@@ -1,0 +1,173 @@
+:root {
+  --primary-bg: rgb(10, 28, 27);
+  --secondary-color: rgb(198, 210, 71);
+  --text-color: #ffffff;
+  --hover-bg: rgba(255, 255, 255, 0.05);
+}
+
+/* RESET */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+/* LAYOUT */
+body {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background: var(--primary-bg);
+  color: var(--text-color);
+  font-family: Arial, sans-serif;
+}
+
+/* MAIN */
+main {
+  flex: 1;
+  padding: 60px 40px;
+}
+
+/* NAVBAR */
+.navbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 25px 40px;
+  border-bottom: 1px solid var(--secondary-color);
+}
+
+/* LOGO */
+.logo {
+  font-size: 22px;
+  font-weight: bold;
+  letter-spacing: 2px;
+}
+
+/* NAV LINKS */
+.navbar ul {
+  display: flex;
+  gap: 30px;
+  list-style: none;
+}
+
+.navbar a {
+  color: var(--text-color);
+  text-decoration: none;
+  font-weight: 500;
+  padding: 6px 10px;
+  border-radius: 6px;
+  transition: 0.2s;
+}
+
+.navbar a:hover {
+  color: var(--secondary-color);
+  background: var(--hover-bg);
+}
+
+/* 🌍 LANGUAGE SWITCHER */
+.lang-switch {
+  display: flex;
+  gap: 10px;
+}
+
+/* LANGUAGE BUTTON */
+.lang-btn {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 10px;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: 0.2s;
+  font-size: 14px;
+}
+
+.lang-btn:hover {
+  background: var(--hover-bg);
+}
+
+/* FLAG */
+.flag {
+  width: 18px;
+  height: 12px;
+  object-fit: cover;
+  border-radius: 2px;
+}
+
+/* FOOTER */
+footer {
+  text-align: center;
+  padding: 20px;
+  font-size: 14px;
+  border-top: 1px solid rgba(255,255,255,0.1);
+}
+
+/* LANGUAGE DROPDOWN */
+.lang-dropdown {
+  position: relative;
+  cursor: pointer;
+}
+
+/* current (icon / button) */
+.lang-current {
+  padding: 6px 10px;
+  border-radius: 6px;
+}
+
+/* dropdown menu */
+.lang-menu {
+  position: absolute;
+  top: 40px;
+  right: 0;
+  background: var(--primary-bg);
+  border: 1px solid var(--secondary-color);
+  border-radius: 8px;
+  display: none;
+  flex-direction: column;
+  min-width: 100px;
+  overflow: hidden;
+}
+
+/* show on hover */
+.lang-dropdown {
+  position: relative;
+}
+
+.lang-menu {
+  position: absolute;
+  top: 100%; /* istället för 40px */
+  right: 0;
+  background: var(--primary-bg);
+  border: 1px solid var(--secondary-color);
+  border-radius: 8px;
+  display: none;
+  flex-direction: column;
+  min-width: 100px;
+}
+
+/* 🔥 viktigt: håller hover aktiv */
+.lang-dropdown:hover .lang-menu,
+.lang-menu:hover {
+  display: flex;
+}
+
+/* options */
+.lang-option {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px;
+  transition: 0.2s;
+}
+
+.lang-option:hover {
+  background: rgba(255,255,255,0.05);
+}
+
+/* flag */
+.flag {
+  width: 18px;
+  height: 12px;
+  object-fit: cover;
+}
