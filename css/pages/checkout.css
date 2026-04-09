@@ -1,0 +1,127 @@
+.buy-hub__item,
+.checkout-product {
+  display: grid;
+  grid-template-columns: minmax(220px, 300px) minmax(0, 1fr);
+  gap: 24px;
+  align-items: center;
+  padding: 24px;
+  border-radius: 24px;
+}
+
+.buy-hub__item img,
+.checkout-product img {
+  width: 100%;
+  max-width: 540px;
+  border-radius: 22px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  background: rgba(0, 0, 0, 0.16);
+}
+
+.checkout-product__body p,
+.checkout-summary p {
+  color: var(--text-muted);
+  line-height: 1.65;
+}
+
+.checkout-product h1,
+.checkout-summary h1 {
+  font-size: clamp(2.3rem, 5vw, 4.4rem);
+  line-height: 0.96;
+  letter-spacing: -0.05em;
+}
+
+.form-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 16px;
+}
+
+.form-field {
+  display: grid;
+  gap: 8px;
+}
+
+.form-field--full {
+  grid-column: 1 / -1;
+}
+
+.form-field label {
+  color: var(--text-muted);
+  font-size: 0.95rem;
+}
+
+.input,
+.textarea,
+.qty-stepper {
+  width: 100%;
+  min-height: 52px;
+  padding: 0 16px;
+  border-radius: 16px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: rgba(0, 0, 0, 0.16);
+  color: var(--text);
+}
+
+.textarea {
+  min-height: 120px;
+  padding-top: 14px;
+  padding-bottom: 14px;
+  resize: vertical;
+}
+
+.qty-stepper {
+  display: inline-flex;
+  align-items: center;
+  justify-content: space-between;
+  max-width: 180px;
+  padding: 0 8px;
+}
+
+.qty-stepper button {
+  width: 40px;
+  height: 40px;
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.qty-value {
+  min-width: 48px;
+  text-align: center;
+  font-weight: 700;
+}
+
+.payment-option {
+  padding: 18px;
+  border-radius: 18px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  background: rgba(255, 255, 255, 0.03);
+}
+
+.payment-option__title,
+.summary-list li {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.summary-list li {
+  color: var(--text-muted);
+}
+
+.summary-list strong {
+  color: var(--text);
+}
+
+.checkout-note {
+  padding: 16px;
+  border-radius: 24px;
+  border: 1px solid rgba(198, 210, 71, 0.18);
+  background: rgba(198, 210, 71, 0.08);
+}
+
+@media (max-width: 860px) {
+  .form-grid {
+    grid-template-columns: 1fr;
+  }
+}

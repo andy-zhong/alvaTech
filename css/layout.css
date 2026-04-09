@@ -1,0 +1,138 @@
+main {
+  flex: 1;
+  width: min(var(--max-width), calc(100% - 48px));
+  margin: 0 auto;
+  padding: 32px 0 88px;
+}
+
+.site-header {
+  position: sticky;
+  top: 0;
+  z-index: 20;
+  backdrop-filter: blur(18px);
+  background: rgba(7, 21, 19, 0.78);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.site-header__inner,
+.site-footer__inner {
+  width: min(var(--max-width), calc(100% - 48px));
+  margin: 0 auto;
+}
+
+.site-header__inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+  min-height: 84px;
+}
+
+.site-footer {
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+  background: rgba(5, 16, 14, 0.74);
+}
+
+.site-footer__inner {
+  display: flex;
+  justify-content: space-between;
+  gap: 24px;
+  padding: 22px 0 36px;
+  align-items: center;
+  color: var(--text-muted);
+  font-size: 0.94rem;
+}
+
+.section {
+  margin-top: 36px;
+}
+
+.grid,
+.info-grid,
+.spec-grid,
+.about-grid,
+.account-grid,
+.checkout-layout {
+  display: grid;
+  gap: 20px;
+}
+
+.grid {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.info-grid,
+.spec-grid,
+.about-grid,
+.account-grid {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.detail-hero {
+  display: grid;
+  grid-template-columns: minmax(0, 1.05fr) minmax(320px, 0.95fr);
+  gap: 28px;
+}
+
+.buy-hub,
+.checkout-layout {
+  display: grid;
+}
+
+.buy-hub {
+  gap: 20px;
+}
+
+.checkout-layout {
+  grid-template-columns: minmax(0, 0.95fr) minmax(340px, 0.75fr);
+  gap: 24px;
+}
+
+.checkout-stack {
+  display: grid;
+  gap: 18px;
+}
+
+@media (max-width: 1080px) {
+  main,
+  .site-header__inner,
+  .site-footer__inner {
+    width: min(var(--max-width), calc(100% - 32px));
+  }
+
+  .grid,
+  .info-grid,
+  .spec-grid,
+  .about-grid,
+  .account-grid,
+  .checkout-layout {
+    grid-template-columns: 1fr;
+  }
+
+  .detail-hero,
+  .buy-hub__item,
+  .checkout-product {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 860px) {
+  .site-header__inner,
+  .hero__top,
+  .section-head,
+  .site-footer__inner {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .site-header__inner {
+    min-height: auto;
+    padding: 16px 0;
+  }
+}
+
+@media (max-width: 560px) {
+  main {
+    padding-bottom: 72px;
+  }
+}

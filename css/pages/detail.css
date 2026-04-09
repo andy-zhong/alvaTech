@@ -1,0 +1,35 @@
+.detail-media img,
+.detail-media video,
+.product-card .media-asset {
+  width: 100%;
+  max-width: 540px;
+  border-radius: 22px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  background: rgba(0, 0, 0, 0.16);
+}
+
+.detail-media video,
+.product-card .media-asset {
+  display: block;
+}
+
+.detail-copy h1 {
+  font-size: clamp(2.3rem, 5vw, 4.4rem);
+  line-height: 0.96;
+  letter-spacing: -0.05em;
+}
+
+.detail-copy p,
+.support-list li,
+.faq-list li,
+.spec-card p {
+  color: var(--text-muted);
+  line-height: 1.65;
+}
+
+.spec-card h3,
+.panel h3,
+.section-title {
+  font-size: 1.15rem;
+  letter-spacing: -0.02em;
+}
