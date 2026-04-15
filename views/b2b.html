@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Business Inquiry | Alva Technology</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="stylesheet" href="../css/styles.css">
+</head>
+
+<body data-page="b2b">
+  <div id="navbar"></div>
+
+  <main id="page-content">
+    <section class="section">
+      <div class="b2b-container">
+
+        <!-- 🔥 FIX: kopplad till translations -->
+        <h1 id="b2b-title">Contact us as a company</h1>
+
+        <!-- 🔥 FIX: kopplad till translations -->
+        <p class="muted" id="b2b-body">
+          Looking for a business solution, bulk pricing, or a custom setup? Fill in the form and our team will contact you.
+        </p>
+
+        <form id="b2b-form" class="b2b-form">
+          <div class="form-row">
+            <input type="text" name="company" placeholder="Company name" required />
+            <input type="text" name="contact" placeholder="Contact person" required />
+          </div>
+
+          <div class="form-row">
+            <input type="email" name="email" placeholder="Email address" required />
+            <input type="tel" name="phone" placeholder="Phone number" required />
+          </div>
+
+          <textarea name="message" placeholder="Tell us what you're looking for..." required></textarea>
+
+          <!-- 🔥 FIX: id för translations -->
+          <button id="b2b-submit" type="submit" class="button button--primary">
+            Send request
+          </button>
+
+          <!-- 🔥 redan korrekt -->
+          <p id="b2b-success" class="b2b-success hidden">
+            ✅ Your request has been sent. We will contact you shortly.
+          </p>
+        </form>
+
+      </div>
+    </section>
+  </main>
+
+  <div id="footer"></div>
+
+  <script type="module" src="../js/main.js"></script>
+</body>
+</html>

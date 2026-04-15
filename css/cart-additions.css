@@ -1,0 +1,315 @@
+/* ═══════════════════════════════════════════════════════════════════════════
+   CART PAGE  —  replace existing cart-additions.css with this file
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+/* ─────────────────────────────────────────────────────────────────────────
+   PAGE HEADER
+   ───────────────────────────────────────────────────────────────────────── */
+
+.cart-header {
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+  margin-bottom: 28px;
+}
+
+.cart-header h1 {
+  margin: 0;
+}
+
+.cart-header__count {
+  font-size: 0.85rem;
+  opacity: 0.45;
+}
+
+/* ─────────────────────────────────────────────────────────────────────────
+   TWO-COLUMN LAYOUT
+   ───────────────────────────────────────────────────────────────────────── */
+
+.cart-layout {
+  display: grid;
+  grid-template-columns: 1fr 320px;
+  gap: 28px;
+  align-items: start;
+}
+
+/* ─────────────────────────────────────────────────────────────────────────
+   CART LINE ITEMS
+   ───────────────────────────────────────────────────────────────────────── */
+
+.cart-lines {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.cart-line {
+  display: grid;
+  grid-template-columns: 72px 1fr auto;
+  gap: 16px;
+  align-items: center;
+  padding: 16px 0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.cart-line:first-child {
+  border-top: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+/* ─── Product image ─────────────────────────────────────────────────────── */
+
+.cart-line__img {
+  width: 72px;
+  height: 72px;
+  object-fit: cover;
+  border-radius: 10px;
+  background: rgba(255, 255, 255, 0.04);
+  display: block;
+  flex-shrink: 0;
+}
+
+/* ─── Body ───────────────────────────────────────────────────────────────── */
+
+.cart-line__body {
+  min-width: 0;
+}
+
+.cart-line__name {
+  font-size: 0.95rem;
+  font-weight: 600;
+  margin: 0 0 4px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.cart-line__meta {
+  font-size: 0.8rem;
+  opacity: 0.5;
+  margin: 0 0 8px;
+  line-height: 1.5;
+}
+
+/* Quantity stepper for fixed-price items */
+.cart-line__qty {
+  margin-top: 0;
+  display: inline-flex;
+}
+
+/* ─── Right column ───────────────────────────────────────────────────────── */
+
+.cart-line__right {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 8px;
+  flex-shrink: 0;
+}
+
+.cart-line__price {
+  font-size: 0.95rem;
+  font-weight: 700;
+  margin: 0;
+  white-space: nowrap;
+}
+
+.cart-line__remove {
+  background: none;
+  border: none;
+  padding: 0;
+  font-size: 0.75rem;
+  opacity: 0.35;
+  cursor: pointer;
+  color: inherit;
+  font-family: inherit;
+  transition: opacity 0.15s ease, color 0.15s ease;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+.cart-line__remove:hover {
+  opacity: 1;
+  color: #ff5555;
+}
+
+/* ─────────────────────────────────────────────────────────────────────────
+   ORDER SUMMARY SIDEBAR
+   ───────────────────────────────────────────────────────────────────────── */
+
+.cart-sidebar {
+  position: sticky;
+  top: 90px;
+  padding: 22px;
+  border-radius: 18px;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.cart-sidebar h3 {
+  margin: 0 0 4px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  opacity: 0.7;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+/* ─── Summary rows ───────────────────────────────────────────────────────── */
+
+.cart-summary__rows {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding-bottom: 14px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.07);
+}
+
+.cart-summary__row {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  font-size: 0.875rem;
+  opacity: 0.65;
+}
+
+.cart-summary__row--total {
+  font-size: 1.1rem;
+  font-weight: 700;
+  opacity: 1;
+  margin-top: 4px;
+}
+
+.cart-summary__legal {
+  font-size: 0.75rem;
+  opacity: 0.35;
+  margin: 0;
+  line-height: 1.5;
+}
+
+/* ─── Action buttons ─────────────────────────────────────────────────────── */
+
+.cart-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-top: 2px;
+}
+
+.cart-actions .button {
+  width: 100%;
+  justify-content: center;
+  text-align: center;
+}
+
+/* ─────────────────────────────────────────────────────────────────────────
+   EMPTY STATE
+   ───────────────────────────────────────────────────────────────────────── */
+
+.empty-state {
+  text-align: center;
+  padding: 60px 20px;
+}
+
+.empty-state h1 {
+  margin-bottom: 10px;
+}
+
+/* ─────────────────────────────────────────────────────────────────────────
+   NAVBAR CART ICON + BADGE
+   ───────────────────────────────────────────────────────────────────────── */
+
+.navbar__actions {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.navbar__cart {
+  position: relative;
+  display: flex;
+  align-items: center;
+  color: inherit;
+  text-decoration: none;
+  opacity: 0.75;
+  transition: opacity 0.15s ease;
+}
+
+.navbar__cart:hover,
+.navbar__cart.active {
+  opacity: 1;
+}
+
+.navbar__cart-count {
+  position: absolute;
+  top: -7px;
+  right: -10px;
+  background: var(--accent, #e8581a);
+  color: #fff;
+  font-size: 10px;
+  font-weight: 700;
+  line-height: 1;
+  min-width: 17px;
+  height: 17px;
+  border-radius: 9px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 4px;
+  pointer-events: none;
+}
+
+/* ─────────────────────────────────────────────────────────────────────────
+   BATTERY SELECTOR (product detail)
+   ───────────────────────────────────────────────────────────────────────── */
+
+.battery-selector {
+  margin-top: 20px;
+}
+
+.battery-selector__label {
+  display: block;
+  font-size: 0.82rem;
+  opacity: 0.6;
+  margin-bottom: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.battery-selector__readout {
+  margin-top: 12px;
+  font-size: 0.9rem;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.battery-selector__readout p {
+  margin: 0;
+}
+
+/* ─────────────────────────────────────────────────────────────────────────
+   RESPONSIVE
+   ───────────────────────────────────────────────────────────────────────── */
+
+@media (max-width: 760px) {
+  .cart-layout {
+    grid-template-columns: 1fr;
+  }
+
+  .cart-sidebar {
+    position: static;
+  }
+
+  .cart-line {
+    grid-template-columns: 60px 1fr auto;
+    gap: 12px;
+  }
+
+  .cart-line__img {
+    width: 60px;
+    height: 60px;
+  }
+}

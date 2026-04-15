@@ -1,0 +1,18 @@
+# Node
+node_modules/
+npm-debug.log
+yarn-error.log
+
+# Env (SUPER VIKTIGT)
+.env
+
+# Mac
+.DS_Store
+
+# Logs
+logs/
+*.log
+
+# Build / temp
+dist/
+build/

@@ -1,42 +1,100 @@
-import { renderLanguagePicker } from "./language-picker.js";
 import { getAllProducts, getProductContent } from "../services/product-service.js";
 import { t } from "../services/language-service.js";
+import { renderLanguagePicker } from "./language-picker.js";
 
-export function renderHeader({ page, lang, route, productUrl }) {
-  const products = getAllProducts();
+export function initHeader({ page, lang, productUrl, route }) {
+  clearActiveLinks();
+  setActive(page);
+  setTranslations(lang);
+  renderProducts(lang, productUrl);
+  updateCart();
+  renderLanguage(lang, route);
+}
 
-  return `
-    <header class="site-header">
-      <div class="site-header__inner">
-        <a class="brand" href="${route("index.html")}" aria-label="Alva Technology">
-          <img class="brand__image" src="${route("Pictures/ALVA TECHNOLOGY logo design.png")}" alt="Alva Technology">
-        </a>
-        <div class="site-nav">
-          <ul class="site-nav__list">
-            <li class="site-nav__item">
-              <a class="site-nav__link ${page === "home" ? "is-active" : ""}" href="${route("index.html")}">${t(lang, "navHome")}</a>
-            </li>
-            <li class="site-nav__item">
-              <a class="nav-dropdown__trigger ${page === "products" || page === "product" ? "is-active" : ""}" href="${route("views/products.html")}">${t(lang, "navProducts")}</a>
-              <div class="nav-dropdown__menu" role="menu" aria-label="${t(lang, "navProducts")}">
-                ${products.map((product) => {
-                  const content = getProductContent(product, lang);
-                  return `<a href="${productUrl(product.slug)}">${content.name}</a>`;
-                }).join("")}
-              </div>
-            </li>
-            <li class="site-nav__item">
-              <a class="site-nav__link ${page === "about" ? "is-active" : ""}" href="${route("views/about.html")}">${t(lang, "navAbout")}</a>
-            </li>
-            <li class="site-nav__item">
-              <a class="site-nav__link ${page === "account" ? "is-active" : ""}" href="${route("views/account.html")}">${t(lang, "navAccount")}</a>
-            </li>
-          </ul>
-          <div class="site-header__actions">
-            ${renderLanguagePicker({ lang, route })}
-          </div>
-        </div>
-      </div>
-    </header>
-  `;
+function clearActiveLinks() {
+  document.querySelectorAll("[data-link].active").forEach((link) => {
+    link.classList.remove("active");
+  });
+}
+
+function setActive(page) {
+  document.querySelectorAll("[data-link]").forEach((link) => {
+    if (link.dataset.link === page) {
+      link.classList.add("active");
+    }
+  });
+}
+
+function safeT(lang, key, fallback = "") {
+  try {
+    return t(lang, key) || fallback || key;
+  } catch {
+    return fallback || key;
+  }
+}
+
+function setText(selector, value) {
+  const el = document.querySelector(selector);
+  if (!el) return;
+  el.textContent = value;
+}
+
+function setTranslations(lang) {
+  setText('[data-link="home"]', safeT(lang, "navHome", "Home"));
+  setText('[data-link="products"]', safeT(lang, "navProducts", "Products"));
+  setText('[data-link="about"]', safeT(lang, "navAbout", "About"));
+  setText('[data-link="account"]', safeT(lang, "navAccount", "Account"));
+  setText('[data-link="b2b"]', safeT(lang, "navB2B", "Företagskund"));
+}
+
+function renderProducts(lang, productUrl) {
+  const container = document.getElementById("product-dropdown");
+  if (!container) return;
+
+  let products = [];
+  try {
+    products = getAllProducts() || [];
+  } catch (err) {
+    console.error("[header] Failed to load products:", err);
+    container.innerHTML = "";
+    return;
+  }
+
+  container.innerHTML = products
+    .map((product) => {
+      try {
+        const content = getProductContent(product, lang);
+        return `<a href="${productUrl(product.slug)}">${content.name}</a>`;
+      } catch (err) {
+        console.error("[header] Failed to render product in dropdown:", err);
+        return "";
+      }
+    })
+    .join("");
+}
+
+function updateCart() {
+  const el = document.getElementById("cart-count");
+  if (!el) return;
+
+  try {
+    const cart = JSON.parse(localStorage.getItem("cart")) || [];
+    const count = cart.reduce((sum, item) => sum + (item.quantity || 1), 0);
+    el.textContent = count > 0 ? String(count) : "";
+  } catch (err) {
+    console.error("[header] Failed to update cart count:", err);
+    el.textContent = "";
+  }
+}
+
+function renderLanguage(lang, route) {
+  const el = document.getElementById("language");
+  if (!el) return;
+
+  try {
+    el.innerHTML = renderLanguagePicker({ lang, route });
+  } catch (err) {
+    console.error("[header] Failed to render language picker:", err);
+    el.innerHTML = "";
+  }
 }

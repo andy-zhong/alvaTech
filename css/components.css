@@ -365,3 +365,104 @@
     border-radius: 22px;
   }
 }
+
+/* ─────────────────────────────────────────
+   NAVBAR → MATCHA SITE DESIGN
+   ───────────────────────────────────────── */
+
+.navbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  width: min(var(--max-width), calc(100% - 48px));
+  margin: 0 auto;
+
+  min-height: 84px;
+}
+
+/* LOGO */
+.logo {
+  font-weight: 800;
+  font-size: 20px;
+  letter-spacing: -0.02em;
+}
+
+/* NAV LIST */
+.navbar__nav {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  list-style: none;
+}
+
+/* LINKS → exakt som site-nav */
+.navbar__nav a {
+  min-height: 44px;
+  display: inline-flex;
+  align-items: center;
+  padding: 0 14px;
+
+  border-radius: 999px;
+
+  color: var(--text-muted);
+  font-weight: 600;
+
+  transition: all 0.2s ease;
+}
+
+.navbar__nav a:hover,
+.navbar__nav a.active {
+  color: var(--text);
+  background: rgba(255, 255, 255, 0.06);
+}
+
+/* DROPDOWN */
+.navbar__dropdown {
+  position: relative;
+}
+
+.navbar__dropdown-menu {
+  position: absolute;
+  top: calc(100% + 4px);
+  left: 0;
+
+  display: grid;
+  gap: 6px;
+
+  padding: 10px;
+
+  background: rgba(9, 26, 24, 0.98);
+  border-radius: 16px;
+
+  border: 1px solid var(--surface-border);
+
+  opacity: 0;
+  pointer-events: none;
+  transform: translateY(8px);
+
+  transition: all 0.2s ease;
+}
+
+.navbar__dropdown:hover .navbar__dropdown-menu {
+  opacity: 1;
+  pointer-events: auto;
+  transform: translateY(0);
+}
+
+.navbar__dropdown-menu a {
+  padding: 10px 12px;
+  border-radius: 10px;
+}
+
+.navbar__dropdown-menu a:hover {
+  background: rgba(255, 255, 255, 0.05);
+}
+
+/* ACTIONS */
+.navbar__actions {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-left: auto;
+}

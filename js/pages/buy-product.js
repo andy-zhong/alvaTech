@@ -1,151 +1,229 @@
 import { getProductBySlug, getProductContent } from "../services/product-service.js";
-import { t } from "../services/language-service.js";
-import { renderMissingProduct } from "./product-detail.js";
+import { getStoredLanguage, t } from "../services/language-service.js";
 
-export function renderBuyProductPage({ lang, slug, route }) {
-  const product = getProductBySlug(slug);
-  if (!product) {
-    return renderMissingProduct({ lang, route });
+// ─────────────────────────────────────────────────────────────────────────────
+// Render
+// ─────────────────────────────────────────────────────────────────────────────
+
+export function renderBuyProductPage({ lang, route }) {
+  const cart = JSON.parse(localStorage.getItem("cart")) || [];
+
+  if (cart.length === 0) {
+    return `
+      <section class="section">
+        <article class="empty-state">
+          <h1>${t(lang, "cartEmpty")}</h1>
+          <p class="muted">${t(lang, "cartEmptyBody")}</p>
+          <div class="section">
+            <a class="button button--secondary" href="/views/products.html">
+              ${t(lang, "backToProducts")}
+            </a>
+          </div>
+        </article>
+      </section>`;
   }
 
+  const grandTotal = cart.reduce((sum, item) => sum + item.unitPrice * (item.quantity || 1), 0);
+  const itemCount  = cart.reduce((sum, item) => sum + (item.quantity || 1), 0);
+
+  return `
+    <section class="section">
+      <div class="cart-header">
+        <h1>${t(lang, "cartTitle")}</h1>
+        <span class="cart-header__count">
+          ${itemCount} ${itemCount === 1 ? t(lang, "cartItemSingular") : t(lang, "cartItemPlural")}
+        </span>
+      </div>
+
+      <div class="cart-layout">
+
+        <!-- Left: line items -->
+        <div class="cart-lines" id="cart-lines">
+          ${cart.map((item) => renderCartLine(item, lang)).join("")}
+        </div>
+
+        <!-- Right: sticky summary + actions -->
+        <aside class="cart-sidebar">
+          <h3>${t(lang, "cartSummaryTitle")}</h3>
+
+          <div class="cart-summary__rows">
+            ${cart.map((item) => renderSummaryRow(item, lang)).join("")}
+          </div>
+
+          <div class="cart-summary__row cart-summary__row--total">
+            <span>${t(lang, "cartTotal")}</span>
+            <span id="cart-grand-total">${grandTotal.toLocaleString("sv-SE")} SEK</span>
+          </div>
+
+          <p class="cart-summary__legal">${t(lang, "cartTaxNote")}</p>
+
+          <div class="cart-actions">
+            <button class="button button--primary" id="checkout-btn">
+              ${t(lang, "cartCheckout")}
+            </button>
+            <a class="button button--secondary" href="/views/products.html">
+              ${t(lang, "cartContinue")}
+            </a>
+          </div>
+        </aside>
+
+      </div>
+    </section>`;
+}
+
+function renderCartLine(item, lang) {
+  const product = getProductBySlug(item.slug);
+  if (!product) return "";
   const content = getProductContent(product, lang);
+  const qty      = item.quantity || 1;
+  const lineTotal = item.unitPrice * qty;
 
+  if (item.isConfigurable) {
+    return `
+      <div class="cart-line" data-item-id="${item.cartItemId}">
+        <img class="cart-line__img" src="${product.heroImage}" alt="${content.name}">
+
+        <div class="cart-line__body">
+          <p class="cart-line__name">${content.name}</p>
+          <p class="cart-line__meta">
+            ${item.batteryCount} ${item.batteryCount === 1 ? t(lang, "cartBatterySingular") : t(lang, "cartBatteryPlural")}
+            &nbsp;·&nbsp; ${item.capacity} kWh
+          </p>
+        </div>
+
+        <div class="cart-line__right">
+          <p class="cart-line__price">${lineTotal.toLocaleString("sv-SE")} SEK</p>
+          <button class="cart-line__remove" data-item-id="${item.cartItemId}"
+                  aria-label="${t(lang, "cartRemove")}">
+            ${t(lang, "cartRemove")}
+          </button>
+        </div>
+      </div>`;
+  }
+
+  // Fixed-price product — quantity controls
   return `
-    <section class="checkout-layout">
-      <div class="checkout-stack">
-        <article class="checkout-product">
-          <img src="${product.heroImage}" alt="${content.name}">
-          <div class="checkout-product__body">
-            <span class="eyebrow">${t(lang, "checkoutEyebrow")}</span>
-            <div class="checkout-product__meta">${product.price}</div>
-            <h1>${content.name}</h1>
-            <p>${content.summary}</p>
-          </div>
-        </article>
+    <div class="cart-line" data-item-id="${item.cartItemId}">
+      <img class="cart-line__img" src="${product.heroImage}" alt="${content.name}">
 
-        <article class="checkout-card">
-          <div class="section-head">
-            <h2>${t(lang, "checkoutCustomer")}</h2>
-          </div>
-          <form class="form-grid">
-            <div class="form-field">
-              <label for="customer-name">${t(lang, "checkoutContactName")}</label>
-              <input class="input" id="customer-name" name="customer-name" type="text">
-            </div>
-            <div class="form-field">
-              <label for="customer-email">${t(lang, "checkoutEmail")}</label>
-              <input class="input" id="customer-email" name="customer-email" type="email">
-            </div>
-            <div class="form-field">
-              <label for="customer-phone">${t(lang, "checkoutPhone")}</label>
-              <input class="input" id="customer-phone" name="customer-phone" type="tel">
-            </div>
-            <div class="form-field">
-              <label for="customer-company">${t(lang, "checkoutCompany")}</label>
-              <input class="input" id="customer-company" name="customer-company" type="text">
-            </div>
-            <div class="form-field form-field--full">
-              <label for="customer-street">${t(lang, "checkoutStreet")}</label>
-              <input class="input" id="customer-street" name="customer-street" type="text">
-            </div>
-            <div class="form-field">
-              <label for="customer-postal">${t(lang, "checkoutPostal")}</label>
-              <input class="input" id="customer-postal" name="customer-postal" type="text">
-            </div>
-            <div class="form-field">
-              <label for="customer-city">${t(lang, "checkoutCity")}</label>
-              <input class="input" id="customer-city" name="customer-city" type="text">
-            </div>
-            <div class="form-field">
-              <label for="customer-country">${t(lang, "checkoutCountry")}</label>
-              <input class="input" id="customer-country" name="customer-country" type="text" placeholder="${t(lang, "checkoutCountryPlaceholder")}">
-            </div>
-            <div class="form-field form-field--full">
-              <label for="customer-notes">${t(lang, "checkoutNotes")}</label>
-              <textarea class="textarea" id="customer-notes" name="customer-notes" placeholder="${t(lang, "checkoutNotesPlaceholder")}"></textarea>
-            </div>
-          </form>
-        </article>
-
-        <article class="checkout-card">
-          <div class="section-head">
-            <h2>${t(lang, "checkoutPayment")}</h2>
-          </div>
-          <div class="payment-options">
-            ${renderPaymentOption(lang, "paymentStripe", "paymentStripeBody")}
-            ${renderPaymentOption(lang, "paymentKlarna", "paymentKlarnaBody")}
-            ${renderPaymentOption(lang, "paymentCards", "paymentCardsBody")}
-          </div>
-        </article>
+      <div class="cart-line__body">
+        <p class="cart-line__name">${content.name}</p>
+        <p class="cart-line__meta">${item.unitPrice.toLocaleString("sv-SE")} SEK ${t(lang, "cartPerUnit")}</p>
+        <div class="battery-control cart-line__qty">
+          <button class="battery-btn qty-decrease" data-item-id="${item.cartItemId}"
+                  aria-label="${t(lang, "cartDecrease")}">−</button>
+          <span class="battery-count qty-value" data-item-id="${item.cartItemId}">${qty}</span>
+          <button class="battery-btn qty-increase" data-item-id="${item.cartItemId}"
+                  aria-label="${t(lang, "cartIncrease")}">+</button>
+        </div>
       </div>
 
-      <aside class="checkout-stack">
-        <article class="checkout-card checkout-summary">
-          <span class="eyebrow">${t(lang, "checkoutSummary")}</span>
-          <h1>${t(lang, "checkoutTitle")}</h1>
-          <p>${t(lang, "checkoutBody")}</p>
-
-          <div class="section">
-            <h2 class="section-title">${t(lang, "checkoutProduct")}</h2>
-            <ul class="summary-list">
-              <li><span>${content.name}</span><strong>${product.price}</strong></li>
-            </ul>
-          </div>
-
-          <div class="section">
-            <h2 class="section-title">${t(lang, "checkoutQuantity")}</h2>
-            <div class="qty-stepper" data-qty-stepper>
-              <button type="button" data-qty-change="-1" aria-label="${t(lang, "decreaseQuantity")}">-</button>
-              <span class="qty-value" data-qty-value>1</span>
-              <button type="button" data-qty-change="1" aria-label="${t(lang, "increaseQuantity")}">+</button>
-            </div>
-          </div>
-
-          <div class="section">
-            <ul class="summary-list">
-              <li><span>${t(lang, "checkoutSubtotal")}</span><strong>${product.price}</strong></li>
-              <li><span>${t(lang, "checkoutShipping")}</span><strong>${t(lang, "checkoutShippingPending")}</strong></li>
-              <li><span>${t(lang, "checkoutTax")}</span><strong>${t(lang, "checkoutTaxPending")}</strong></li>
-              <li><span>${t(lang, "checkoutTotal")}</span><strong>${product.price}</strong></li>
-            </ul>
-          </div>
-
-          <div class="checkout-note">
-            ${t(lang, "checkoutLegal")}
-          </div>
-
-          <div class="section">
-            <button class="button button--primary button--wide" type="button">${t(lang, "checkoutSubmit")}</button>
-          </div>
-        </article>
-      </aside>
-    </section>
-  `;
-}
-
-function renderPaymentOption(lang, titleKey, bodyKey) {
-  return `
-    <article class="payment-option">
-      <div class="payment-option__title">
-        <span>${t(lang, titleKey)}</span>
-        <span class="pill">${t(lang, "paymentPending")}</span>
+      <div class="cart-line__right">
+        <p class="cart-line__price" data-price-id="${item.cartItemId}">${lineTotal.toLocaleString("sv-SE")} SEK</p>
+        <button class="cart-line__remove" data-item-id="${item.cartItemId}"
+                aria-label="${t(lang, "cartRemove")}">
+          ${t(lang, "cartRemove")}
+        </button>
       </div>
-      <p>${t(lang, bodyKey)}</p>
-    </article>
-  `;
+    </div>`;
 }
 
-export function bindBuyProductPage() {
-  const stepper = document.querySelector("[data-qty-stepper]");
-  if (!stepper) return;
+function renderSummaryRow(item, lang) {
+  const product = getProductBySlug(item.slug);
+  if (!product) return "";
+  const content   = getProductContent(product, lang);
+  const qty       = item.quantity || 1;
+  const lineTotal = item.unitPrice * qty;
 
-  const valueNode = stepper.querySelector("[data-qty-value]");
-  let value = 1;
+  const label = item.isConfigurable
+    ? `${content.name} (${item.batteryCount} ${item.batteryCount === 1 ? t(lang, "cartBatterySingular") : t(lang, "cartBatteryPlural")})`
+    : qty > 1
+      ? `${content.name} × ${qty}`
+      : content.name;
 
-  stepper.querySelectorAll("[data-qty-change]").forEach((button) => {
-    button.addEventListener("click", () => {
-      value = Math.max(1, value + Number(button.dataset.qtyChange));
-      valueNode.textContent = String(value);
+  return `
+    <div class="cart-summary__row">
+      <span style="max-width: 180px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;"
+            title="${label}">${label}</span>
+      <span>${lineTotal.toLocaleString("sv-SE")} SEK</span>
+    </div>`;
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Bind (called by bootstrap after innerHTML is set)
+// ─────────────────────────────────────────────────────────────────────────────
+
+export function afterRenderBuyProduct({ lang } = {}) {
+  const activeLang = lang || getStoredLanguage();
+
+  // Remove buttons
+  document.querySelectorAll(".cart-line__remove").forEach((btn) => {
+    btn.addEventListener("click", () => {
+      removeCartItem(btn.dataset.itemId);
+      rerenderCart(activeLang);
     });
   });
+
+  // Quantity controls
+  document.querySelectorAll(".qty-decrease").forEach((btn) => {
+    btn.addEventListener("click", () => updateCartQuantity(btn.dataset.itemId, -1, activeLang));
+  });
+
+  document.querySelectorAll(".qty-increase").forEach((btn) => {
+    btn.addEventListener("click", () => updateCartQuantity(btn.dataset.itemId, +1, activeLang));
+  });
+
+  // Checkout — Klarna wired here later
+  document.getElementById("checkout-btn")?.addEventListener("click", () => {
+    // TODO: initialise Klarna session here.
+    // Cart payload: JSON.parse(localStorage.getItem("cart"))
+    alert("Klarna checkout coming soon!");
+  });
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Helpers
+// ─────────────────────────────────────────────────────────────────────────────
+
+function rerenderCart(lang) {
+  const container = document.getElementById("page-content");
+  if (!container) return;
+  container.innerHTML = renderBuyProductPage({ lang, route: null });
+  afterRenderBuyProduct({ lang });
+}
+
+function removeCartItem(cartItemId) {
+  const cart    = JSON.parse(localStorage.getItem("cart")) || [];
+  const updated = cart.filter((item) => item.cartItemId !== cartItemId);
+  localStorage.setItem("cart", JSON.stringify(updated));
+}
+
+function updateCartQuantity(cartItemId, delta, lang) {
+  const cart  = JSON.parse(localStorage.getItem("cart")) || [];
+  const index = cart.findIndex((item) => item.cartItemId === cartItemId);
+  if (index < 0) return;
+
+  const newQty = (cart[index].quantity || 1) + delta;
+
+  if (newQty < 1) {
+    cart.splice(index, 1);
+    localStorage.setItem("cart", JSON.stringify(cart));
+    rerenderCart(lang);
+    return;
+  }
+
+  cart[index].quantity = newQty;
+  localStorage.setItem("cart", JSON.stringify(cart));
+
+  // Patch DOM in place — no full re-render needed for a quantity change
+  const lineTotal = cart[index].unitPrice * newQty;
+  const grandTotal = cart.reduce((sum, item) => sum + item.unitPrice * (item.quantity || 1), 0);
+
+  const qtyEl     = document.querySelector(`.qty-value[data-item-id="${cartItemId}"]`);
+  const priceEl   = document.querySelector(`.cart-line__price[data-price-id="${cartItemId}"]`);
+  const totalEl   = document.getElementById("cart-grand-total");
+
+  if (qtyEl)   qtyEl.innerText   = newQty;
+  if (priceEl) priceEl.innerText = `${lineTotal.toLocaleString("sv-SE")} SEK`;
+  if (totalEl) totalEl.innerText = `${grandTotal.toLocaleString("sv-SE")} SEK`;
 }

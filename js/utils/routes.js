@@ -10,8 +10,11 @@ export function createRouteHelpers(page) {
   return {
     root,
     route,
-    productUrl: (slug) => route(`views/product.html?slug=${encodeURIComponent(slug)}`),
-    buyProductUrl: (slug) => route(`views/buy-product.html?slug=${encodeURIComponent(slug)}`),
-    getCurrentSlug: () => new URLSearchParams(window.location.search).get("slug")
+    productUrl: (slug) =>
+      route(`views/product.html?slug=${encodeURIComponent(slug)}`),
+    buyProductUrl: (slug) =>
+      route(`views/buy-product.html?slug=${encodeURIComponent(slug)}`),
+    getCurrentSlug: () =>
+      new URLSearchParams(window.location.search).get("slug"),
   };
 }

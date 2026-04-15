@@ -1,0 +1,52 @@
+.b2b-container {
+  max-width: 720px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.b2b-form {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  margin-top: 10px;
+}
+
+.form-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+
+.b2b-form input,
+.b2b-form textarea {
+  width: 100%;
+  padding: 12px 14px;
+  border-radius: 10px;
+  border: 1px solid rgba(255,255,255,0.1);
+  background: rgba(255,255,255,0.04);
+  color: white;
+  font-family: inherit;
+}
+
+.b2b-form textarea {
+  min-height: 120px;
+  resize: vertical;
+}
+
+.b2b-success {
+  margin-top: 10px;
+  font-size: 0.9rem;
+  color: #8fff9c;
+}
+
+.hidden {
+  display: none;
+}
+
+@media (max-width: 640px) {
+  .form-row {
+    grid-template-columns: 1fr;
+  }
+}
