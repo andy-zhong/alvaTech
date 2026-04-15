@@ -22,8 +22,15 @@ function getProductMedia(product, fallbackAlt) {
     src: product.heroImage,
     alt: fallbackAlt,
   };
+
   const gallery = Array.isArray(product.gallery) ? product.gallery : [];
-  return [hero, ...gallery].filter((item) => item?.src);
+
+  const uniqueGallery = gallery.filter((item) => {
+    if (!item?.src) return false;
+    return !(item.src === hero.src && (item.type ?? "image") === (hero.type ?? "image"));
+  });
+
+  return [hero, ...uniqueGallery];
 }
 
 // ─────────────────────────────────────────────────────────────────────────────
