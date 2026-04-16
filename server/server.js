@@ -6,31 +6,69 @@ const express = require("express");
 const cors = require("cors");
 const path = require("path");
 
-const authRoutes = require("./routes/auth");
-const b2bRoutes = require("./routes/b2b");
-const pool = require("./db/connection");
-
 const app = express();
 const PORT = process.env.PORT || 3000;
 
-// Middleware
-app.use(cors());
+// ── Helpers ────────────────────────────────────────────────────────────────
+// Safe route loader so the server does not crash if one branch has a route
+// file that the other branch does not have yet.
+function loadRoute(routePath) {
+  try {
+    return require(routePath);
+  } catch (err) {
+    if (err.code === "MODULE_NOT_FOUND") {
+      console.warn(`[server] Route not found: ${routePath}`);
+      return null;
+    }
+    throw err;
+  }
+}
+
+// ── Routes / DB ────────────────────────────────────────────────────────────
+const authRoutes = loadRoute("./routes/auth");
+const b2bRoutes = loadRoute("./routes/b2b");
+const orderRoutes = loadRoute("./routes/orders");
+const adminRoutes = loadRoute("./routes/admin");
+
+const pool = require("./db/connection");
+
+// ── Middleware ─────────────────────────────────────────────────────────────
+app.use(
+  cors({
+    origin: process.env.CORS_ORIGIN || "*",
+    methods: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
+    allowedHeaders: ["Content-Type", "Authorization"],
+  })
+);
+
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-// Static frontend
+// Serve the project root as static files
 app.use(express.static(path.join(__dirname, "..")));
 
-// API routes
-app.use("/auth", authRoutes);
-app.use("/api/b2b", b2bRoutes);
+// ── API Routes ─────────────────────────────────────────────────────────────
+if (authRoutes) {
+  app.use("/auth", authRoutes);
+}
 
-// Health check
-app.get("/", (req, res) => {
+if (b2bRoutes) {
+  app.use("/api/b2b", b2bRoutes);
+}
+
+if (orderRoutes) {
+  app.use("/api/orders", orderRoutes);
+}
+
+if (adminRoutes) {
+  app.use("/api/admin", adminRoutes);
+}
+
+// ── Health / DB Test ───────────────────────────────────────────────────────
+app.get("/health", (req, res) => {
   res.send("Backend is running");
 });
 
-// DB test
 app.get("/test-db", async (req, res) => {
   try {
     const result = await pool.query("SELECT NOW()");
@@ -41,6 +79,7 @@ app.get("/test-db", async (req, res) => {
   }
 });
 
+// ── Start ──────────────────────────────────────────────────────────────────
 app.listen(PORT, () => {
-  console.log(`Server running on http://localhost:${PORT}`);
+  console.log(`✓ Server running at http://localhost:${PORT}`);
 });

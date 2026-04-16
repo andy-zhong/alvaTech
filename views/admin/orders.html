@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Orders | Alva Admin</title>
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../../css/styles.css">
+  <link rel="stylesheet" href="../../css/pages/admin.css">
+</head>
+<body class="admin-body">
+    <div id="navbar"></div>
+
+  <div class="admin-layout">
+
+    <!-- Sidebar -->
+    <aside class="admin-sidebar">
+      <a class="admin-brand" href="/views/admin/orders.html">
+        <span class="admin-brand__logo">ALVA</span>
+        <span class="admin-brand__label">Admin</span>
+      </a>
+      <nav class="admin-nav">
+        <a class="admin-nav__link is-active" href="/views/admin/orders.html">
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"
+               fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M9 5H7a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2h-2"/>
+            <rect x="9" y="3" width="6" height="4" rx="1"/>
+          </svg>
+          Orders
+        </a>
+      </nav>
+      <div class="admin-sidebar__bottom">
+        <p class="admin-sidebar__user" id="admin-name-display"></p>
+        <button class="admin-signout" id="signout-btn">Sign out</button>
+      </div>
+    </aside>
+
+    <!-- Main -->
+    <main class="admin-main">
+
+      <div class="admin-topbar">
+        <h1 class="admin-page-title">Orders</h1>
+        <div class="admin-topbar__controls">
+          <input class="admin-search" type="search" id="search-input"
+                 placeholder="Search by name, email, order number…">
+          <select class="admin-select" id="status-filter">
+            <option value="">All statuses</option>
+            <option value="new">New</option>
+            <option value="confirmed">Confirmed</option>
+            <option value="processing">Processing</option>
+            <option value="shipped">Shipped</option>
+            <option value="delivered">Delivered</option>
+            <option value="cancelled">Cancelled</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- Stats bar -->
+      <div class="admin-stats" id="stats-bar" style="display:none;">
+        <div class="admin-stat">
+          <span class="admin-stat__value" id="stat-total">0</span>
+          <span class="admin-stat__label">Total Orders</span>
+        </div>
+        <div class="admin-stat">
+          <span class="admin-stat__value" id="stat-new">0</span>
+          <span class="admin-stat__label">New</span>
+        </div>
+        <div class="admin-stat">
+          <span class="admin-stat__value" id="stat-processing">0</span>
+          <span class="admin-stat__label">Processing</span>
+        </div>
+        <div class="admin-stat">
+          <span class="admin-stat__value" id="stat-revenue">0</span>
+          <span class="admin-stat__label">Revenue (SEK)</span>
+        </div>
+      </div>
+
+      <div id="orders-state" class="admin-state-msg">Loading orders…</div>
+
+      <div class="admin-table-wrap" id="table-wrap" style="display:none;">
+        <table class="admin-table" id="orders-table">
+          <thead>
+            <tr>
+              <th>Order</th>
+              <th>Customer</th>
+              <th>City</th>
+              <th>Total</th>
+              <th>Status</th>
+              <th>Date</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody id="orders-body"></tbody>
+        </table>
+      </div>
+
+    </main>
+  </div>
+
+  <div id="footer"></div>
+
+  <script>
+    // ── Auth guard ──────────────────────────────────────────────────────────
+    const token = localStorage.getItem("adminToken");
+    if (!token) { window.location.href = "/views/admin/login.html"; }
+
+    document.getElementById("admin-name-display").textContent =
+      localStorage.getItem("adminName") || "Admin";
+
+    document.getElementById("signout-btn").addEventListener("click", () => {
+      localStorage.removeItem("adminToken");
+      localStorage.removeItem("adminName");
+      window.location.href = "/views/admin/login.html";
+    });
+
+    // ── Data ────────────────────────────────────────────────────────────────
+    let allOrders = [];
+
+    const STATUS_COLORS = {
+      new:        "badge--blue",
+      confirmed:  "badge--teal",
+      processing: "badge--yellow",
+      shipped:    "badge--purple",
+      delivered:  "badge--green",
+      cancelled:  "badge--red",
+    };
+
+    function fmt(n) {
+      return Number(n).toLocaleString("sv-SE");
+    }
+
+    function fmtDate(iso) {
+      return new Date(iso).toLocaleDateString("sv-SE", {
+        year: "numeric", month: "short", day: "numeric",
+      });
+    }
+
+    function renderRow(order) {
+      const badgeClass = STATUS_COLORS[order.status] || "badge--grey";
+      return `
+        <tr class="admin-table__row" data-id="${order.id}">
+          <td class="admin-table__order-num">${order.order_number}</td>
+          <td>
+            <p class="admin-table__name">${order.first_name} ${order.last_name}</p>
+            <p class="admin-table__email">${order.email}</p>
+          </td>
+          <td>${order.city}, ${order.country}</td>
+          <td class="admin-table__amount">${fmt(order.total)} SEK</td>
+          <td><span class="badge ${badgeClass}">${order.status}</span></td>
+          <td class="admin-table__date">${fmtDate(order.created_at)}</td>
+          <td>
+            <a class="admin-table__view" href="/views/admin/order.html?id=${order.id}">
+              View →
+            </a>
+          </td>
+        </tr>`;
+    }
+
+    function applyFilters() {
+      const q      = document.getElementById("search-input").value.toLowerCase();
+      const status = document.getElementById("status-filter").value;
+      const tbody  = document.getElementById("orders-body");
+
+      const filtered = allOrders.filter((o) => {
+        const matchQ = !q || [
+          o.order_number, o.first_name, o.last_name, o.email, o.city,
+        ].some((v) => v?.toLowerCase().includes(q));
+        const matchS = !status || o.status === status;
+        return matchQ && matchS;
+      });
+
+      if (filtered.length === 0) {
+        tbody.innerHTML = `<tr><td colspan="7" class="admin-empty-row">No orders match your search.</td></tr>`;
+      } else {
+        tbody.innerHTML = filtered.map(renderRow).join("");
+      }
+    }
+
+    function renderStats(orders) {
+      const bar = document.getElementById("stats-bar");
+      bar.style.display = "grid";
+
+      document.getElementById("stat-total").textContent = orders.length;
+      document.getElementById("stat-new").textContent =
+        orders.filter((o) => o.status === "new").length;
+      document.getElementById("stat-processing").textContent =
+        orders.filter((o) => ["confirmed", "processing"].includes(o.status)).length;
+      document.getElementById("stat-revenue").textContent =
+        fmt(orders.filter((o) => o.status !== "cancelled")
+                  .reduce((s, o) => s + parseFloat(o.total), 0));
+    }
+
+    async function loadOrders() {
+      try {
+        const res  = await fetch("/api/admin/orders", {
+          headers: { Authorization: `Bearer ${token}` },
+        });
+
+        if (res.status === 401) {
+          localStorage.removeItem("adminToken");
+          window.location.href = "/views/admin/login.html";
+          return;
+        }
+
+        allOrders = await res.json();
+
+        document.getElementById("orders-state").style.display = "none";
+        document.getElementById("table-wrap").style.display   = "block";
+
+        renderStats(allOrders);
+        applyFilters();
+
+      } catch (err) {
+        document.getElementById("orders-state").textContent =
+          "Failed to load orders. Is the server running?";
+      }
+    }
+
+    // Wire search and filter
+    document.getElementById("search-input").addEventListener("input",  applyFilters);
+    document.getElementById("status-filter").addEventListener("change", applyFilters);
+
+    // Click row to open order
+    document.getElementById("orders-body").addEventListener("click", (e) => {
+      const row = e.target.closest("tr[data-id]");
+      if (row && !e.target.classList.contains("admin-table__view")) {
+        window.location.href = `/views/admin/order.html?id=${row.dataset.id}`;
+      }
+    });
+
+    loadOrders();
+  </script>
+  <script type="module" src="../../js/main.js"></script>
+</body>
+</html>

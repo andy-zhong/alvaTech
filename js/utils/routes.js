@@ -1,9 +1,13 @@
-export function getRootPath(page) {
-  return page === "home" ? "." : "..";
+export function getRootPath() {
+  const depth = window.location.pathname.split("/").length - 2;
+
+  return depth === 0
+    ? "."
+    : "../".repeat(depth);
 }
 
-export function createRouteHelpers(page) {
-  const root = getRootPath(page);
+export function createRouteHelpers() {
+  const root = getRootPath();
 
   const route = (path) => `${root}/${path}`;
 

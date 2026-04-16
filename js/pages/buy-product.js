@@ -37,12 +37,10 @@ export function renderBuyProductPage({ lang, route }) {
 
       <div class="cart-layout">
 
-        <!-- Left: line items -->
         <div class="cart-lines" id="cart-lines">
           ${cart.map((item) => renderCartLine(item, lang)).join("")}
         </div>
 
-        <!-- Right: sticky summary + actions -->
         <aside class="cart-sidebar">
           <h3>${t(lang, "cartSummaryTitle")}</h3>
 
@@ -58,9 +56,9 @@ export function renderBuyProductPage({ lang, route }) {
           <p class="cart-summary__legal">${t(lang, "cartTaxNote")}</p>
 
           <div class="cart-actions">
-            <button class="button button--primary" id="checkout-btn">
+            <a class="button button--primary" href="/views/checkout.html">
               ${t(lang, "cartCheckout")}
-            </button>
+            </a>
             <a class="button button--secondary" href="/views/products.html">
               ${t(lang, "cartContinue")}
             </a>
@@ -74,15 +72,14 @@ export function renderBuyProductPage({ lang, route }) {
 function renderCartLine(item, lang) {
   const product = getProductBySlug(item.slug);
   if (!product) return "";
-  const content = getProductContent(product, lang);
-  const qty      = item.quantity || 1;
+  const content   = getProductContent(product, lang);
+  const qty       = item.quantity || 1;
   const lineTotal = item.unitPrice * qty;
 
   if (item.isConfigurable) {
     return `
       <div class="cart-line" data-item-id="${item.cartItemId}">
         <img class="cart-line__img" src="${product.heroImage}" alt="${content.name}">
-
         <div class="cart-line__body">
           <p class="cart-line__name">${content.name}</p>
           <p class="cart-line__meta">
@@ -90,7 +87,6 @@ function renderCartLine(item, lang) {
             &nbsp;·&nbsp; ${item.capacity} kWh
           </p>
         </div>
-
         <div class="cart-line__right">
           <p class="cart-line__price">${lineTotal.toLocaleString("sv-SE")} SEK</p>
           <button class="cart-line__remove" data-item-id="${item.cartItemId}"
@@ -101,11 +97,9 @@ function renderCartLine(item, lang) {
       </div>`;
   }
 
-  // Fixed-price product — quantity controls
   return `
     <div class="cart-line" data-item-id="${item.cartItemId}">
       <img class="cart-line__img" src="${product.heroImage}" alt="${content.name}">
-
       <div class="cart-line__body">
         <p class="cart-line__name">${content.name}</p>
         <p class="cart-line__meta">${item.unitPrice.toLocaleString("sv-SE")} SEK ${t(lang, "cartPerUnit")}</p>
@@ -117,7 +111,6 @@ function renderCartLine(item, lang) {
                   aria-label="${t(lang, "cartIncrease")}">+</button>
         </div>
       </div>
-
       <div class="cart-line__right">
         <p class="cart-line__price" data-price-id="${item.cartItemId}">${lineTotal.toLocaleString("sv-SE")} SEK</p>
         <button class="cart-line__remove" data-item-id="${item.cartItemId}"
@@ -137,26 +130,23 @@ function renderSummaryRow(item, lang) {
 
   const label = item.isConfigurable
     ? `${content.name} (${item.batteryCount} ${item.batteryCount === 1 ? t(lang, "cartBatterySingular") : t(lang, "cartBatteryPlural")})`
-    : qty > 1
-      ? `${content.name} × ${qty}`
-      : content.name;
+    : qty > 1 ? `${content.name} × ${qty}` : content.name;
 
   return `
     <div class="cart-summary__row">
-      <span style="max-width: 180px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;"
+      <span style="max-width:180px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;"
             title="${label}">${label}</span>
       <span>${lineTotal.toLocaleString("sv-SE")} SEK</span>
     </div>`;
 }
 
 // ─────────────────────────────────────────────────────────────────────────────
-// Bind (called by bootstrap after innerHTML is set)
+// Bind
 // ─────────────────────────────────────────────────────────────────────────────
 
 export function afterRenderBuyProduct({ lang } = {}) {
   const activeLang = lang || getStoredLanguage();
 
-  // Remove buttons
   document.querySelectorAll(".cart-line__remove").forEach((btn) => {
     btn.addEventListener("click", () => {
       removeCartItem(btn.dataset.itemId);
@@ -164,20 +154,12 @@ export function afterRenderBuyProduct({ lang } = {}) {
     });
   });
 
-  // Quantity controls
   document.querySelectorAll(".qty-decrease").forEach((btn) => {
     btn.addEventListener("click", () => updateCartQuantity(btn.dataset.itemId, -1, activeLang));
   });
 
   document.querySelectorAll(".qty-increase").forEach((btn) => {
     btn.addEventListener("click", () => updateCartQuantity(btn.dataset.itemId, +1, activeLang));
-  });
-
-  // Checkout — Klarna wired here later
-  document.getElementById("checkout-btn")?.addEventListener("click", () => {
-    // TODO: initialise Klarna session here.
-    // Cart payload: JSON.parse(localStorage.getItem("cart"))
-    alert("Klarna checkout coming soon!");
   });
 }
 
@@ -215,13 +197,12 @@ function updateCartQuantity(cartItemId, delta, lang) {
   cart[index].quantity = newQty;
   localStorage.setItem("cart", JSON.stringify(cart));
 
-  // Patch DOM in place — no full re-render needed for a quantity change
-  const lineTotal = cart[index].unitPrice * newQty;
+  const lineTotal  = cart[index].unitPrice * newQty;
   const grandTotal = cart.reduce((sum, item) => sum + item.unitPrice * (item.quantity || 1), 0);
 
-  const qtyEl     = document.querySelector(`.qty-value[data-item-id="${cartItemId}"]`);
-  const priceEl   = document.querySelector(`.cart-line__price[data-price-id="${cartItemId}"]`);
-  const totalEl   = document.getElementById("cart-grand-total");
+  const qtyEl   = document.querySelector(`.qty-value[data-item-id="${cartItemId}"]`);
+  const priceEl = document.querySelector(`.cart-line__price[data-price-id="${cartItemId}"]`);
+  const totalEl = document.getElementById("cart-grand-total");
 
   if (qtyEl)   qtyEl.innerText   = newQty;
   if (priceEl) priceEl.innerText = `${lineTotal.toLocaleString("sv-SE")} SEK`;

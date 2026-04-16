@@ -11,12 +11,14 @@ import {
   afterRenderProductDetail,
 } from "../pages/product-detail.js";
 import { renderBuyHubPage } from "../pages/buy.js";
-import { renderBuyProductPage, afterRenderBuyProduct } from "../pages/buy-product.js";
+import {
+  renderBuyProductPage,
+  afterRenderBuyProduct,
+} from "../pages/buy-product.js";
 import { renderAboutPage } from "../pages/about.js";
 import { renderAccountPage } from "../pages/account.js";
 import { getProductBySlug } from "../services/product-service.js";
 import { initB2BForm } from "../pages/b2b.js";
-
 
 export async function initApp() {
   const page = document.body.dataset.page || "home";
@@ -26,9 +28,9 @@ export async function initApp() {
   document.documentElement.lang = lang;
 
   await mountShell({ page, lang, ...routes });
-  mountPage({ page, lang, ...routes });
+  await mountPage({ page, lang, ...routes });
 
-  // Viktigt: bind först efter att navbarn faktiskt finns i DOM
+  // Bind först efter att navbar faktiskt finns i DOM
   bindLanguagePicker();
 }
 
@@ -63,7 +65,14 @@ async function mountShell({ page, lang, route, productUrl }) {
   }
 }
 
-function mountPage({ page, lang, route, productUrl, buyProductUrl, getCurrentSlug }) {
+async function mountPage({
+  page,
+  lang,
+  route,
+  productUrl,
+  buyProductUrl,
+  getCurrentSlug,
+}) {
   const container = document.getElementById("page-content");
   if (!container) return;
 
@@ -110,6 +119,29 @@ function mountPage({ page, lang, route, productUrl, buyProductUrl, getCurrentSlu
       afterRenderBuyProduct({ lang });
       break;
 
+    case "checkout":
+      document.title = "Checkout | Alva Technology";
+      try {
+        const checkoutModule = await import("../pages/checkout.js");
+        container.innerHTML = checkoutModule.renderCheckoutPage({ lang });
+        checkoutModule.bindCheckoutPage({ lang });
+      } catch (err) {
+        console.error("[bootstrap] Checkout page failed:", err);
+        container.innerHTML = renderMissingProduct({ lang, route });
+      }
+      break;
+
+    case "order-confirmation":
+      document.title = "Order Confirmed | Alva Technology";
+      try {
+        const orderConfirmationModule = await import("../pages/order-confirmation.js");
+        container.innerHTML = orderConfirmationModule.renderOrderConfirmationPage();
+      } catch (err) {
+        console.error("[bootstrap] Order confirmation page failed:", err);
+        container.innerHTML = renderMissingProduct({ lang, route });
+      }
+      break;
+
     case "about":
       document.title = t(lang, "metaAboutTitle");
       container.innerHTML = renderAboutPage({ lang });
@@ -121,14 +153,11 @@ function mountPage({ page, lang, route, productUrl, buyProductUrl, getCurrentSlu
       break;
 
     case "b2b":
-  document.title = "B2B | Alva Technology";
-
-  // 🔥 VIKTIGT: kör EFTER DOM finns
-  setTimeout(() => {
-    initB2BForm();
-  }, 0);
-
-  break;
+      document.title = "B2B | Alva Technology";
+      setTimeout(() => {
+        initB2BForm();
+      }, 0);
+      break;
 
     default:
       container.innerHTML = renderMissingProduct({ lang, route });
