@@ -80,7 +80,7 @@ async function mountPage({
     case "home":
       document.title = t(lang, "metaHomeTitle");
       container.innerHTML = renderHomePage({ lang });
-      bindHomePage({ lang, productUrl });
+      bindHomePage({ lang, productUrl, buyProductUrl });
       break;
 
     case "products":

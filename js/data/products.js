@@ -14,16 +14,16 @@ const createMediaItem = (src, alt, type = "image") => ({ src, alt, type });
 export const PRODUCTS = [
 
   {
-    slug: "Voltrix",
-    name: "Voltrix System",
-    shortName: "Voltrix",
+    slug: "voltrix-5-pack-kit",
+    name: "Voltrix 5-Pack Kit",
+    shortName: "Voltrix 5-Pack",
 
     heroImage: "/assets/products/voltrix01.jpg",
     thumbnail: "/assets/products/voltrix01.jpg",
 
     heroMedia: createMediaItem(
       "/assets/products/voltrix01.jpg",
-      "Voltrix System"
+      "Voltrix 5-Pack Kit"
     ),
 
     gallery: [
@@ -50,7 +50,7 @@ export const PRODUCTS = [
 
     translations: {
       en: {
-        name: "Voltrix System",
+        name: "Voltrix 5-Pack Kit",
         summary: "A modular home energy system — scale seamlessly from 0.57 to 6.84 kWh as your needs evolve.",
         intro: "Voltrix is the intelligent core of your home energy system. Start with a single battery module and expand up to twelve as your needs grow. Store solar energy during the day and power your home at night — while the removable core extends energy use beyond the home, supporting mobility and everyday applications.",
         features: [
@@ -108,7 +108,7 @@ export const PRODUCTS = [
       },
 
       sv: {
-        name: "Voltrix System",
+        name: "Voltrix 5-Pack Kit",
         summary: "Ett modulärt energisystem för hemmet — bygg ut från 0,57 till 6,84 kWh i takt med dina behov.",
         intro: "Voltrix är kärnan i ditt hemmaenergisystem. Börja med en batterimodul och expandera upp till tolv efter behov. Lagra solenergi under dagen och använd den på kvällen — samtidigt som den avtagbara batterikärnan gör energin flexibel även utanför hemmet.",
         features: [
