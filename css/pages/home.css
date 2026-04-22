@@ -1,14 +1,41 @@
+/* ═══════════════════════════════════════════════════════════════════════════
+   HOME PAGE  —  css/pages/home.css
+   Replaces the existing home.css completely.
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+
+/* ─────────────────────────────────────────────────────────────────────────
+   Shared layout token for home sections
+   ───────────────────────────────────────────────────────────────────────── */
+
+.home-section-inner {
+  max-width: 1160px;
+  margin: 0 auto;
+  padding: 0 clamp(20px, 5vw, 56px);
+}
+
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   HERO — everything visible on first load, no scrolling required
+   ═══════════════════════════════════════════════════════════════════════════ */
+
 .hero--home {
-  position: relative;
-  overflow: hidden;
-  padding: clamp(32px, 5vw, 56px) 0 24px;
-  border: none;
+  /* Fill the viewport, centred vertically */
+  min-height: 100svh;
+  display: flex;
+  align-items: center;
+
+  /* Subtle atmospheric background */
   background:
-    radial-gradient(circle at 50% 18%, rgba(198, 210, 71, 0.16), transparent 24%),
-    radial-gradient(circle at 12% 12%, rgba(198, 210, 71, 0.08), transparent 18%),
-    radial-gradient(circle at 88% 14%, rgba(99, 142, 102, 0.14), transparent 22%),
-    linear-gradient(180deg, rgba(8, 21, 19, 0.72), rgba(5, 15, 13, 0.3));
-  box-shadow: none;
+    radial-gradient(circle at 50% 15%, rgba(198, 210, 71, 0.14) 0%, transparent 22%),
+    radial-gradient(circle at 12% 10%, rgba(198, 210, 71, 0.06) 0%, transparent 16%),
+    radial-gradient(circle at 88% 12%, rgba(99, 142, 102, 0.12) 0%, transparent 20%),
+    linear-gradient(180deg, rgba(8, 21, 19, 0.68) 0%, rgba(5, 14, 12, 0.25) 100%);
+
+  /* Remove any extra padding from the base */
+  padding: clamp(20px, 3svh, 44px) 0;
+  overflow: hidden;
+  position: relative;
 }
 
 .hero--home::before {
@@ -16,176 +43,396 @@
   position: absolute;
   inset: 0;
   background:
-    linear-gradient(180deg, rgba(255, 255, 255, 0.02), transparent 24%),
-    radial-gradient(circle at 50% 100%, rgba(198, 210, 71, 0.05), transparent 35%);
+    linear-gradient(180deg, rgba(255, 255, 255, 0.018) 0%, transparent 20%),
+    radial-gradient(circle at 50% 100%, rgba(198, 210, 71, 0.04) 0%, transparent 32%);
   pointer-events: none;
 }
 
+/* Shell — stacks copy above showcase, centred */
 .hero__shell {
   position: relative;
   z-index: 1;
   display: grid;
-  gap: 28px;
+  gap: clamp(14px, 2.5svh, 28px);  /* tight gap so everything fits */
   justify-items: center;
   text-align: center;
+  width: 100%;
 }
 
+/* Copy block */
 .hero__copy {
   display: grid;
-  gap: 14px;
-  max-width: 820px;
+  gap: 10px;
+  max-width: 760px;
   justify-items: center;
 }
 
 .hero__kicker {
+  color: rgba(198, 210, 71, 0.82);
+  letter-spacing: 0.2em;
+  font-size: 0.72rem;
+  font-weight: 600;
   margin: 0;
   padding: 0;
   background: none;
-  color: rgba(198, 210, 71, 0.86);
-  letter-spacing: 0.2em;
 }
 
 .hero__copy h1 {
-  max-width: 14ch;
   margin: 0;
-  font-size: clamp(2.8rem, 7vw, 5.6rem);
-  line-height: 0.94;
-  letter-spacing: -0.06em;
+  font-size: clamp(2rem, 5.2vw, 4.2rem);
+  line-height: 0.95;
+  letter-spacing: -0.05em;
+  max-width: 15ch;
 }
+
+
+/* ─────────────────────────────────────────────────────────────────────────
+   Showcase — the product carousel area inside the hero
+   ───────────────────────────────────────────────────────────────────────── */
 
 .showcase {
   width: 100%;
-  display: block;
 }
 
 .showcase__stage {
   position: relative;
-  width: min(100%, 1080px);
-  min-height: clamp(420px, 62vw, 760px);
+  /* Controlled height — never overflows the viewport */
+  width: min(100%, 960px);
+  height: clamp(300px, 40svh, 520px);
   margin: 0 auto;
   display: grid;
   place-items: center;
 }
 
+/* Prev / next arrows */
 .showcase__button {
   position: absolute;
   top: 50%;
   z-index: 2;
-  width: 46px;
-  height: 46px;
-  border-radius: 999px;
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
   border: 1px solid rgba(255, 255, 255, 0.08);
-  background: rgba(8, 20, 18, 0.64);
+  background: rgba(8, 20, 18, 0.6);
   color: var(--text);
   transform: translateY(-50%);
-  transition: background-color 180ms ease, opacity 180ms ease, transform 180ms ease;
+  transition: background 180ms ease, opacity 180ms ease, transform 180ms ease;
+  cursor: pointer;
 }
 
 .showcase__button:hover,
 .showcase__button:focus-visible {
-  background: rgba(14, 29, 26, 0.92);
+  background: rgba(14, 30, 26, 0.92);
   transform: translateY(calc(-50% - 1px));
 }
 
-.showcase__button:disabled {
-  opacity: 0.3;
-  cursor: default;
+.showcase__button:disabled,
+.showcase__button[hidden] {
+  opacity: 0;
+  pointer-events: none;
 }
 
 .showcase__button::before {
   content: "";
   display: inline-block;
-  width: 10px;
-  height: 10px;
+  width: 9px;
+  height: 9px;
   border-top: 1.5px solid currentColor;
   border-right: 1.5px solid currentColor;
 }
 
-.showcase__button[data-direction="prev"] {
-  left: clamp(12px, 8vw, 112px);
-}
+.showcase__button[data-direction="prev"] { left:  clamp(10px, 6vw, 88px); }
+.showcase__button[data-direction="prev"]::before { transform: rotate(-135deg); margin-left:  3px; }
 
-.showcase__button[data-direction="prev"]::before {
-  transform: rotate(-135deg);
-  margin-left: 4px;
-}
+.showcase__button[data-direction="next"] { right: clamp(10px, 6vw, 88px); }
+.showcase__button[data-direction="next"]::before { transform: rotate(45deg);  margin-right: 3px; }
 
-.showcase__button[data-direction="next"] {
-  right: clamp(12px, 8vw, 112px);
-}
 
-.showcase__button[data-direction="next"]::before {
-  transform: rotate(45deg);
-  margin-right: 4px;
-}
+/* ─────────────────────────────────────────────────────────────────────────
+   Product visual — stable layout regardless of image dimensions
+   The frame has a FIXED height. The img is absolutely placed inside it so
+   the image can never push other content around.
+   ───────────────────────────────────────────────────────────────────────── */
 
 .product-visual {
   display: grid;
-  gap: 18px;
+  /* Fixed rows: image | product name | buy button */
+  grid-template-rows: 1fr auto auto;
+  gap: 14px;
   justify-items: center;
-  width: 100%;
+  width: min(100%, 640px);
+
+  /* Height matches the parent stage */
+  height: 100%;
+
+  /* Crossfade transition — applies when .is-fading is added */
+  transition: opacity 0.2s ease, transform 0.2s ease;
 }
 
+.product-visual.is-fading {
+  opacity: 0;
+  transform: translateY(7px);
+}
+
+/* The link fills the first row */
 .product-visual__link {
   display: block;
-  width: min(100%, 820px);
-  transition: transform 200ms ease;
+  width: 100%;
+  height: 100%;
+  transition: transform 220ms ease;
 }
 
 .product-visual__link:hover,
 .product-visual__link:focus-visible {
-  transform: translateY(-2px);
+  transform: translateY(-3px);
 }
 
-.product-visual img {
+/* ── KEY FIX: the frame determines layout, not the image ── */
+.product-visual__frame {
+  /* Fills the link (which fills row 1) */
   width: 100%;
-  max-width: 820px;
-  max-height: 560px;
-  object-fit: contain;
-  border: none;
-  border-radius: 0;
-  background: transparent;
-  filter: drop-shadow(0 30px 80px rgba(0, 0, 0, 0.46));
+  height: 100%;
+  position: relative; /* contains the absolutely placed img */
+  overflow: hidden;
+  border-radius: 20px;
 }
 
+/* The image takes the frame's dimensions — never affects layout */
+.product-visual__frame img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  object-position: center;
+  padding: clamp(12px, 3vw, 32px);
+  filter: drop-shadow(0 24px 64px rgba(0, 0, 0, 0.42));
+  transition: transform 320ms ease;
+  pointer-events: none;
+  /* No background here — the atmospheric gradient shows through */
+}
+
+.product-visual__link:hover .product-visual__frame img {
+  transform: scale(1.04);
+}
+
+/* Product name text */
 .product-visual__name {
+  font-size: clamp(1rem, 2.2vw, 1.3rem);
+  font-weight: 600;
   margin: 0;
-  font-size: clamp(1.2rem, 2.8vw, 1.85rem);
+  letter-spacing: -0.02em;
+}
+
+/* Buy button */
+.product-visual__buy {
+  /* row 3, no extra margin needed */
+}
+
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   SCROLL REVEAL SYSTEM
+   Elements start hidden/transformed; IntersectionObserver adds .is-visible
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+.reveal {
+  opacity: 0;
+  transform: translateY(28px);
+  transition:
+    opacity  0.72s cubic-bezier(0.22, 0.6, 0.36, 1),
+    transform 0.72s cubic-bezier(0.22, 0.6, 0.36, 1);
+  transition-delay: var(--delay, 0s);
+}
+
+.reveal.is-visible {
+  opacity: 1;
+  transform: none;
+}
+
+/* Variant: scale in from slightly smaller */
+.reveal--scale {
+  transform: scale(0.94) translateY(16px);
+}
+
+.reveal--scale.is-visible {
+  transform: scale(1) translateY(0);
+}
+
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   STATS STRIP
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+.home-stats {
+  padding: clamp(44px, 7vw, 88px) clamp(20px, 5vw, 56px);
+  border-top:    1px solid rgba(255, 255, 255, 0.06);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.home-stats__inner {
+  max-width: 860px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: clamp(20px, 4vw, 48px);
+  text-align: center;
+}
+
+.home-stat__value {
+  display: block;
+  font-size: clamp(2.8rem, 7vw, 5.2rem);
+  font-weight: 800;
+  line-height: 1;
+  letter-spacing: -0.05em;
+  /* Accent colour — the yellow-green from your palette */
+  color: rgba(198, 210, 71, 0.88);
+  font-feature-settings: "tnum";
+}
+
+.home-stat__label {
+  margin: 8px 0 0;
+  font-size: 0.78rem;
+  font-weight: 500;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+  opacity: 0.42;
+}
+
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   FEATURE CARDS
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+.home-features {
+  padding: clamp(56px, 9vw, 112px) 0;
+}
+
+.home-features__title {
+  font-size: clamp(1.7rem, 3.8vw, 2.8rem);
   font-weight: 700;
   letter-spacing: -0.04em;
+  margin: 0 0 clamp(28px, 5vw, 52px);
+  text-align: center;
 }
 
-.product-visual__buy {
-  margin-top: 4px;
+.home-features__grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 18px;
 }
+
+.home-feature {
+  background: rgba(255, 255, 255, 0.03);
+  border:     1px solid rgba(255, 255, 255, 0.07);
+  border-radius: 20px;
+  padding: clamp(22px, 3vw, 32px);
+  transition: background 0.2s ease, border-color 0.2s ease, transform 0.2s ease;
+}
+
+.home-feature:hover {
+  background:    rgba(255, 255, 255, 0.055);
+  border-color:  rgba(255, 255, 255, 0.12);
+  transform:     translateY(-2px);
+}
+
+.home-feature__icon {
+  color: rgba(198, 210, 71, 0.78);
+  margin-bottom: 16px;
+  display: block;
+  line-height: 0;
+}
+
+.home-feature__title {
+  font-size: 1.05rem;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  margin: 0 0 9px;
+}
+
+.home-feature__body {
+  font-size: 0.875rem;
+  line-height: 1.68;
+  opacity: 0.55;
+  margin: 0;
+}
+
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   CTA SECTION
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+.home-cta {
+  padding: clamp(48px, 8vw, 96px) 0
+           clamp(64px, 10vw, 120px);
+}
+
+.home-cta__card {
+  /* Accent-tinted glassmorphism panel */
+  background: linear-gradient(
+    135deg,
+    rgba(198, 210, 71, 0.10) 0%,
+    rgba(99, 142, 102, 0.07) 100%
+  );
+  border: 1px solid rgba(198, 210, 71, 0.18);
+  border-radius: 24px;
+  padding: clamp(40px, 6vw, 72px) clamp(28px, 5vw, 64px);
+  text-align: center;
+}
+
+.home-cta__title {
+  font-size: clamp(1.7rem, 3.8vw, 2.8rem);
+  font-weight: 700;
+  letter-spacing: -0.04em;
+  margin: 0 0 12px;
+}
+
+.home-cta__body {
+  font-size: 1rem;
+  opacity: 0.55;
+  max-width: 380px;
+  margin: 0 auto 28px;
+  line-height: 1.65;
+}
+
+.home-cta__btn {
+  font-size: 0.95rem;
+}
+
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   RESPONSIVE
+   ═══════════════════════════════════════════════════════════════════════════ */
 
 @media (max-width: 860px) {
   .hero--home {
-    padding-top: 22px;
+    padding-top: clamp(16px, 2.5svh, 28px);
   }
 
   .showcase__stage {
-    min-height: 430px;
+    height: clamp(260px, 38svh, 420px);
   }
 
-  .showcase__button[data-direction="prev"] {
-    left: 8px;
-  }
+  .showcase__button[data-direction="prev"] { left:  8px; }
+  .showcase__button[data-direction="next"] { right: 8px; }
 
-  .showcase__button[data-direction="next"] {
-    right: 8px;
+  .home-features__grid {
+    grid-template-columns: 1fr;
+    max-width: 480px;
+    margin: 0 auto;
   }
 }
 
-@media (max-width: 560px) {
+@media (max-width: 600px) {
   .hero__copy h1 {
-    max-width: 11ch;
+    max-width: 12ch;
+    font-size: clamp(1.8rem, 7.5vw, 2.4rem);
   }
 
   .showcase__stage {
-    min-height: 340px;
+    height: clamp(220px, 36svh, 360px);
   }
 
+  /* Move arrows to the bottom on small screens */
   .showcase__button {
     top: auto;
     bottom: 28px;
@@ -197,12 +444,22 @@
     transform: translateY(-1px);
   }
 
-  .product-visual {
-    gap: 14px;
-    padding-bottom: 44px;
+  .home-stats__inner {
+    grid-template-columns: 1fr 1fr;
   }
 
-  .product-visual img {
-    max-height: 280px;
+  /* Centre the third stat if grid wraps */
+  .home-stat:last-child {
+    grid-column: 1 / -1;
+  }
+}
+
+@media (max-width: 400px) {
+  .home-stats__inner {
+    grid-template-columns: 1fr;
+  }
+
+  .home-stat:last-child {
+    grid-column: auto;
   }
 }
