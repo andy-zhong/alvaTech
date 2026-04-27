@@ -1,11 +1,10 @@
 /* ═══════════════════════════════════════════════════════════════════════════
    HOME PAGE  —  css/pages/home.css
-   Replaces the existing home.css completely.
    ═══════════════════════════════════════════════════════════════════════════ */
 
 
 /* ─────────────────────────────────────────────────────────────────────────
-   Shared layout token for home sections
+   Shared inner-width token used by all home sections
    ───────────────────────────────────────────────────────────────────────── */
 
 .home-section-inner {
@@ -16,24 +15,32 @@
 
 
 /* ═══════════════════════════════════════════════════════════════════════════
-   HERO — everything visible on first load, no scrolling required
+   HERO
+   — Fills exactly one viewport.
+   — Product is the dominant visual element (right/top).
+   — Copy is a refined tagline (left/bottom).
    ═══════════════════════════════════════════════════════════════════════════ */
 
 .hero--home {
-  /* Fill the viewport, centred vertically */
   min-height: 100svh;
+
+  /* Push content below navbar (~68 px).
+     box-sizing:border-box keeps total height at 100svh including the padding,
+     so flex centering works in the visible area beneath the navbar. */
+  padding-top: clamp(68px, 9svh, 96px);
+  padding-bottom: clamp(20px, 3svh, 40px);
+  box-sizing: border-box;
+
   display: flex;
   align-items: center;
 
-  /* Subtle atmospheric background */
+  /* Atmospheric background — identical to existing palette */
   background:
-    radial-gradient(circle at 50% 15%, rgba(198, 210, 71, 0.14) 0%, transparent 22%),
-    radial-gradient(circle at 12% 10%, rgba(198, 210, 71, 0.06) 0%, transparent 16%),
-    radial-gradient(circle at 88% 12%, rgba(99, 142, 102, 0.12) 0%, transparent 20%),
-    linear-gradient(180deg, rgba(8, 21, 19, 0.68) 0%, rgba(5, 14, 12, 0.25) 100%);
+    radial-gradient(circle at 50% 15%, rgba(198, 210, 71, 0.14) 0%, transparent 24%),
+    radial-gradient(circle at 10% 10%, rgba(198, 210, 71, 0.06) 0%, transparent 18%),
+    radial-gradient(circle at 90% 12%, rgba(99, 142, 102, 0.12) 0%, transparent 22%),
+    linear-gradient(180deg, rgba(8, 21, 19, 0.68) 0%, rgba(5, 14, 12, 0.22) 100%);
 
-  /* Remove any extra padding from the base */
-  padding: clamp(20px, 3svh, 44px) 0;
   overflow: hidden;
   position: relative;
 }
@@ -43,51 +50,120 @@
   position: absolute;
   inset: 0;
   background:
-    linear-gradient(180deg, rgba(255, 255, 255, 0.018) 0%, transparent 20%),
-    radial-gradient(circle at 50% 100%, rgba(198, 210, 71, 0.04) 0%, transparent 32%);
+    linear-gradient(180deg, rgba(255, 255, 255, 0.018) 0%, transparent 22%),
+    radial-gradient(circle at 50% 100%, rgba(198, 210, 71, 0.04) 0%, transparent 35%);
   pointer-events: none;
 }
 
-/* Shell — stacks copy above showcase, centred */
+/* ─────────────────────────────────────────────────────────────────────────
+   Shell — two-column on desktop, stacked (product first) on mobile
+   ───────────────────────────────────────────────────────────────────────── */
+
 .hero__shell {
   position: relative;
   z-index: 1;
+  width: 100%;
   display: grid;
-  gap: clamp(14px, 2.5svh, 28px);  /* tight gap so everything fits */
+  grid-template-columns: 1fr;
+  gap: clamp(20px, 3svh, 32px);
   justify-items: center;
   text-align: center;
-  width: 100%;
+  padding: 0 clamp(18px, 5vw, 40px);
+  box-sizing: border-box;
 }
 
-/* Copy block */
+/* On mobile: product (showcase) floats ABOVE copy using grid order */
+.hero__copy    { order: 2; }
+.showcase      { order: 1; }
+
+@media (min-width: 861px) {
+  .hero__shell {
+    /* Copy left (40%) — Product right (60%) */
+    grid-template-columns: 40fr 60fr;
+    gap: clamp(32px, 4vw, 72px);
+    text-align: left;
+    justify-items: start;
+    align-items: center;
+    max-width: 1320px;
+    margin: 0 auto;
+    padding: 0 clamp(32px, 5vw, 80px);
+  }
+
+  /* Restore natural DOM order on desktop */
+  .hero__copy { order: 1; }
+  .showcase   { order: 2; }
+}
+
+
+/* ─────────────────────────────────────────────────────────────────────────
+   Copy block — tagline treatment
+   ───────────────────────────────────────────────────────────────────────── */
+
 .hero__copy {
-  display: grid;
-  gap: 10px;
-  max-width: 760px;
-  justify-items: center;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  align-items: center; /* centred on mobile */
+}
+
+@media (min-width: 861px) {
+  .hero__copy {
+    align-items: flex-start; /* left-aligned on desktop */
+    max-width: 420px;
+    gap: 20px;
+  }
 }
 
 .hero__kicker {
   color: rgba(198, 210, 71, 0.82);
   letter-spacing: 0.2em;
-  font-size: 0.72rem;
+  font-size: 0.68rem;
   font-weight: 600;
   margin: 0;
   padding: 0;
   background: none;
 }
 
-.hero__copy h1 {
+/* ── Headline: smaller, refined tagline — product is the real hero ── */
+.hero__headline {
   margin: 0;
-  font-size: clamp(2rem, 5.2vw, 4.2rem);
-  line-height: 0.95;
-  letter-spacing: -0.05em;
-  max-width: 15ch;
+  font-size: clamp(2rem, 4vw, 3.4rem);
+  line-height: 0.96;
+  letter-spacing: -0.045em;
+  max-width: 10ch;
+}
+
+/* ── Supporting sentence ── */
+.hero__sub {
+  font-size: clamp(0.85rem, 1.1vw, 0.97rem);
+  line-height: 1.68;
+  opacity: 0.52;
+  max-width: 32ch;
+  margin: 0;
+}
+
+/* ── "Explore the system →" text link ── */
+.hero__explore {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.82rem;
+  font-weight: 500;
+  color: inherit;
+  text-decoration: none;
+  opacity: 0.38;
+  transition: opacity 0.18s ease, gap 0.18s ease;
+  margin-top: 4px;
+}
+
+.hero__explore:hover {
+  opacity: 0.75;
+  gap: 10px;
 }
 
 
 /* ─────────────────────────────────────────────────────────────────────────
-   Showcase — the product carousel area inside the hero
+   Showcase — wraps the stage and carousel arrows
    ───────────────────────────────────────────────────────────────────────── */
 
 .showcase {
@@ -96,28 +172,37 @@
 
 .showcase__stage {
   position: relative;
-  /* Controlled height — never overflows the viewport */
-  width: min(100%, 960px);
-  height: clamp(300px, 40svh, 520px);
+  width: 100%;
+  max-width: min(100%, 840px);
+  height: clamp(280px, 38svh, 460px);
   margin: 0 auto;
   display: grid;
   place-items: center;
 }
 
-/* Prev / next arrows */
+@media (min-width: 861px) {
+  .showcase__stage {
+    /* On desktop the right column IS the showcase — let it fill naturally */
+    max-width: 100%;
+    height: clamp(420px, 56svh, 680px);
+    margin: 0;
+  }
+}
+
+/* Carousel arrows */
 .showcase__button {
   position: absolute;
   top: 50%;
   z-index: 2;
-  width: 44px;
-  height: 44px;
+  width: 42px;
+  height: 42px;
   border-radius: 50%;
   border: 1px solid rgba(255, 255, 255, 0.08);
-  background: rgba(8, 20, 18, 0.6);
+  background: rgba(8, 20, 18, 0.58);
   color: var(--text);
   transform: translateY(-50%);
-  transition: background 180ms ease, opacity 180ms ease, transform 180ms ease;
   cursor: pointer;
+  transition: background 180ms ease, transform 180ms ease;
 }
 
 .showcase__button:hover,
@@ -141,63 +226,59 @@
   border-right: 1.5px solid currentColor;
 }
 
-.showcase__button[data-direction="prev"] { left:  clamp(10px, 6vw, 88px); }
-.showcase__button[data-direction="prev"]::before { transform: rotate(-135deg); margin-left:  3px; }
+.showcase__button[data-direction="prev"] { left:  clamp(8px, 3vw, 28px); }
+.showcase__button[data-direction="prev"]::before { transform: rotate(-135deg); margin-left: 3px; }
 
-.showcase__button[data-direction="next"] { right: clamp(10px, 6vw, 88px); }
-.showcase__button[data-direction="next"]::before { transform: rotate(45deg);  margin-right: 3px; }
+.showcase__button[data-direction="next"] { right: clamp(8px, 3vw, 28px); }
+.showcase__button[data-direction="next"]::before { transform: rotate(45deg); margin-right: 3px; }
 
 
 /* ─────────────────────────────────────────────────────────────────────────
-   Product visual — stable layout regardless of image dimensions
-   The frame has a FIXED height. The img is absolutely placed inside it so
-   the image can never push other content around.
+   Product visual — the image NEVER shifts layout regardless of dimensions.
+   The frame is absolutely positioned so the image lives inside a fixed box.
    ───────────────────────────────────────────────────────────────────────── */
 
 .product-visual {
+  /* Three fixed rows: [image area] [name] [configure button] */
   display: grid;
-  /* Fixed rows: image | product name | buy button */
   grid-template-rows: 1fr auto auto;
-  gap: 14px;
+  gap: 16px;
   justify-items: center;
-  width: min(100%, 640px);
-
-  /* Height matches the parent stage */
+  width: min(100%, 560px);
   height: 100%;
 
-  /* Crossfade transition — applies when .is-fading is added */
-  transition: opacity 0.2s ease, transform 0.2s ease;
+  /* Crossfade when .is-fading is applied by the carousel */
+  transition: opacity 0.22s ease, transform 0.22s ease;
 }
 
 .product-visual.is-fading {
   opacity: 0;
-  transform: translateY(7px);
+  transform: translateY(10px);
 }
 
-/* The link fills the first row */
+/* The link fills row 1 */
 .product-visual__link {
   display: block;
   width: 100%;
   height: 100%;
-  transition: transform 220ms ease;
+  transition: transform 240ms ease;
 }
 
 .product-visual__link:hover,
 .product-visual__link:focus-visible {
-  transform: translateY(-3px);
+  transform: translateY(-4px);
 }
 
-/* ── KEY FIX: the frame determines layout, not the image ── */
+/* ── Frame — determines layout. Image is contained inside. ── */
 .product-visual__frame {
-  /* Fills the link (which fills row 1) */
   width: 100%;
   height: 100%;
-  position: relative; /* contains the absolutely placed img */
+  position: relative; /* contains the absolute img */
+  border-radius: 22px;
   overflow: hidden;
-  border-radius: 20px;
 }
 
-/* The image takes the frame's dimensions — never affects layout */
+/* Image fills the frame absolutely — never pushes siblings */
 .product-visual__frame img {
   position: absolute;
   inset: 0;
@@ -205,42 +286,43 @@
   height: 100%;
   object-fit: contain;
   object-position: center;
-  padding: clamp(12px, 3vw, 32px);
-  filter: drop-shadow(0 24px 64px rgba(0, 0, 0, 0.42));
-  transition: transform 320ms ease;
+  padding: clamp(10px, 2.5vw, 28px);
+  filter: drop-shadow(0 28px 72px rgba(0, 0, 0, 0.44));
+  transition: transform 340ms ease;
   pointer-events: none;
-  /* No background here — the atmospheric gradient shows through */
 }
 
 .product-visual__link:hover .product-visual__frame img {
   transform: scale(1.04);
 }
 
-/* Product name text */
+/* Product name — row 2 */
 .product-visual__name {
-  font-size: clamp(1rem, 2.2vw, 1.3rem);
+  font-size: clamp(0.95rem, 1.8vw, 1.25rem);
   font-weight: 600;
-  margin: 0;
   letter-spacing: -0.02em;
+  margin: 0;
+  text-align: center;
 }
 
-/* Buy button */
-.product-visual__buy {
-  /* row 3, no extra margin needed */
+/* Configure button — row 3. Replaces the old "Buy" button. */
+.product-visual__configure {
+  font-size: 0.88rem;
 }
 
 
 /* ═══════════════════════════════════════════════════════════════════════════
    SCROLL REVEAL SYSTEM
-   Elements start hidden/transformed; IntersectionObserver adds .is-visible
+   — Elements begin invisible/shifted.
+   — IntersectionObserver adds .is-visible; transition plays once.
    ═══════════════════════════════════════════════════════════════════════════ */
 
 .reveal {
   opacity: 0;
-  transform: translateY(28px);
+  transform: translateY(26px);
   transition:
-    opacity  0.72s cubic-bezier(0.22, 0.6, 0.36, 1),
-    transform 0.72s cubic-bezier(0.22, 0.6, 0.36, 1);
+    opacity  0.7s cubic-bezier(0.22, 0.6, 0.36, 1),
+    transform 0.7s cubic-bezier(0.22, 0.6, 0.36, 1);
   transition-delay: var(--delay, 0s);
 }
 
@@ -249,9 +331,8 @@
   transform: none;
 }
 
-/* Variant: scale in from slightly smaller */
 .reveal--scale {
-  transform: scale(0.94) translateY(16px);
+  transform: scale(0.94) translateY(14px);
 }
 
 .reveal--scale.is-visible {
@@ -261,6 +342,7 @@
 
 /* ═══════════════════════════════════════════════════════════════════════════
    STATS STRIP
+   — PDF sourced: 12 modules / 2400W / 97% efficiency
    ═══════════════════════════════════════════════════════════════════════════ */
 
 .home-stats {
@@ -274,7 +356,7 @@
   margin: 0 auto;
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  gap: clamp(20px, 4vw, 48px);
+  gap: clamp(20px, 5vw, 56px);
   text-align: center;
 }
 
@@ -284,23 +366,23 @@
   font-weight: 800;
   line-height: 1;
   letter-spacing: -0.05em;
-  /* Accent colour — the yellow-green from your palette */
   color: rgba(198, 210, 71, 0.88);
   font-feature-settings: "tnum";
 }
 
 .home-stat__label {
   margin: 8px 0 0;
-  font-size: 0.78rem;
+  font-size: 0.76rem;
   font-weight: 500;
   letter-spacing: 0.07em;
   text-transform: uppercase;
-  opacity: 0.42;
+  opacity: 0.4;
 }
 
 
 /* ═══════════════════════════════════════════════════════════════════════════
    FEATURE CARDS
+   — Three cards sourced from PDF: Grow As You Go / Weather / Battery always at work
    ═══════════════════════════════════════════════════════════════════════════ */
 
 .home-features {
@@ -308,7 +390,7 @@
 }
 
 .home-features__title {
-  font-size: clamp(1.7rem, 3.8vw, 2.8rem);
+  font-size: clamp(1.6rem, 3.6vw, 2.6rem);
   font-weight: 700;
   letter-spacing: -0.04em;
   margin: 0 0 clamp(28px, 5vw, 52px);
@@ -322,28 +404,28 @@
 }
 
 .home-feature {
-  background: rgba(255, 255, 255, 0.03);
-  border:     1px solid rgba(255, 255, 255, 0.07);
+  background:    rgba(255, 255, 255, 0.03);
+  border:        1px solid rgba(255, 255, 255, 0.07);
   border-radius: 20px;
-  padding: clamp(22px, 3vw, 32px);
+  padding:       clamp(22px, 3vw, 32px);
   transition: background 0.2s ease, border-color 0.2s ease, transform 0.2s ease;
 }
 
 .home-feature:hover {
-  background:    rgba(255, 255, 255, 0.055);
-  border-color:  rgba(255, 255, 255, 0.12);
-  transform:     translateY(-2px);
+  background:   rgba(255, 255, 255, 0.055);
+  border-color: rgba(255, 255, 255, 0.13);
+  transform:    translateY(-3px);
 }
 
 .home-feature__icon {
-  color: rgba(198, 210, 71, 0.78);
-  margin-bottom: 16px;
+  color: rgba(198, 210, 71, 0.76);
+  margin-bottom: 18px;
   display: block;
   line-height: 0;
 }
 
 .home-feature__title {
-  font-size: 1.05rem;
+  font-size: 1.02rem;
   font-weight: 700;
   letter-spacing: -0.02em;
   margin: 0 0 9px;
@@ -352,30 +434,30 @@
 .home-feature__body {
   font-size: 0.875rem;
   line-height: 1.68;
-  opacity: 0.55;
+  opacity: 0.52;
   margin: 0;
 }
 
 
 /* ═══════════════════════════════════════════════════════════════════════════
-   CTA SECTION
+   CTA — "One battery for all."
    ═══════════════════════════════════════════════════════════════════════════ */
 
 .home-cta {
-  padding: clamp(48px, 8vw, 96px) 0
-           clamp(64px, 10vw, 120px);
+  padding:
+    clamp(48px, 8vw, 96px) 0
+    clamp(64px, 10vw, 128px);
 }
 
 .home-cta__card {
-  /* Accent-tinted glassmorphism panel */
   background: linear-gradient(
     135deg,
     rgba(198, 210, 71, 0.10) 0%,
     rgba(99, 142, 102, 0.07) 100%
   );
-  border: 1px solid rgba(198, 210, 71, 0.18);
+  border:        1px solid rgba(198, 210, 71, 0.16);
   border-radius: 24px;
-  padding: clamp(40px, 6vw, 72px) clamp(28px, 5vw, 64px);
+  padding: clamp(40px, 6vw, 72px) clamp(28px, 6vw, 72px);
   text-align: center;
 }
 
@@ -387,15 +469,15 @@
 }
 
 .home-cta__body {
-  font-size: 1rem;
-  opacity: 0.55;
-  max-width: 380px;
+  font-size: 0.97rem;
+  opacity: 0.52;
+  max-width: 36ch;
   margin: 0 auto 28px;
   line-height: 1.65;
 }
 
 .home-cta__btn {
-  font-size: 0.95rem;
+  font-size: 0.93rem;
 }
 
 
@@ -403,18 +485,8 @@
    RESPONSIVE
    ═══════════════════════════════════════════════════════════════════════════ */
 
+/* Tablet */
 @media (max-width: 860px) {
-  .hero--home {
-    padding-top: clamp(16px, 2.5svh, 28px);
-  }
-
-  .showcase__stage {
-    height: clamp(260px, 38svh, 420px);
-  }
-
-  .showcase__button[data-direction="prev"] { left:  8px; }
-  .showcase__button[data-direction="next"] { right: 8px; }
-
   .home-features__grid {
     grid-template-columns: 1fr;
     max-width: 480px;
@@ -422,20 +494,20 @@
   }
 }
 
+/* Mobile */
 @media (max-width: 600px) {
-  .hero__copy h1 {
-    max-width: 12ch;
-    font-size: clamp(1.8rem, 7.5vw, 2.4rem);
+  .hero__headline {
+    font-size: clamp(1.9rem, 7vw, 2.4rem);
   }
 
   .showcase__stage {
-    height: clamp(220px, 36svh, 360px);
+    height: clamp(220px, 35svh, 340px);
   }
 
-  /* Move arrows to the bottom on small screens */
+  /* Move carousel arrows to bottom corners on small screens */
   .showcase__button {
     top: auto;
-    bottom: 28px;
+    bottom: 20px;
     transform: none;
   }
 
@@ -444,11 +516,12 @@
     transform: translateY(-1px);
   }
 
+  /* Stats: 2-column grid on small screens */
   .home-stats__inner {
     grid-template-columns: 1fr 1fr;
   }
 
-  /* Centre the third stat if grid wraps */
+  /* Centre-span the third stat */
   .home-stat:last-child {
     grid-column: 1 / -1;
   }
