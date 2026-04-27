@@ -1,184 +1,261 @@
-/**
- * data/products/voltrix.js
- * Voltrix — Modular home energy hub by Alva Technology.
- * The core system: stores solar energy, charges battery modules,
- * and acts as the central power hub.
- */
-
 const createMediaItem = (src, alt, type = "image") => ({ src, alt, type });
 
 export const VOLTRIX_PRODUCT = {
-  slug:      "voltrix-5-pack-kit",
-  name:      "Voltrix 5-Pack Kit",
+  slug: "voltrix-5-pack-kit",
+  name: "Voltrix 5-Pack Kit",
   shortName: "Voltrix",
 
   heroImage: "/assets/products/voltrix01.png",
   thumbnail: "/assets/products/voltrix01.png",
 
-  heroMedia: createMediaItem(
-    "/assets/products/voltrix01.png",
-    "Voltrix Energy Hub"
-  ),
+  heroMedia: createMediaItem("/assets/products/voltrix01.png", "Voltrix Energy Hub"),
 
   gallery: [
-    createMediaItem("/assets/products/voltrix01.png", "Voltrix — front view"),
-    createMediaItem("/assets/products/voltrix02.png", "Voltrix — side profile"),
-    createMediaItem("/assets/products/voltrix03.jpg", "Voltrix — installed outdoors"),
-    createMediaItem("/assets/products/voltrix04.jpg", "Voltrix — wall mounted"),
-    createMediaItem("/assets/products/voltrix05.jpg", "Voltrix — expanded system"),
-    createMediaItem("/assets/products/voltrix06.jpg", "Voltrix — solar integration"),
-    createMediaItem("/assets/products/voltrix07.jpg", "Voltrix — app control"),
+    createMediaItem("/assets/products/voltrix01.png", "Voltrix front view"),
+    createMediaItem("/assets/products/voltrix02.png", "Voltrix side profile"),
+    createMediaItem("/assets/products/voltrix03.jpg", "Voltrix installed outdoors"),
+    createMediaItem("/assets/products/voltrix04.jpg", "Voltrix wall mounted"),
+    createMediaItem("/assets/products/voltrix05.jpg", "Voltrix expanded system"),
+    createMediaItem("/assets/products/voltrix06.jpg", "Voltrix solar integration"),
+    createMediaItem("/assets/products/voltrix07.jpg", "Voltrix app control"),
   ],
 
-  price:      "From 10 980 SEK",
-  status:     "available",
+  price: "From 10 980 SEK",
+  status: "available",
   buyEnabled: true,
 
-  /**
-   * Configurable system — user selects number of battery modules at purchase.
-   * Price = basePrice (hub unit) + batteryCount × batteryPrice (per module)
-   * Capacity = batteryCount × capacityPerBattery kWh
-   */
   config: {
-    basePrice:          7990, // SEK — hub/inverter unit
-    batteryPrice:       2990, // SEK — per 1 kWh battery module
-    minBatteries:       1,
-    maxBatteries:       12,
-    capacityPerBattery: 1,   // kWh per module
+    basePrice: 7990,
+    batteryPrice: 2990,
+    minBatteries: 1,
+    maxBatteries: 12,
+    capacityPerBattery: 1,
   },
 
   translations: {
-
-    // ── English ─────────────────────────────────────────────────────────────
     en: {
-      name:    "Voltrix 5-Pack Kit",
-      summary: "A modular home energy hub — scale from 1 to 12 kWh as your needs grow.",
+      name: "Voltrix 5-Pack Kit",
+      summary: "A modular home energy hub that scales from 1 to 12 kWh as your energy needs grow.",
       intro:
-        "Voltrix is the intelligent core of your home energy system. Start with one battery module " +
-        "and expand to twelve as your needs grow. Store solar energy during the day and power your " +
-        "home at night — while the removable battery core travels with you to support mobility and " +
-        "everyday outdoor use.",
-
+        "Voltrix is the intelligent core of your home energy system. Start with one battery module and expand up to twelve while storing solar energy, lowering grid dependence and keeping portable power available.",
       features: [
-        "Expandable from 1 to 12 battery modules (1–12 kWh)",
-        "2400 W peak AC output — handles high-demand appliances",
-        "2400 W solar input with two independent MPPT trackers",
-        "IP65 rated — protected against dust and water jets",
-        "Operates from −20 °C to +45 °C with integrated self-heating",
-        "Ultra-slim wall profile — ideal for compact spaces",
-        "Stand included for flexible floor placement",
-        "WiFi and Bluetooth with cloud platform and mobile app",
-        "LFP (lithium iron phosphate) battery chemistry — long lifespan",
-        "HF transformer isolation — enhanced safety and grid compliance",
+        "Expandable from 1 to 12 battery modules",
+        "2400 W peak AC output",
+        "2400 W solar input with dual MPPT",
+        "IP65 protection against dust and water",
+        "Operates from -20 °C to +45 °C with self-heating",
+        "WiFi and Bluetooth app connectivity",
+        "LFP battery chemistry for long service life",
       ],
-
       certifications: [
-        "IP65 — dust-tight and water-jet protection",
-        "LFP cell chemistry — IEC 62619 compliant",
-        "CE marked — EN 62109 / EN 61000 series",
+        "IP65 rated",
+        "LFP cell chemistry compliant with IEC 62619",
+        "CE marked",
         "Grid type: L+N+PE",
-        "Operating temperature: −20 °C to +65 °C",
       ],
-
       specs: [
-        { label: "Battery chemistry",      value: "LFP (lithium iron phosphate)" },
-        { label: "Capacity per module",    value: "1 kWh" },
-        { label: "Capacity range",         value: "1 kWh (1 module) — 12 kWh (12 modules)" },
-        { label: "Max. AC output",         value: "1600 VA rated / 2400 VA peak (10 s)" },
-        { label: "Max. solar input",       value: "2400 W" },
-        { label: "Number of MPPTs",        value: "2 independent" },
-        { label: "MPPT voltage range",     value: "12–60 V" },
-        { label: "MPPT tracking eff.",     value: "99 %" },
-        { label: "Max. system efficiency", value: "97 %" },
-        { label: "AC output voltage",      value: "230 V / 180–264 V range" },
-        { label: "AC frequency",           value: "50/60 Hz" },
-        { label: "Cooling method",         value: "Natural convection" },
-        { label: "Communication",          value: "WiFi / Bluetooth" },
-        { label: "Control",                value: "Cloud Platform + Mobile App" },
-        { label: "IP rating",              value: "IP65" },
-        { label: "Operating temperature",  value: "−20 °C to +45 °C" },
-        { label: "DC connector",           value: "MC4" },
+        { label: "Battery chemistry", value: "LFP (lithium iron phosphate)" },
+        { label: "Capacity per module", value: "1 kWh" },
+        { label: "Capacity range", value: "1-12 kWh" },
+        { label: "Max. AC output", value: "1600 VA rated / 2400 VA peak" },
+        { label: "Max. solar input", value: "2400 W" },
+        { label: "Number of MPPTs", value: "2 independent" },
+        { label: "Communication", value: "WiFi / Bluetooth" },
+        { label: "IP rating", value: "IP65" },
       ],
-
       useCases: [
-        "Residential solar storage — use excess solar energy in the evening",
-        "Balcony and terrace installations — minimal footprint",
-        "Reduced grid dependence and lower electricity costs",
-        "Portable energy beyond the home — e-bikes and outdoor gear",
-        "Backup power for essential devices during outages",
-        "Off-grid cabins and remote properties",
+        "Residential solar storage",
+        "Balcony and terrace installations",
+        "Reduced grid dependence",
+        "Backup power for essential devices",
+        "Portable energy beyond the home",
       ],
-
       faq: [
-        "Can I add more batteries after purchase? Yes — the system is fully modular. Add modules one at a time up to 12.",
-        "Does it work without solar panels? Yes — Voltrix charges directly from the grid.",
+        "Can I add more batteries later? Yes, the system is fully modular.",
+        "Does it work without solar panels? Yes, it can charge from the grid.",
         "What happens during a power cut? The system switches to off-grid mode automatically.",
-        "Is installation complex? No — wall mount or floor stand with standard hardware.",
-        "Can the battery be removed and used elsewhere? Yes — the removable core powers compatible Alva devices.",
+        "Is installation complex? No, wall mount or floor stand is supported.",
+        "Can the battery be removed and used elsewhere? Yes, with compatible Alva devices.",
       ],
     },
-
-    // ── Swedish ──────────────────────────────────────────────────────────────
     sv: {
-      name:    "Voltrix 5-Pack Kit",
-      summary: "Ett modulärt energisystem för hemmet — bygg ut från 1 till 12 kWh i din egen takt.",
+      name: "Voltrix 5-Pack Kit",
+      summary: "Ett modulärt energisystem för hemmet som kan skalas från 1 till 12 kWh i takt med behovet.",
       intro:
-        "Voltrix är kärnan i ditt hemmaenergisystem. Börja med en batterimodul och expandera upp till tolv " +
-        "efter behov. Lagra solenergi under dagen och använd den på kvällen — det avtagbara batterikärnet " +
-        "gör energin tillgänglig även utanför hemmet.",
-
+        "Voltrix är den intelligenta kärnan i ditt hemmaenergisystem. Börja med en batterimodul och bygg ut till tolv medan du lagrar solenergi, minskar beroendet av elnätet och behåller portabel kraft nära till hands.",
       features: [
-        "Skalbart från 1 till 12 batterimoduler (1–12 kWh)",
-        "2400 W toppeffekt AC-utgång — klarar energikrävande apparater",
-        "2400 W solinmatning med två oberoende MPPT-spårare",
-        "IP65-klassad — skyddad mot damm och vatten",
-        "Drift från −20 °C till +45 °C med självuppvärmning",
-        "Ultraslim väggdesign — passar även i trånga utrymmen",
-        "Stativ ingår för flexibel golvplacering",
-        "WiFi och Bluetooth med molnplattform och mobilapp",
-        "LFP-batterikemi — lång livslängd och hög säkerhet",
-        "HF-transformatorisolering — ökad säkerhet och nätkompatibilitet",
+        "Skalbart från 1 till 12 batterimoduler",
+        "2400 W toppeffekt på AC-utgång",
+        "2400 W solinmatning med dubbel MPPT",
+        "IP65-skydd mot damm och vatten",
+        "Drift från -20 °C till +45 °C med självuppvärmning",
+        "WiFi- och Bluetooth-anslutning via app",
+        "LFP-batterikemi för lång livslängd",
       ],
-
       certifications: [
-        "IP65 — damm- och vattenskydd",
+        "IP65-klassad",
         "LFP-celler enligt IEC 62619",
-        "CE-märkt — EN 62109 / EN 61000-serien",
+        "CE-märkt",
         "Nättyp: L+N+PE",
-        "Drifttemperatur: −20 °C till +65 °C",
       ],
-
       specs: [
-        { label: "Batterikemi",         value: "LFP (litiumjärnfosfat)" },
+        { label: "Batterikemi", value: "LFP (litiumjärnfosfat)" },
         { label: "Kapacitet per modul", value: "1 kWh" },
-        { label: "Kapacitetsintervall", value: "1 kWh (1 modul) — 12 kWh (12 moduler)" },
-        { label: "Max AC-utgång",       value: "2400 VA topp (10 s)" },
-        { label: "Max solinmatning",    value: "2400 W" },
-        { label: "Antal MPPT",          value: "2 oberoende" },
-        { label: "Systemeffektivitet",  value: "97 %" },
-        { label: "Spänning",            value: "230 V" },
-        { label: "Frekvens",            value: "50/60 Hz" },
-        { label: "Kommunikation",       value: "WiFi / Bluetooth" },
-        { label: "IP-klass",            value: "IP65" },
-        { label: "Temperatur",          value: "−20 °C till +45 °C" },
-        { label: "DC-kontakt",          value: "MC4" },
+        { label: "Kapacitetsintervall", value: "1-12 kWh" },
+        { label: "Max AC-utgång", value: "1600 VA nominell / 2400 VA topp" },
+        { label: "Max solinmatning", value: "2400 W" },
+        { label: "Antal MPPT", value: "2 oberoende" },
+        { label: "Kommunikation", value: "WiFi / Bluetooth" },
+        { label: "IP-klass", value: "IP65" },
       ],
-
       useCases: [
-        "Lagra solenergi för kvällsanvändning i hemmet",
-        "Installation på balkong eller terrass",
-        "Minska elkostnader och beroendet av elnätet",
-        "Portabel energi för elcyklar och friluftsliv",
-        "Reservkraft vid strömavbrott",
-        "Off-grid stugor och avlägset belägna fastigheter",
+        "Solenergilagring för hemmet",
+        "Installation på balkong och terrass",
+        "Minskat beroende av elnätet",
+        "Reservkraft för viktiga enheter",
+        "Portabel energi även utanför hemmet",
       ],
-
       faq: [
-        "Kan jag bygga ut systemet efter köpet? Ja — fullt modulärt, upp till 12 moduler.",
-        "Fungerar det utan solpaneler? Ja — laddas direkt från elnätet.",
-        "Vad händer vid strömavbrott? Systemet byter automatiskt till off-grid-läge.",
-        "Är installationen svår? Nej — väggmontering eller stativ med standardverktyg.",
-        "Kan batteriet tas ut och användas på annat håll? Ja — kärnan driver kompatibla Alva-enheter.",
+        "Kan jag lägga till fler batterier senare? Ja, systemet är helt modulärt.",
+        "Fungerar det utan solpaneler? Ja, det kan laddas från elnätet.",
+        "Vad händer vid strömavbrott? Systemet växlar automatiskt till off-grid-läge.",
+        "Är installationen komplicerad? Nej, väggfäste eller golvstativ stöds.",
+        "Kan batteriet tas ut och användas på annan plats? Ja, med kompatibla Alva-enheter.",
+      ],
+    },
+    fi: {
+      name: "Voltrix 5-Pack Kit",
+      summary: "Modulaarinen kodin energiajärjestelmä, joka skaalautuu 1-12 kWh tarpeen kasvaessa.",
+      intro:
+        "Voltrix on kotisi energiajärjestelmän älykäs ydin. Aloita yhdellä akkumoduulilla ja laajenna kahteentoista samalla kun varastoit aurinkoenergiaa, vähennät riippuvuutta sähköverkosta ja pidät siirrettävän energian saatavilla.",
+      features: [
+        "Laajennettavissa 1-12 akkumoduuliin",
+        "2400 W huippu AC-teho",
+        "2400 W aurinkosyöttö kahdella MPPT:llä",
+        "IP65-suoja pölyä ja vettä vastaan",
+        "Toimii -20 °C ... +45 °C itselämmityksellä",
+        "WiFi- ja Bluetooth-yhteys sovellukseen",
+        "LFP-akkukemia pitkää käyttöikää varten",
+      ],
+      certifications: [
+        "IP65-luokitus",
+        "IEC 62619 -yhteensopivat LFP-kennot",
+        "CE-merkitty",
+        "Verkkotyyppi: L+N+PE",
+      ],
+      specs: [
+        { label: "Akkukemia", value: "LFP (litiumrautafosfaatti)" },
+        { label: "Kapasiteetti per moduuli", value: "1 kWh" },
+        { label: "Kapasiteettialue", value: "1-12 kWh" },
+        { label: "Maks. AC-lähtö", value: "1600 VA nimellinen / 2400 VA huippu" },
+        { label: "Maks. aurinkosyöttö", value: "2400 W" },
+        { label: "MPPT-määrä", value: "2 erillistä" },
+        { label: "Yhteydet", value: "WiFi / Bluetooth" },
+        { label: "IP-luokka", value: "IP65" },
+      ],
+      useCases: [
+        "Aurinkoenergian varastointi kotiin",
+        "Parveke- ja terassiasennukset",
+        "Pienempi riippuvuus sähköverkosta",
+        "Varavoima tärkeille laitteille",
+        "Siirrettävä energia myös kodin ulkopuolelle",
+      ],
+      faq: [
+        "Voinko lisätä akkuja myöhemmin? Kyllä, järjestelmä on täysin modulaarinen.",
+        "Toimiiko se ilman aurinkopaneeleita? Kyllä, sitä voi ladata sähköverkosta.",
+        "Mitä tapahtuu sähkökatkon aikana? Järjestelmä vaihtaa automaattisesti off-grid-tilaan.",
+        "Onko asennus monimutkainen? Ei, seinäkiinnitys ja lattiateline ovat tuettuja.",
+        "Voiko akun irrottaa ja käyttää muualla? Kyllä, yhteensopivien Alva-laitteiden kanssa.",
+      ],
+    },
+    no: {
+      name: "Voltrix 5-Pack Kit",
+      summary: "Et modulært energisystem for hjemmet som kan skaleres fra 1 til 12 kWh etter behov.",
+      intro:
+        "Voltrix er den intelligente kjernen i hjemmets energisystem. Start med én batterimodul og bygg ut til tolv mens du lagrer solenergi, reduserer avhengigheten av strømnettet og holder bærbar kraft tilgjengelig.",
+      features: [
+        "Utvidbart fra 1 til 12 batterimoduler",
+        "2400 W topp AC-effekt",
+        "2400 W solinngang med dobbel MPPT",
+        "IP65-beskyttelse mot støv og vann",
+        "Drift fra -20 °C til +45 °C med selvoppvarming",
+        "WiFi- og Bluetooth-tilkobling via app",
+        "LFP-batterikjemi for lang levetid",
+      ],
+      certifications: [
+        "IP65-klassifisert",
+        "LFP-celler i samsvar med IEC 62619",
+        "CE-merket",
+        "Nettype: L+N+PE",
+      ],
+      specs: [
+        { label: "Batterikjemi", value: "LFP (litiumjernfosfat)" },
+        { label: "Kapasitet per modul", value: "1 kWh" },
+        { label: "Kapasitetsområde", value: "1-12 kWh" },
+        { label: "Maks AC-utgang", value: "1600 VA nominell / 2400 VA topp" },
+        { label: "Maks solinngang", value: "2400 W" },
+        { label: "Antall MPPT", value: "2 uavhengige" },
+        { label: "Kommunikasjon", value: "WiFi / Bluetooth" },
+        { label: "IP-klasse", value: "IP65" },
+      ],
+      useCases: [
+        "Solenergilagring i hjemmet",
+        "Installasjon på balkong og terrasse",
+        "Mindre avhengighet av strømnettet",
+        "Reservekraft til viktige enheter",
+        "Bærbar energi også utenfor hjemmet",
+      ],
+      faq: [
+        "Kan jeg legge til flere batterier senere? Ja, systemet er helt modulært.",
+        "Fungerer det uten solpaneler? Ja, det kan lades fra strømnettet.",
+        "Hva skjer ved strømbrudd? Systemet bytter automatisk til off-grid-modus.",
+        "Er installasjonen komplisert? Nei, veggmontering eller gulvstativ støttes.",
+        "Kan batteriet tas ut og brukes et annet sted? Ja, med kompatible Alva-enheter.",
+      ],
+    },
+    da: {
+      name: "Voltrix 5-Pack Kit",
+      summary: "Et modulært energisystem til hjemmet, der kan skaleres fra 1 til 12 kWh efter behov.",
+      intro:
+        "Voltrix er den intelligente kerne i hjemmets energisystem. Start med ét batterimodul og udvid til tolv, mens du lagrer solenergi, reducerer afhængigheden af elnettet og holder bærbar strøm tilgængelig.",
+      features: [
+        "Kan udvides fra 1 til 12 batterimoduler",
+        "2400 W top AC-effekt",
+        "2400 W solindgang med dobbelt MPPT",
+        "IP65-beskyttelse mod støv og vand",
+        "Drift fra -20 °C til +45 °C med selvopvarmning",
+        "WiFi- og Bluetooth-forbindelse via app",
+        "LFP-batterikemi for lang levetid",
+      ],
+      certifications: [
+        "IP65-klassificeret",
+        "LFP-celler i henhold til IEC 62619",
+        "CE-mærket",
+        "Nettype: L+N+PE",
+      ],
+      specs: [
+        { label: "Batterikemi", value: "LFP (litiumjernfosfat)" },
+        { label: "Kapacitet pr. modul", value: "1 kWh" },
+        { label: "Kapacitetsområde", value: "1-12 kWh" },
+        { label: "Maks AC-udgang", value: "1600 VA nominelt / 2400 VA top" },
+        { label: "Maks solindgang", value: "2400 W" },
+        { label: "Antal MPPT", value: "2 uafhængige" },
+        { label: "Kommunikation", value: "WiFi / Bluetooth" },
+        { label: "IP-klasse", value: "IP65" },
+      ],
+      useCases: [
+        "Solenergilagring i hjemmet",
+        "Installation på altan og terrasse",
+        "Mindre afhængighed af elnettet",
+        "Backup-strøm til vigtige enheder",
+        "Bærbar energi også uden for hjemmet",
+      ],
+      faq: [
+        "Kan jeg tilføje flere batterier senere? Ja, systemet er fuldt modulært.",
+        "Virker det uden solpaneler? Ja, det kan oplades fra elnettet.",
+        "Hvad sker der ved strømafbrydelse? Systemet skifter automatisk til off-grid-tilstand.",
+        "Er installationen kompliceret? Nej, vægmontering eller gulvstativ understøttes.",
+        "Kan batteriet tages ud og bruges et andet sted? Ja, med kompatible Alva-enheder.",
       ],
     },
   },

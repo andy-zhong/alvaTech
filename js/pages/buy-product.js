@@ -1,11 +1,24 @@
 import { getProductBySlug, getProductContent } from "../services/product-service.js";
 import { getStoredLanguage, t } from "../services/language-service.js";
 
+const CART_COPY = {
+  en: { summaryTitle: "Order summary" },
+  sv: { summaryTitle: "Ordersammanfattning" },
+  fi: { summaryTitle: "Tilausyhteenveto" },
+  no: { summaryTitle: "Ordresammendrag" },
+  da: { summaryTitle: "Ordreoversigt" },
+};
+
+function getCartCopy(lang) {
+  return CART_COPY[lang] ?? CART_COPY.sv;
+}
+
 // ─────────────────────────────────────────────────────────────────────────────
 // Render
 // ─────────────────────────────────────────────────────────────────────────────
 
 export function renderBuyProductPage({ lang, route }) {
+  const copy = getCartCopy(lang);
   const cart = JSON.parse(localStorage.getItem("cart")) || [];
 
   if (cart.length === 0) {
@@ -42,7 +55,7 @@ export function renderBuyProductPage({ lang, route }) {
         </div>
 
         <aside class="cart-sidebar">
-          <h3>${t(lang, "cartSummaryTitle")}</h3>
+          <h3>${copy.summaryTitle}</h3>
 
           <div class="cart-summary__rows">
             ${cart.map((item) => renderSummaryRow(item, lang)).join("")}

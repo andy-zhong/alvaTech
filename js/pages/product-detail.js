@@ -4,9 +4,72 @@ import { t } from "../services/language-service.js";
 let batteryCount = 1;
 let currentMediaIndex = 0;
 
-// ─────────────────────────────────────────────────────────────────────────────
-// Helpers
-// ─────────────────────────────────────────────────────────────────────────────
+const DETAIL_COPY = {
+  en: {
+    showImage: "Show image",
+    previous: "Previous",
+    next: "Next",
+    batteryLabel: "Number of battery modules",
+    batteryDecrease: "Remove one battery",
+    batteryIncrease: "Add one battery",
+    capacity: "Capacity",
+    price: "Price",
+    imageViewer: "Image viewer",
+    closeViewer: "Close",
+  },
+  sv: {
+    showImage: "Visa bild",
+    previous: "Föregående",
+    next: "Nästa",
+    batteryLabel: "Antal batterimoduler",
+    batteryDecrease: "Ta bort en batterimodul",
+    batteryIncrease: "Lägg till en batterimodul",
+    capacity: "Kapacitet",
+    price: "Pris",
+    imageViewer: "Bildvisare",
+    closeViewer: "Stäng",
+  },
+  fi: {
+    showImage: "Näytä kuva",
+    previous: "Edellinen",
+    next: "Seuraava",
+    batteryLabel: "Akkumoduulien määrä",
+    batteryDecrease: "Poista yksi akkumoduuli",
+    batteryIncrease: "Lisää yksi akkumoduuli",
+    capacity: "Kapasiteetti",
+    price: "Hinta",
+    imageViewer: "Kuvakatselin",
+    closeViewer: "Sulje",
+  },
+  no: {
+    showImage: "Vis bilde",
+    previous: "Forrige",
+    next: "Neste",
+    batteryLabel: "Antall batterimoduler",
+    batteryDecrease: "Fjern én batterimodul",
+    batteryIncrease: "Legg til én batterimodul",
+    capacity: "Kapasitet",
+    price: "Pris",
+    imageViewer: "Bildeviser",
+    closeViewer: "Lukk",
+  },
+  da: {
+    showImage: "Vis billede",
+    previous: "Forrige",
+    next: "Næste",
+    batteryLabel: "Antal batterimoduler",
+    batteryDecrease: "Fjern én batterimodul",
+    batteryIncrease: "Tilføj én batterimodul",
+    capacity: "Kapacitet",
+    price: "Pris",
+    imageViewer: "Billedviser",
+    closeViewer: "Luk",
+  },
+};
+
+function getDetailCopy(lang) {
+  return DETAIL_COPY[lang] ?? DETAIL_COPY.sv;
+}
 
 function calculatePrice(product) {
   return product.config.basePrice + batteryCount * product.config.batteryPrice;
@@ -33,60 +96,56 @@ function getProductMedia(product, fallbackAlt) {
   return [hero, ...uniqueGallery];
 }
 
-// ─────────────────────────────────────────────────────────────────────────────
-// HTML render helpers
-// ─────────────────────────────────────────────────────────────────────────────
-
 function renderMainMedia(media, fallbackAlt) {
   const type = media?.type ?? "image";
-  const src  = media?.src  ?? "";
-  const alt  = media?.alt  ?? fallbackAlt;
+  const src = media?.src ?? "";
+  const alt = media?.alt ?? fallbackAlt;
 
   if (type === "video") {
     return `<video id="detail-main-media" class="media-main-asset"
               controls playsinline preload="metadata" aria-label="${alt}">
               <source src="${src}">${alt}</video>`;
   }
+
   return `<img id="detail-main-media" class="media-main-asset" src="${src}" alt="${alt}">`;
 }
 
-function renderThumbnail(media, index, isActive, fallbackAlt) {
+function renderThumbnail(media, index, isActive, fallbackAlt, labels) {
   const type = media?.type ?? "image";
-  const src  = media?.src  ?? "";
-  const alt  = media?.alt  ?? `${fallbackAlt} ${index + 1}`;
+  const src = media?.src ?? "";
+  const alt = media?.alt ?? `${fallbackAlt} ${index + 1}`;
 
   const inner = type === "video"
     ? `<span class="media-thumb__video-wrap">
          <video class="media-thumb__asset" muted playsinline preload="metadata">
            <source src="${src}">
          </video>
-         <span class="media-thumb__video-badge">▶</span>
+         <span class="media-thumb__video-badge">&#9654;</span>
        </span>`
     : `<img class="media-thumb__asset" src="${src}" alt="${alt}">`;
 
   return `
     <button class="media-thumb ${isActive ? "is-active" : ""}" type="button"
-            data-media-index="${index}" aria-label="Show image ${index + 1}">
+            data-media-index="${index}" aria-label="${labels.showImage} ${index + 1}">
       ${inner}
     </button>`;
 }
 
-function renderMediaViewer(product, content) {
-  const mediaItems  = getProductMedia(product, content.name);
+function renderMediaViewer(product, content, labels) {
+  const mediaItems = getProductMedia(product, content.name);
   const activeMedia = mediaItems[0];
 
   return `
     <article class="detail-media">
       <div class="media-viewer">
-
         <div class="media-stage" id="media-stage">
-          <button class="media-nav media-nav--prev" id="media-prev" type="button" aria-label="Previous">‹</button>
+          <button class="media-nav media-nav--prev" id="media-prev" type="button" aria-label="${labels.previous}">&lsaquo;</button>
 
           <div class="media-stage__inner" id="media-stage-inner">
             ${renderMainMedia(activeMedia, content.name)}
           </div>
 
-          <button class="media-nav media-nav--next" id="media-next" type="button" aria-label="Next">›</button>
+          <button class="media-nav media-nav--next" id="media-next" type="button" aria-label="${labels.next}">&rsaquo;</button>
 
           <span class="media-stage__expand-hint" aria-hidden="true">
             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"
@@ -98,67 +157,59 @@ function renderMediaViewer(product, content) {
         </div>
 
         <div class="media-thumbs" id="media-thumbs">
-          ${mediaItems.map((m, i) => renderThumbnail(m, i, i === 0, content.name)).join("")}
+          ${mediaItems.map((media, index) => renderThumbnail(media, index, index === 0, content.name, labels)).join("")}
         </div>
-
       </div>
     </article>`;
 }
 
-function renderBatterySelector(product) {
+function renderBatterySelector(product, labels) {
   if (!product.config) return "";
 
   return `
     <div class="battery-selector">
-      <label class="battery-selector__label">Number of battery modules</label>
+      <label class="battery-selector__label">${labels.batteryLabel}</label>
       <div class="battery-control">
-        <button id="battery-minus" class="battery-btn" aria-label="Remove one battery">−</button>
+        <button id="battery-minus" class="battery-btn" aria-label="${labels.batteryDecrease}">-</button>
         <span id="battery-count" class="battery-count">${product.config.minBatteries}</span>
-        <button id="battery-plus" class="battery-btn" aria-label="Add one battery">+</button>
+        <button id="battery-plus" class="battery-btn" aria-label="${labels.batteryIncrease}">+</button>
       </div>
       <div class="battery-selector__readout">
-        <p>Capacity: <strong><span id="capacity"></span> kWh</strong></p>
-        <p>Price: <strong><span id="price"></span> SEK</strong></p>
+        <p>${labels.capacity}: <strong><span id="capacity"></span> kWh</strong></p>
+        <p>${labels.price}: <strong><span id="price"></span> SEK</strong></p>
       </div>
     </div>`;
 }
 
-// Lightbox HTML — injected once at top of render output
-function renderLightbox() {
+function renderLightbox(labels) {
   return `
-    <div class="lightbox" id="lightbox" role="dialog" aria-modal="true" aria-label="Image viewer">
-      <button class="lightbox__close" id="lightbox-close" aria-label="Close">
+    <div class="lightbox" id="lightbox" role="dialog" aria-modal="true" aria-label="${labels.imageViewer}">
+      <button class="lightbox__close" id="lightbox-close" aria-label="${labels.closeViewer}">
         <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24"
              fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
           <line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>
         </svg>
       </button>
 
-      <button class="lightbox__nav lightbox__nav--prev" id="lightbox-prev" aria-label="Previous">‹</button>
-
+      <button class="lightbox__nav lightbox__nav--prev" id="lightbox-prev" aria-label="${labels.previous}">&lsaquo;</button>
       <div class="lightbox__stage" id="lightbox-stage"></div>
-
-      <button class="lightbox__nav lightbox__nav--next" id="lightbox-next" aria-label="Next">›</button>
-
+      <button class="lightbox__nav lightbox__nav--next" id="lightbox-next" aria-label="${labels.next}">&rsaquo;</button>
       <span class="lightbox__counter" id="lightbox-counter"></span>
     </div>`;
 }
-
-// ─────────────────────────────────────────────────────────────────────────────
-// Main page render  (gallery section removed — thumbs above serve the same purpose)
-// ─────────────────────────────────────────────────────────────────────────────
 
 export function renderProductDetailPage({ lang, slug, route }) {
   const product = getProductBySlug(slug);
   if (!product) return renderMissingProduct({ lang, route });
 
   const content = getProductContent(product, lang);
+  const labels = getDetailCopy(lang);
 
   return `
-    ${renderLightbox()}
+    ${renderLightbox(labels)}
 
     <section class="detail-hero">
-      ${renderMediaViewer(product, content)}
+      ${renderMediaViewer(product, content, labels)}
 
       <article class="detail-copy">
         <span class="eyebrow">${t(lang, "detailEyebrow")}</span>
@@ -166,7 +217,7 @@ export function renderProductDetailPage({ lang, slug, route }) {
         <h1>${content.name}</h1>
         <p>${content.intro}</p>
 
-        ${renderBatterySelector(product)}
+        ${renderBatterySelector(product, labels)}
 
         <div class="detail-actions">
           <button class="button button--primary" id="add-to-cart">
@@ -184,7 +235,7 @@ export function renderProductDetailPage({ lang, slug, route }) {
         <article class="panel">
           <h3>${t(lang, "detailFeatures")}</h3>
           <ul class="detail-list">
-            ${content.features.map((i) => `<li>${i}</li>`).join("")}
+            ${content.features.map((item) => `<li>${item}</li>`).join("")}
           </ul>
         </article>
         <article class="panel">
@@ -203,17 +254,17 @@ export function renderProductDetailPage({ lang, slug, route }) {
         <article class="panel">
           <h3>${t(lang, "detailSpecifications")}</h3>
           <div class="spec-grid">
-            ${content.specs.map((i) => `
+            ${content.specs.map((item) => `
               <article class="spec-card">
-                <h3>${i.label}</h3>
-                <p>${i.value}</p>
+                <h3>${item.label}</h3>
+                <p>${item.value}</p>
               </article>`).join("")}
           </div>
         </article>
         <article class="panel">
           <h3>${t(lang, "detailCertifications")}</h3>
           <ul class="detail-list">
-            ${content.certifications.map((i) => `<li>${i}</li>`).join("")}
+            ${content.certifications.map((item) => `<li>${item}</li>`).join("")}
           </ul>
         </article>
       </div>
@@ -224,13 +275,13 @@ export function renderProductDetailPage({ lang, slug, route }) {
         <article class="panel">
           <h3>${t(lang, "detailUseCases")}</h3>
           <ul class="detail-list">
-            ${content.useCases.map((i) => `<li>${i}</li>`).join("")}
+            ${content.useCases.map((item) => `<li>${item}</li>`).join("")}
           </ul>
         </article>
         <article class="panel">
           <h3>${t(lang, "detailFaq")}</h3>
           <ul class="faq-list">
-            ${content.faq.map((i) => `<li>${i}</li>`).join("")}
+            ${content.faq.map((item) => `<li>${item}</li>`).join("")}
           </ul>
         </article>
       </div>
@@ -253,17 +304,13 @@ export function renderMissingProduct({ lang, route }) {
     </section>`;
 }
 
-// ─────────────────────────────────────────────────────────────────────────────
-// Media viewer + lightbox logic
-// ─────────────────────────────────────────────────────────────────────────────
-
 function setMainStageContent(media, fallbackAlt) {
   const stage = document.getElementById("media-stage-inner");
   if (!stage) return;
 
   const type = media?.type ?? "image";
-  const src  = media?.src  ?? "";
-  const alt  = media?.alt  ?? fallbackAlt;
+  const src = media?.src ?? "";
+  const alt = media?.alt ?? fallbackAlt;
 
   if (type === "video") {
     stage.innerHTML = `<video id="detail-main-media" class="media-main-asset"
@@ -276,8 +323,8 @@ function setMainStageContent(media, fallbackAlt) {
 
 function setLightboxContent(lbStage, media, fallbackAlt) {
   const type = media?.type ?? "image";
-  const src  = media?.src  ?? "";
-  const alt  = media?.alt  ?? fallbackAlt;
+  const src = media?.src ?? "";
+  const alt = media?.alt ?? fallbackAlt;
 
   if (type === "video") {
     lbStage.innerHTML = `<video class="lightbox__asset" controls playsinline preload="metadata"
@@ -289,42 +336,48 @@ function setLightboxContent(lbStage, media, fallbackAlt) {
 }
 
 function initProductMediaViewer(product, content) {
-  const mediaItems   = getProductMedia(product, content.name);
+  const mediaItems = getProductMedia(product, content.name);
   if (!mediaItems.length) return;
 
-  currentMediaIndex  = 0;
-  const stageInner   = document.getElementById("media-stage-inner");
-  const prevBtn      = document.getElementById("media-prev");
-  const nextBtn      = document.getElementById("media-next");
+  currentMediaIndex = 0;
+  const prevBtn = document.getElementById("media-prev");
+  const nextBtn = document.getElementById("media-next");
   const thumbButtons = document.querySelectorAll(".media-thumb");
-  const mainStage    = document.getElementById("media-stage");
+  const mainStage = document.getElementById("media-stage");
 
-  const lightbox  = document.getElementById("lightbox");
-  const lbStage   = document.getElementById("lightbox-stage");
-  const lbClose   = document.getElementById("lightbox-close");
-  const lbPrev    = document.getElementById("lightbox-prev");
-  const lbNext    = document.getElementById("lightbox-next");
+  const lightbox = document.getElementById("lightbox");
+  const lbStage = document.getElementById("lightbox-stage");
+  const lbClose = document.getElementById("lightbox-close");
+  const lbPrev = document.getElementById("lightbox-prev");
+  const lbNext = document.getElementById("lightbox-next");
   const lbCounter = document.getElementById("lightbox-counter");
 
-  // ── Viewer navigation ─────────────────────────────────────────────────
   function goTo(newIndex) {
     currentMediaIndex = (newIndex + mediaItems.length) % mediaItems.length;
     setMainStageContent(mediaItems[currentMediaIndex], content.name);
-    thumbButtons.forEach((btn, i) => btn.classList.toggle("is-active", i === currentMediaIndex));
+    thumbButtons.forEach((button, index) => button.classList.toggle("is-active", index === currentMediaIndex));
     document.querySelector(`.media-thumb[data-media-index="${currentMediaIndex}"]`)
       ?.scrollIntoView({ behavior: "smooth", block: "nearest", inline: "center" });
   }
 
-  prevBtn?.addEventListener("click", (e) => { e.stopPropagation(); goTo(currentMediaIndex - 1); });
-  nextBtn?.addEventListener("click", (e) => { e.stopPropagation(); goTo(currentMediaIndex + 1); });
-  thumbButtons.forEach((btn) => btn.addEventListener("click", () => goTo(Number(btn.dataset.mediaIndex))));
+  prevBtn?.addEventListener("click", (event) => {
+    event.stopPropagation();
+    goTo(currentMediaIndex - 1);
+  });
 
-  // Hide nav if only one item
+  nextBtn?.addEventListener("click", (event) => {
+    event.stopPropagation();
+    goTo(currentMediaIndex + 1);
+  });
+
+  thumbButtons.forEach((button) => {
+    button.addEventListener("click", () => goTo(Number(button.dataset.mediaIndex)));
+  });
+
   if (mediaItems.length <= 1) {
-    [prevBtn, nextBtn].forEach((b) => b && (b.style.display = "none"));
+    [prevBtn, nextBtn].forEach((button) => button && (button.style.display = "none"));
   }
 
-  // ── Lightbox ──────────────────────────────────────────────────────────
   function openLightbox(index) {
     currentMediaIndex = (index + mediaItems.length) % mediaItems.length;
     setLightboxContent(lbStage, mediaItems[currentMediaIndex], content.name);
@@ -336,68 +389,69 @@ function initProductMediaViewer(product, content) {
   function closeLightbox() {
     lightbox?.classList.remove("active");
     document.body.style.overflow = "";
-    lbStage?.querySelectorAll("video").forEach((v) => v.pause());
+    lbStage?.querySelectorAll("video").forEach((video) => video.pause());
   }
 
   function lbGoTo(newIndex) {
     currentMediaIndex = (newIndex + mediaItems.length) % mediaItems.length;
     setLightboxContent(lbStage, mediaItems[currentMediaIndex], content.name);
     if (lbCounter) lbCounter.textContent = `${currentMediaIndex + 1} / ${mediaItems.length}`;
-    goTo(currentMediaIndex); // keep main viewer in sync
+    goTo(currentMediaIndex);
   }
 
-  // Clicking anywhere on the stage (not nav buttons) → open lightbox
-  mainStage?.addEventListener("click", (e) => {
-    if (e.target.closest(".media-nav")) return;
+  mainStage?.addEventListener("click", (event) => {
+    if (event.target.closest(".media-nav")) return;
     openLightbox(currentMediaIndex);
   });
 
   lbClose?.addEventListener("click", closeLightbox);
-  lbPrev?.addEventListener("click",  () => lbGoTo(currentMediaIndex - 1));
-  lbNext?.addEventListener("click",  () => lbGoTo(currentMediaIndex + 1));
+  lbPrev?.addEventListener("click", () => lbGoTo(currentMediaIndex - 1));
+  lbNext?.addEventListener("click", () => lbGoTo(currentMediaIndex + 1));
 
-  // Click backdrop (not stage content) → close
-  lightbox?.addEventListener("click", (e) => {
-    if (e.target === lightbox) closeLightbox();
+  lightbox?.addEventListener("click", (event) => {
+    if (event.target === lightbox) closeLightbox();
   });
 
-  // Hide lightbox nav if only one item
   if (mediaItems.length <= 1) {
-    [lbPrev, lbNext].forEach((b) => b && (b.style.display = "none"));
+    [lbPrev, lbNext].forEach((button) => button && (button.style.display = "none"));
   }
 
-  // ── Keyboard ──────────────────────────────────────────────────────────
-  window.addEventListener("keydown", (e) => {
-    const lbOpen = lightbox?.classList.contains("active");
+  window.addEventListener("keydown", (event) => {
+    const lightboxOpen = lightbox?.classList.contains("active");
 
-    if (lbOpen) {
-      if (e.key === "Escape")     { e.preventDefault(); closeLightbox(); }
-      if (e.key === "ArrowLeft")  { e.preventDefault(); lbGoTo(currentMediaIndex - 1); }
-      if (e.key === "ArrowRight") { e.preventDefault(); lbGoTo(currentMediaIndex + 1); }
+    if (lightboxOpen) {
+      if (event.key === "Escape") {
+        event.preventDefault();
+        closeLightbox();
+      }
+      if (event.key === "ArrowLeft") {
+        event.preventDefault();
+        lbGoTo(currentMediaIndex - 1);
+      }
+      if (event.key === "ArrowRight") {
+        event.preventDefault();
+        lbGoTo(currentMediaIndex + 1);
+      }
     } else {
-      if (e.key === "ArrowLeft")  goTo(currentMediaIndex - 1);
-      if (e.key === "ArrowRight") goTo(currentMediaIndex + 1);
+      if (event.key === "ArrowLeft") goTo(currentMediaIndex - 1);
+      if (event.key === "ArrowRight") goTo(currentMediaIndex + 1);
     }
   });
 }
 
-// ─────────────────────────────────────────────────────────────────────────────
-// After render — called by bootstrap
-// ─────────────────────────────────────────────────────────────────────────────
-
 export function afterRenderProductDetail(product) {
-  const lang    = document.documentElement.lang || "en";
+  const lang = document.documentElement.lang || "en";
   const content = getProductContent(product, lang);
 
   initProductMediaViewer(product, content);
 
-  const btn = document.getElementById("add-to-cart");
+  const button = document.getElementById("add-to-cart");
 
   if (product.config) {
-    const minus      = document.getElementById("battery-minus");
-    const plus       = document.getElementById("battery-plus");
-    const countEl    = document.getElementById("battery-count");
-    const priceEl    = document.getElementById("price");
+    const minus = document.getElementById("battery-minus");
+    const plus = document.getElementById("battery-plus");
+    const countEl = document.getElementById("battery-count");
+    const priceEl = document.getElementById("price");
     const capacityEl = document.getElementById("capacity");
 
     if (!minus || !plus || !countEl || !priceEl || !capacityEl) return;
@@ -405,35 +459,48 @@ export function afterRenderProductDetail(product) {
     batteryCount = product.config.minBatteries;
 
     function update() {
-      countEl.innerText    = batteryCount;
-      priceEl.innerText    = calculatePrice(product).toLocaleString("sv-SE");
+      countEl.innerText = batteryCount;
+      priceEl.innerText = calculatePrice(product).toLocaleString("sv-SE");
       capacityEl.innerText = calculateCapacity(product);
     }
 
-    minus.addEventListener("click", () => { if (batteryCount > product.config.minBatteries) { batteryCount--; update(); } });
-    plus.addEventListener("click",  () => { if (batteryCount < product.config.maxBatteries) { batteryCount++; update(); } });
+    minus.addEventListener("click", () => {
+      if (batteryCount > product.config.minBatteries) {
+        batteryCount -= 1;
+        update();
+      }
+    });
 
-    btn?.addEventListener("click", () => { addConfigurableToCart(product); window.location.href = "/views/buy-product.html"; });
+    plus.addEventListener("click", () => {
+      if (batteryCount < product.config.maxBatteries) {
+        batteryCount += 1;
+        update();
+      }
+    });
+
+    button?.addEventListener("click", () => {
+      addConfigurableToCart(product);
+      window.location.href = "/views/buy-product.html";
+    });
 
     update();
   } else {
-    btn?.addEventListener("click", () => { addSimpleToCart(product); window.location.href = "/views/buy-product.html"; });
+    button?.addEventListener("click", () => {
+      addSimpleToCart(product);
+      window.location.href = "/views/buy-product.html";
+    });
   }
 }
-
-// ─────────────────────────────────────────────────────────────────────────────
-// Cart helpers
-// ─────────────────────────────────────────────────────────────────────────────
 
 function addConfigurableToCart(product) {
   const cart = JSON.parse(localStorage.getItem("cart")) || [];
   cart.push({
-    cartItemId:    `${product.slug}-${Date.now()}`,
-    slug:          product.slug,
+    cartItemId: `${product.slug}-${Date.now()}`,
+    slug: product.slug,
     batteryCount,
-    unitPrice:     calculatePrice(product),
-    capacity:      calculateCapacity(product),
-    quantity:      1,
+    unitPrice: calculatePrice(product),
+    capacity: calculateCapacity(product),
+    quantity: 1,
     isConfigurable: true,
   });
   localStorage.setItem("cart", JSON.stringify(cart));
@@ -441,20 +508,21 @@ function addConfigurableToCart(product) {
 
 function addSimpleToCart(product) {
   const cart = JSON.parse(localStorage.getItem("cart")) || [];
-  const idx  = cart.findIndex((i) => i.slug === product.slug && !i.isConfigurable);
+  const index = cart.findIndex((item) => item.slug === product.slug && !item.isConfigurable);
 
-  if (idx >= 0) {
-    cart[idx].quantity = (cart[idx].quantity || 1) + 1;
+  if (index >= 0) {
+    cart[index].quantity = (cart[index].quantity || 1) + 1;
   } else {
     cart.push({
-      cartItemId:    `${product.slug}-${Date.now()}`,
-      slug:          product.slug,
-      batteryCount:  null,
-      unitPrice:     product.basePrice,
-      capacity:      null,
-      quantity:      1,
+      cartItemId: `${product.slug}-${Date.now()}`,
+      slug: product.slug,
+      batteryCount: null,
+      unitPrice: product.basePrice,
+      capacity: null,
+      quantity: 1,
       isConfigurable: false,
     });
   }
+
   localStorage.setItem("cart", JSON.stringify(cart));
 }

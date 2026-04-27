@@ -1,6 +1,7 @@
 import { initHeader } from "../components/header.js";
 import { renderFooter } from "../components/footer.js";
 import { bindLanguagePicker } from "../components/language-picker.js";
+import { mountFloatingQuoteWidget } from "../components/floating-quote-widget.js";
 import { getStoredLanguage, t } from "../services/language-service.js";
 import { createRouteHelpers } from "../utils/routes.js";
 import { renderHomePage, bindHomePage } from "../pages/home.js";
@@ -29,8 +30,8 @@ export async function initApp() {
 
   await mountShell({ page, lang, ...routes });
   await mountPage({ page, lang, ...routes });
+  mountFloatingQuoteWidget({ lang });
 
-  // Bind först efter att navbar faktiskt finns i DOM
   bindLanguagePicker();
 }
 
@@ -135,7 +136,7 @@ async function mountPage({
       document.title = "Order Confirmed | Alva Technology";
       try {
         const orderConfirmationModule = await import("../pages/order-confirmation.js");
-        container.innerHTML = orderConfirmationModule.renderOrderConfirmationPage();
+        container.innerHTML = orderConfirmationModule.renderOrderConfirmationPage(lang);
       } catch (err) {
         console.error("[bootstrap] Order confirmation page failed:", err);
         container.innerHTML = renderMissingProduct({ lang, route });
