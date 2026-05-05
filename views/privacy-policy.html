@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Privacy Policy | Alva Technology</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../css/styles.css">
+  <style>
+    .privacy-page {
+      max-width: 720px;
+      margin: 0 auto;
+      padding: clamp(40px, 7vw, 80px) clamp(20px, 5vw, 40px);
+    }
+    .privacy-page h1 { font-size: clamp(2rem, 5vw, 3rem); letter-spacing: -0.04em; margin: 0 0 6px; }
+    .privacy-meta    { font-size: 0.8rem; opacity: 0.4; margin-bottom: 40px; }
+    .privacy-page h2 { font-size: 1.1rem; font-weight: 700; margin: 36px 0 10px; color: rgba(198,210,71,0.85); }
+    .privacy-page p, .privacy-page li { font-size: 0.93rem; line-height: 1.75; opacity: 0.72; }
+    .privacy-page ul { padding-left: 1.4em; margin: 10px 0; }
+    .privacy-page li { margin-bottom: 4px; }
+    .privacy-page a  { color: rgba(198,210,71,0.85); text-underline-offset: 2px; }
+    .privacy-page table { width: 100%; border-collapse: collapse; font-size: 0.88rem; margin: 16px 0; }
+    .privacy-page th, .privacy-page td { text-align: left; padding: 10px 14px; border-bottom: 1px solid rgba(255,255,255,0.07); }
+    .privacy-page th { font-weight: 600; opacity: 0.45; font-size: 0.76rem; text-transform: uppercase; letter-spacing: 0.07em; }
+    .privacy-page td { opacity: 0.68; }
+    .privacy-manage  { margin-top: 28px; padding: 20px 24px; background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08); border-radius: 14px; }
+    .privacy-manage h3 { margin: 0 0 10px; font-size: 0.95rem; }
+    .privacy-manage p  { margin: 0 0 14px; }
+    .privacy-status    { margin-top: 12px; font-size: 0.8rem; opacity: 0.5; }
+  </style>
+</head>
+<body data-page="privacy-policy">
+  <div id="navbar"></div>
+  <main id="page-content">
+    <div class="privacy-page">
+
+      <h1>Privacy Policy</h1>
+      <p class="privacy-meta">Last updated: April 2026 &nbsp;·&nbsp; Version 1.0</p>
+
+      <h2>1. Who we are</h2>
+      <p>
+        This website is operated by <strong>Alva Technology</strong>. We sell Voltrix
+        energy systems and related products. Contact us at
+        <a href="mailto:privacy@alvatechnology.com">privacy@alvatechnology.com</a>
+        with any privacy questions.
+      </p>
+
+      <h2>2. What we collect</h2>
+      <p><strong>Order and inquiry forms:</strong> name, email, phone, and delivery address — used only to process your request.</p>
+      <p><strong>Anonymous analytics (only with your consent):</strong></p>
+      <table>
+        <thead><tr><th>Data</th><th>What it is</th><th>What it is NOT</th></tr></thead>
+        <tbody>
+          <tr>
+            <td>Session ID</td>
+            <td>Random UUID in your browser's sessionStorage. Deleted when you close the tab.</td>
+            <td>Not linked to your identity or any login.</td>
+          </tr>
+          <tr>
+            <td>Page path</td>
+            <td>Which page was visited (e.g. /views/product.html)</td>
+            <td>Not your full URL, search terms, or other browsing history.</td>
+          </tr>
+          <tr>
+            <td>Clicked element</td>
+            <td>Button or link text (e.g. "Configure System")</td>
+            <td>Not form inputs or anything you type.</td>
+          </tr>
+          <tr>
+            <td>Time on page</td>
+            <td>Approximate seconds on a page</td>
+            <td>Not linked to your identity.</td>
+          </tr>
+          <tr>
+            <td>Approximate location</td>
+            <td>Country and city derived from your IP at the moment of the first request.</td>
+            <td>Your IP address is NEVER stored.</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <h2>3. Legal basis (GDPR Art. 6)</h2>
+      <ul>
+        <li><strong>Consent (Art. 6(1)(a))</strong> — Anonymous analytics are processed only after you accept.</li>
+        <li><strong>Contract (Art. 6(1)(b))</strong> — Order data is processed to fulfil your purchase.</li>
+        <li><strong>Legitimate interest (Art. 6(1)(f))</strong> — Order data retained for accounting obligations.</li>
+      </ul>
+
+      <h2>4. Data retention</h2>
+      <table>
+        <thead><tr><th>Data</th><th>Kept for</th></tr></thead>
+        <tbody>
+          <tr><td>Anonymous analytics</td><td>90 days, then automatically deleted</td></tr>
+          <tr><td>Order data</td><td>7 years (Swedish accounting law)</td></tr>
+          <tr><td>B2B / quote inquiries</td><td>2 years after last contact</td></tr>
+          <tr><td>Consent preference</td><td>Stored in your browser only — we cannot access it</td></tr>
+        </tbody>
+      </table>
+
+      <h2>5. Cookies and storage</h2>
+      <table>
+        <thead><tr><th>Name</th><th>Type</th><th>Purpose</th><th>Duration</th></tr></thead>
+        <tbody>
+          <tr><td>alva-consent</td><td>localStorage</td><td>Your cookie preference. Essential.</td><td>Until you clear browser storage</td></tr>
+          <tr><td>alva-language</td><td>localStorage</td><td>Your language setting. Essential.</td><td>Until you clear browser storage</td></tr>
+          <tr><td>alva-session-id</td><td>sessionStorage</td><td>Anonymous session ID. Analytics only, with consent.</td><td>Deleted when tab closes</td></tr>
+          <tr><td>cart</td><td>localStorage</td><td>Shopping cart contents. Essential.</td><td>Until order placed or cleared</td></tr>
+        </tbody>
+      </table>
+      <p>We do <strong>not</strong> use Google Analytics, Facebook Pixel, or any advertising cookies.</p>
+
+      <h2>6. Your rights</h2>
+      <p>Under GDPR you have the right to access, rectify, erase, and port your data, and to withdraw consent at any time. Contact <a href="mailto:privacy@alvatechnology.com">privacy@alvatechnology.com</a>. You may also complain to the Swedish Data Protection Authority at <a href="https://www.imy.se" target="_blank" rel="noopener">imy.se</a>.</p>
+
+      <!-- Manage consent from this page -->
+      <div class="privacy-manage">
+        <h3>Manage your cookie consent</h3>
+        <p>Change your analytics preference at any time:</p>
+        <div style="display:flex;gap:12px;flex-wrap:wrap;">
+          <button class="button button--primary"   id="privacy-accept-btn" style="font-size:0.85rem;padding:10px 18px;">Accept analytics</button>
+          <button class="button button--secondary" id="privacy-reject-btn" style="font-size:0.85rem;padding:10px 18px;">Reject analytics</button>
+        </div>
+        <p class="privacy-status" id="privacy-consent-status"></p>
+      </div>
+
+    </div>
+  </main>
+  <div id="footer"></div>
+  <script type="module" src="../js/main.js"></script>
+  <script type="module">
+    import { acceptAll, rejectAll, getConsent } from "../js/analytics/consent.js";
+
+    function updateStatus() {
+      const c  = getConsent();
+      const el = document.getElementById("privacy-consent-status");
+      el.textContent = !c || !c.decided
+        ? "No preference saved yet."
+        : c.analytics
+          ? "✓ You have accepted anonymous analytics."
+          : "✓ You have rejected analytics tracking.";
+    }
+
+    document.getElementById("privacy-accept-btn")?.addEventListener("click", () => { acceptAll(); updateStatus(); });
+    document.getElementById("privacy-reject-btn")?.addEventListener("click", () => { rejectAll(); updateStatus(); });
+    updateStatus();
+  </script>
+</body>
+</html>

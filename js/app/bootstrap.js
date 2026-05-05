@@ -1,36 +1,39 @@
-import { initHeader } from "../components/header.js";
-import { renderFooter } from "../components/footer.js";
-import { bindLanguagePicker } from "../components/language-picker.js";
+import { initHeader }             from "../components/header.js";
+import { renderFooter }           from "../components/footer.js";
+import { bindLanguagePicker }     from "../components/language-picker.js";
 import { mountFloatingQuoteWidget } from "../components/floating-quote-widget.js";
-import { getStoredLanguage, t } from "../services/language-service.js";
-import { createRouteHelpers } from "../utils/routes.js";
+import { mountCookieBanner } from "../components/consent-banner.js";
+import { getStoredLanguage, t }   from "../services/language-service.js";
+import { createRouteHelpers }     from "../utils/routes.js";
 import { renderHomePage, bindHomePage } from "../pages/home.js";
-import { renderProductsPage } from "../pages/products.js";
+import { renderProductsPage }     from "../pages/products.js";
 import {
   renderProductDetailPage,
   renderMissingProduct,
   afterRenderProductDetail,
 } from "../pages/product-detail.js";
-import { renderBuyHubPage } from "../pages/buy.js";
+import { renderBuyHubPage }       from "../pages/buy.js";
 import {
   renderBuyProductPage,
   afterRenderBuyProduct,
 } from "../pages/buy-product.js";
-import { renderAboutPage } from "../pages/about.js";
-import { renderAccountPage } from "../pages/account.js";
-import { getProductBySlug } from "../services/product-service.js";
-import { initB2BForm } from "../pages/b2b.js";
+import { renderAboutPage }        from "../pages/about.js";
+import { renderAccountPage }      from "../pages/account.js";
+import { getProductBySlug }       from "../services/product-service.js";
+import { initB2BForm }            from "../pages/b2b.js";
 
 export async function initApp() {
-  const page = document.body.dataset.page || "home";
-  const lang = getStoredLanguage();
+  const page   = document.body.dataset.page || "home";
+  const lang   = getStoredLanguage();
   const routes = createRouteHelpers(page);
 
   document.documentElement.lang = lang;
 
   await mountShell({ page, lang, ...routes });
   await mountPage({ page, lang, ...routes });
+
   mountFloatingQuoteWidget({ lang });
+  mountCookieBanner({ lang });  // ← NEW — always last so it overlays everything
 
   bindLanguagePicker();
 }
@@ -42,14 +45,8 @@ async function mountShell({ page, lang, route, productUrl }) {
   if (navbar) {
     try {
       const res = await fetch("/components/navbar.html");
-
-      if (!res.ok) {
-        throw new Error(`Failed to load navbar.html (${res.status})`);
-      }
-
-      const html = await res.text();
-      navbar.innerHTML = html;
-
+      if (!res.ok) throw new Error(`Failed to load navbar.html (${res.status})`);
+      navbar.innerHTML = await res.text();
       initHeader({ page, lang, productUrl, route });
     } catch (err) {
       console.error("[bootstrap] Navbar failed:", err);
@@ -66,14 +63,7 @@ async function mountShell({ page, lang, route, productUrl }) {
   }
 }
 
-async function mountPage({
-  page,
-  lang,
-  route,
-  productUrl,
-  buyProductUrl,
-  getCurrentSlug,
-}) {
+async function mountPage({ page, lang, route, productUrl, buyProductUrl, getCurrentSlug }) {
   const container = document.getElementById("page-content");
   if (!container) return;
 
@@ -92,14 +82,7 @@ async function mountPage({
     case "product": {
       document.title = t(lang, "metaProductTitle");
       const slug = getCurrentSlug();
-
-      container.innerHTML = renderProductDetailPage({
-        lang,
-        slug,
-        route,
-        buyProductUrl,
-      });
-
+      container.innerHTML = renderProductDetailPage({ lang, slug, route, buyProductUrl });
       const product = getProductBySlug(slug);
       if (product) {
         afterRenderProductDetail(product);
@@ -123,11 +106,11 @@ async function mountPage({
     case "checkout":
       document.title = "Checkout | Alva Technology";
       try {
-        const checkoutModule = await import("../pages/checkout.js");
-        container.innerHTML = checkoutModule.renderCheckoutPage({ lang });
-        checkoutModule.bindCheckoutPage({ lang });
+        const m = await import("../pages/checkout.js");
+        container.innerHTML = m.renderCheckoutPage({ lang });
+        m.bindCheckoutPage({ lang });
       } catch (err) {
-        console.error("[bootstrap] Checkout page failed:", err);
+        console.error("[bootstrap] Checkout failed:", err);
         container.innerHTML = renderMissingProduct({ lang, route });
       }
       break;
@@ -135,10 +118,10 @@ async function mountPage({
     case "order-confirmation":
       document.title = "Order Confirmed | Alva Technology";
       try {
-        const orderConfirmationModule = await import("../pages/order-confirmation.js");
-        container.innerHTML = orderConfirmationModule.renderOrderConfirmationPage(lang);
+        const m = await import("../pages/order-confirmation.js");
+        container.innerHTML = m.renderOrderConfirmationPage(lang);
       } catch (err) {
-        console.error("[bootstrap] Order confirmation page failed:", err);
+        console.error("[bootstrap] Order confirmation failed:", err);
         container.innerHTML = renderMissingProduct({ lang, route });
       }
       break;
@@ -155,9 +138,7 @@ async function mountPage({
 
     case "b2b":
       document.title = "B2B | Alva Technology";
-      setTimeout(() => {
-        initB2BForm();
-      }, 0);
+      setTimeout(() => initB2BForm(), 0);
       break;
 
     default:
