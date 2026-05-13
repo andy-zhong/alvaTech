@@ -2,7 +2,7 @@
   position: fixed;
   right: 24px;
   bottom: 24px;
-  z-index: 18;
+  z-index: 1001;
   width: min(392px, calc(100vw - 48px));
   pointer-events: none;
   opacity: 1;
@@ -20,11 +20,10 @@
 .floating-quote-widget__card {
   pointer-events: auto;
   border-radius: 28px;
-  border: 1px solid rgba(198, 210, 71, 0.16);
-  background:
-    linear-gradient(180deg, rgba(17, 42, 39, 0.96), rgba(8, 23, 21, 0.98));
-  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.36);
-  backdrop-filter: blur(16px);
+  border: 1px solid rgba(199, 226, 122, 0.24);
+  background: #0f2a24;
+  color: #f7faf4;
+  box-shadow: 0 24px 70px rgba(0, 0, 0, 0.34);
 }
 
 .floating-quote-widget__bar {
@@ -45,7 +44,7 @@
 }
 
 .floating-quote-widget__prompt {
-  color: var(--text);
+  color: #ffffff;
   font-size: 0.95rem;
   font-weight: 700;
   letter-spacing: -0.01em;
@@ -65,16 +64,16 @@
   align-items: center;
   justify-content: center;
   border-radius: 999px;
-  color: var(--text-muted);
-  background: rgba(255, 255, 255, 0.04);
-  border: 1px solid rgba(255, 255, 255, 0.06);
+  color: rgba(247, 250, 244, 0.72);
+  background: rgba(255, 255, 255, 0.07);
+  border: 1px solid rgba(255, 255, 255, 0.12);
   transition: background-color 180ms ease, color 180ms ease, transform 180ms ease;
 }
 
 .floating-quote-widget__icon-button:hover,
 .floating-quote-widget__icon-button:focus-visible {
-  color: var(--text);
-  background: rgba(255, 255, 255, 0.08);
+  color: #ffffff;
+  background: rgba(255, 255, 255, 0.12);
   transform: translateY(-1px);
 }
 
@@ -107,12 +106,12 @@
   font-size: 1.35rem;
   line-height: 1.1;
   letter-spacing: -0.03em;
-  color: var(--text);
+  color: #ffffff;
 }
 
 .floating-quote-widget__description,
 .floating-quote-widget__privacy {
-  color: var(--text-muted);
+  color: rgba(247, 250, 244, 0.76);
   line-height: 1.6;
 }
 
@@ -147,21 +146,21 @@
   min-height: 46px;
   padding: 12px 14px;
   border-radius: 16px;
-  border: 1px solid rgba(255, 255, 255, 0.09);
-  background: rgba(4, 12, 11, 0.48);
-  color: var(--text);
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  background: rgba(4, 12, 11, 0.72);
+  color: #ffffff;
   transition: border-color 180ms ease, box-shadow 180ms ease, background-color 180ms ease;
 }
 
 .floating-quote-widget__input::placeholder {
-  color: rgba(243, 246, 242, 0.34);
+  color: rgba(247, 250, 244, 0.46);
 }
 
 .floating-quote-widget__input:focus {
   outline: none;
-  border-color: rgba(198, 210, 71, 0.7);
-  box-shadow: 0 0 0 3px rgba(198, 210, 71, 0.14);
-  background: rgba(8, 18, 17, 0.8);
+  border-color: rgba(199, 226, 122, 0.78);
+  box-shadow: 0 0 0 3px rgba(199, 226, 122, 0.16);
+  background: rgba(8, 18, 17, 0.92);
 }
 
 .floating-quote-widget__input.is-invalid {
@@ -191,6 +190,31 @@
 .floating-quote-widget__card--success {
   min-height: 188px;
   align-content: start;
+}
+
+.floating-quote-widget__card--success .floating-quote-widget__description {
+  color: rgba(247, 250, 244, 0.82);
+}
+
+@media (max-width: 1120px) {
+  .floating-quote-widget {
+    right: 16px;
+    bottom: 16px;
+  }
+
+  body:has(.cookie-banner--visible) .floating-quote-widget {
+    bottom: 188px;
+  }
+}
+
+@media (max-width: 640px) {
+  .floating-quote-widget {
+    width: calc(100vw - 32px);
+  }
+
+  body:has(.cookie-banner--visible) .floating-quote-widget {
+    bottom: 204px;
+  }
 }
 
 @keyframes floating-quote-widget-enter {

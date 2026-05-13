@@ -334,3 +334,84 @@
     border-radius: 24px;
   }
 }
+
+/* Visual polish: align About with the light editorial platform system. */
+.about-hero {
+  background:
+    linear-gradient(135deg, rgba(255, 255, 255, 0.94), rgba(240, 240, 235, 0.78));
+}
+
+.about-hero__glow {
+  background: rgba(32, 180, 85, 0.1);
+}
+
+.about-hero__content h1,
+.about-story h2,
+.about-product-band h2,
+.about-location h2,
+.about-cta h2 {
+  color: #111111;
+}
+
+.about-hero__content p,
+.about-hero__lead,
+.about-story p,
+.about-product-band p,
+.about-location p,
+.about-cta p,
+.about-card p,
+.about-value p {
+  color: rgba(0, 0, 0, 0.64) !important;
+}
+
+.about-hero__panel,
+.about-card,
+.about-value,
+.about-product-band,
+.about-location,
+.about-cta {
+  border: 1px solid rgba(15, 42, 36, 0.1);
+  background: rgba(255, 255, 255, 0.86);
+  box-shadow: 0 18px 54px rgba(15, 42, 36, 0.08);
+}
+
+.about-stat {
+  background: rgba(15, 42, 36, 0.05);
+}
+
+.about-stat strong,
+.about-card h3,
+.about-value h3 {
+  color: #111111;
+}
+
+.about-stat span {
+  color: rgba(0, 0, 0, 0.58);
+}
+
+.about-product-band {
+  background:
+    radial-gradient(circle at 18% 20%, rgba(32, 180, 85, 0.1), transparent 28%),
+    rgba(255, 255, 255, 0.86);
+}
+
+.about-product-band__visual {
+  background:
+    linear-gradient(145deg, rgba(255, 255, 255, 0.88), rgba(240, 240, 235, 0.75)),
+    radial-gradient(circle at 50% 15%, rgba(199, 226, 122, 0.24), transparent 34%);
+}
+
+.about-product-band li {
+  color: rgba(0, 0, 0, 0.74);
+}
+
+.about-product-band li::before {
+  background: #20b455;
+  box-shadow: 0 0 18px rgba(32, 180, 85, 0.26);
+}
+
+.about-cta {
+  background:
+    radial-gradient(circle at 50% 0%, rgba(32, 180, 85, 0.12), transparent 34%),
+    rgba(255, 255, 255, 0.9);
+}

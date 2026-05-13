@@ -1,21 +1,24 @@
 :root {
-  --bg: #071513;
-  --bg-soft: #0b1f1d;
-  --bg-elevated: rgba(10, 34, 31, 0.9);
-  --surface: rgba(255, 255, 255, 0.04);
-  --surface-strong: rgba(255, 255, 255, 0.08);
-  --surface-border: rgba(198, 210, 71, 0.18);
-  --line: rgba(255, 255, 255, 0.12);
-  --text: #f3f6f2;
-  --text-muted: rgba(243, 246, 242, 0.72);
-  --accent: #c6d247;
-  --accent-strong: #d9e85c;
-  --accent-shadow: rgba(198, 210, 71, 0.22);
+  --bg: #fafaf7;
+  --bg-soft: #f0f0eb;
+  --bg-elevated: #ffffff;
+  --surface: #ffffff;
+  --surface-strong: #f7f7f2;
+  --surface-border: rgba(15, 42, 36, 0.1);
+  --line: rgba(17, 17, 17, 0.1);
+  --text: #111111;
+  --text-muted: rgba(0, 0, 0, 0.62);
+  --accent: #20b455;
+  --accent-strong: #c7e27a;
+  --accent-shadow: rgba(32, 180, 85, 0.2);
+  --dark-green: #0f2a24;
+  --deep-green: #071a16;
   --radius-sm: 12px;
   --radius-md: 20px;
   --radius-lg: 32px;
-  --shadow: 0 24px 80px rgba(0, 0, 0, 0.35);
+  --shadow: 0 22px 70px rgba(15, 42, 36, 0.1);
   --max-width: 1240px;
+  --site-header-height: 76px;
 }
 
 * {
@@ -26,18 +29,17 @@
 
 html {
   scroll-behavior: smooth;
+  overflow-x: hidden;
 }
 
 body {
   min-height: 100vh;
   display: flex;
   flex-direction: column;
-  background:
-    radial-gradient(circle at top right, rgba(198, 210, 71, 0.14), transparent 28%),
-    radial-gradient(circle at top left, rgba(63, 119, 112, 0.22), transparent 22%),
-    linear-gradient(180deg, #081816 0%, #071311 100%);
+  background: var(--bg);
   color: var(--text);
   font-family: "Manrope", sans-serif;
+  overflow-x: hidden;
 }
 
 img {

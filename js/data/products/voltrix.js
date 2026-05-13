@@ -5,19 +5,19 @@ export const VOLTRIX_PRODUCT = {
   name: "Voltrix 5-Pack Kit",
   shortName: "Voltrix",
 
-  heroImage: "/assets/products/voltrix01.png",
-  thumbnail: "/assets/products/voltrix01.png",
+  heroImage: "/Picture/products/voltrix/voltrix01.png",
+  thumbnail: "/Picture/products/voltrix/voltrix01.png",
 
-  heroMedia: createMediaItem("/assets/products/voltrix01.png", "Voltrix Energy Hub"),
+  heroMedia: createMediaItem("/Picture/products/voltrix/voltrix01.png", "Voltrix Energy Hub"),
 
   gallery: [
-    createMediaItem("/assets/products/voltrix01.png", "Voltrix front view"),
-    createMediaItem("/assets/products/voltrix02.png", "Voltrix side profile"),
-    createMediaItem("/assets/products/voltrix03.jpg", "Voltrix installed outdoors"),
-    createMediaItem("/assets/products/voltrix04.jpg", "Voltrix wall mounted"),
-    createMediaItem("/assets/products/voltrix05.jpg", "Voltrix expanded system"),
-    createMediaItem("/assets/products/voltrix06.jpg", "Voltrix solar integration"),
-    createMediaItem("/assets/products/voltrix07.jpg", "Voltrix app control"),
+    createMediaItem("/Picture/products/voltrix/voltrix01.png", "Voltrix front view"),
+    createMediaItem("/Picture/products/voltrix/voltrix02.png", "Voltrix side profile"),
+    createMediaItem("/Picture/products/voltrix/voltrix03.jpg", "Voltrix installed outdoors"),
+    createMediaItem("/Picture/products/voltrix/voltrix04.jpg", "Voltrix wall mounted"),
+    createMediaItem("/Picture/products/voltrix/voltrix05.jpg", "Voltrix expanded system"),
+    createMediaItem("/Picture/products/voltrix/voltrix06.jpg", "Voltrix solar integration"),
+    createMediaItem("/Picture/products/voltrix/voltrix07.jpg", "Voltrix app control"),
   ],
 
   price: "From 10 980 SEK",

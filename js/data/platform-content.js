@@ -21,7 +21,8 @@ const SHARED_PLATFORM_CONTENT = {
     summerHouse: {
       id: "summer-house",
       label: "Summer House",
-      headline: "Energy freedom for your summer house.",
+      headline: "Energy freedom for your summer house",
+      headlineLines: ["Energy freedom", "for your summer house"],
       body: "Store solar energy, power everyday comfort, and expand your system as your needs grow.",
       benefits: [
         "Made for cabins and holiday homes",
@@ -32,7 +33,8 @@ const SHARED_PLATFORM_CONTENT = {
     field: {
       id: "field",
       label: "Field",
-      headline: "Portable energy for field teams.",
+      headline: "Portable energy for field teams",
+      headlineLines: ["Portable energy", "for field teams"],
       body: "Charge at base, bring power into the van, and use modular batteries where work happens.",
       benefits: [
         "For installers and service teams",
@@ -63,7 +65,7 @@ const SHARED_PLATFORM_CONTENT = {
     eyebrow: "The platform",
     title: "One battery platform. Multiple ways to use energy.",
     body:
-      "Voltrix is a modular energy platform designed to adapt to different ways of living and working. Start small and expand over time at home, outdoors, or on the job.",
+      "Voltrix is a modular energy platform designed to adapt to different ways of living and working. Start small and expand over time - at home, outdoors, or on the job.",
   },
   productFit: {
     eyebrow: "Product fit",
@@ -91,19 +93,19 @@ const SHARED_PLATFORM_CONTENT = {
     {
       id: "voltrix-starter",
       title: "Voltrix Starter",
-      range: "1-5 kWh",
+      range: "1–5 kWh",
       body: "For cabins, basic storage and smaller everyday energy needs.",
     },
     {
       id: "voltrix-medium",
       title: "Voltrix Medium",
-      range: "6-8 kWh",
+      range: "6–8 kWh",
       body: "For larger summer houses, outdoor routines and flexible use.",
     },
     {
       id: "voltrix-max",
       title: "Voltrix Max",
-      range: "9-12 kWh",
+      range: "9–12 kWh",
       body: "For extended autonomy, professional workflows and future expansion.",
     },
     {

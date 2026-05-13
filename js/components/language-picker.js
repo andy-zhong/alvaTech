@@ -7,13 +7,13 @@ export function renderLanguagePicker({ lang, route }) {
   return `
     <div class="lang-picker">
       <button class="lang-picker__button" type="button" aria-label="${t(lang, "languageLabel")}">
-        <img class="flag" src="${route(`assets/flags/${current.flag}.svg`)}" alt="">
+        <img class="flag" src="${route(`Picture/icons/flags/${current.flag}.svg`)}" alt="">
         <span>${current.label}</span>
       </button>
       <div class="lang-picker__menu" role="menu">
         ${languages.map((entry) => `
           <button class="lang-picker__option ${entry.code === lang ? "is-active" : ""}" type="button" data-language-option="${entry.code}">
-            <img class="flag" src="${route(`assets/flags/${entry.flag}.svg`)}" alt="">
+            <img class="flag" src="${route(`Picture/icons/flags/${entry.flag}.svg`)}" alt="">
             <span>${entry.label}</span>
           </button>
         `).join("")}

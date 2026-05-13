@@ -5,18 +5,18 @@ export const VOLTDOCK_PRODUCT = {
   name: "VoltDock",
   shortName: "VoltDock",
 
-  heroImage: "/assets/products/voltdock01.jpg",
-  thumbnail: "/assets/products/voltdock01.jpg",
+  heroImage: "/Picture/products/voltdock/voltdock01.jpg",
+  thumbnail: "/Picture/products/voltdock/voltdock01.jpg",
 
-  heroMedia: createMediaItem("/assets/products/voltdock01.jpg", "VoltDock dual-source desktop hub"),
+  heroMedia: createMediaItem("/Picture/products/voltdock/voltdock01.jpg", "VoltDock dual-source desktop hub"),
 
   gallery: [
-    createMediaItem("/assets/products/voltdock01.jpg", "VoltDock overview"),
-    createMediaItem("/assets/products/voltdock02.jpg", "VoltDock front ports"),
-    createMediaItem("/assets/products/voltdock03.jpg", "VoltDock desk setup"),
-    createMediaItem("/assets/products/voltdock04.jpg", "VoltDock with battery"),
-    createMediaItem("/assets/products/voltdock05.jpg", "VoltDock display detail"),
-    createMediaItem("/assets/products/voltdock06.jpg", "VoltDock portable use"),
+    createMediaItem("/Picture/products/voltdock/voltdock01.jpg", "VoltDock overview"),
+    createMediaItem("/Picture/products/voltdock/voltdock02.jpg", "VoltDock front ports"),
+    createMediaItem("/Picture/products/voltdock/voltdock03.jpg", "VoltDock desk setup"),
+    createMediaItem("/Picture/products/voltdock/voltdock04.jpg", "VoltDock with battery"),
+    createMediaItem("/Picture/products/voltdock/voltdock05.jpg", "VoltDock display detail"),
+    createMediaItem("/Picture/products/voltdock/voltdock06.jpg", "VoltDock portable use"),
   ],
 
   price: "3 990 SEK",
