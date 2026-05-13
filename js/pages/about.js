@@ -296,7 +296,7 @@ const ABOUT_COPY = {
   },
 };
 
-const getCopy = (lang) => ABOUT_COPY[lang] ?? ABOUT_COPY.sv;
+const getCopy = (lang) => ABOUT_COPY[lang] ?? ABOUT_COPY.en;
 
 export function renderAboutPage({ lang }) {
   const copy = getCopy(lang);

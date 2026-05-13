@@ -7,10 +7,11 @@ const CART_COPY = {
   fi: { summaryTitle: "Tilausyhteenveto" },
   no: { summaryTitle: "Ordresammendrag" },
   da: { summaryTitle: "Ordreoversigt" },
+  it: { summaryTitle: "Riepilogo ordine" },
 };
 
 function getCartCopy(lang) {
-  return CART_COPY[lang] ?? CART_COPY.sv;
+  return CART_COPY[lang] ?? CART_COPY.en;
 }
 
 // ─────────────────────────────────────────────────────────────────────────────

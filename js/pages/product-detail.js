@@ -65,10 +65,22 @@ const DETAIL_COPY = {
     imageViewer: "Billedviser",
     closeViewer: "Luk",
   },
+  it: {
+    showImage: "Mostra immagine",
+    previous: "Precedente",
+    next: "Successivo",
+    batteryLabel: "Numero di moduli batteria",
+    batteryDecrease: "Rimuovi un modulo batteria",
+    batteryIncrease: "Aggiungi un modulo batteria",
+    capacity: "Capacita",
+    price: "Prezzo",
+    imageViewer: "Visualizzatore immagini",
+    closeViewer: "Chiudi",
+  },
 };
 
 function getDetailCopy(lang) {
-  return DETAIL_COPY[lang] ?? DETAIL_COPY.sv;
+  return DETAIL_COPY[lang] ?? DETAIL_COPY.en;
 }
 
 function calculatePrice(product) {

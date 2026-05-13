@@ -70,7 +70,7 @@ async function mountPage({ page, lang, route, productUrl, buyProductUrl, getCurr
   switch (page) {
     case "home":
       document.title = t(lang, "metaHomeTitle");
-      container.innerHTML = renderHomePage({ lang });
+      container.innerHTML = renderHomePage({ lang, productUrl });
       bindHomePage({ lang, productUrl, buyProductUrl });
       break;
 

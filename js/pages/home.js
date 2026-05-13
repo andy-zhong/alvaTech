@@ -1,207 +1,66 @@
-import { getAllProducts, getProductContent } from "../services/product-service.js";
+import { getAllProducts, getProductBySlug, getProductContent } from "../services/product-service.js";
 import { t } from "../services/language-service.js";
+import { getHomeContent } from "../data/home-content.js";
 
-const COPY = {
-  en: {
-    eyebrow: "VOLTRIX BY ALVA",
-    heroTitle: ["One Battery", "for All"],
-    heroPara:
-      "The modular home energy hub. Store solar, power your home, and take the same battery anywhere.",
-    browseLink: "Explore the system",
-    stats: [
-      { target: 12, suffix: "", label: "Battery modules" },
-      { target: 2400, suffix: "W", label: "Peak AC output" },
-      { target: 97, suffix: "%", label: "System efficiency" },
-    ],
-    featuresTitle: "Built for real life",
-    features: [
-      {
-        title: "Grows with you",
-        body: "Start with one module and scale to twelve without changing your core setup.",
-      },
-      {
-        title: "Built for any weather",
-        body: "IP65 protection and self-heating keep the system ready through Nordic seasons.",
-      },
-      {
-        title: "One battery, everywhere",
-        body: "Use the same energy core for the home, mobility and everyday outdoor use.",
-      },
-    ],
-    configureBtn: "Configure System",
-    ctaTitle: "One battery for all.",
-    ctaBody: "Configure your Voltrix system, choose your capacity and continue directly to purchase.",
-    ctaButton: "View all products",
-  },
-  sv: {
-    eyebrow: "VOLTRIX AV ALVA",
-    heroTitle: ["Ett batteri", "för allt"],
-    heroPara:
-      "Det modulära hemmaenergisystemet. Lagra solenergi, driv ditt hem och ta med batteriet vart du vill.",
-    browseLink: "Utforska systemet",
-    stats: [
-      { target: 12, suffix: "", label: "Batterimoduler" },
-      { target: 2400, suffix: "W", label: "Toppeffekt (AC)" },
-      { target: 97, suffix: "%", label: "Systemverkningsgrad" },
-    ],
-    featuresTitle: "Byggt för verkligheten",
-    features: [
-      {
-        title: "Växer med dig",
-        body: "Börja med en modul och bygg ut till tolv utan att ändra grundsystemet.",
-      },
-      {
-        title: "Byggt för alla väder",
-        body: "IP65-skydd och självuppvärmning gör systemet redo för nordiska årstider.",
-      },
-      {
-        title: "Ett batteri, överallt",
-        body: "Använd samma energikärna för hemmet, mobilitet och vardagligt uteliv.",
-      },
-    ],
-    configureBtn: "Konfigurera system",
-    ctaTitle: "Ett batteri för allt.",
-    ctaBody: "Konfigurera ditt Voltrix-system, välj kapacitet och gå vidare direkt till köp.",
-    ctaButton: "Visa alla produkter",
-  },
-  fi: {
-    eyebrow: "VOLTRIX BY ALVA",
-    heroTitle: ["Yksi akku", "kaikkeen"],
-    heroPara:
-      "Modulaarinen kodin energiajärjestelmä. Varastoi aurinkoenergiaa, syötä kotia ja ota sama akku mukaasi.",
-    browseLink: "Tutustu järjestelmään",
-    stats: [
-      { target: 12, suffix: "", label: "Akkumoduulia" },
-      { target: 2400, suffix: "W", label: "Huippu AC-teho" },
-      { target: 97, suffix: "%", label: "Järjestelmän hyötysuhde" },
-    ],
-    featuresTitle: "Rakennettu oikeaan arkeen",
-    features: [
-      {
-        title: "Kasvaa tarpeidesi mukana",
-        body: "Aloita yhdellä moduulilla ja laajenna kahteentoista ilman että perusratkaisua tarvitsee vaihtaa.",
-      },
-      {
-        title: "Valmis kaikkiin sääoloihin",
-        body: "IP65-suojaus ja itselämmitys pitävät järjestelmän valmiina pohjoisissa oloissa.",
-      },
-      {
-        title: "Yksi akku kaikkialle",
-        body: "Käytä samaa energiaydintä kotona, liikkeellä ja ulkona jokapäiväisessä käytössä.",
-      },
-    ],
-    configureBtn: "Määritä järjestelmä",
-    ctaTitle: "Yksi akku kaikkeen.",
-    ctaBody: "Määritä Voltrix-järjestelmäsi, valitse kapasiteetti ja siirry suoraan ostoon.",
-    ctaButton: "Katso kaikki tuotteet",
-  },
-  no: {
-    eyebrow: "VOLTRIX BY ALVA",
-    heroTitle: ["Ett batteri", "for alt"],
-    heroPara:
-      "Det modulære energisystemet for hjemmet. Lagre solenergi, driv hjemmet og ta med samme batteri hvor du vil.",
-    browseLink: "Utforsk systemet",
-    stats: [
-      { target: 12, suffix: "", label: "Batterimoduler" },
-      { target: 2400, suffix: "W", label: "Maks AC-effekt" },
-      { target: 97, suffix: "%", label: "Systemeffektivitet" },
-    ],
-    featuresTitle: "Bygget for virkeligheten",
-    features: [
-      {
-        title: "Vokser med deg",
-        body: "Start med én modul og utvid til tolv uten å endre grunnoppsettet.",
-      },
-      {
-        title: "Klar for all slags vær",
-        body: "IP65-beskyttelse og selvoppvarming holder systemet klart gjennom nordiske årstider.",
-      },
-      {
-        title: "Ett batteri, overalt",
-        body: "Bruk samme energikjerne hjemme, på farten og i hverdagslig utendørsbruk.",
-      },
-    ],
-    configureBtn: "Konfigurer system",
-    ctaTitle: "Ett batteri for alt.",
-    ctaBody: "Konfigurer Voltrix-systemet ditt, velg kapasitet og gå direkte videre til kjøp.",
-    ctaButton: "Se alle produkter",
-  },
-  da: {
-    eyebrow: "VOLTRIX BY ALVA",
-    heroTitle: ["Ét batteri", "til alt"],
-    heroPara:
-      "Det modulære energisystem til hjemmet. Gem solenergi, forsyn hjemmet og tag det samme batteri med dig.",
-    browseLink: "Udforsk systemet",
-    stats: [
-      { target: 12, suffix: "", label: "Batterimoduler" },
-      { target: 2400, suffix: "W", label: "Maks AC-effekt" },
-      { target: 97, suffix: "%", label: "Systemeffektivitet" },
-    ],
-    featuresTitle: "Bygget til virkeligheden",
-    features: [
-      {
-        title: "Vokser med dig",
-        body: "Start med ét modul og udvid til tolv uden at ændre den grundlæggende opsætning.",
-      },
-      {
-        title: "Klar til alt slags vejr",
-        body: "IP65-beskyttelse og selvopvarmning holder systemet klar gennem nordiske sæsoner.",
-      },
-      {
-        title: "Ét batteri, overalt",
-        body: "Brug den samme energikerne i hjemmet, på farten og i hverdagsbrug udendørs.",
-      },
-    ],
-    configureBtn: "Konfigurer system",
-    ctaTitle: "Ét batteri til alt.",
-    ctaBody: "Konfigurer dit Voltrix-system, vælg kapacitet og fortsæt direkte til køb.",
-    ctaButton: "Se alle produkter",
-  },
-};
-
-const ICONS = [
-  `<svg xmlns="http://www.w3.org/2000/svg" width="26" height="26" viewBox="0 0 24 24"
+const ICONS = {
+  modular: `<svg xmlns="http://www.w3.org/2000/svg" width="26" height="26" viewBox="0 0 24 24"
        fill="none" stroke="currentColor" stroke-width="1.6"
        stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-     <polyline points="15 3 21 3 21 9"/>
-     <polyline points="9 21 3 21 3 15"/>
-     <line x1="21" y1="3" x2="14" y2="10"/>
-     <line x1="3" y1="21" x2="10" y2="14"/>
+     <rect x="3" y="3" width="7" height="7" rx="1.5"/>
+     <rect x="14" y="3" width="7" height="7" rx="1.5"/>
+     <rect x="3" y="14" width="7" height="7" rx="1.5"/>
+     <rect x="14" y="14" width="7" height="7" rx="1.5"/>
    </svg>`,
-  `<svg xmlns="http://www.w3.org/2000/svg" width="26" height="26" viewBox="0 0 24 24"
+  solar: `<svg xmlns="http://www.w3.org/2000/svg" width="26" height="26" viewBox="0 0 24 24"
+       fill="none" stroke="currentColor" stroke-width="1.6"
+       stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+     <circle cx="12" cy="12" r="4"/>
+     <path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"/>
+   </svg>`,
+  backup: `<svg xmlns="http://www.w3.org/2000/svg" width="26" height="26" viewBox="0 0 24 24"
        fill="none" stroke="currentColor" stroke-width="1.6"
        stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
      <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
    </svg>`,
-  `<svg xmlns="http://www.w3.org/2000/svg" width="26" height="26" viewBox="0 0 24 24"
+  portable: `<svg xmlns="http://www.w3.org/2000/svg" width="26" height="26" viewBox="0 0 24 24"
        fill="none" stroke="currentColor" stroke-width="1.6"
        stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
      <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/>
    </svg>`,
-];
+};
 
-export function renderHomePage({ lang }) {
-  const copy = COPY[lang] ?? COPY.sv;
+const ICON_SEQUENCE = [ICONS.modular, ICONS.solar, ICONS.backup, ICONS.portable];
+
+export function renderHomePage({ lang, productUrl }) {
+  const content = getHomeContent(lang);
+  const featuredProduct = getProductBySlug(content.productSlug);
+  const featuredProductContent = featuredProduct
+    ? getProductContent(featuredProduct, lang)
+    : null;
+  const featuredHref = featuredProduct ? productUrl(featuredProduct.slug) : "./views/products.html";
 
   return `
-    <section class="hero hero--home">
-      <div class="hero__shell">
-        <div class="hero__copy">
-          <span class="eyebrow hero__kicker">${copy.eyebrow}</span>
-          <h1 class="hero__headline">${copy.heroTitle[0]}<br>${copy.heroTitle[1]}</h1>
-          <p class="hero__sub">${copy.heroPara}</p>
-          <a class="hero__explore" href="./views/products.html">
-            ${copy.browseLink}
-            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24"
-                 fill="none" stroke="currentColor" stroke-width="2.2"
-                 stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-              <line x1="5" y1="12" x2="19" y2="12"/>
-              <polyline points="12 5 19 12 12 19"/>
-            </svg>
-          </a>
+    <section class="home-showcase-hero" aria-labelledby="home-hero-title">
+      <div class="home-showcase-hero__glow" aria-hidden="true"></div>
+      <div class="home-showcase-hero__shell">
+        <div class="home-showcase-hero__copy">
+          <span class="eyebrow home-showcase-hero__eyebrow">${content.hero.eyebrow}</span>
+          <h1 id="home-hero-title" class="home-showcase-hero__title">${content.hero.title}</h1>
+          <p class="home-showcase-hero__subtitle">${content.hero.subtitle}</p>
+          <div class="home-showcase-hero__actions">
+            <a class="button button--primary home-showcase-hero__primary" href="${featuredHref}">
+              ${content.hero.primaryCta}
+            </a>
+            <a class="button button--secondary home-showcase-hero__secondary" href="#home-how-it-works">
+              ${content.hero.secondaryCta}
+            </a>
+          </div>
+          <div class="home-showcase-hero__signals" aria-label="Primary use cases">
+            ${content.hero.quickPoints.map((point) => `<span>${point}</span>`).join("")}
+          </div>
         </div>
 
-        <div class="showcase">
+        <div class="showcase home-showcase-hero__product">
           <div class="showcase__stage">
             <button class="showcase__button" type="button"
                     data-direction="prev"
@@ -217,80 +76,163 @@ export function renderHomePage({ lang }) {
       </div>
     </section>
 
-    <section class="home-stats">
-      <div class="home-stats__inner">
-        ${copy.stats.map((stat, index) => `
-          <div class="home-stat reveal" style="--delay:${(index * 0.14).toFixed(2)}s">
-            <strong class="home-stat__value"
-                    data-counter-target="${stat.target}"
-                    data-counter-suffix="${stat.suffix}">${stat.target}${stat.suffix}</strong>
-            <p class="home-stat__label">${stat.label}</p>
-          </div>
-        `).join("")}
+    <section class="home-section home-why" aria-labelledby="home-why-title">
+      <div class="home-section-inner">
+        ${renderSectionHeading(content.why.eyebrow, content.why.title, "home-why-title")}
+        <div class="home-card-grid home-card-grid--four">
+          ${content.why.items.map((item, index) => renderFeatureCard(item, index)).join("")}
+        </div>
       </div>
     </section>
 
-    <section class="home-features">
-      <div class="home-section-inner">
-        <h2 class="home-features__title reveal">${copy.featuresTitle}</h2>
-        <div class="home-features__grid">
-          ${copy.features.map((feature, index) => `
-            <article class="home-feature reveal" style="--delay:${(index * 0.12).toFixed(2)}s">
-              <div class="home-feature__icon">${ICONS[index] || ICONS[0]}</div>
-              <h3 class="home-feature__title">${feature.title}</h3>
-              <p class="home-feature__body">${feature.body}</p>
+    <section class="home-section home-use-cases" aria-labelledby="home-use-cases-title">
+      <div class="home-section-inner home-use-cases__layout">
+        <div>
+          <span class="eyebrow">${content.useCases.eyebrow}</span>
+          <h2 id="home-use-cases-title" class="home-section-title">${content.useCases.title}</h2>
+        </div>
+        <div class="home-use-cases__grid">
+          ${content.useCases.items.map(([title, body], index) => `
+            <article class="home-use-case reveal" style="--delay:${(index * 0.08).toFixed(2)}s">
+              <span>${String(index + 1).padStart(2, "0")}</span>
+              <h3>${title}</h3>
+              <p>${body}</p>
             </article>
           `).join("")}
         </div>
       </div>
     </section>
 
-    <section class="home-cta">
+    <section class="home-section home-system" id="home-how-it-works" aria-labelledby="home-system-title">
+      <div class="home-section-inner home-system__layout">
+        <div class="home-system__visual reveal" aria-hidden="true">
+          <div class="home-system__hub"></div>
+          <span></span><span></span><span></span>
+        </div>
+        <div class="home-system__copy">
+          <span class="eyebrow">${content.works.eyebrow}</span>
+          <h2 id="home-system-title" class="home-section-title">${content.works.title}</h2>
+          <div class="home-steps">
+            ${content.works.steps.map(([title, body], index) => `
+              <article class="home-step reveal" style="--delay:${(index * 0.1).toFixed(2)}s">
+                <span>${index + 1}</span>
+                <div>
+                  <h3>${title}</h3>
+                  <p>${body}</p>
+                </div>
+              </article>
+            `).join("")}
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="home-section home-trust" aria-labelledby="home-trust-title">
+      <div class="home-section-inner home-trust__card reveal">
+        <div>
+          <span class="eyebrow">${content.trust.eyebrow}</span>
+          <h2 id="home-trust-title" class="home-section-title">${content.trust.title}</h2>
+          <p>${content.trust.body}</p>
+        </div>
+        <div class="home-trust__points">
+          ${content.trust.points.map((point) => `<span>${point}</span>`).join("")}
+        </div>
+      </div>
+    </section>
+
+    <section class="home-section home-featured-product" aria-labelledby="home-featured-title">
       <div class="home-section-inner">
-        <div class="home-cta__card reveal reveal--scale">
-          <h2 class="home-cta__title">${copy.ctaTitle}</h2>
-          <p class="home-cta__body">${copy.ctaBody}</p>
-          <a class="button button--primary home-cta__btn" href="./views/products.html">
-            ${copy.ctaButton}
-          </a>
+        <article class="home-featured-product__card reveal reveal--scale">
+          <div class="home-featured-product__media">
+            ${featuredProduct ? `<img src="${featuredProduct.heroImage}" alt="${featuredProductContent?.name ?? content.productAlt}">` : ""}
+          </div>
+          <div class="home-featured-product__copy">
+            <span class="eyebrow">${content.featured.eyebrow}</span>
+            <h2 id="home-featured-title">${content.featured.title}</h2>
+            <p>${content.featured.body}</p>
+            ${featuredProduct ? `<span class="home-featured-product__price">${featuredProduct.price}</span>` : ""}
+            <div class="home-featured-product__actions">
+              <a class="button button--primary" href="${featuredHref}">${content.featured.cta}</a>
+              <a class="button button--secondary" href="${featuredHref}">${content.featured.secondaryCta}</a>
+            </div>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <section class="home-section home-faq" aria-labelledby="home-faq-title">
+      <div class="home-section-inner">
+        ${renderSectionHeading(content.faq.eyebrow, content.faq.title, "home-faq-title")}
+        <div class="home-faq__list">
+          ${content.faq.items.map(([question, answer], index) => `
+            <article class="home-faq__item reveal" style="--delay:${(index * 0.06).toFixed(2)}s">
+              <h3>${question}</h3>
+              <p>${answer}</p>
+            </article>
+          `).join("")}
         </div>
       </div>
     </section>
   `;
 }
 
-export function bindHomePage({ lang, productUrl, buyProductUrl }) {
-  initCarousel(lang, productUrl, buyProductUrl);
+export function bindHomePage({ lang, productUrl }) {
+  initCarousel(lang, productUrl);
   initScrollReveal();
-  initCounters();
+}
+
+function renderSectionHeading(eyebrow, title, id) {
+  return `
+    <div class="home-section-heading">
+      <span class="eyebrow">${eyebrow}</span>
+      <h2 id="${id}" class="home-section-title">${title}</h2>
+    </div>
+  `;
+}
+
+function renderFeatureCard(item, index) {
+  return `
+    <article class="home-feature-card reveal" style="--delay:${(index * 0.1).toFixed(2)}s">
+      <div class="home-feature-card__icon">${ICON_SEQUENCE[index] || ICON_SEQUENCE[0]}</div>
+      <h3>${item.title}</h3>
+      <p>${item.body}</p>
+    </article>
+  `;
 }
 
 function initCarousel(lang, productUrl) {
   const target = document.getElementById("home-showcase");
   if (!target) return;
 
+  const content = getHomeContent(lang);
   const products = getAllProducts();
   if (!products.length) return;
 
-  const copy = COPY[lang] ?? COPY.sv;
-  let activeIndex = 0;
+  const featuredIndex = Math.max(0, products.findIndex((product) => product.slug === content.productSlug));
+  let activeIndex = featuredIndex;
   let isAnimating = false;
 
   function paintProduct() {
     const product = products[activeIndex];
-    const content = getProductContent(product, lang);
+    const productContent = getProductContent(product, lang);
     const href = productUrl(product.slug);
+    const ctaLabel = product.slug === content.productSlug
+      ? content.hero.productCta
+      : t(lang, "productCardCta");
 
     target.innerHTML = `
-      <a class="product-visual__link" href="${href}" aria-label="${content.name}">
+      <a class="product-visual__link" href="${href}" aria-label="${productContent.name}">
         <div class="product-visual__frame">
-          <img src="${product.heroImage}" alt="${content.name}" draggable="false" loading="eager">
+          <img src="${product.heroImage}" alt="${productContent.name}" draggable="false" loading="eager">
         </div>
       </a>
-      <h2 class="product-visual__name">${content.name}</h2>
-      <a class="button button--primary product-visual__configure" href="${href}">
-        ${copy.configureBtn}
-      </a>
+      <div class="product-visual__meta">
+        <p class="product-visual__market">${content.market.market}</p>
+        <h2 class="product-visual__name">${productContent.name}</h2>
+        <a class="button button--primary product-visual__configure" href="${href}">
+          ${ctaLabel}
+        </a>
+      </div>
     `;
   }
 
@@ -337,30 +279,4 @@ function initScrollReveal() {
   }, { threshold: 0.1, rootMargin: "0px 0px -24px 0px" });
 
   document.querySelectorAll(".reveal").forEach((element) => observer.observe(element));
-}
-
-function initCounters() {
-  const observer = new IntersectionObserver((entries) => {
-    entries.forEach((entry) => {
-      if (!entry.isIntersecting) return;
-
-      const element = entry.target;
-      const end = parseInt(element.dataset.counterTarget, 10);
-      const suffix = element.dataset.counterSuffix || "";
-      const duration = 1400;
-      const start = performance.now();
-
-      function tick(now) {
-        const progress = Math.min((now - start) / duration, 1);
-        const eased = 1 - Math.pow(1 - progress, 3);
-        element.textContent = Math.round(end * eased) + suffix;
-        if (progress < 1) requestAnimationFrame(tick);
-      }
-
-      requestAnimationFrame(tick);
-      observer.unobserve(element);
-    });
-  }, { threshold: 0.5 });
-
-  document.querySelectorAll("[data-counter-target]").forEach((element) => observer.observe(element));
 }

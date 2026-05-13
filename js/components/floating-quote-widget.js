@@ -114,6 +114,27 @@ const WIDGET_COPY = {
     closeLabel:     "Luk hjælpeformular",
     expandLabel:    "Åbn hjælpeformular",
   },
+  it: {
+    collapsedText: "Hai bisogno di aiuto per scegliere il kit?",
+    title: "Hai bisogno di aiuto per scegliere il kit?",
+    description:
+      "Raccontaci la tua casa o il tuo impianto e ti aiuteremo a trovare la soluzione Voltrix piu adatta.",
+    needsLabel: "Le tue esigenze",
+    nameLabel: "Nome",
+    emailLabel: "Email",
+    phoneLabel: "Telefono",
+    submitLabel: "Invia richiesta",
+    privacy:
+      "Inviando il modulo accetti che Alva Technology possa contattarti sui prodotti Voltrix.",
+    needsError: "Descrivi le tue esigenze.",
+    phoneError: "Inserisci il tuo numero di telefono.",
+    successTitle: "Grazie!",
+    successBody:
+      "La tua richiesta e stata ricevuta. Ti contatteremo il prima possibile.",
+    minimizeLabel: "Riduci modulo di aiuto",
+    closeLabel: "Chiudi modulo di aiuto",
+    expandLabel: "Apri modulo di aiuto",
+  },
 };
 
 function getCopy(lang) {

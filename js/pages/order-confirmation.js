@@ -39,10 +39,18 @@ const ORDER_CONFIRMATION_COPY = {
     continueShopping: "Fortsæt med at handle",
     backHome: "Til forsiden",
   },
+  it: {
+    title: "Ordine ricevuto",
+    numberLabel: "Numero ordine",
+    message:
+      "Grazie. Abbiamo ricevuto il tuo ordine. Il team Alva ti contattera per confermare dettagli, consegna e pagamento.",
+    continueShopping: "Continua gli acquisti",
+    backHome: "Torna alla home",
+  },
 };
 
 function getCopy(lang) {
-  return ORDER_CONFIRMATION_COPY[lang] ?? ORDER_CONFIRMATION_COPY.sv;
+  return ORDER_CONFIRMATION_COPY[lang] ?? ORDER_CONFIRMATION_COPY.en;
 }
 
 export function renderOrderConfirmationPage(lang = "sv") {
