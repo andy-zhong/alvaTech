@@ -2,12 +2,42 @@ import { getProductBySlug, getProductContent } from "../services/product-service
 import { getStoredLanguage, t } from "../services/language-service.js";
 
 const CART_COPY = {
-  en: { summaryTitle: "Order summary" },
-  sv: { summaryTitle: "Ordersammanfattning" },
-  fi: { summaryTitle: "Tilausyhteenveto" },
-  no: { summaryTitle: "Ordresammendrag" },
-  da: { summaryTitle: "Ordreoversigt" },
-  it: { summaryTitle: "Riepilogo ordine" },
+  en: {
+    title: "Review your configuration",
+    summaryTitle: "Configuration summary",
+    checkout: "Continue to checkout",
+    continue: "Adjust system",
+  },
+  sv: {
+    title: "Granska din konfiguration",
+    summaryTitle: "Konfigurationssammanfattning",
+    checkout: "Fortsatt till kassan",
+    continue: "Justera system",
+  },
+  fi: {
+    title: "Tarkista kokoonpano",
+    summaryTitle: "Kokoonpanon yhteenveto",
+    checkout: "Jatka kassaan",
+    continue: "Saada jarjestelmaa",
+  },
+  no: {
+    title: "Se gjennom konfigurasjonen",
+    summaryTitle: "Konfigurasjonssammendrag",
+    checkout: "Gaa til kassen",
+    continue: "Juster system",
+  },
+  da: {
+    title: "Gennemgaa din konfiguration",
+    summaryTitle: "Konfigurationsoversigt",
+    checkout: "Gaa til kassen",
+    continue: "Juster system",
+  },
+  it: {
+    title: "Rivedi la configurazione",
+    summaryTitle: "Riepilogo configurazione",
+    checkout: "Vai al checkout",
+    continue: "Modifica sistema",
+  },
 };
 
 function getCartCopy(lang) {
@@ -43,7 +73,7 @@ export function renderBuyProductPage({ lang, route }) {
   return `
     <section class="section">
       <div class="cart-header">
-        <h1>${t(lang, "cartTitle")}</h1>
+        <h1>${copy.title}</h1>
         <span class="cart-header__count">
           ${itemCount} ${itemCount === 1 ? t(lang, "cartItemSingular") : t(lang, "cartItemPlural")}
         </span>
@@ -71,10 +101,10 @@ export function renderBuyProductPage({ lang, route }) {
 
           <div class="cart-actions">
             <a class="button button--primary" href="/views/checkout.html">
-              ${t(lang, "cartCheckout")}
+              ${copy.checkout}
             </a>
             <a class="button button--secondary" href="/views/products.html">
-              ${t(lang, "cartContinue")}
+              ${copy.continue}
             </a>
           </div>
         </aside>

@@ -5,9 +5,9 @@ export function renderBuyHubPage({ lang, productUrl, buyProductUrl }) {
   return `
     <section class="page-hero">
       <div class="page-hero__inner">
-        <span class="eyebrow">${t(lang, "buyHubEyebrow")}</span>
-        <h1>${t(lang, "buyHubTitle")}</h1>
-        <p>${t(lang, "buyHubBody")}</p>
+        <span class="eyebrow">Configure</span>
+        <h1>Configure your Voltrix system.</h1>
+        <p>Choose the real available product that fits your use case, then continue into the existing configuration and checkout flow.</p>
       </div>
     </section>
 
@@ -22,7 +22,7 @@ export function renderBuyHubPage({ lang, productUrl, buyProductUrl }) {
               <h2>${content.name}</h2>
               <p>${content.summary}</p>
               <div class="hero__actions">
-                <a class="button button--primary" href="${buyProductUrl(product.slug)}">${t(lang, "buyHubCta")}</a>
+                <a class="button button--primary" href="${buyProductUrl(product.slug)}">Choose setup</a>
                 <a class="button button--secondary" href="${productUrl(product.slug)}">${t(lang, "productCardCta")}</a>
               </div>
             </div>

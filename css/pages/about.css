@@ -292,6 +292,13 @@
   margin: 18px auto 26px;
 }
 
+.about-cta__actions {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
 @media (max-width: 900px) {
   .about-hero__inner,
   .about-story,

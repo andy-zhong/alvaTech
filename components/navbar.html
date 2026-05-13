@@ -11,12 +11,30 @@
     <nav class="site-nav" aria-label="Main navigation">
       <ul class="site-nav__list">
         <li class="site-nav__item">
-          <a href="/index.html" data-link="home" class="site-nav__link"></a>
+          <a href="/views/solutions.html" data-link="solutions" class="nav-dropdown__trigger"></a>
+          <div class="nav-dropdown__menu" id="solutions-dropdown">
+            <a href="/views/solutions.html#summer-house" data-nav-label="summerHouse"></a>
+            <a href="/views/solutions.html#field" data-nav-label="field"></a>
+          </div>
         </li>
 
         <li class="site-nav__item">
           <a href="/views/products.html" data-link="products" class="nav-dropdown__trigger"></a>
-          <div class="nav-dropdown__menu" id="product-dropdown"></div>
+          <div class="nav-dropdown__menu" id="product-dropdown">
+            <a href="/views/products.html#voltrix-starter" data-nav-label="starter"></a>
+            <a href="/views/products.html#voltrix-medium" data-nav-label="medium"></a>
+            <a href="/views/products.html#voltrix-max" data-nav-label="max"></a>
+            <a href="/views/products.html#accessories" data-nav-label="accessories"></a>
+          </div>
+        </li>
+
+        <li class="site-nav__item">
+          <a href="/views/support.html" data-link="support" class="nav-dropdown__trigger"></a>
+          <div class="nav-dropdown__menu" id="support-dropdown">
+            <a href="/views/support.html#instructions" data-nav-label="instructions"></a>
+            <a href="/views/support.html#faqs" data-nav-label="faqs"></a>
+            <a href="/views/support.html#troubleshooting" data-nav-label="troubleshooting"></a>
+          </div>
         </li>
 
         <li class="site-nav__item">
@@ -24,16 +42,14 @@
         </li>
 
         <li class="site-nav__item">
-          <a href="/views/admin/login.html" data-link="account" class="site-nav__link"></a>
-        </li>
-
-        <li class="site-nav__item">
-          <a href="/views/b2b.html" data-link="b2b" class="site-nav__link"></a>
+          <a href="/views/b2b.html" data-link="contact" class="site-nav__link"></a>
         </li>
       </ul>
     </nav>
 
     <div class="site-header__actions">
+      <a href="/views/solutions.html" class="button button--primary site-header__cta" data-nav-label="findSystem"></a>
+
       <a href="/views/buy-product.html" class="navbar__cart" aria-label="Cart">
         <svg
           xmlns="http://www.w3.org/2000/svg"

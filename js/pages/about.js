@@ -1,45 +1,45 @@
 const ABOUT_COPY = {
   en: {
     eyebrow: "About Alva Technology",
-    title: "Smarter energy for homes, outdoor living and everyday independence.",
+    title: "Built for practical energy independence.",
     intro:
-      "Alva Technology is a Jonkoping-based energy technology company focused on modular power solutions for modern homes, summer houses, outdoor living and mobile everyday use.",
+      "Alva designs modular energy systems for homes, seasonal living and field work, with a calm Nordic approach to technology.",
     introStrong:
-      "From our main office in Hedenstorp, Jonkoping, we develop products that make energy easier to store, move and use without making the experience complicated.",
+      "From Sweden, we build around practical routines: storing energy, expanding capacity and making power easier to use where life and work actually happen.",
     stats: [
       ["Jonkoping", "Main office in Hedenstorp"],
       ["Modular", "Energy systems built to scale"],
       ["One ecosystem", "Home, outdoor and mobile power"],
     ],
     storyEyebrow: "Alva Energy Ecosystem",
-    storyTitle: "Built around a simple idea: energy should follow your life.",
+    storyTitle: "Swedish design for real living and working routines.",
     storyBody:
-      "Most energy products are fixed to one place or designed for one narrow use case. Alva Technology is built around a different idea: one flexible power ecosystem that can support the home, the garden, the balcony, the summer house and life outdoors.",
+      "The Alva platform is built around functional simplicity: clear products, modular capacity and a quiet interface between technology and everyday use.",
     storyBodyTwo:
-      "Our focus is not only technical performance. It is also usability, design and real situations where power must be available, reliable and easy to access.",
+      "The goal is not to make energy feel complicated or industrial. It is to make reliable power feel understandable, calm and ready for seasonal homes, daily routines and field work.",
     cards: [
       {
-        title: "Designed for real homes",
-        body: "Slim installation, wall-mounted options and clean product design make the system easier to place in everyday living environments.",
+        title: "Modular",
+        body: "Systems should grow with the user instead of forcing every need into one fixed setup.",
       },
       {
-        title: "A growing power ecosystem",
-        body: "Alva connects home energy storage with outdoor appliances, portable power and accessories into one clear ecosystem.",
+        title: "Adaptable",
+        body: "The same platform logic can support summer houses, solar routines, backup needs and field deployment.",
       },
       {
-        title: "Practical independence",
-        body: "The goal is simple: give people more control over their energy, wherever they need it.",
+        title: "Calm reliability",
+        body: "Premium energy technology should feel quiet, functional and dependable in use.",
       },
     ],
     productEyebrow: "Product direction",
-    productTitle: "From household storage to portable power.",
+    productTitle: "A platform designed to grow with user needs.",
     productBody:
-      "The Alva product ecosystem is built around modular battery capacity, smart control and flexible use across the home, the desk and outdoor environments.",
+      "Voltrix is the starting point for a modular energy platform that can support homes, seasonal living, outdoor routines and professional workflows.",
     productPoints: [
       "Modular battery capacity that grows with demand",
-      "Solar input support for smarter energy use",
-      "Weather-aware design for Nordic conditions",
-      "App-connected control for a more modern experience",
+      "Use-case led configuration before purchase",
+      "Functional Nordic design for real environments",
+      "Support and guidance around system fit",
     ],
     valuesEyebrow: "Alva standard",
     valuesTitle: "How we work",
@@ -53,10 +53,11 @@ const ABOUT_COPY = {
     locationTitle: "Based in Jonkoping, looking outward.",
     locationBody:
       "Alva Technology works close to product development, partners and customers with the ambition to make modern energy solutions more accessible.",
-    ctaTitle: "Power that fits the way people actually live.",
+    ctaTitle: "Find the right Voltrix path.",
     ctaBody:
-      "Alva Technology exists to make energy less locked, less complicated and more useful at home, outside and everywhere in between.",
-    ctaButton: "Explore products",
+      "Start from a use case, understand the platform, then configure a system or contact Alva for advice.",
+    ctaButton: "Explore solutions",
+    ctaSecondary: "Contact us",
   },
   sv: {
     eyebrow: "Om Alva Technology",
@@ -300,7 +301,8 @@ const getCopy = (lang) => ABOUT_COPY[lang] ?? ABOUT_COPY.en;
 
 export function renderAboutPage({ lang }) {
   const copy = getCopy(lang);
-  const productsPath = window.location.pathname.includes("/views/") ? "./products.html" : "views/products.html";
+  const solutionsPath = window.location.pathname.includes("/views/") ? "./solutions.html" : "views/solutions.html";
+  const contactPath = window.location.pathname.includes("/views/") ? "./b2b.html" : "views/b2b.html";
 
   return `
     <section class="about-hero">
@@ -384,7 +386,10 @@ export function renderAboutPage({ lang }) {
     <section class="section about-cta">
       <h2>${copy.ctaTitle}</h2>
       <p>${copy.ctaBody}</p>
-      <a class="button button--primary" href="${productsPath}">${copy.ctaButton}</a>
+      <div class="about-cta__actions">
+        <a class="button button--primary" href="${solutionsPath}">${copy.ctaButton}</a>
+        <a class="button button--secondary" href="${contactPath}">${copy.ctaSecondary ?? "Contact us"}</a>
+      </div>
     </section>
   `;
 }

@@ -80,8 +80,64 @@ const DETAIL_COPY = {
 };
 
 function getDetailCopy(lang) {
-  return DETAIL_COPY[lang] ?? DETAIL_COPY.en;
+  return {
+    ...DETAIL_PLATFORM_COPY.en,
+    ...(DETAIL_PLATFORM_COPY[lang] ?? {}),
+    ...(DETAIL_COPY[lang] ?? DETAIL_COPY.en),
+  };
 }
+
+const DETAIL_PLATFORM_COPY = {
+  en: {
+    configure: "Configure system",
+    requestAdvice: "Request advice",
+    whoFor: "Who it is for",
+    platformFit: "How it fits the platform",
+    platformFitBody:
+      "This product works as part of the Voltrix modular energy platform, helping connect storage, expansion and practical deployment across home and work use cases.",
+    modularity: "Capacity and modularity",
+    modularityFallback:
+      "Capacity and configuration depend on selected modules and setup.",
+    trustTitle: "Guidance before configuration",
+  },
+  sv: {
+    configure: "Konfigurera system",
+    requestAdvice: "Be om radgivning",
+    whoFor: "Vem den passar for",
+    platformFit: "Hur den passar plattformen",
+    platformFitBody:
+      "Produkten fungerar som en del av Voltrix modulera energiplattform och kopplar samman lagring, expansion och praktisk anvandning.",
+    modularity: "Kapacitet och modularitet",
+    modularityFallback:
+      "Kapacitet och konfiguration beror pa valda moduler och slutlig setup.",
+    trustTitle: "Vagledning fore konfigurering",
+  },
+  it: {
+    configure: "Configura sistema",
+    requestAdvice: "Richiedi consiglio",
+    whoFor: "Per chi e pensato",
+    platformFit: "Come si integra nella piattaforma",
+    platformFitBody:
+      "Questo prodotto fa parte della piattaforma energetica modulare Voltrix per accumulo, espansione e uso pratico.",
+    modularity: "Capacita e modularita",
+    modularityFallback:
+      "Capacita e configurazione dipendono dai moduli selezionati e dal setup finale.",
+    trustTitle: "Guida prima della configurazione",
+  },
+};
+
+const PLATFORM_USE_CASES = [
+  "Summer houses",
+  "Solar storage",
+  "Backup power",
+  "Portable deployment / field use",
+];
+
+const TRUST_POINTS = [
+  "Designed in Sweden",
+  "Shipped from Sweden",
+  "Support and guidance available",
+];
 
 function calculatePrice(product) {
   return product.config.basePrice + batteryCount * product.config.batteryPrice;
@@ -193,6 +249,17 @@ function renderBatterySelector(product, labels) {
     </div>`;
 }
 
+function renderModularityCopy(product, labels) {
+  if (!product.config) {
+    return labels.modularityFallback;
+  }
+
+  const min = product.config.minBatteries;
+  const max = product.config.maxBatteries;
+  const capacity = product.config.capacityPerBattery;
+  return `Configure from ${min} to ${max} modules at ${capacity} kWh per module. Final capacity depends on selected modules and setup.`;
+}
+
 function renderLightbox(labels) {
   return `
     <div class="lightbox" id="lightbox" role="dialog" aria-modal="true" aria-label="${labels.imageViewer}">
@@ -233,13 +300,45 @@ export function renderProductDetailPage({ lang, slug, route }) {
 
         <div class="detail-actions">
           <button class="button button--primary" id="add-to-cart">
-            ${t(lang, "detailBuy")}
+            ${labels.configure}
           </button>
-          <a class="button button--secondary" href="${route("views/products.html")}">
-            ${t(lang, "detailBack")}
+          <a class="button button--secondary" href="${route("views/b2b.html")}">
+            ${labels.requestAdvice}
           </a>
         </div>
       </article>
+    </section>
+
+    <section class="section detail-platform-section">
+      <div class="detail-platform-grid">
+        <article class="panel detail-platform-panel">
+          <span class="eyebrow">${labels.whoFor}</span>
+          <div class="detail-pill-grid">
+            ${PLATFORM_USE_CASES.map((item) => `<span class="detail-platform-pill">${item}</span>`).join("")}
+          </div>
+        </article>
+        <article class="panel detail-platform-panel">
+          <span class="eyebrow">${labels.platformFit}</span>
+          <h2>${labels.platformFit}</h2>
+          <p>${labels.platformFitBody}</p>
+        </article>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="detail-platform-grid">
+        <article class="panel detail-platform-panel">
+          <span class="eyebrow">${labels.modularity}</span>
+          <h2>${labels.modularity}</h2>
+          <p>${renderModularityCopy(product, labels)}</p>
+        </article>
+        <article class="panel detail-trust-band">
+          <span class="eyebrow">${labels.trustTitle}</span>
+          <div class="detail-trust-points">
+            ${TRUST_POINTS.map((point) => `<span>${point}</span>`).join("")}
+          </div>
+        </article>
+      </div>
     </section>
 
     <section class="section">

@@ -1,12 +1,114 @@
-import { getAllProducts, getProductContent } from "../services/product-service.js";
-import { t } from "../services/language-service.js";
 import { renderLanguagePicker } from "./language-picker.js";
 
-export function initHeader({ page, lang, productUrl, route }) {
+const NAV_COPY = {
+  en: {
+    solutions: "Solutions",
+    products: "Products",
+    support: "Support",
+    about: "About",
+    contact: "Contact",
+    summerHouse: "Summer House",
+    field: "Field",
+    starter: "Voltrix Starter 1-5 kWh",
+    medium: "Voltrix Medium 6-8 kWh",
+    max: "Voltrix Max 9-12 kWh",
+    accessories: "Accessories",
+    instructions: "Instructions",
+    faqs: "FAQs",
+    troubleshooting: "Troubleshooting",
+    findSystem: "Find your system",
+  },
+  sv: {
+    solutions: "Losningar",
+    products: "Produkter",
+    support: "Support",
+    about: "Om",
+    contact: "Kontakt",
+    summerHouse: "Fritidshus",
+    field: "Field",
+    starter: "Voltrix Starter 1-5 kWh",
+    medium: "Voltrix Medium 6-8 kWh",
+    max: "Voltrix Max 9-12 kWh",
+    accessories: "Tillbehor",
+    instructions: "Instruktioner",
+    faqs: "FAQ",
+    troubleshooting: "Felsokning",
+    findSystem: "Hitta ditt system",
+  },
+  fi: {
+    solutions: "Ratkaisut",
+    products: "Tuotteet",
+    support: "Tuki",
+    about: "Tietoa",
+    contact: "Yhteys",
+    summerHouse: "Mokki",
+    field: "Field",
+    starter: "Voltrix Starter 1-5 kWh",
+    medium: "Voltrix Medium 6-8 kWh",
+    max: "Voltrix Max 9-12 kWh",
+    accessories: "Lisavarusteet",
+    instructions: "Ohjeet",
+    faqs: "UKK",
+    troubleshooting: "Vianmaaritys",
+    findSystem: "Loyda jarjestelma",
+  },
+  no: {
+    solutions: "Losninger",
+    products: "Produkter",
+    support: "Support",
+    about: "Om",
+    contact: "Kontakt",
+    summerHouse: "Hytte",
+    field: "Field",
+    starter: "Voltrix Starter 1-5 kWh",
+    medium: "Voltrix Medium 6-8 kWh",
+    max: "Voltrix Max 9-12 kWh",
+    accessories: "Tilbehor",
+    instructions: "Instruksjoner",
+    faqs: "FAQ",
+    troubleshooting: "Feilsoking",
+    findSystem: "Finn ditt system",
+  },
+  da: {
+    solutions: "Losninger",
+    products: "Produkter",
+    support: "Support",
+    about: "Om",
+    contact: "Kontakt",
+    summerHouse: "Fritidshus",
+    field: "Field",
+    starter: "Voltrix Starter 1-5 kWh",
+    medium: "Voltrix Medium 6-8 kWh",
+    max: "Voltrix Max 9-12 kWh",
+    accessories: "Tilbehor",
+    instructions: "Instruktioner",
+    faqs: "FAQ",
+    troubleshooting: "Fejlfinding",
+    findSystem: "Find dit system",
+  },
+  it: {
+    solutions: "Soluzioni",
+    products: "Prodotti",
+    support: "Supporto",
+    about: "Chi siamo",
+    contact: "Contatto",
+    summerHouse: "Casa vacanze",
+    field: "Field",
+    starter: "Voltrix Starter 1-5 kWh",
+    medium: "Voltrix Medium 6-8 kWh",
+    max: "Voltrix Max 9-12 kWh",
+    accessories: "Accessori",
+    instructions: "Istruzioni",
+    faqs: "FAQ",
+    troubleshooting: "Risoluzione problemi",
+    findSystem: "Trova il sistema",
+  },
+};
+
+export function initHeader({ page, lang, route }) {
   clearActiveLinks();
   setActive(page);
   setTranslations(lang);
-  renderProducts(lang, productUrl);
   updateCart();
   renderLanguage(lang, route);
 }
@@ -18,19 +120,13 @@ function clearActiveLinks() {
 }
 
 function setActive(page) {
+  const activePage = page === "b2b" ? "contact" : page;
+
   document.querySelectorAll("[data-link]").forEach((link) => {
-    if (link.dataset.link === page) {
+    if (link.dataset.link === activePage) {
       link.classList.add("active");
     }
   });
-}
-
-function safeT(lang, key, fallback = "") {
-  try {
-    return t(lang, key) || fallback || key;
-  } catch {
-    return fallback || key;
-  }
 }
 
 function setText(selector, value) {
@@ -39,38 +135,26 @@ function setText(selector, value) {
   el.textContent = value;
 }
 
-function setTranslations(lang) {
-  setText('[data-link="home"]', safeT(lang, "navHome", "Home"));
-  setText('[data-link="products"]', safeT(lang, "navProducts", "Products"));
-  setText('[data-link="about"]', safeT(lang, "navAbout", "About"));
-  setText('[data-link="account"]', safeT(lang, "navAccount", "Account"));
-  setText('[data-link="b2b"]', safeT(lang, "navB2B", "Företagskund"));
+function getNavCopy(lang) {
+  return {
+    ...NAV_COPY.en,
+    ...(NAV_COPY[lang] ?? {}),
+  };
 }
 
-function renderProducts(lang, productUrl) {
-  const container = document.getElementById("product-dropdown");
-  if (!container) return;
+function setTranslations(lang) {
+  const copy = getNavCopy(lang);
 
-  let products = [];
-  try {
-    products = getAllProducts() || [];
-  } catch (err) {
-    console.error("[header] Failed to load products:", err);
-    container.innerHTML = "";
-    return;
-  }
+  setText('[data-link="solutions"]', copy.solutions);
+  setText('[data-link="products"]', copy.products);
+  setText('[data-link="support"]', copy.support);
+  setText('[data-link="about"]', copy.about);
+  setText('[data-link="contact"]', copy.contact);
 
-  container.innerHTML = products
-    .map((product) => {
-      try {
-        const content = getProductContent(product, lang);
-        return `<a href="${productUrl(product.slug)}">${content.name}</a>`;
-      } catch (err) {
-        console.error("[header] Failed to render product in dropdown:", err);
-        return "";
-      }
-    })
-    .join("");
+  document.querySelectorAll("[data-nav-label]").forEach((el) => {
+    const key = el.dataset.navLabel;
+    el.textContent = copy[key] ?? key;
+  });
 }
 
 function updateCart() {

@@ -18,6 +18,8 @@ import {
   afterRenderBuyProduct,
 } from "../pages/buy-product.js";
 import { renderAboutPage }        from "../pages/about.js";
+import { renderSolutionsPage }    from "../pages/solutions.js";
+import { renderSupportPage }      from "../pages/support.js";
 import { renderAccountPage }      from "../pages/account.js";
 import { getProductBySlug }       from "../services/product-service.js";
 import { initB2BForm }            from "../pages/b2b.js";
@@ -77,6 +79,16 @@ async function mountPage({ page, lang, route, productUrl, buyProductUrl, getCurr
     case "products":
       document.title = t(lang, "metaProductsTitle");
       container.innerHTML = renderProductsPage({ lang, productUrl });
+      break;
+
+    case "solutions":
+      document.title = "Solutions | Alva Technology";
+      container.innerHTML = renderSolutionsPage({ lang, route });
+      break;
+
+    case "support":
+      document.title = "Support | Alva Technology";
+      container.innerHTML = renderSupportPage({ lang });
       break;
 
     case "product": {
