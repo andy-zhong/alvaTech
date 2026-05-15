@@ -44,7 +44,7 @@ export const MARKETS = {
   en: {
     code: "en",
     label: "EN",
-    flag: "eu",
+    flag: "gb",
     market: "Europe",
     language: "English",
     cluster: MARKET_CLUSTERS.EU_ENGLISH,
@@ -58,6 +58,7 @@ export const MARKETS = {
     language: "Italian",
     cluster: MARKET_CLUSTERS.ITALY,
     likelyCurrency: "EUR",
+    selectable: false,
   },
 };
 
@@ -68,5 +69,9 @@ export function getMarket(lang) {
 }
 
 export function getMarketOptions() {
-  return Object.values(MARKETS);
+  return Object.values(MARKETS).filter((market) => market.selectable !== false);
+}
+
+export function isSelectableMarket(lang) {
+  return MARKETS[lang]?.selectable !== false && Boolean(MARKETS[lang]);
 }

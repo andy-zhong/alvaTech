@@ -13,11 +13,14 @@ export const VOLTRIX_PRODUCT = {
   gallery: [
     createMediaItem("/Picture/products/voltrix/voltrix01.png", "Voltrix front view"),
     createMediaItem("/Picture/products/voltrix/voltrix02.png", "Voltrix side profile"),
-    createMediaItem("/Picture/products/voltrix/voltrix03.jpg", "Voltrix installed outdoors"),
-    createMediaItem("/Picture/products/voltrix/voltrix04.jpg", "Voltrix wall mounted"),
+    createMediaItem("/Picture/products/voltrix/summerhouse/voltrix03.jpg", "Voltrix installed outdoors"),
+    createMediaItem("/Picture/products/voltrix/summerhouse/voltrix04.jpg", "Voltrix wall mounted"),
     createMediaItem("/Picture/products/voltrix/voltrix05.jpg", "Voltrix expanded system"),
-    createMediaItem("/Picture/products/voltrix/voltrix06.jpg", "Voltrix solar integration"),
-    createMediaItem("/Picture/products/voltrix/voltrix07.jpg", "Voltrix app control"),
+    createMediaItem("/Picture/products/voltrix/summerhouse/voltrix06.jpg", "Voltrix solar integration"),
+    createMediaItem("/Picture/products/voltrix/summerhouse/voltrix07.jpg", "Voltrix app control"),
+    createMediaItem("/Picture/products/voltrix/field/voltrix08.png", "Voltrix field setup"),
+    createMediaItem("/Picture/products/voltrix/field/voltrix09.png", "Voltrix field charging"),
+    createMediaItem("/Picture/products/voltrix/field/voltrix10.png", "Voltrix field power use"),
   ],
 
   price: "From 10 980 SEK",

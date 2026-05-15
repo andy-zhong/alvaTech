@@ -12,9 +12,8 @@ main {
   right: 0;
   z-index: 900;
   width: 100%;
-  backdrop-filter: blur(18px);
-  background: rgba(255, 255, 255, 0.92);
-  border-bottom: 1px solid rgba(15, 42, 36, 0.08);
+  background: #ffffff;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.08);
   box-shadow: 0 12px 34px rgba(15, 42, 36, 0.06);
 }
 

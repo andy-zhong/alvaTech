@@ -5,15 +5,17 @@ export const BATTERY_PRODUCT = {
   name: "Voltrix Battery Module",
   shortName: "Battery",
 
-  heroImage: "/Picture/products/battery/battery01.jpg",
-  thumbnail: "/Picture/products/battery/battery01.jpg",
+  heroImage: "/Picture/products/battery/battery01.png",
+  thumbnail: "/Picture/products/battery/battery01.png",
 
-  heroMedia: createMediaItem("/Picture/products/battery/battery01.jpg", "Voltrix Battery Module"),
+  heroMedia: createMediaItem("/Picture/products/battery/battery01.png", "Voltrix Battery Module"),
 
   gallery: [
-    createMediaItem("/Picture/products/battery/battery01.jpg", "Battery module front"),
-    createMediaItem("/Picture/products/battery/battery02.jpg", "Battery module installed"),
-    createMediaItem("/Picture/products/battery/battery03.jpg", "Battery module detail"),
+    createMediaItem("/Picture/products/battery/battery01.png", "Battery module front"),
+    createMediaItem("/Picture/products/battery/battery02.png", "Battery module installed"),
+    createMediaItem("/Picture/products/battery/battery03.png", "Battery module detail"),
+    createMediaItem("/Picture/products/battery/battery04.jpg", "Battery module side view"),
+    createMediaItem("/Picture/products/battery/battery05.jpg", "Battery module detail"),
   ],
 
   price: "From 2 990 SEK",

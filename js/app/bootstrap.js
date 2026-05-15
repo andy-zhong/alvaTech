@@ -19,10 +19,13 @@ import {
 } from "../pages/buy-product.js";
 import { renderAboutPage }        from "../pages/about.js";
 import { renderSolutionsPage }    from "../pages/solutions.js";
+import { renderSolutionDetailPage } from "../pages/solution-detail.js";
 import { renderSupportPage }      from "../pages/support.js";
 import { renderAccountPage }      from "../pages/account.js";
 import { getProductBySlug }       from "../services/product-service.js";
 import { initB2BForm }            from "../pages/b2b.js";
+
+const ENABLE_FLOATING_QUOTE_WIDGET = false;
 
 export async function initApp() {
   const page   = document.body.dataset.page || "home";
@@ -34,7 +37,9 @@ export async function initApp() {
   await mountShell({ page, lang, ...routes });
   await mountPage({ page, lang, ...routes });
 
-  mountFloatingQuoteWidget({ lang });
+  if (ENABLE_FLOATING_QUOTE_WIDGET) {
+    mountFloatingQuoteWidget({ lang });
+  }
   mountCookieBanner({ lang });  // ← NEW — always last so it overlays everything
 
   bindLanguagePicker();
@@ -84,6 +89,16 @@ async function mountPage({ page, lang, route, productUrl, buyProductUrl, getCurr
     case "solutions":
       document.title = "Solutions | Alva Technology";
       container.innerHTML = renderSolutionsPage({ lang, route });
+      break;
+
+    case "solution-summer-house":
+      document.title = "Summer House | Alva Technology";
+      container.innerHTML = renderSolutionDetailPage({ lang, type: "summer-house" });
+      break;
+
+    case "solution-field":
+      document.title = "Field Teams | Alva Technology";
+      container.innerHTML = renderSolutionDetailPage({ lang, type: "field" });
       break;
 
     case "support":

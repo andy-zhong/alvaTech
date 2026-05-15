@@ -19,20 +19,20 @@ const NAV_COPY = {
     findSystem: "Find your system",
   },
   sv: {
-    solutions: "Losningar",
+    solutions: "Lösningar",
     products: "Produkter",
     support: "Support",
     about: "Om",
     contact: "Kontakt",
     summerHouse: "Fritidshus",
-    field: "Field",
+    field: "Fältarbete",
     starter: "Voltrix Starter 1-5 kWh",
     medium: "Voltrix Medium 6-8 kWh",
     max: "Voltrix Max 9-12 kWh",
-    accessories: "Tillbehor",
+    accessories: "Tillbehör",
     instructions: "Instruktioner",
     faqs: "FAQ",
-    troubleshooting: "Felsokning",
+    troubleshooting: "Felsökning",
     findSystem: "Hitta ditt system",
   },
   fi: {
@@ -41,8 +41,8 @@ const NAV_COPY = {
     support: "Tuki",
     about: "Tietoa",
     contact: "Yhteys",
-    summerHouse: "Mokki",
-    field: "Field",
+    summerHouse: "Mökki",
+    field: "Kenttätyö",
     starter: "Voltrix Starter 1-5 kWh",
     medium: "Voltrix Medium 6-8 kWh",
     max: "Voltrix Max 9-12 kWh",
@@ -50,37 +50,37 @@ const NAV_COPY = {
     instructions: "Ohjeet",
     faqs: "UKK",
     troubleshooting: "Vianmaaritys",
-    findSystem: "Loyda jarjestelma",
+    findSystem: "Löydä järjestelmä",
   },
   no: {
-    solutions: "Losninger",
+    solutions: "Løsninger",
     products: "Produkter",
     support: "Support",
     about: "Om",
     contact: "Kontakt",
     summerHouse: "Hytte",
-    field: "Field",
+    field: "Feltarbeid",
     starter: "Voltrix Starter 1-5 kWh",
     medium: "Voltrix Medium 6-8 kWh",
     max: "Voltrix Max 9-12 kWh",
-    accessories: "Tilbehor",
+    accessories: "Tilbehør",
     instructions: "Instruksjoner",
     faqs: "FAQ",
-    troubleshooting: "Feilsoking",
+    troubleshooting: "Feilsøking",
     findSystem: "Finn ditt system",
   },
   da: {
-    solutions: "Losninger",
+    solutions: "Løsninger",
     products: "Produkter",
     support: "Support",
     about: "Om",
     contact: "Kontakt",
-    summerHouse: "Fritidshus",
-    field: "Field",
+    summerHouse: "Sommerhus",
+    field: "Feltarbejde",
     starter: "Voltrix Starter 1-5 kWh",
     medium: "Voltrix Medium 6-8 kWh",
     max: "Voltrix Max 9-12 kWh",
-    accessories: "Tilbehor",
+    accessories: "Tilbehør",
     instructions: "Instruktioner",
     faqs: "FAQ",
     troubleshooting: "Fejlfinding",
@@ -120,7 +120,11 @@ function clearActiveLinks() {
 }
 
 function setActive(page) {
-  const activePage = page === "b2b" ? "contact" : page;
+  const activePage = page === "b2b"
+    ? "contact"
+    : page.startsWith("solution-")
+      ? "solutions"
+      : page;
 
   document.querySelectorAll("[data-link]").forEach((link) => {
     if (link.dataset.link === activePage) {

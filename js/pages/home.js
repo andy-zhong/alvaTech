@@ -1,7 +1,7 @@
 import { getPlatformContent } from "../data/platform-content.js";
 
 const ICONS = ["01", "02", "03", "04"];
-const BENEFIT_ICONS = ["modules", "expand", "weather"];
+const BENEFIT_ICONS = ["modules", "expand", "deploy", "tool"];
 const FEATURE_ICONS = ["overview", "batteryPlus", "deploy"];
 const TIER_ICONS = {
   "voltrix-starter": "battery",
@@ -9,11 +9,6 @@ const TIER_ICONS = {
   "voltrix-max": "stack",
   accessories: "tool",
 };
-const SOLUTION_ICONS = {
-  "summer-house": "house",
-  field: "field",
-};
-
 export function renderHomePage({ lang }) {
   const content = getPlatformContent(lang);
   const defaultScenario = content.heroScenarios.summerHouse;
@@ -45,45 +40,40 @@ export function renderHomePage({ lang }) {
           </div>
 
           <div class="platform-hero__actions">
-            <a class="button button--primary" href="/views/solutions.html">${content.heroCtas.primary}</a>
+            <a class="button button--primary" href="/views/products.html">${content.heroCtas.primary}</a>
             <a class="button button--secondary" href="#platform-section">${content.heroCtas.secondary}</a>
           </div>
         </div>
       </div>
     </section>
 
-    <section class="platform-home-section platform-home-section--light">
+    <section class="platform-home-section platform-home-section--milk">
       <div class="home-section-inner">
         <div class="platform-benefit-grid">
           ${content.benefits.map((item, index) => `
             <article class="platform-benefit-card reveal" style="--delay:${(index * 0.08).toFixed(2)}s">
-              <div class="platform-card-kicker">
+              <div class="platform-benefit-card__meta">
                 ${renderIcon(BENEFIT_ICONS[index])}
                 <span>${ICONS[index]}</span>
               </div>
-              <h2>${item.title}</h2>
-              <p>${item.body}</p>
+              <div class="platform-benefit-card__body">
+                <h2>${item.title}</h2>
+                <p>${item.body}</p>
+              </div>
+              ${item.label ? `<small class="platform-benefit-card__tag">${item.label}</small>` : ""}
             </article>
           `).join("")}
         </div>
       </div>
     </section>
 
-    <section class="platform-home-section platform-home-section--light" id="platform-section" aria-labelledby="platform-title">
-      <div class="home-section-inner platform-explain">
-        <div class="platform-explain__copy reveal">
-          <span class="platform-eyebrow">${content.platform.eyebrow}</span>
-          <h2 id="platform-title">${content.platform.title}</h2>
-          <p>${content.platform.body}</p>
-        </div>
-
-        <div class="platform-solution-grid">
-          ${content.solutions.map((solution, index) => renderSolutionCard(solution, index)).join("")}
-        </div>
+    <section class="platform-home-section platform-home-section--sage" id="platform-section" aria-labelledby="platform-title">
+      <div class="home-section-inner">
+        ${renderSolutionShowcase(content.platform, content.solutions)}
       </div>
     </section>
 
-    <section class="platform-home-section platform-home-section--neutral" aria-labelledby="product-fit-title">
+    <section class="platform-home-section platform-home-section--milk" aria-labelledby="product-fit-title">
       <div class="home-section-inner">
         <div class="platform-section-head">
           <div>
@@ -92,7 +82,7 @@ export function renderHomePage({ lang }) {
             <p>${content.productFit.body}</p>
           </div>
           <div class="platform-section-actions">
-            <a class="button button--primary" href="/views/solutions.html">${content.productFit.primary}</a>
+            <a class="button button--primary" href="/views/products.html">${content.productFit.primary}</a>
             <a class="button button--secondary" href="/views/products.html">${content.productFit.secondary}</a>
           </div>
         </div>
@@ -114,31 +104,40 @@ export function renderHomePage({ lang }) {
       </div>
     </section>
 
-    ${content.useCaseSections.map((section, index) => renderUseCaseSection(section, index)).join("")}
-
-    <section class="platform-home-section platform-home-section--light" aria-labelledby="smart-title">
-      <div class="home-section-inner">
+    <section class="platform-home-section platform-home-section--sage" aria-labelledby="smart-title">
+      <div class="home-section-inner platform-smart-layout">
         <div class="platform-section-head platform-section-head--narrow">
           <div>
             <span class="platform-eyebrow">${content.smartFeatures.eyebrow}</span>
             <h2 id="smart-title">${content.smartFeatures.title}</h2>
+            <p>${content.smartFeatures.intro}</p>
           </div>
         </div>
-        <div class="platform-feature-grid">
-          ${content.smartFeatures.items.map((item, index) => `
-            <article class="platform-feature-card reveal" style="--delay:${(index * 0.08).toFixed(2)}s">
-              <div class="platform-card-kicker">
-                ${renderIcon(FEATURE_ICONS[index])}
-              </div>
-              <h3>${item.title}</h3>
-              <p>${item.body}</p>
-            </article>
-          `).join("")}
+        <div class="platform-smart-body">
+          <div class="platform-phone-mockup reveal" aria-hidden="true">
+            <div class="platform-phone-screen">
+              <span></span>
+              <strong>78%</strong>
+              <small>${content.smartFeatures.phoneLabel}</small>
+              <i></i>
+            </div>
+          </div>
+          <div class="platform-feature-grid platform-feature-grid--stacked">
+            ${content.smartFeatures.items.map((item, index) => `
+              <article class="platform-feature-card reveal" style="--delay:${(index * 0.08).toFixed(2)}s">
+                <div class="platform-card-kicker">
+                  ${renderIcon(FEATURE_ICONS[index])}
+                </div>
+                <h3>${item.title}</h3>
+                <p>${item.body}</p>
+              </article>
+            `).join("")}
+          </div>
         </div>
       </div>
     </section>
 
-    <section class="platform-home-section platform-home-section--dark" aria-labelledby="trust-title">
+    <section class="platform-home-section platform-home-section--milk" aria-labelledby="trust-title">
       <div class="home-section-inner platform-trust">
         <div>
           <span class="platform-eyebrow platform-eyebrow--dark">${content.trust.eyebrow}</span>
@@ -151,32 +150,13 @@ export function renderHomePage({ lang }) {
       </div>
     </section>
 
-    <section class="platform-home-section platform-home-section--light" aria-labelledby="support-entry-title">
-      <div class="home-section-inner">
-        <div class="platform-section-head">
-          <div>
-            <span class="platform-eyebrow">Support</span>
-            <h2 id="support-entry-title">Knowledge for choosing and using Voltrix.</h2>
-          </div>
-          <a class="button button--secondary" href="/views/support.html">Open support</a>
-        </div>
-        <div class="platform-support-grid">
-          ${content.supportCards.map((card) => `
-            <a class="platform-support-card reveal" href="/views/support.html#${card.id}">
-              <h3>${card.title}</h3>
-              <p>${card.body}</p>
-            </a>
-          `).join("")}
-        </div>
-      </div>
-    </section>
-
-    <section class="platform-home-section platform-home-section--final" aria-labelledby="final-cta-title">
+    <section class="platform-home-section platform-home-section--sage platform-home-section--final" aria-labelledby="final-cta-title">
       <div class="home-section-inner platform-final">
         <span class="platform-eyebrow">${content.finalCta.eyebrow}</span>
         <h2 id="final-cta-title">${content.finalCta.title}</h2>
+        <p>${content.finalCta.body}</p>
         <div class="platform-final__actions">
-          <a class="button button--primary" href="/views/solutions.html">${content.finalCta.primary}</a>
+          <a class="button button--primary" href="/views/products.html">${content.finalCta.primary}</a>
           <a class="button button--secondary" href="/views/b2b.html">${content.finalCta.secondary}</a>
         </div>
       </div>
@@ -186,6 +166,7 @@ export function renderHomePage({ lang }) {
 
 export function bindHomePage({ lang }) {
   bindScenarioTabs(lang);
+  bindSolutionShowcase();
   initScrollReveal();
 }
 
@@ -234,20 +215,75 @@ function escapeHtml(value) {
     .replaceAll("'", "&#039;");
 }
 
-function renderSolutionCard(solution, index) {
-  const visualClass = solution.id === "field" ? "platform-visual--field" : "platform-visual--summer";
+function renderSolutionShowcase(platform, solutions) {
+  return `
+    <div class="platform-solution-showcase reveal" data-solution-showcase>
+      <div class="platform-solution-layout">
+        <div class="platform-explain__copy">
+          <span class="platform-eyebrow">${platform.eyebrow}</span>
+          <h2 id="platform-title">${platform.title}</h2>
+          <p>${platform.body}</p>
+        </div>
+
+        <div class="platform-solution-tabs" role="tablist" aria-label="Voltrix platform solutions">
+          ${solutions.map((solution, index) => renderSolutionTab(solution, index)).join("")}
+        </div>
+      </div>
+
+      <div class="platform-solution-panels" data-solution-panels hidden>
+        ${solutions.map((solution) => renderSolutionDetail(solution)).join("")}
+      </div>
+    </div>
+  `;
+}
+
+function renderSolutionTab(solution, index) {
+  const visualClass = solution.id === "field" ? "platform-solution-tab__image--field" : "platform-solution-tab__image--summer";
 
   return `
-    <a class="platform-solution-card reveal" href="/views/solutions.html#${solution.id}" style="--delay:${(index * 0.08).toFixed(2)}s">
-      <div class="platform-visual ${visualClass}" aria-hidden="true">
-        <span>${solution.title}</span>
+    <button
+      class="platform-solution-tab"
+      type="button"
+      role="tab"
+      aria-selected="false"
+      aria-expanded="false"
+      aria-controls="solution-panel-${solution.id}"
+      id="solution-tab-${solution.id}"
+      data-solution-tab="${solution.id}"
+      style="--delay:${(index * 0.08).toFixed(2)}s">
+      <span class="platform-solution-tab__image ${visualClass}" aria-hidden="true"></span>
+      <span class="platform-solution-tab__copy">
+        <small>${solution.label}</small>
+        <strong>${solution.title}</strong>
+        <span>${solution.body}</span>
+        <span class="platform-solution-tab__cta">Explore solution <b aria-hidden="true">→</b></span>
+      </span>
+    </button>
+  `;
+}
+
+function renderSolutionDetail(solution) {
+  const visualClass = solution.id === "field" ? "platform-solution-detail__visual--field" : "platform-solution-detail__visual--summer";
+
+  return `
+    <article
+      class="platform-solution-detail"
+      id="solution-panel-${solution.id}"
+      role="tabpanel"
+      aria-labelledby="solution-tab-${solution.id}"
+      data-solution-panel="${solution.id}"
+      hidden>
+      <div class="platform-solution-detail__visual ${visualClass}" aria-hidden="true"></div>
+      <div class="platform-solution-detail__copy">
+        <span class="platform-eyebrow">${solution.detail.eyebrow}</span>
+        <h3>${solution.detail.title}</h3>
+        <p>${solution.detail.body}</p>
+        <ul>
+          ${solution.detail.bullets.map((bullet) => `<li>${bullet}</li>`).join("")}
+        </ul>
+        <a class="button button--primary" href="${solution.href}">${solution.cta}</a>
       </div>
-      <div>
-        ${renderIcon(SOLUTION_ICONS[solution.id] ?? "modules")}
-        <h3>${solution.title}</h3>
-        <p>${solution.body}</p>
-      </div>
-    </a>
+    </article>
   `;
 }
 
@@ -270,28 +306,6 @@ function renderIcon(name) {
     <svg class="platform-icon" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
       ${paths[name] ?? paths.modules}
     </svg>
-  `;
-}
-
-function renderUseCaseSection(section, index) {
-  const isField = section.id === "field-detail";
-  const visualClass = isField ? "platform-usecase__visual--field" : "platform-usecase__visual--summer";
-
-  return `
-    <section class="platform-home-section ${isField ? "platform-home-section--neutral" : "platform-home-section--light"}">
-      <div class="home-section-inner platform-usecase ${isField ? "platform-usecase--reverse" : ""}">
-        <div class="platform-usecase__visual ${visualClass} reveal" aria-hidden="true"></div>
-        <div class="platform-usecase__copy reveal" style="--delay:0.08s">
-          <span class="platform-eyebrow">${section.eyebrow}</span>
-          <h2>${section.title}</h2>
-          <p>${section.body}</p>
-          <ul>
-            ${section.bullets.map((bullet) => `<li>${bullet}</li>`).join("")}
-          </ul>
-          <a class="button button--primary" href="${section.href}">${section.cta}</a>
-        </div>
-      </div>
-    </section>
   `;
 }
 
@@ -332,6 +346,56 @@ function bindScenarioTabs(lang) {
   root.dataset.activeScenario = "summerHouse";
   tabs.forEach((tab) => {
     tab.addEventListener("click", () => setScenario(tab.dataset.scenario));
+  });
+}
+
+function bindSolutionShowcase() {
+  const root = document.querySelector("[data-solution-showcase]");
+  if (!root) return;
+
+  const tabs = [...root.querySelectorAll("[data-solution-tab]")];
+  const panels = [...root.querySelectorAll("[data-solution-panel]")];
+  const panelsRoot = root.querySelector("[data-solution-panels]");
+  let activeId = null;
+  let switchTimer;
+
+  function setSolution(id) {
+    tabs.forEach((tab) => {
+      const isActive = tab.dataset.solutionTab === id;
+      tab.classList.toggle("is-active", isActive);
+      tab.setAttribute("aria-selected", isActive ? "true" : "false");
+      tab.setAttribute("aria-expanded", isActive ? "true" : "false");
+    });
+
+    const showPanel = () => {
+      panels.forEach((panel) => {
+        panel.hidden = panel.dataset.solutionPanel !== id;
+      });
+
+      if (panelsRoot) {
+        panelsRoot.hidden = false;
+        panelsRoot.classList.remove("is-switching");
+        panelsRoot.classList.add("is-open");
+      }
+
+      activeId = id;
+    };
+
+    if (panelsRoot) {
+      clearTimeout(switchTimer);
+
+      if (activeId && activeId !== id && !panelsRoot.hidden) {
+        panelsRoot.classList.add("is-switching");
+        switchTimer = setTimeout(showPanel, 180);
+        return;
+      }
+    }
+
+    showPanel();
+  }
+
+  tabs.forEach((tab) => {
+    tab.addEventListener("click", () => setSolution(tab.dataset.solutionTab));
   });
 }
 

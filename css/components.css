@@ -165,6 +165,17 @@
   border-radius: 3px;
 }
 
+.flag--text {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(15, 42, 36, 0.08);
+  color: #0f2a24;
+  font-size: 0.62rem;
+  font-weight: 800;
+  line-height: 1;
+}
+
 .button {
   display: inline-flex;
   align-items: center;
