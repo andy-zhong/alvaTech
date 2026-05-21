@@ -287,31 +287,31 @@
 .solution-page__visual--summer {
   background:
     linear-gradient(rgba(15, 42, 36, 0.08), rgba(15, 42, 36, 0.08)),
-    url("/Picture/products/voltrix/summerhouse/voltrix04.jpg") center / cover no-repeat;
+    url("/Picture/products/voltrix/summerhouse/summerhouse02.jpg") center / cover no-repeat;
 }
 
 .solution-page__visual--field {
   background:
     linear-gradient(rgba(15, 42, 36, 0.12), rgba(15, 42, 36, 0.12)),
-    url("/Picture/products/voltrix/field/voltrix08.png") center / cover no-repeat;
+    url("/Picture/products/voltrix/field/field01.png") center / cover no-repeat;
 }
 
 .solution-page__image--summer-living {
   background:
     linear-gradient(rgba(15, 42, 36, 0.1), rgba(15, 42, 36, 0.1)),
-    url("/Picture/products/voltrix/summerhouse/voltrix06.jpg") center / cover no-repeat;
+    url("/Picture/products/voltrix/summerhouse/summerhouse03.jpg") center / cover no-repeat;
 }
 
 .solution-page__image--field-dock {
   background:
     linear-gradient(rgba(15, 42, 36, 0.12), rgba(15, 42, 36, 0.12)),
-    url("/Picture/products/voltrix/field/voltrix09.png") center / cover no-repeat;
+    url("/Picture/products/voltrix/field/field02.png") center / cover no-repeat;
 }
 
 .solution-page__image--field-backpack {
   background:
     linear-gradient(rgba(15, 42, 36, 0.12), rgba(15, 42, 36, 0.12)),
-    url("/Picture/products/voltrix/field/voltrix10.png") center / cover no-repeat;
+    url("/Picture/products/voltrix/field/field03.png") center / cover no-repeat;
 }
 
 .solution-page-statement {
@@ -480,7 +480,7 @@
 .solution-page-band--summer {
   background:
     linear-gradient(180deg, rgba(15, 42, 36, 0.08), rgba(15, 42, 36, 0.52)),
-    url("/Picture/products/voltrix/summerhouse/voltrix07.jpg") center / cover no-repeat;
+    url("/Picture/products/voltrix/summerhouse/summerhouse04.jpg") center / cover no-repeat;
 }
 
 .solution-page-band__content {

@@ -108,7 +108,7 @@ export function renderCheckoutPage({ lang }) {
               <div class="field-group">
                 <label class="field-label" for="co-notes">Delivery Notes (Optional)</label>
                 <textarea class="field-input field-textarea" id="co-notes" name="notes"
-                          rows="3" placeholder="Access codes, delivery preferences, installation notes…"></textarea>
+                          rows="3" placeholder="Access codes, delivery preferences, installation notes..."></textarea>
               </div>
             </fieldset>
 
@@ -137,6 +137,18 @@ export function renderCheckoutPage({ lang }) {
 
             <div class="checkout-summary-divider"></div>
 
+            <div class="checkout-summary-row">
+              <span>Subtotal</span>
+              <span>${grandTotal.toLocaleString("sv-SE")} SEK</span>
+            </div>
+            <div class="checkout-summary-row">
+              <span>Shipping</span>
+              <span>Confirmed separately</span>
+            </div>
+            <div class="checkout-summary-row">
+              <span>VAT</span>
+              <span>Calculated separately</span>
+            </div>
             <div class="checkout-summary-row checkout-summary-row--total">
               <span>Total</span>
               <span>${grandTotal.toLocaleString("sv-SE")} SEK</span>
@@ -146,7 +158,7 @@ export function renderCheckoutPage({ lang }) {
             </p>
 
             <a class="checkout-summary-edit" href="/views/buy-product.html">
-              ← Edit cart
+              Edit cart
             </a>
           </div>
         </aside>
@@ -163,8 +175,8 @@ function renderSummaryItem(item, lang) {
   const total   = (item.unitPrice * qty).toLocaleString("sv-SE");
 
   const meta = item.isConfigurable
-    ? `${item.batteryCount} battery module${item.batteryCount === 1 ? "" : "s"} · ${item.capacity} kWh`
-    : qty > 1 ? `× ${qty}` : "";
+    ? `${item.batteryCount} battery module${item.batteryCount === 1 ? "" : "s"} / ${item.capacity} kWh`
+    : qty > 1 ? `x ${qty}` : "";
 
   return `
     <div class="checkout-summary-item">
@@ -195,7 +207,7 @@ export function bindCheckoutPage({ lang }) {
 
     // Loading state
     submitBtn.disabled    = true;
-    submitBtn.textContent = "Placing order…";
+    submitBtn.textContent = "Placing order...";
     formError.style.display = "none";
 
     try {

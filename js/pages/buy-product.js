@@ -3,10 +3,10 @@ import { getStoredLanguage, t } from "../services/language-service.js";
 
 const CART_COPY = {
   en: {
-    title: "Review your configuration",
-    summaryTitle: "Configuration summary",
+    title: "Your cart",
+    summaryTitle: "Order summary",
     checkout: "Continue to checkout",
-    continue: "Adjust system",
+    continue: "Continue shopping",
   },
   sv: {
     title: "Granska din konfiguration",
@@ -128,7 +128,7 @@ function renderCartLine(item, lang) {
           <p class="cart-line__name">${content.name}</p>
           <p class="cart-line__meta">
             ${item.batteryCount} ${item.batteryCount === 1 ? t(lang, "cartBatterySingular") : t(lang, "cartBatteryPlural")}
-            &nbsp;·&nbsp; ${item.capacity} kWh
+            &nbsp;/&nbsp; ${item.capacity} kWh
           </p>
         </div>
         <div class="cart-line__right">
@@ -149,7 +149,7 @@ function renderCartLine(item, lang) {
         <p class="cart-line__meta">${item.unitPrice.toLocaleString("sv-SE")} SEK ${t(lang, "cartPerUnit")}</p>
         <div class="battery-control cart-line__qty">
           <button class="battery-btn qty-decrease" data-item-id="${item.cartItemId}"
-                  aria-label="${t(lang, "cartDecrease")}">−</button>
+                  aria-label="${t(lang, "cartDecrease")}">-</button>
           <span class="battery-count qty-value" data-item-id="${item.cartItemId}">${qty}</span>
           <button class="battery-btn qty-increase" data-item-id="${item.cartItemId}"
                   aria-label="${t(lang, "cartIncrease")}">+</button>
@@ -174,7 +174,7 @@ function renderSummaryRow(item, lang) {
 
   const label = item.isConfigurable
     ? `${content.name} (${item.batteryCount} ${item.batteryCount === 1 ? t(lang, "cartBatterySingular") : t(lang, "cartBatteryPlural")})`
-    : qty > 1 ? `${content.name} × ${qty}` : content.name;
+    : qty > 1 ? `${content.name} x ${qty}` : content.name;
 
   return `
     <div class="cart-summary__row">

@@ -3,12 +3,25 @@ import { getPlatformContent } from "../data/platform-content.js";
 const ICONS = ["01", "02", "03", "04"];
 const BENEFIT_ICONS = ["modules", "expand", "deploy", "tool"];
 const FEATURE_ICONS = ["overview", "batteryPlus", "deploy"];
-const TIER_ICONS = {
-  "voltrix-starter": "battery",
-  "voltrix-medium": "batteryPlus",
-  "voltrix-max": "stack",
-  accessories: "tool",
-};
+const PRODUCT_PRESET_IMAGES = [
+  {
+    src: "/Picture/products/voltrix/1-12_battery/Voltrix_5b.png",
+    alt: "Voltrix system with five battery modules",
+  },
+  {
+    src: "/Picture/products/voltrix/1-12_battery/Voltrix_8b.png",
+    alt: "Voltrix system with eight battery modules",
+  },
+  {
+    src: "/Picture/products/voltrix/1-12_battery/Voltrix_12b.png",
+    alt: "Voltrix system with twelve battery modules",
+  },
+];
+const PRODUCT_PRESET_LINKS = [
+  "/products/starter/",
+  "/products/medium/",
+  "/products/max/",
+];
 export function renderHomePage({ lang }) {
   const content = getPlatformContent(lang);
   const defaultScenario = content.heroScenarios.summerHouse;
@@ -73,8 +86,24 @@ export function renderHomePage({ lang }) {
       </div>
     </section>
 
-    <section class="platform-home-section platform-home-section--milk" aria-labelledby="product-fit-title">
-      <div class="home-section-inner">
+    <section class="platform-home-section platform-home-section--milk" aria-labelledby="product-presets-title">
+      <div class="home-section-inner platform-product-area platform-product-area--ranges">
+        <div class="platform-preset-head">
+          <div>
+            <span class="platform-eyebrow">Products</span>
+            <h2 id="product-presets-title">Choose your Voltrix system.</h2>
+          </div>
+          <a class="platform-text-link" href="/views/products.html">Compare systems</a>
+        </div>
+
+        <div class="platform-preset-grid">
+          ${content.productTiers.slice(0, 3).map((tier, index) => renderProductPreset(tier, index)).join("")}
+        </div>
+      </div>
+    </section>
+
+    <section class="platform-home-section platform-home-section--sage" aria-labelledby="product-fit-title">
+      <div class="home-section-inner platform-product-area platform-product-area--featured">
         <div class="platform-section-head">
           <div>
             <span class="platform-eyebrow">${content.productFit.eyebrow}</span>
@@ -87,24 +116,19 @@ export function renderHomePage({ lang }) {
           </div>
         </div>
 
-        <p class="platform-tier-note">${content.productTierNote}</p>
-
-        <div class="platform-tier-grid">
-          ${content.productTiers.map((tier, index) => `
-            <article class="platform-tier-card reveal" id="${tier.id}" style="--delay:${(index * 0.07).toFixed(2)}s">
-              <div class="platform-card-kicker">
-                ${renderIcon(TIER_ICONS[tier.id] ?? "battery")}
-                <span>${tier.range}</span>
-              </div>
-              <h3>${tier.title}</h3>
-              <p>${tier.body}</p>
-            </article>
-          `).join("")}
+        <div class="platform-product-feature reveal">
+          <figure class="platform-product-feature__media frameless-image-stage">
+            <img src="/Picture/products/voltrix/voltrix02.png" alt="Voltrix 5-Pack Kit">
+          </figure>
+          <div class="platform-product-feature__copy">
+            <span class="platform-product-feature__label">Fixed 5 kWh starting setup</span>
+            <p>${content.productFit.note ?? content.productTierNote}</p>
+          </div>
         </div>
       </div>
     </section>
 
-    <section class="platform-home-section platform-home-section--sage" aria-labelledby="smart-title">
+    <section class="platform-home-section platform-home-section--milk" aria-labelledby="smart-title">
       <div class="home-section-inner platform-smart-layout">
         <div class="platform-section-head platform-section-head--narrow">
           <div>
@@ -137,7 +161,7 @@ export function renderHomePage({ lang }) {
       </div>
     </section>
 
-    <section class="platform-home-section platform-home-section--milk" aria-labelledby="trust-title">
+    <section class="platform-home-section platform-home-section--sage platform-home-section--trust" aria-labelledby="trust-title">
       <div class="home-section-inner platform-trust">
         <div>
           <span class="platform-eyebrow platform-eyebrow--dark">${content.trust.eyebrow}</span>
@@ -150,7 +174,7 @@ export function renderHomePage({ lang }) {
       </div>
     </section>
 
-    <section class="platform-home-section platform-home-section--sage platform-home-section--final" aria-labelledby="final-cta-title">
+    <section class="platform-home-section platform-home-section--milk platform-home-section--final" aria-labelledby="final-cta-title">
       <div class="home-section-inner platform-final">
         <span class="platform-eyebrow">${content.finalCta.eyebrow}</span>
         <h2 id="final-cta-title">${content.finalCta.title}</h2>
@@ -161,6 +185,27 @@ export function renderHomePage({ lang }) {
         </div>
       </div>
     </section>
+  `;
+}
+
+function renderProductPreset(tier, index) {
+  const sizes = ["Small", "Medium", "Large"];
+  const image = PRODUCT_PRESET_IMAGES[index];
+  const href = PRODUCT_PRESET_LINKS[index] ?? "/views/products.html";
+
+  return `
+    <article class="platform-preset-card reveal" style="--delay:${(index * 0.07).toFixed(2)}s">
+      <figure class="platform-preset-card__media">
+        <img src="${image.src}" alt="${image.alt}">
+      </figure>
+      <div class="platform-preset-card__body">
+        <span class="platform-preset-card__size">${sizes[index]}</span>
+        <span class="platform-preset-card__range">${tier.range}</span>
+        <h3>${tier.title}</h3>
+        <p>${tier.body}</p>
+        <a href="${href}">View product -></a>
+      </div>
+    </article>
   `;
 }
 
@@ -256,7 +301,7 @@ function renderSolutionTab(solution, index) {
         <small>${solution.label}</small>
         <strong>${solution.title}</strong>
         <span>${solution.body}</span>
-        <span class="platform-solution-tab__cta">Explore solution <b aria-hidden="true">→</b></span>
+        <span class="platform-solution-tab__cta">Explore solution <b aria-hidden="true">&rarr;</b></span>
       </span>
     </button>
   `;
@@ -359,13 +404,53 @@ function bindSolutionShowcase() {
   let activeId = null;
   let switchTimer;
 
-  function setSolution(id) {
+  function updateTabs(id) {
     tabs.forEach((tab) => {
       const isActive = tab.dataset.solutionTab === id;
+      const arrow = tab.querySelector(".platform-solution-tab__cta b");
+
       tab.classList.toggle("is-active", isActive);
       tab.setAttribute("aria-selected", isActive ? "true" : "false");
       tab.setAttribute("aria-expanded", isActive ? "true" : "false");
+
+      if (arrow) {
+        arrow.textContent = isActive ? "\u2193" : "\u2192";
+      }
     });
+  }
+
+  function scrollToPanels() {
+    if (!panelsRoot || panelsRoot.hidden) return;
+
+    requestAnimationFrame(() => {
+      const headerOffset = document.querySelector(".site-header")?.offsetHeight || 0;
+      const targetTop = panelsRoot.getBoundingClientRect().top + window.scrollY - headerOffset - 24;
+      window.scrollTo({ top: Math.max(targetTop, 0), behavior: "smooth" });
+    });
+  }
+
+  function collapseSolution() {
+    clearTimeout(switchTimer);
+    updateTabs(null);
+    panels.forEach((panel) => {
+      panel.hidden = true;
+    });
+
+    if (panelsRoot) {
+      panelsRoot.hidden = true;
+      panelsRoot.classList.remove("is-open", "is-switching");
+    }
+
+    activeId = null;
+  }
+
+  function setSolution(id) {
+    if (activeId === id && panelsRoot && !panelsRoot.hidden) {
+      collapseSolution();
+      return;
+    }
+
+    updateTabs(id);
 
     const showPanel = () => {
       panels.forEach((panel) => {
@@ -379,6 +464,7 @@ function bindSolutionShowcase() {
       }
 
       activeId = id;
+      scrollToPanels();
     };
 
     if (panelsRoot) {

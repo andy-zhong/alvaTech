@@ -1,394 +1,119 @@
 const ABOUT_COPY = {
-  en: {
-    eyebrow: "About Alva Technology",
-    title: "Built for practical energy independence.",
-    intro:
-      "Alva designs modular energy systems for homes, seasonal living and field work, with a calm Nordic approach to technology.",
-    introStrong:
-      "From Sweden, we build around practical routines: storing energy, expanding capacity and making power easier to use where life and work actually happen.",
-    stats: [
-      ["Jonkoping", "Main office in Hedenstorp"],
-      ["Modular", "Energy systems built to scale"],
-      ["One ecosystem", "Home, outdoor and mobile power"],
-    ],
-    storyEyebrow: "Alva Energy Ecosystem",
-    storyTitle: "Swedish design for real living and working routines.",
-    storyBody:
-      "The Alva platform is built around functional simplicity: clear products, modular capacity and a quiet interface between technology and everyday use.",
-    storyBodyTwo:
-      "The goal is not to make energy feel complicated or industrial. It is to make reliable power feel understandable, calm and ready for seasonal homes, daily routines and field work.",
-    cards: [
-      {
-        title: "Modular",
-        body: "Systems should grow with the user instead of forcing every need into one fixed setup.",
-      },
-      {
-        title: "Adaptable",
-        body: "The same platform logic can support summer houses, solar routines, backup needs and field deployment.",
-      },
-      {
-        title: "Calm reliability",
-        body: "Premium energy technology should feel quiet, functional and dependable in use.",
-      },
-    ],
-    productEyebrow: "Product direction",
-    productTitle: "A platform designed to grow with user needs.",
-    productBody:
-      "Voltrix is the starting point for a modular energy platform that can support homes, seasonal living, outdoor routines and professional workflows.",
-    productPoints: [
-      "Modular battery capacity that grows with demand",
-      "Use-case led configuration before purchase",
-      "Functional Nordic design for real environments",
-      "Support and guidance around system fit",
-    ],
-    valuesEyebrow: "Alva standard",
-    valuesTitle: "How we work",
-    values: [
-      ["Clear before clever", "Technology should feel easy to understand before it feels advanced."],
-      ["Built for use", "Every feature should make sense in a real home, workplace or outdoor situation."],
-      ["Premium without noise", "Clean design, strong function and a calm visual language."],
-      ["Future-ready", "Our systems are built to scale as energy needs change."],
-    ],
-    locationEyebrow: "Hedenstorp · Jonkoping",
-    locationTitle: "Based in Jonkoping, looking outward.",
-    locationBody:
-      "Alva Technology works close to product development, partners and customers with the ambition to make modern energy solutions more accessible.",
-    ctaTitle: "Find the right Voltrix path.",
-    ctaBody:
-      "Start from a use case, understand the platform, then configure a system or contact Alva for advice.",
-    ctaButton: "Explore solutions",
-    ctaSecondary: "Contact us",
-  },
-  sv: {
-    eyebrow: "Om Alva Technology",
-    title: "Smartare energi för hem, fritidshus och ett friare vardagsliv.",
-    intro:
-      "Alva Technology är ett energiteknikbolag från Jonkoping med fokus på modulära energilösningar för moderna hem, fritidshus, uteliv och mobil vardagsanvändning.",
-    introStrong:
-      "Från vårt huvudkontor på Hedenstorp i Jonkoping utvecklar vi produkter som gör energi enklare att lagra, flytta och använda utan att upplevelsen blir komplicerad.",
-    stats: [
-      ["Jonkoping", "Huvudkontor på Hedenstorp"],
-      ["Modulärt", "Energisystem som kan växa"],
-      ["Ett ekosystem", "Hem, uteliv och mobil kraft"],
-    ],
-    storyEyebrow: "Alva Energy Ecosystem",
-    storyTitle: "Byggt på en enkel idé: energi ska följa livet.",
-    storyBody:
-      "Många energiprodukter är låsta till en plats eller byggda för ett smalt användningsområde. Alva Technology bygger i stället på ett flexibelt energiekosystem som kan stötta hemmet, trädgården, balkongen, fritidshuset och livet utomhus.",
-    storyBodyTwo:
-      "Vårt fokus handlar inte bara om teknisk prestanda. Det handlar också om användarvänlighet, design och verkliga situationer där ström behöver finnas nära, fungera pålitligt och vara enkel att komma åt.",
-    cards: [
-      {
-        title: "Designat för riktiga hem",
-        body: "Smal installation, väggmonterade alternativ och ren produktdesign gör lösningen lättare att placera i vanliga boendemiljöer.",
-      },
-      {
-        title: "Ett växande energiekosystem",
-        body: "Alva kopplar ihop energilagring för hemmet med utomhusprodukter, portabel kraft och tillbehör i ett tydligt sammanhållet ekosystem.",
-      },
-      {
-        title: "Praktisk självständighet",
-        body: "Målet är enkelt: ge människor mer kontroll över sin energi, där den faktiskt behövs.",
-      },
-    ],
-    productEyebrow: "Produktriktning",
-    productTitle: "Från energilagring i hemmet till portabel kraft.",
-    productBody:
-      "Alvas produkt-ekosystem bygger på modulär batterikapacitet, smart styrning och flexibel användning i hemmet, vid skrivbordet och utomhus.",
-    productPoints: [
-      "Modulär batterikapacitet som växer med behovet",
-      "Stöd för solenergi och smartare energianvändning",
-      "Väderanpassad design för nordiska förhållanden",
-      "Appansluten styrning för en modernare upplevelse",
-    ],
-    valuesEyebrow: "Alva standard",
-    valuesTitle: "Så arbetar vi",
-    values: [
-      ["Tydligt före krångligt", "Teknik ska kännas enkel att förstå innan den känns avancerad."],
-      ["Byggt för användning", "Varje funktion ska ha en tydlig nytta i hemmet, på arbetsplatsen eller utomhus."],
-      ["Premium utan brus", "Ren design, stark funktion och ett lugnt uttryck."],
-      ["Redo för framtiden", "Våra system ska kunna växa när energibehoven förändras."],
-    ],
-    locationEyebrow: "Hedenstorp · Jonkoping",
-    locationTitle: "Bas i Jonkoping, riktning framåt.",
-    locationBody:
-      "Alva Technology arbetar nära produktutveckling, partners och kunder med ambitionen att göra moderna energilösningar mer tillgängliga.",
-    ctaTitle: "Kraft som passar hur människor faktiskt lever.",
-    ctaBody:
-      "Alva Technology finns för att göra energi mindre låst, mindre komplicerad och mer användbar hemma, utomhus och däremellan.",
-    ctaButton: "Utforska produkter",
-  },
-  fi: {
-    eyebrow: "Tietoa Alva Technologysta",
-    title: "Älykkäämpää energiaa koteihin, vapaa-aikaan ja itsenäisempään arkeen.",
-    intro:
-      "Alva Technology on Jonkopingissa toimiva energiateknologiayritys, joka keskittyy modulaarisiin energiaratkaisuihin koteihin, kesämökeille, ulkoiluun ja liikkuvaan arkeen.",
-    introStrong:
-      "Hedenstorpissa sijaitsevasta päätoimistostamme kehitämme tuotteita, jotka tekevät energian varastoinnista, siirtämisestä ja käytöstä helpompaa ilman monimutkaisuutta.",
-    stats: [
-      ["Jonkoping", "Päätoimisto Hedenstorpissa"],
-      ["Modulaarinen", "Skaalautuvat energiajärjestelmät"],
-      ["Yksi ekosysteemi", "Koti, ulkoilu ja mobiili virta"],
-    ],
-    storyEyebrow: "Alva Energy Ecosystem",
-    storyTitle: "Rakennettu yksinkertaisen ajatuksen ympärille: energian pitää seurata elämääsi.",
-    storyBody:
-      "Monet energiatuotteet on sidottu yhteen paikkaan tai yhteen käyttötarkoitukseen. Alva Technology rakentaa joustavan energiaekosysteemin, joka palvelee kotia, pihaa, parveketta, mökkiä ja ulkoelämää.",
-    storyBodyTwo:
-      "Painopisteemme ei ole vain teknisessä suorituskyvyssä. Siihen kuuluvat myös käytettävyys, muotoilu ja todelliset tilanteet, joissa energian on oltava helposti saatavilla ja luotettavaa.",
-    cards: [
-      {
-        title: "Suunniteltu oikeisiin koteihin",
-        body: "Ohut asennus, seinäkiinnitys ja selkeä tuotesuunnittelu helpottavat sijoittamista tavallisiin asuinympäristöihin.",
-      },
-      {
-        title: "Kasvava energiaekosysteemi",
-        body: "Alva yhdistää kodin energiavarastoinnin, ulkotuotteet, siirrettävän virran ja lisävarusteet yhdeksi selkeäksi kokonaisuudeksi.",
-      },
-      {
-        title: "Käytännöllinen omavaraisuus",
-        body: "Tavoite on yksinkertainen: antaa ihmisille enemmän hallintaa omaan energiaansa siellä missä sitä tarvitaan.",
-      },
-    ],
-    productEyebrow: "Tuotesuunta",
-    productTitle: "Kotitalouden varastoinnista siirrettävään virtaan.",
-    productBody:
-      "Alvan tuote-ekosysteemi rakentuu modulaarisen akkukapasiteetin, älykkään ohjauksen ja joustavan käytön ympärille kotona, työpisteellä ja ulkona.",
-    productPoints: [
-      "Modulaarinen akkukapasiteetti, joka kasvaa tarpeen mukaan",
-      "Aurinkotuen avulla älykkäämpää energiankäyttöä",
-      "Pohjoisiin olosuhteisiin sopiva sää huomioiva muotoilu",
-      "Sovellukseen liitetty ohjaus nykyaikaisempaan käyttöön",
-    ],
-    valuesEyebrow: "Alva-standardi",
-    valuesTitle: "Näin työskentelemme",
-    values: [
-      ["Selkeä ennen nokkelaa", "Teknologian pitää tuntua helpolta ymmärtää ennen kuin se tuntuu edistyneeltä."],
-      ["Rakennettu käyttöön", "Jokaisella ominaisuudella pitää olla todellinen merkitys kodissa, työssä tai ulkona."],
-      ["Premium ilman melua", "Puhdas muotoilu, vahva toimivuus ja rauhallinen visuaalinen kieli."],
-      ["Valmis tulevaan", "Järjestelmämme on rakennettu kasvamaan energiatarpeiden mukana."],
-    ],
-    locationEyebrow: "Hedenstorp · Jonkoping",
-    locationTitle: "Perustuu Jonkopingiin, katsoo ulospäin.",
-    locationBody:
-      "Alva Technology työskentelee lähellä tuotekehitystä, kumppaneita ja asiakkaita tavoitteenaan tehdä nykyaikaisista energiaratkaisuista saavutettavampia.",
-    ctaTitle: "Voimaa, joka sopii siihen miten ihmiset oikeasti elävät.",
-    ctaBody:
-      "Alva Technology on olemassa tehdäkseen energiasta vähemmän sidottua, vähemmän monimutkaista ja hyödyllisempää kotona, ulkona ja niiden välissä.",
-    ctaButton: "Tutustu tuotteisiin",
-  },
-  no: {
-    eyebrow: "Om Alva Technology",
-    title: "Smartere energi for hjem, fritidsbolig og en friere hverdag.",
-    intro:
-      "Alva Technology er et energiteknologiselskap i Jonkoping med fokus på modulære energiløsninger for hjem, hytter, uteliv og mobil hverdagsbruk.",
-    introStrong:
-      "Fra hovedkontoret vårt i Hedenstorp utvikler vi produkter som gjør energi enklere å lagre, flytte og bruke uten å gjøre opplevelsen komplisert.",
-    stats: [
-      ["Jonkoping", "Hovedkontor i Hedenstorp"],
-      ["Modulært", "Energisystemer som skalerer"],
-      ["Ett økosystem", "Hjem, uteliv og mobil kraft"],
-    ],
-    storyEyebrow: "Alva Energy Ecosystem",
-    storyTitle: "Bygget rundt en enkel idé: energi skal følge livet ditt.",
-    storyBody:
-      "Mange energiprodukter er låst til ett sted eller laget for ett smalt bruksområde. Alva Technology bygger i stedet et fleksibelt energiøkosystem som kan støtte hjemmet, hagen, balkongen, hytta og livet ute.",
-    storyBodyTwo:
-      "Fokuset vårt handler ikke bare om teknisk ytelse. Det handler også om brukervennlighet, design og virkelige situasjoner der strøm må være tilgjengelig, pålitelig og enkel å nå.",
-    cards: [
-      {
-        title: "Designet for virkelige hjem",
-        body: "Slank installasjon, veggmonterte løsninger og ren produktdesign gjør systemet lettere å plassere i vanlige bomiljøer.",
-      },
-      {
-        title: "Et voksende energiøkosystem",
-        body: "Alva kobler sammen energilagring i hjemmet med utendørsprodukter, bærbar strøm og tilbehør i ett tydelig økosystem.",
-      },
-      {
-        title: "Praktisk selvstendighet",
-        body: "Målet er enkelt: gi mennesker mer kontroll over energien sin der den faktisk trengs.",
-      },
-    ],
-    productEyebrow: "Produktretning",
-    productTitle: "Fra energilagring i hjemmet til bærbar kraft.",
-    productBody:
-      "Alvas produktøkosystem er bygget rundt modulær batterikapasitet, smart styring og fleksibel bruk i hjemmet, ved skrivebordet og utendørs.",
-    productPoints: [
-      "Modulær batterikapasitet som vokser med behovet",
-      "Støtte for solenergi og smartere energibruk",
-      "Værtilpasset design for nordiske forhold",
-      "App-tilkoblet styring for en mer moderne opplevelse",
-    ],
-    valuesEyebrow: "Alva-standard",
-    valuesTitle: "Slik jobber vi",
-    values: [
-      ["Tydelig før smart", "Teknologi skal føles lett å forstå før den føles avansert."],
-      ["Bygget for bruk", "Hver funksjon skal gi mening i hjemmet, på arbeidsplassen eller ute."],
-      ["Premium uten støy", "Ren design, sterk funksjon og et rolig visuelt uttrykk."],
-      ["Klar for fremtiden", "Systemene våre skal kunne vokse når energibehovene endrer seg."],
-    ],
-    locationEyebrow: "Hedenstorp · Jonkoping",
-    locationTitle: "Basert i Jonkoping, med blikket utover.",
-    locationBody:
-      "Alva Technology jobber tett på produktutvikling, partnere og kunder med ambisjon om å gjøre moderne energiløsninger mer tilgjengelige.",
-    ctaTitle: "Kraft som passer måten folk faktisk lever på.",
-    ctaBody:
-      "Alva Technology finnes for å gjøre energi mindre låst, mindre komplisert og mer nyttig hjemme, ute og alt imellom.",
-    ctaButton: "Utforsk produkter",
-  },
-  da: {
-    eyebrow: "Om Alva Technology",
-    title: "Smartere energi til hjem, fritidshus og en friere hverdag.",
-    intro:
-      "Alva Technology er en energiteknologivirksomhed i Jonkoping med fokus på modulære energiløsninger til hjem, fritidshuse, udeliv og mobil hverdagsbrug.",
-    introStrong:
-      "Fra vores hovedkontor i Hedenstorp udvikler vi produkter, der gør energi lettere at lagre, flytte og bruge uden at gøre oplevelsen kompliceret.",
-    stats: [
-      ["Jonkoping", "Hovedkontor i Hedenstorp"],
-      ["Modulært", "Energisystemer der kan skalere"],
-      ["Ét økosystem", "Hjem, udeliv og mobil strøm"],
-    ],
-    storyEyebrow: "Alva Energy Ecosystem",
-    storyTitle: "Bygget omkring en enkel idé: energi skal følge livet.",
-    storyBody:
-      "Mange energiprodukter er låst til ét sted eller skabt til ét snævert formål. Alva Technology bygger i stedet et fleksibelt energiøkosystem, der kan støtte hjemmet, haven, altanen, fritidshuset og livet udendørs.",
-    storyBodyTwo:
-      "Vores fokus handler ikke kun om teknisk ydeevne. Det handler også om brugervenlighed, design og virkelige situationer, hvor strøm skal være tilgængelig, pålidelig og let at bruge.",
-    cards: [
-      {
-        title: "Designet til rigtige hjem",
-        body: "Slank installation, vægmonterede løsninger og rent produktdesign gør systemet lettere at placere i almindelige boligmiljøer.",
-      },
-      {
-        title: "Et voksende energiøkosystem",
-        body: "Alva forbinder energilagring i hjemmet med udendørsprodukter, bærbar strøm og tilbehør i ét tydeligt økosystem.",
-      },
-      {
-        title: "Praktisk selvstændighed",
-        body: "Målet er enkelt: at give mennesker mere kontrol over deres energi dér, hvor den faktisk behøves.",
-      },
-    ],
-    productEyebrow: "Produktretning",
-    productTitle: "Fra energilagring i hjemmet til bærbar strøm.",
-    productBody:
-      "Alvas produktøkosystem er bygget omkring modulær batterikapacitet, intelligent styring og fleksibel brug i hjemmet, ved skrivebordet og udendørs.",
-    productPoints: [
-      "Modulær batterikapacitet der vokser med behovet",
-      "Støtte til solenergi og smartere energibrug",
-      "Vejrtilpasset design til nordiske forhold",
-      "App-forbundet styring til en mere moderne oplevelse",
-    ],
-    valuesEyebrow: "Alva-standard",
-    valuesTitle: "Sådan arbejder vi",
-    values: [
-      ["Klart før smart", "Teknologi skal være let at forstå, før den føles avanceret."],
-      ["Bygget til brug", "Hver funktion skal give mening i hjemmet, på arbejdspladsen eller udendørs."],
-      ["Premium uden støj", "Rent design, stærk funktion og et roligt visuelt sprog."],
-      ["Klar til fremtiden", "Vores systemer skal kunne vokse, når energibehovene ændrer sig."],
-    ],
-    locationEyebrow: "Hedenstorp · Jonkoping",
-    locationTitle: "Forankret i Jonkoping, med blik udad.",
-    locationBody:
-      "Alva Technology arbejder tæt på produktudvikling, partnere og kunder med ambitionen om at gøre moderne energiløsninger mere tilgængelige.",
-    ctaTitle: "Strøm, der passer til den måde mennesker faktisk lever på.",
-    ctaBody:
-      "Alva Technology findes for at gøre energi mindre låst, mindre kompliceret og mere anvendelig hjemme, ude og alt derimellem.",
-    ctaButton: "Udforsk produkter",
-  },
+  eyebrow: "ABOUT ALVA",
+  headline: "A Swedish energy company building practical green technology for everyday use.",
+  body:
+    "Alva Technology is a Swedish company focused on innovative green energy products that make clean power more flexible, useful and accessible in everyday life.",
+  statementHeadline: "We believe energy should move closer to where life and work happen.",
+  statementBody:
+    "The energy transition is not only about producing cleaner electricity. It is also about making that energy easier to store, move and use in the places where people actually need it - at home, outdoors, on site and across daily routines.",
+  buildEyebrow: "WHAT WE BUILD",
+  buildHeadline: "Green energy products with a new sense of flexibility.",
+  buildBody:
+    "Alva develops modular energy systems designed to challenge how storage products are usually used. Instead of treating batteries as fixed equipment, we build platforms that can support compact installation, capacity expansion and portable use through compatible components.",
+  buildPoints: [
+    "Modular battery platforms",
+    "Expandable energy storage",
+    "Portable add-ons",
+    "Nordic-ready product design",
+  ],
+  mattersHeadline: "From fixed storage to useful power in more places.",
+  mattersBody:
+    "Many energy products are designed around one fixed location. Alva takes a different approach. Our systems are built to support the routines around the product: seasonal homes, outdoor spaces, service vans, field teams and the moments when useful power needs to move beyond the wall.",
+  swedishEyebrow: "SWEDISH BY DESIGN",
+  swedishHeadline: "Designed for Nordic routines, weather and ways of living.",
+  swedishBody:
+    "As a Swedish company, Alva designs with Nordic conditions in mind: changing seasons, compact living spaces, outdoor routines and the practical need for reliable products that feel simple to use. Our goal is to combine technical innovation with calm, functional design.",
+  philosophyHeadline: "Innovation should feel practical.",
+  philosophyBody:
+    "We focus on products that are not only technically advanced, but also understandable, modular and useful in real situations. For Alva, innovation means creating energy systems that fit into daily life instead of asking people to adapt their routines around the technology.",
+  ctaHeadline: "Explore how Alva is building the next generation of flexible energy products.",
+  productsButton: "View products",
+  solutionsButton: "Explore solutions",
 };
 
-const getCopy = (lang) => ABOUT_COPY[lang] ?? ABOUT_COPY.en;
+function getRelativePath(page) {
+  return window.location.pathname.includes("/views/") ? `./${page}` : `views/${page}`;
+}
 
-export function renderAboutPage({ lang }) {
-  const copy = getCopy(lang);
-  const solutionsPath = window.location.pathname.includes("/views/") ? "./solutions.html" : "views/solutions.html";
-  const contactPath = window.location.pathname.includes("/views/") ? "./b2b.html" : "views/b2b.html";
+export function renderAboutPage() {
+  const copy = ABOUT_COPY;
+  const productsPath = getRelativePath("products.html");
+  const solutionsPath = getRelativePath("solutions.html");
 
   return `
-    <section class="about-hero">
-      <div class="about-hero__glow"></div>
+    <section class="about-hero section--milk">
       <div class="about-hero__inner">
-        <div class="about-hero__content">
+        <div class="about-hero__copy">
           <span class="eyebrow">${copy.eyebrow}</span>
-          <h1>${copy.title}</h1>
-          <p>${copy.intro}</p>
-          <p class="about-hero__lead">${copy.introStrong}</p>
+          <h1>${copy.headline}</h1>
+          <p>${copy.body}</p>
         </div>
-
-        <div class="about-hero__panel" aria-label="Alva Technology summary">
-          ${copy.stats.map(([value, label]) => `
-            <div class="about-stat">
-              <strong>${value}</strong>
-              <span>${label}</span>
-            </div>
-          `).join("")}
+        <div class="about-visual" aria-hidden="true">
+          <div class="about-visual__line"></div>
+          <div class="about-visual__module about-visual__module--one"></div>
+          <div class="about-visual__module about-visual__module--two"></div>
+          <div class="about-visual__module about-visual__module--three"></div>
         </div>
       </div>
     </section>
 
-    <section class="section about-story">
-      <div class="about-story__copy">
-        <span class="eyebrow">${copy.storyEyebrow}</span>
-        <h2>${copy.storyTitle}</h2>
-        <p>${copy.storyBody}</p>
-        <p>${copy.storyBodyTwo}</p>
-      </div>
-
-      <div class="about-story__cards">
-        ${copy.cards.map((card) => `
-          <article class="about-card">
-            <h3>${card.title}</h3>
-            <p>${card.body}</p>
-          </article>
-        `).join("")}
+    <section class="about-statement section--milk">
+      <div class="about-statement__inner">
+        <p>${copy.statementHeadline}</p>
+        <div class="about-statement__body">${copy.statementBody}</div>
       </div>
     </section>
 
-    <section class="section about-product-band">
-      <div class="about-product-band__visual">
-        <div class="about-product-stack">
-          <span></span><span></span><span></span><span></span>
+    <section class="about-build section--sage">
+      <div class="about-build__inner">
+        <div class="about-build__copy">
+          <span class="eyebrow">${copy.buildEyebrow}</span>
+          <h2>${copy.buildHeadline}</h2>
+          <p>${copy.buildBody}</p>
         </div>
-      </div>
-      <div class="about-product-band__copy">
-        <span class="eyebrow">${copy.productEyebrow}</span>
-        <h2>${copy.productTitle}</h2>
-        <p>${copy.productBody}</p>
-        <ul>
-          ${copy.productPoints.map((point) => `<li>${point}</li>`).join("")}
+        <ul class="about-line-list" aria-label="What Alva builds">
+          ${copy.buildPoints.map((point) => `<li>${point}</li>`).join("")}
         </ul>
       </div>
     </section>
 
-    <section class="section about-values">
-      <div class="about-section-heading">
-        <span class="eyebrow">${copy.valuesEyebrow}</span>
-        <h2>${copy.valuesTitle}</h2>
-      </div>
-      <div class="about-values__grid">
-        ${copy.values.map(([title, body]) => `
-          <article class="about-value">
-            <h3>${title}</h3>
-            <p>${body}</p>
-          </article>
-        `).join("")}
+    <section class="about-split section--milk">
+      <div class="about-split__inner">
+        <div class="about-split__marker" aria-hidden="true">01</div>
+        <div>
+          <h2>${copy.mattersHeadline}</h2>
+          <p>${copy.mattersBody}</p>
+        </div>
       </div>
     </section>
 
-    <section class="section about-location">
-      <div>
-        <span class="eyebrow">${copy.locationEyebrow}</span>
-        <h2>${copy.locationTitle}</h2>
+    <section class="about-nordic section--sage">
+      <div class="about-nordic__inner">
+        <div class="about-nordic__visual" aria-hidden="true">
+          <span>SE</span>
+        </div>
+        <div class="about-nordic__copy">
+          <span class="eyebrow">${copy.swedishEyebrow}</span>
+          <h2>${copy.swedishHeadline}</h2>
+          <p>${copy.swedishBody}</p>
+        </div>
       </div>
-      <p>${copy.locationBody}</p>
     </section>
 
-    <section class="section about-cta">
-      <h2>${copy.ctaTitle}</h2>
-      <p>${copy.ctaBody}</p>
-      <div class="about-cta__actions">
-        <a class="button button--primary" href="${solutionsPath}">${copy.ctaButton}</a>
-        <a class="button button--secondary" href="${contactPath}">${copy.ctaSecondary ?? "Contact us"}</a>
+    <section class="about-philosophy section--milk">
+      <div class="about-philosophy__inner">
+        <h2>${copy.philosophyHeadline}</h2>
+        <p>${copy.philosophyBody}</p>
+      </div>
+    </section>
+
+    <section class="about-cta section--sage">
+      <div class="about-cta__inner">
+        <h2>${copy.ctaHeadline}</h2>
+        <div class="about-cta__actions">
+          <a class="button button--primary" href="${productsPath}">${copy.productsButton}</a>
+          <a class="button button--secondary" href="${solutionsPath}">${copy.solutionsButton}</a>
+        </div>
       </div>
     </section>
   `;

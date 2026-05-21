@@ -33,9 +33,10 @@
   opacity: 0.66;
   background:
     linear-gradient(rgba(7, 26, 22, 0.08), rgba(7, 26, 22, 0.18)),
-    url("/Picture/home/HomePageBackground_1-optimized.jpg") center / cover no-repeat;
+    url("/Picture/home/HomePageBackground_1-optimized.jpg") 62% 44% / cover no-repeat;
   filter: saturate(0.96);
-  transform: scale(1.01);
+  transform: scaleX(-1) scale(1.28);
+  transform-origin: center;
   transition: opacity 240ms ease, transform 240ms ease;
 }
 
@@ -52,7 +53,7 @@
 
 .platform-hero[data-active-scenario="field"] .platform-hero__image {
   opacity: 0;
-  transform: scale(1);
+  transform: scaleX(-1) scale(1.24);
 }
 
 .platform-hero[data-active-scenario="field"] .platform-hero__field {
@@ -486,14 +487,14 @@
 .platform-solution-tab:hover,
 .platform-solution-tab:focus-visible,
 .platform-solution-tab.is-active {
-  border-color: rgba(15, 107, 63, 0.42);
-  box-shadow: 0 24px 58px rgba(15, 42, 36, 0.1);
-  transform: translateY(-4px);
+  border-color: rgba(0, 107, 69, 0.28);
+  box-shadow: 0 0 0 4px rgba(0, 107, 69, 0.06);
+  transform: none;
 }
 
 .platform-solution-tab.is-active {
-  background: #ffffff;
-  outline: 1px solid rgba(15, 107, 63, 0.16);
+  background: transparent;
+  outline: 0;
 }
 
 .platform-solution-tab__image {
@@ -505,33 +506,32 @@
 }
 
 .platform-solution-tab:hover .platform-solution-tab__image,
-.platform-solution-tab:focus-visible .platform-solution-tab__image,
-.platform-solution-tab.is-active .platform-solution-tab__image {
+.platform-solution-tab:focus-visible .platform-solution-tab__image {
   transform: scale(1.02);
 }
 
 .platform-solution-tab__image--summer {
   background:
     linear-gradient(rgba(15, 42, 36, 0.12), rgba(15, 42, 36, 0.12)),
-    url("/Picture/products/voltrix/summerhouse/voltrix06.jpg") center / cover no-repeat;
+    url("/Picture/products/voltrix/summerhouse/summerhouse03.jpg") center / cover no-repeat;
 }
 
 .platform-solution-tab__image--field {
   background:
     linear-gradient(rgba(15, 42, 36, 0.14), rgba(15, 42, 36, 0.14)),
-    url("/Picture/products/voltrix/field/voltrix09.png") center / cover no-repeat;
+    url("/Picture/products/voltrix/field/field02.png") center / cover no-repeat;
 }
 
 .platform-solution-detail__visual--summer {
   background:
     linear-gradient(rgba(15, 42, 36, 0.12), rgba(15, 42, 36, 0.12)),
-    url("/Picture/products/voltrix/summerhouse/voltrix04.jpg") center / cover no-repeat;
+    url("/Picture/products/voltrix/summerhouse/summerhouse02.jpg") center / cover no-repeat;
 }
 
 .platform-solution-detail__visual--field {
   background:
     linear-gradient(rgba(15, 42, 36, 0.14), rgba(15, 42, 36, 0.14)),
-    url("/Picture/products/voltrix/field/voltrix08.png") center / cover no-repeat;
+    url("/Picture/products/voltrix/field/field01.png") center / cover no-repeat;
 }
 
 .platform-solution-tab__copy {
@@ -590,9 +590,12 @@
 }
 
 .platform-solution-tab:hover .platform-solution-tab__cta b,
-.platform-solution-tab:focus-visible .platform-solution-tab__cta b,
-.platform-solution-tab.is-active .platform-solution-tab__cta b {
+.platform-solution-tab:focus-visible .platform-solution-tab__cta b {
   transform: translateX(4px);
+}
+
+.platform-solution-tab.is-active .platform-solution-tab__cta b {
+  transform: none;
 }
 
 .platform-solution-panels {
@@ -746,19 +749,19 @@
 .platform-visual--summer {
   background:
     linear-gradient(rgba(15, 42, 36, 0.16), rgba(15, 42, 36, 0.16)),
-    url("/Picture/products/voltrix/summerhouse/voltrix04.jpg") center / cover no-repeat;
+    url("/Picture/products/voltrix/summerhouse/summerhouse02.jpg") center / cover no-repeat;
 }
 
 .platform-visual--field {
   background:
     linear-gradient(rgba(15, 42, 36, 0.14), rgba(15, 42, 36, 0.14)),
-    url("/Picture/products/voltrix/field/voltrix08.png") center / cover no-repeat;
+    url("/Picture/products/voltrix/field/field01.png") center / cover no-repeat;
 }
 
 .platform-usecase__visual--field {
   background:
     linear-gradient(rgba(15, 42, 36, 0.14), rgba(15, 42, 36, 0.14)),
-    url("/Picture/products/voltrix/field/voltrix09.png") center / cover no-repeat;
+    url("/Picture/products/voltrix/field/field02.png") center / cover no-repeat;
 }
 
 .platform-visual--field::before,
@@ -820,7 +823,7 @@
 .platform-usecase__visual--summer {
   background:
     linear-gradient(rgba(15, 42, 36, 0.12), rgba(15, 42, 36, 0.12)),
-    url("/Picture/products/voltrix/summerhouse/voltrix06.jpg") center / cover no-repeat;
+    url("/Picture/products/voltrix/summerhouse/summerhouse03.jpg") center / cover no-repeat;
 }
 
 .platform-usecase__copy ul {
@@ -1084,6 +1087,415 @@
   }
 
   .platform-solution-detail__visual {
+    min-height: 280px;
+  }
+}
+
+/* Nordic editorial commerce refinement */
+.platform-hero__tab {
+  min-height: auto;
+  padding: 0 0 8px;
+  border: 0;
+  border-bottom: 1px solid rgba(243, 246, 242, 0.28);
+  border-radius: 0;
+  background: transparent;
+}
+
+.platform-hero__tab:hover,
+.platform-hero__tab:focus-visible,
+.platform-hero__tab.is-active {
+  border-color: #c7e27a;
+  background: transparent;
+  transform: none;
+}
+
+.platform-benefit-grid {
+  gap: 0;
+  border-top: 1px solid var(--line-soft);
+  border-bottom: 1px solid var(--line-soft);
+}
+
+.platform-benefit-card {
+  min-height: 0;
+  padding: clamp(22px, 3vw, 34px);
+  border: 0;
+  border-right: 1px solid var(--line-soft);
+  border-radius: 0;
+  background: transparent;
+  box-shadow: none;
+}
+
+.platform-benefit-card:last-child {
+  border-right: 0;
+}
+
+.platform-benefit-card__meta {
+  min-height: 28px;
+  align-items: center;
+}
+
+.platform-benefit-card__meta .platform-icon {
+  display: none;
+}
+
+.platform-benefit-card__body h2 {
+  font-size: clamp(1.12rem, 1.5vw, 1.38rem);
+}
+
+.platform-benefit-card__tag {
+  min-height: 26px;
+  margin-top: 20px;
+  padding: 0;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+}
+
+.platform-solution-tab {
+  border: 1.5px solid transparent;
+  border-radius: 0;
+  background: transparent;
+  box-shadow: none;
+}
+
+.platform-solution-tab:hover,
+.platform-solution-tab:focus-visible,
+.platform-solution-tab.is-active {
+  border-color: rgba(0, 107, 69, 0.28);
+  box-shadow: 0 0 0 4px rgba(0, 107, 69, 0.06);
+  transform: none;
+}
+
+.platform-solution-tab.is-active {
+  background: transparent;
+  outline: 0;
+}
+
+.platform-solution-tab__image {
+  min-height: clamp(250px, 25vw, 350px);
+  border-radius: 0;
+}
+
+.platform-solution-tab__copy {
+  padding: 20px 14px 0;
+  border-bottom: 1px solid var(--line-soft);
+}
+
+.platform-solution-tab__copy small {
+  padding: 0;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+}
+
+.platform-solution-panels {
+  border: 0;
+  border-top: 1px solid var(--line-soft);
+  border-radius: 0;
+  background: transparent;
+  box-shadow: none;
+}
+
+.platform-solution-detail {
+  padding: clamp(30px, 5vw, 56px) 0 0;
+}
+
+.platform-solution-detail__visual,
+.platform-usecase__visual {
+  border-radius: 0;
+  box-shadow: none;
+}
+
+.platform-product-area {
+  display: grid;
+  gap: clamp(42px, 6vw, 72px);
+}
+
+.platform-product-area--ranges {
+  gap: clamp(34px, 5vw, 58px);
+}
+
+.platform-product-area--featured {
+  gap: clamp(30px, 4.8vw, 54px);
+}
+
+.platform-preset-head {
+  display: flex;
+  align-items: end;
+  justify-content: space-between;
+  gap: 24px;
+}
+
+.platform-preset-head h2 {
+  max-width: 720px;
+}
+
+.platform-text-link {
+  display: inline-flex;
+  align-items: center;
+  min-height: 36px;
+  border-bottom: 1px solid currentColor;
+  color: #0f2a24;
+  font-size: 0.9rem;
+  font-weight: 800;
+}
+
+.platform-preset-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: clamp(16px, 2.4vw, 26px);
+}
+
+.platform-preset-card {
+  display: grid;
+  grid-template-rows: auto 1fr;
+  min-width: 0;
+  border-top: 1px solid var(--line-soft);
+  background: rgba(255, 255, 255, 0.34);
+}
+
+.platform-preset-card__media {
+  position: relative;
+  min-height: clamp(180px, 20vw, 250px);
+  margin: 0;
+  overflow: hidden;
+  background:
+    radial-gradient(circle at 50% 62%, rgba(255, 255, 255, 0.82), rgba(255, 255, 255, 0) 58%),
+    linear-gradient(180deg, rgba(238, 243, 234, 0.62), rgba(238, 243, 234, 0.26));
+}
+
+.platform-preset-card__media img {
+  position: absolute;
+  inset: 0;
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  object-position: center center;
+  padding: clamp(12px, 2vw, 24px);
+}
+
+.platform-preset-card__body {
+  display: grid;
+  align-content: start;
+  gap: 10px;
+  padding: 22px clamp(12px, 1.8vw, 22px) 0;
+  border-bottom: 1px solid var(--line-soft);
+}
+
+.platform-preset-card__size,
+.platform-preset-card__range {
+  color: #0f6b3f;
+  font-size: 0.74rem;
+  font-weight: 900;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.platform-preset-card__range {
+  color: rgba(15, 42, 36, 0.58);
+}
+
+.platform-preset-card h3 {
+  margin: 0;
+  color: #0f2a24;
+  font-size: clamp(1.12rem, 1.5vw, 1.34rem);
+  line-height: 1.18;
+  letter-spacing: -0.03em;
+}
+
+.platform-preset-card p {
+  margin: 0;
+  max-width: 330px;
+}
+
+.platform-preset-card a {
+  width: fit-content;
+  margin-top: 8px;
+  padding-bottom: 22px;
+  color: #0f2a24;
+  font-size: 0.88rem;
+  font-weight: 900;
+  transition: color 180ms ease, transform 180ms ease;
+}
+
+.platform-preset-card a:hover,
+.platform-preset-card a:focus-visible {
+  color: #0f6b3f;
+  transform: translateX(3px);
+}
+
+.platform-product-area > .platform-section-head {
+  margin-bottom: 0;
+}
+
+.platform-product-feature {
+  display: grid;
+  grid-template-columns: minmax(0, 1.08fr) minmax(260px, 0.58fr);
+  gap: clamp(24px, 4vw, 52px);
+  align-items: center;
+  padding-top: 0;
+}
+
+.platform-product-feature__media {
+  min-height: clamp(300px, 38vw, 470px);
+  background:
+    radial-gradient(circle at 50% 58%, rgba(238, 243, 234, 0.95), rgba(238, 243, 234, 0) 62%);
+}
+
+.platform-product-feature__media img {
+  padding: clamp(4px, 1vw, 12px);
+  transform: scale(1.22);
+  transform-origin: center;
+}
+
+.platform-product-feature__copy {
+  align-self: center;
+  max-width: 360px;
+  padding: 0;
+  border-top: 1px solid var(--line-soft);
+}
+
+.platform-product-feature__copy p {
+  max-width: 420px;
+  margin: 16px 0 0;
+  font-size: 0.93rem;
+}
+
+.platform-product-feature__label {
+  display: inline-flex;
+  margin-top: 18px;
+  color: #0f6b3f;
+  font-size: 0.78rem;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.platform-smart-body {
+  grid-template-columns: minmax(0, 0.92fr) minmax(260px, 0.58fr);
+}
+
+.platform-phone-mockup {
+  order: 2;
+  box-shadow: 0 18px 42px rgba(15, 42, 36, 0.12);
+}
+
+.platform-feature-grid--stacked {
+  border-top: 1px solid var(--line-soft);
+}
+
+.platform-feature-card {
+  min-height: 0;
+  padding: 22px 0;
+  border: 0;
+  border-bottom: 1px solid var(--line-soft);
+  border-radius: 0;
+  background: transparent;
+  box-shadow: none;
+}
+
+.platform-feature-card .platform-card-kicker {
+  display: none;
+}
+
+.platform-trust {
+  padding: 0;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  box-shadow: none;
+}
+
+.platform-trust__points {
+  align-content: start;
+}
+
+.platform-trust__points span {
+  min-height: 38px;
+  padding: 8px 14px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.58);
+  box-shadow: none;
+}
+
+.platform-home-section--final {
+  background: var(--page-bg);
+  padding-top: clamp(42px, 4.8vw, 64px);
+}
+
+.platform-final {
+  padding: 0;
+}
+
+.platform-home-section--trust {
+  padding-bottom: clamp(48px, 5.4vw, 72px);
+}
+
+@media (max-width: 1120px) {
+  .platform-benefit-card:nth-child(2n) {
+    border-right: 0;
+  }
+
+  .platform-benefit-card:nth-child(n + 3) {
+    border-top: 1px solid var(--line-soft);
+  }
+
+  .platform-preset-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .platform-product-feature {
+    grid-template-columns: 1fr;
+  }
+
+  .platform-product-feature__copy {
+    max-width: 640px;
+    padding-bottom: 0;
+  }
+
+  .platform-smart-body {
+    grid-template-columns: 1fr;
+  }
+
+  .platform-phone-mockup {
+    order: 0;
+  }
+}
+
+@media (max-width: 760px) {
+  .platform-benefit-grid {
+    border-bottom: 0;
+  }
+
+  .platform-benefit-card,
+  .platform-benefit-card:nth-child(2n) {
+    border-right: 0;
+    border-bottom: 1px solid var(--line-soft);
+  }
+
+  .platform-benefit-card:nth-child(n + 3) {
+    border-top: 0;
+  }
+
+  .platform-preset-head {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .platform-preset-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .platform-solution-tab__copy {
+    padding-inline: 10px;
+  }
+
+  .platform-preset-card__media {
+    min-height: 190px;
+  }
+
+  .platform-product-feature__media {
     min-height: 280px;
   }
 }

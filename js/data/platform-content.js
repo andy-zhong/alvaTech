@@ -76,12 +76,13 @@ const SHARED_PLATFORM_CONTENT = {
       "Voltrix is built around a modular energy base and battery packs that can stay at home, move outdoors, or support selected field routines through compatible add-ons.",
   },
   productFit: {
-    eyebrow: "Product range",
-    title: "Choose the Voltrix system range that fits your routine.",
+    eyebrow: "Featured setup",
+    title: "Voltrix 5-Pack Kit",
     body:
-      "These ranges help frame capacity and use cases before a real product configuration. The detailed product flow will be refined later.",
-    primary: "View product range",
-    secondary: "Explore kits",
+      "A fixed 5 kWh starting setup for seasonal homes, everyday energy support and expandable outdoor use.",
+    note: "Includes five NCM battery modules. Actual performance depends on connected devices, installation and usage pattern.",
+    primary: "View kit",
+    secondary: "Explore products",
   },
   solutions: [
     {
@@ -176,7 +177,7 @@ const SHARED_PLATFORM_CONTENT = {
     eyebrow: "Nordic conditions",
     title: "Designed for changing Nordic routines.",
     body: "Built for seasonal homes, outdoor routines and practical everyday energy needs in changing weather.",
-    points: ["-20°C to +45°C", "IP65", "1–12 kWh expandable"],
+    points: ["-20°C to +65°C", "IP65", "1-12 kWh per inverter/base setup"],
   },
   finalCta: {
     eyebrow: "Get started",
@@ -307,7 +308,7 @@ const LANGUAGE_OVERRIDES = {
       eyebrow: "Nordiska förhållanden",
       title: "Utformat för skiftande nordiska rutiner.",
       body: "Byggt för säsongsboenden, utomhusrutiner och praktiska energibehov i växlande väder.",
-      points: ["-20°C till +45°C", "IP65", "1–12 kWh utbyggbart"],
+      points: ["-20°C till +65°C", "IP65", "1-12 kWh per inverter/base setup"],
     },
     finalCta: {
       eyebrow: "Kom igång",

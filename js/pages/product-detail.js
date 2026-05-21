@@ -206,7 +206,7 @@ function renderMediaViewer(product, content, labels) {
   return `
     <article class="detail-media">
       <div class="media-viewer">
-        <div class="media-stage" id="media-stage">
+        <div class="media-stage frameless-image-stage" id="media-stage">
           <button class="media-nav media-nav--prev" id="media-prev" type="button" aria-label="${labels.previous}">&lsaquo;</button>
 
           <div class="media-stage__inner" id="media-stage-inner">
@@ -309,15 +309,15 @@ export function renderProductDetailPage({ lang, slug, route }) {
       </article>
     </section>
 
-    <section class="section detail-platform-section">
+    <section class="detail-section detail-platform-section">
       <div class="detail-platform-grid">
-        <article class="panel detail-platform-panel">
+        <article class="detail-platform-panel">
           <span class="eyebrow">${labels.whoFor}</span>
           <div class="detail-pill-grid">
             ${PLATFORM_USE_CASES.map((item) => `<span class="detail-platform-pill">${item}</span>`).join("")}
           </div>
         </article>
-        <article class="panel detail-platform-panel">
+        <article class="detail-platform-panel">
           <span class="eyebrow">${labels.platformFit}</span>
           <h2>${labels.platformFit}</h2>
           <p>${labels.platformFitBody}</p>
@@ -325,14 +325,14 @@ export function renderProductDetailPage({ lang, slug, route }) {
       </div>
     </section>
 
-    <section class="section">
+    <section class="detail-section">
       <div class="detail-platform-grid">
-        <article class="panel detail-platform-panel">
+        <article class="detail-platform-panel">
           <span class="eyebrow">${labels.modularity}</span>
           <h2>${labels.modularity}</h2>
           <p>${renderModularityCopy(product, labels)}</p>
         </article>
-        <article class="panel detail-trust-band">
+        <article class="detail-trust-band">
           <span class="eyebrow">${labels.trustTitle}</span>
           <div class="detail-trust-points">
             ${TRUST_POINTS.map((point) => `<span>${point}</span>`).join("")}
@@ -341,17 +341,17 @@ export function renderProductDetailPage({ lang, slug, route }) {
       </div>
     </section>
 
-    <section class="section">
+    <section class="detail-section">
       <div class="info-grid">
-        <article class="panel">
+        <article class="detail-content-panel">
           <h3>${t(lang, "detailFeatures")}</h3>
-          <ul class="detail-list">
+          <ul class="detail-list thin-divider-list">
             ${content.features.map((item) => `<li>${item}</li>`).join("")}
           </ul>
         </article>
-        <article class="panel">
+        <article class="detail-content-panel">
           <h3>${t(lang, "detailSupport")}</h3>
-          <ul class="support-list">
+          <ul class="support-list thin-divider-list">
             <li>${content.summary}</li>
             <li>${product.price}</li>
             <li>${t(lang, "productCardStatus")}</li>
@@ -360,38 +360,38 @@ export function renderProductDetailPage({ lang, slug, route }) {
       </div>
     </section>
 
-    <section class="section">
+    <section class="detail-section">
       <div class="spec-grid">
-        <article class="panel">
+        <article class="detail-content-panel">
           <h3>${t(lang, "detailSpecifications")}</h3>
-          <div class="spec-grid">
+          <div class="detail-spec-table spec-table">
             ${content.specs.map((item) => `
-              <article class="spec-card">
-                <h3>${item.label}</h3>
-                <p>${item.value}</p>
-              </article>`).join("")}
+              <div class="detail-spec-row">
+                <span>${item.label}</span>
+                <strong>${item.value}</strong>
+              </div>`).join("")}
           </div>
         </article>
-        <article class="panel">
+        <article class="detail-content-panel">
           <h3>${t(lang, "detailCertifications")}</h3>
-          <ul class="detail-list">
+          <ul class="detail-list thin-divider-list">
             ${content.certifications.map((item) => `<li>${item}</li>`).join("")}
           </ul>
         </article>
       </div>
     </section>
 
-    <section class="section">
+    <section class="detail-section">
       <div class="info-grid">
-        <article class="panel">
+        <article class="detail-content-panel">
           <h3>${t(lang, "detailUseCases")}</h3>
-          <ul class="detail-list">
+          <ul class="detail-list thin-divider-list">
             ${content.useCases.map((item) => `<li>${item}</li>`).join("")}
           </ul>
         </article>
-        <article class="panel">
+        <article class="detail-content-panel">
           <h3>${t(lang, "detailFaq")}</h3>
-          <ul class="faq-list">
+          <ul class="faq-list thin-divider-list">
             ${content.faq.map((item) => `<li>${item}</li>`).join("")}
           </ul>
         </article>

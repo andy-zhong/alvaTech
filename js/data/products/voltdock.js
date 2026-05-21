@@ -5,22 +5,18 @@ export const VOLTDOCK_PRODUCT = {
   name: "VoltDock",
   shortName: "VoltDock",
 
-  heroImage: "/Picture/products/voltdock/voltdock01.jpg",
-  thumbnail: "/Picture/products/voltdock/voltdock01.jpg",
+  heroImage: "/Picture/products/voltdock/voltdock01.png",
+  thumbnail: "/Picture/products/voltdock/voltdock01.png",
 
-  heroMedia: createMediaItem("/Picture/products/voltdock/voltdock01.jpg", "VoltDock dual-source desktop hub"),
+  heroMedia: createMediaItem("/Picture/products/voltdock/voltdock01.png", "VoltDock charging detail"),
 
   gallery: [
-    createMediaItem("/Picture/products/voltdock/voltdock01.jpg", "VoltDock overview"),
-    createMediaItem("/Picture/products/voltdock/voltdock02.jpg", "VoltDock front ports"),
-    createMediaItem("/Picture/products/voltdock/voltdock03.jpg", "VoltDock desk setup"),
-    createMediaItem("/Picture/products/voltdock/voltdock04.jpg", "VoltDock with battery"),
-    createMediaItem("/Picture/products/voltdock/voltdock05.jpg", "VoltDock display detail"),
-    createMediaItem("/Picture/products/voltdock/voltdock06.jpg", "VoltDock portable use"),
-    createMediaItem("/Picture/products/voltdock/voltdock07.png", "VoltDock product angle"),
-    createMediaItem("/Picture/products/voltdock/voltdoc08.png", "VoltDock detail view"),
-    createMediaItem("/Picture/products/voltdock/voltdoc09.png", "VoltDock charging detail"),
-    createMediaItem("/Picture/products/voltdock/voltdock10.png", "VoltDock desktop use"),
+    createMediaItem("/Picture/products/voltdock/voltdock01.png", "VoltDock charging detail"),
+    createMediaItem("/Picture/products/voltdock/voltdock02.png", "VoltDock detail view"),
+    createMediaItem("/Picture/products/voltdock/voltdock03.png", "VoltDock desktop use"),
+    createMediaItem("/Picture/products/voltdock/voltdock04.png", "VoltDock product angle"),
+    createMediaItem("/Picture/products/voltdock/voltdock10.jpg", "VoltDock overview"),
+    createMediaItem("/Picture/products/voltdock/voltdock07.jpg", "VoltDock with battery"),
   ],
 
   price: "3 990 SEK",

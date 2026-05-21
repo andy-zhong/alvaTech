@@ -20,6 +20,10 @@ import {
 import { renderAboutPage }        from "../pages/about.js";
 import { renderSolutionsPage }    from "../pages/solutions.js";
 import { renderSolutionDetailPage } from "../pages/solution-detail.js";
+import {
+  getSystemRangeTitle,
+  renderSystemRangePage,
+} from "../pages/system-range.js";
 import { renderSupportPage }      from "../pages/support.js";
 import { renderAccountPage }      from "../pages/account.js";
 import { getProductBySlug }       from "../services/product-service.js";
@@ -84,6 +88,21 @@ async function mountPage({ page, lang, route, productUrl, buyProductUrl, getCurr
     case "products":
       document.title = t(lang, "metaProductsTitle");
       container.innerHTML = renderProductsPage({ lang, productUrl });
+      break;
+
+    case "product-starter":
+      document.title = getSystemRangeTitle("starter");
+      container.innerHTML = renderSystemRangePage({ type: "starter" });
+      break;
+
+    case "product-medium":
+      document.title = getSystemRangeTitle("medium");
+      container.innerHTML = renderSystemRangePage({ type: "medium" });
+      break;
+
+    case "product-max":
+      document.title = getSystemRangeTitle("max");
+      container.innerHTML = renderSystemRangePage({ type: "max" });
       break;
 
     case "solutions":
