@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Vendure Checkout Smoke Test | Alva Technology</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../css/base.css">
+  <link rel="stylesheet" href="../css/pages/vendure-checkout-test.css">
+</head>
+<body>
+  <main class="vendure-checkout-test">
+    <section class="vendure-checkout-test__hero">
+      <p class="vendure-checkout-test__eyebrow">Storefront smoke test</p>
+      <h1>Vendure checkout check</h1>
+      <p>Run isolated guest checkout Shop API steps against the current browser session order.</p>
+    </section>
+
+    <section class="vendure-checkout-test__toolbar" aria-label="Vendure endpoint settings">
+      <label for="vendure-endpoint">Shop API endpoint</label>
+      <input id="vendure-endpoint" type="url" value="http://localhost:2605/shop-api">
+      <button type="button" class="vendure-checkout-test__button" data-action="refresh-order">Refresh order</button>
+      <button type="button" class="vendure-checkout-test__button" data-action="add-test-item">Add VoltDock</button>
+    </section>
+
+    <section class="vendure-checkout-test__layout">
+      <form class="vendure-checkout-test__panel vendure-checkout-test__form" data-checkout-form>
+        <div class="vendure-checkout-test__panel-head">
+          <div>
+            <p class="vendure-checkout-test__label">Guest checkout</p>
+            <h2>Step inputs</h2>
+          </div>
+          <button type="button" class="vendure-checkout-test__button" data-action="run-checkout">Run steps</button>
+        </div>
+
+        <fieldset>
+          <legend>Customer</legend>
+          <label for="checkout-email">
+            <span>Email</span>
+            <input id="checkout-email" name="emailAddress" type="email" value="guest@example.com" autocomplete="email" required>
+          </label>
+          <label for="checkout-first-name">
+            <span>First name</span>
+            <input id="checkout-first-name" name="firstName" type="text" value="Guest" autocomplete="given-name" required>
+          </label>
+          <label for="checkout-last-name">
+            <span>Last name</span>
+            <input id="checkout-last-name" name="lastName" type="text" value="Checkout" autocomplete="family-name" required>
+          </label>
+          <label for="checkout-phone">
+            <span>Phone</span>
+            <input id="checkout-phone" name="phoneNumber" type="tel" value="+46700000000" autocomplete="tel">
+          </label>
+        </fieldset>
+
+        <fieldset>
+          <legend>Shipping address</legend>
+          <label for="checkout-street">
+            <span>Street</span>
+            <input id="checkout-street" name="streetLine1" type="text" value="Testgatan 1" autocomplete="address-line1" required>
+          </label>
+          <label for="checkout-city">
+            <span>City</span>
+            <input id="checkout-city" name="city" type="text" value="Stockholm" autocomplete="address-level2" required>
+          </label>
+          <label for="checkout-postal-code">
+            <span>Postal code</span>
+            <input id="checkout-postal-code" name="postalCode" type="text" value="111 22" autocomplete="postal-code" required>
+          </label>
+          <label for="checkout-country-code">
+            <span>Country code</span>
+            <input id="checkout-country-code" name="countryCode" type="text" value="SE" maxlength="2" autocomplete="country" required>
+          </label>
+        </fieldset>
+
+        <fieldset>
+          <legend>Methods</legend>
+          <label for="checkout-shipping-method">
+            <span>Shipping method ID</span>
+            <input id="checkout-shipping-method" name="shippingMethodId" type="text" inputmode="numeric" autocomplete="off" placeholder="Leave blank to use first eligible method">
+          </label>
+          <label for="checkout-payment-method">
+            <span>Payment method code</span>
+            <input id="checkout-payment-method" name="paymentMethodCode" type="text" value="standard-payment" autocomplete="off">
+          </label>
+        </fieldset>
+      </form>
+
+      <section class="vendure-checkout-test__panel" aria-label="Active order">
+        <div class="vendure-checkout-test__panel-head">
+          <div>
+            <p class="vendure-checkout-test__label">Query</p>
+            <h2>activeOrder</h2>
+          </div>
+          <div class="vendure-checkout-test__status" data-status="active-order">Idle</div>
+        </div>
+        <pre data-output="active-order">No request run yet.</pre>
+      </section>
+    </section>
+
+    <section class="vendure-checkout-test__panel" aria-label="Checkout step results">
+      <div class="vendure-checkout-test__panel-head">
+        <div>
+          <p class="vendure-checkout-test__label">Mutations</p>
+          <h2>Checkout steps</h2>
+        </div>
+        <div class="vendure-checkout-test__status" data-status="checkout">Idle</div>
+      </div>
+      <ol class="vendure-checkout-test__steps">
+        <li data-step="customer">setCustomerForOrder</li>
+        <li data-step="address">setOrderShippingAddress</li>
+        <li data-step="billing-address">setOrderBillingAddress</li>
+        <li data-step="shipping-methods">eligibleShippingMethods</li>
+        <li data-step="shipping-method">setOrderShippingMethod</li>
+        <li data-step="state">transitionOrderToState</li>
+        <li data-step="payment">addPaymentToOrder</li>
+      </ol>
+      <pre data-output="checkout">No checkout steps run yet.</pre>
+    </section>
+  </main>
+
+  <script type="module" src="../js/pages/vendure-checkout-test.js"></script>
+</body>
+</html>

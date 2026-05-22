@@ -27,8 +27,6 @@ function loadRoute(routePath) {
 const authRoutes     = loadRoute("./routes/auth");
 const b2bRoutes      = loadRoute("./routes/b2b");
 const quoteRoutes    = loadRoute("./routes/quote");
-const orderRoutes    = loadRoute("./routes/orders");
-const adminRoutes    = loadRoute("./routes/admin");
 const trackRoute     = loadRoute("./routes/track");      // analytics ingest (public)
 const analyticsRoute = loadRoute("./routes/analytics");  // analytics read (admin-only)
 
@@ -50,8 +48,6 @@ app.use(express.static(path.join(__dirname, "..")));
 if (authRoutes)     app.use("/auth",           authRoutes);
 if (b2bRoutes)      app.use("/api/b2b",        b2bRoutes);
 if (quoteRoutes)    app.use("/api/quote",       quoteRoutes);
-if (orderRoutes)    app.use("/api/orders",      orderRoutes);
-if (adminRoutes)    app.use("/api/admin",       adminRoutes);
 if (trackRoute)     app.use("/api/track",      trackRoute);       // public — no auth
 if (analyticsRoute) app.use("/api/analytics",   analyticsRoute);   // admin JWT required
 

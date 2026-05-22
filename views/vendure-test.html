@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Vendure Smoke Test | Alva Technology</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../css/base.css">
+  <link rel="stylesheet" href="../css/pages/vendure-test.css">
+</head>
+<body>
+  <main class="vendure-test">
+    <section class="vendure-test__hero">
+      <p class="vendure-test__eyebrow">Storefront smoke test</p>
+      <h1>Vendure connection check</h1>
+      <p>Run focused Shop API checks without loading the storefront app shell.</p>
+    </section>
+
+    <section class="vendure-test__toolbar" aria-label="Vendure endpoint settings">
+      <label for="vendure-endpoint">Shop API endpoint</label>
+      <input id="vendure-endpoint" type="url" value="http://localhost:2605/shop-api">
+      <button type="button" class="vendure-test__button" data-action="run-all">Run all</button>
+    </section>
+
+    <section class="vendure-test__grid" aria-label="Vendure smoke test sections">
+      <article class="vendure-test__panel" data-test-panel="active-channel">
+        <div class="vendure-test__panel-head">
+          <div>
+            <p class="vendure-test__label">Query</p>
+            <h2>activeChannel</h2>
+          </div>
+          <button type="button" class="vendure-test__button" data-action="active-channel">Check</button>
+        </div>
+        <div class="vendure-test__status" data-status="active-channel">Idle</div>
+        <pre data-output="active-channel">No request run yet.</pre>
+      </article>
+
+      <article class="vendure-test__panel" data-test-panel="products">
+        <div class="vendure-test__panel-head">
+          <div>
+            <p class="vendure-test__label">Query</p>
+            <h2>products</h2>
+          </div>
+          <button type="button" class="vendure-test__button" data-action="products">List</button>
+        </div>
+        <div class="vendure-test__status" data-status="products">Idle</div>
+        <div class="vendure-test__products" data-output="products">No request run yet.</div>
+      </article>
+
+      <article class="vendure-test__panel" data-test-panel="active-order">
+        <div class="vendure-test__panel-head">
+          <div>
+            <p class="vendure-test__label">Query</p>
+            <h2>activeOrder</h2>
+          </div>
+          <button type="button" class="vendure-test__button" data-action="active-order">Show</button>
+        </div>
+        <div class="vendure-test__status" data-status="active-order">Idle</div>
+        <pre data-output="active-order">No request run yet.</pre>
+      </article>
+
+      <article class="vendure-test__panel" data-test-panel="add-item">
+        <div class="vendure-test__panel-head">
+          <div>
+            <p class="vendure-test__label">Mutation</p>
+            <h2>addItemToOrder</h2>
+          </div>
+        </div>
+        <form class="vendure-test__form" data-add-item-form>
+          <label for="vendure-variant-id">
+            <span>productVariantId</span>
+            <input id="vendure-variant-id" name="productVariantId" type="text" inputmode="numeric" autocomplete="off" required>
+          </label>
+          <label for="vendure-quantity">
+            <span>Quantity</span>
+            <input id="vendure-quantity" name="quantity" type="number" min="1" step="1" value="1" required>
+          </label>
+          <button type="submit" class="vendure-test__button">Add item</button>
+        </form>
+        <div class="vendure-test__status" data-status="add-item">Idle</div>
+        <pre data-output="add-item">No request run yet.</pre>
+      </article>
+    </section>
+  </main>
+
+  <script type="module" src="../js/pages/vendure-test.js"></script>
+</body>
+</html>

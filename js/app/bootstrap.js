@@ -6,7 +6,7 @@ import { mountCookieBanner } from "../components/consent-banner.js";
 import { getStoredLanguage, t }   from "../services/language-service.js";
 import { createRouteHelpers }     from "../utils/routes.js";
 import { renderHomePage, bindHomePage } from "../pages/home.js";
-import { renderProductsPage }     from "../pages/products.js";
+import { renderProductsPage, afterRenderProductsPage } from "../pages/products.js";
 import {
   renderProductDetailPage,
   renderMissingProduct,
@@ -88,6 +88,7 @@ async function mountPage({ page, lang, route, productUrl, buyProductUrl, getCurr
     case "products":
       document.title = t(lang, "metaProductsTitle");
       container.innerHTML = renderProductsPage({ lang, productUrl });
+      afterRenderProductsPage();
       break;
 
     case "product-starter":

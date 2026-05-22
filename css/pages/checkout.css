@@ -18,6 +18,51 @@
   margin: 0 0 28px;
 }
 
+.checkout-vendure-status {
+  display: flex;
+  justify-content: space-between;
+  gap: 18px;
+  margin: 0 0 28px;
+  padding: 14px 0;
+  border-top: 1px solid rgba(15, 42, 36, 0.14);
+  border-bottom: 1px solid rgba(15, 42, 36, 0.14);
+}
+
+.checkout-vendure-status__eyebrow,
+.checkout-vendure-status__title,
+.checkout-vendure-status__meta {
+  margin: 0;
+}
+
+.checkout-vendure-status__eyebrow {
+  color: rgba(15, 42, 36, 0.5);
+  font-size: 0.72rem;
+  font-weight: 800;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.checkout-vendure-status__title {
+  margin-top: 4px;
+  color: var(--text-dark, #0f2a24);
+  font-weight: 800;
+}
+
+.checkout-vendure-status__meta {
+  color: rgba(15, 42, 36, 0.58);
+  font-size: 0.82rem;
+  text-align: right;
+}
+
+.checkout-vendure-status[data-state="success"] {
+  border-color: rgba(15, 107, 63, 0.35);
+}
+
+.checkout-vendure-status[data-state="warning"],
+.checkout-vendure-status[data-state="error"] {
+  border-color: rgba(159, 46, 36, 0.28);
+}
+
 /* ─────────────────────────────────────────────────────────────────────────
    Fieldsets
    ───────────────────────────────────────────────────────────────────────── */
@@ -302,6 +347,14 @@
   opacity: 0.65;
   line-height: 1.7;
   margin: 0 0 32px;
+}
+
+.order-confirm__source {
+  color: rgba(15, 42, 36, 0.58);
+  font-size: 0.84rem;
+  line-height: 1.6;
+  margin: -10px auto 24px;
+  max-width: 440px;
 }
 
 .order-confirm__actions {

@@ -150,19 +150,29 @@ const SPECS = [
   ["Add-ons", "VoltDock, Backpack Power, mobility options"],
 ];
 
-export function renderProductsPage({ productUrl }) {
+const VOLTRIX_KIT_URL = "/views/product.html?slug=voltrix-5-pack-kit";
+
+export function renderProductsPage({ lang, productUrl }) {
+  const copy = getProductsCopy(lang);
   const productMap = new Map(getAllProducts().map((product) => [product.slug, product]));
-  const productHref = (slug) => productMap.has(slug) ? productUrl(slug) : "/views/b2b.html";
+  const productHref = (slug) => productMap.has(slug)
+    ? `/views/product.html?slug=${encodeURIComponent(slug)}`
+    : "/views/b2b.html";
+  const compositionLabels = copy.compositionLabels ?? COMPOSITION_LABELS;
+  const showroomProducts = copy.showroomProducts ?? SHOWROOM_PRODUCTS;
+  const capacityRanges = copy.capacityRanges ?? CAPACITY_RANGES;
+  const addons = copy.addons ?? ADDONS;
+  const specs = copy.specs ?? SPECS;
 
   return `
     <section class="showroom-hero editorial-section">
       <div class="showroom-hero__copy">
-        <span class="eyebrow">Products</span>
-        <h1>The Voltrix system.</h1>
-        <p>A modular battery platform built from a base unit, expandable battery packs, mounting options and portable add-ons.</p>
+        <span class="eyebrow">${copy.productsEyebrow}</span>
+        <h1>${copy.heroTitle}</h1>
+        <p>${copy.heroBody}</p>
         <div class="showroom-actions">
-          <a class="button button--primary" href="#featured-setup">Explore kits</a>
-          <a class="button button--secondary" href="/views/b2b.html">Talk to Alva</a>
+          <a class="button button--primary" href="#featured-setup">${copy.exploreKits}</a>
+          <a class="button button--secondary" href="/views/b2b.html">${copy.talkToAlva}</a>
         </div>
       </div>
       ${renderImage(PRODUCT_ASSETS.kit, "Voltrix system", "showroom-hero__media")}
@@ -170,14 +180,14 @@ export function renderProductsPage({ productUrl }) {
 
     <section class="showroom-section showroom-section--sage showroom-composition editorial-section--soft" aria-labelledby="composition-title">
       <div class="showroom-section__head">
-        <span class="eyebrow">System composition</span>
-        <h2 id="composition-title">One system, built in layers.</h2>
-        <p>Start with the Voltrix base. Add battery packs for capacity. Extend use with selected add-ons when power needs to move beyond the wall or closer to the work area.</p>
+        <span class="eyebrow">${copy.compositionEyebrow}</span>
+        <h2 id="composition-title">${copy.compositionTitle}</h2>
+        <p>${copy.compositionBody}</p>
       </div>
       <div class="showroom-composition__body">
         ${renderImage(PRODUCT_ASSETS.base, "Voltrix base and battery platform", "showroom-composition__image")}
         <div class="showroom-annotation-list thin-divider-list">
-          ${COMPOSITION_LABELS.map(([label, body]) => `
+          ${compositionLabels.map(([label, body]) => `
             <div class="showroom-annotation">
               <strong>${label}</strong>
               <span>${body}</span>
@@ -190,25 +200,25 @@ export function renderProductsPage({ productUrl }) {
     <section class="showroom-section showroom-featured editorial-section" id="featured-setup" aria-labelledby="featured-title">
       ${renderImage(PRODUCT_ASSETS.kit, "Voltrix 5-Pack Kit", "showroom-featured__image")}
       <div class="showroom-featured__copy">
-        <span class="eyebrow">Featured setup</span>
+        <span class="eyebrow">${copy.featuredEyebrow}</span>
         <h2 id="featured-title">Voltrix 5-Pack Kit</h2>
-        <p>A fixed 5 kWh starting setup for seasonal homes, everyday energy support and expandable outdoor use.</p>
-        <small>Includes five NCM battery modules. Actual performance depends on connected devices, installation and usage pattern.</small>
+        <p>${copy.featuredBody}</p>
+        <small>${copy.featuredNote}</small>
         <div class="showroom-actions">
-          <a class="button button--primary" href="${productHref("voltrix-5-pack-kit")}">View kit</a>
-          <a class="button button--secondary" href="/views/b2b.html">Contact Alva</a>
+          <a class="button button--primary" href="${VOLTRIX_KIT_URL}" data-product-link="voltrix-5-pack-kit">${copy.viewKit}</a>
+          <a class="button button--secondary" href="/views/b2b.html">${copy.contactAlva}</a>
         </div>
       </div>
     </section>
 
     <section class="showroom-section showroom-section--sage showroom-capacity editorial-section--soft" aria-labelledby="capacity-title">
       <div class="showroom-section__head">
-        <span class="eyebrow">Capacity guide</span>
-        <h2 id="capacity-title">Choose a setup range before choosing a product.</h2>
-        <p>Capacity ranges help frame a starting setup. They are guidance for planning, not separate purchasable kits.</p>
+        <span class="eyebrow">${copy.capacityEyebrow}</span>
+        <h2 id="capacity-title">${copy.capacityTitle}</h2>
+        <p>${copy.capacityBody}</p>
       </div>
       <div class="showroom-capacity-scale">
-        ${CAPACITY_RANGES.map((item) => `
+        ${capacityRanges.map((item) => `
           <a class="showroom-capacity-range" href="${item.href}">
             <span>${item.label}</span>
             <strong>${item.range}</strong>
@@ -217,58 +227,73 @@ export function renderProductsPage({ productUrl }) {
           </a>
         `).join("")}
       </div>
-      <p class="showroom-note">These ranges are planning guidance. Actual performance depends on connected devices, installation and usage pattern.</p>
+      <p class="showroom-note">${copy.rangeNote}</p>
     </section>
 
     <section class="showroom-section editorial-section" aria-labelledby="showroom-title">
       <div class="showroom-section__head">
-        <span class="eyebrow">Product showroom</span>
-        <h2 id="showroom-title">A platform, not a wall of products.</h2>
+        <span class="eyebrow">${copy.showroomEyebrow}</span>
+        <h2 id="showroom-title">${copy.showroomTitle}</h2>
       </div>
       <div class="showroom-product-list">
-        ${SHOWROOM_PRODUCTS.map((item) => renderShowroomItem(item, productHref)).join("")}
+        ${showroomProducts.map((item) => renderShowroomItem(item, productHref, copy)).join("")}
       </div>
     </section>
 
     <section class="showroom-section showroom-addons editorial-section" aria-labelledby="addons-title">
       <div class="showroom-section__head">
-        <span class="eyebrow">Add-ons</span>
-        <h2 id="addons-title">Use the battery pack in more places.</h2>
-        <p>Selected add-ons help the same Voltrix battery platform support desks, outdoor routines, service vans and last-meter tasks.</p>
+        <span class="eyebrow">${copy.addonsEyebrow}</span>
+        <h2 id="addons-title">${copy.addonsTitle}</h2>
+        <p>${copy.addonsBody}</p>
       </div>
       <div class="showroom-addon-shelf product-shelf">
-        ${ADDONS.map((item) => renderAddon(item, productHref)).join("")}
+        ${addons.map((item) => renderAddon(item, productHref)).join("")}
       </div>
     </section>
 
     <section class="showroom-section showroom-section--sage editorial-section--soft" aria-labelledby="specs-title">
       <div class="showroom-section__head">
-        <span class="eyebrow">Specs</span>
-        <h2 id="specs-title">System basics</h2>
+        <span class="eyebrow">${copy.specsEyebrow}</span>
+        <h2 id="specs-title">${copy.specsTitle}</h2>
       </div>
       <div class="showroom-spec-table spec-table">
-        ${SPECS.map(([label, value]) => `
+        ${specs.map(([label, value]) => `
           <div class="showroom-spec-row">
             <span>${label}</span>
             <strong>${value}</strong>
           </div>
         `).join("")}
       </div>
-      <p class="showroom-note">Runtime and performance depend on connected devices, installation and usage pattern.</p>
+      <p class="showroom-note">${copy.specsNote}</p>
     </section>
 
     <section class="showroom-cta editorial-cta-band">
-      <h2>Not sure where to start?</h2>
-      <p>Talk to Alva about your home, cabin, team routine or field workflow.</p>
+      <h2>${copy.ctaTitle}</h2>
+      <p>${copy.ctaBody}</p>
       <div class="showroom-actions">
-        <a class="button button--primary" href="/views/b2b.html">Contact Alva</a>
-        <a class="button button--secondary" href="/views/solutions.html">Explore solutions</a>
+        <a class="button button--primary" href="/views/b2b.html">${copy.contactAlva}</a>
+        <a class="button button--secondary" href="/views/solutions.html">${copy.exploreSolutions}</a>
       </div>
     </section>
   `;
 }
 
-function renderShowroomItem(item, productHref) {
+export function afterRenderProductsPage() {
+  document.querySelectorAll("[data-product-link]").forEach((link) => {
+    link.addEventListener("click", (event) => {
+      const slug = link.getAttribute("data-product-link");
+
+      if (slug !== "voltrix-5-pack-kit") {
+        return;
+      }
+
+      event.preventDefault();
+      window.location.assign(VOLTRIX_KIT_URL);
+    });
+  });
+}
+
+function renderShowroomItem(item, productHref, copy) {
   const href = item.slug ? productHref(item.slug) : item.href;
   const asset = PRODUCT_ASSETS[item.key];
 
@@ -280,7 +305,7 @@ function renderShowroomItem(item, productHref) {
         <h3>${item.name}</h3>
         <p>${item.body}</p>
       </div>
-      <span class="showroom-link">View product <b aria-hidden="true">-&gt;</b></span>
+      <span class="showroom-link">${copy.viewProduct} <b aria-hidden="true">-&gt;</b></span>
     </a>
   `;
 }
@@ -308,4 +333,116 @@ function renderImage(asset, alt, className) {
       <img class="showroom-image__hover" src="${hoverImage}" alt="" aria-hidden="true">
     </figure>
   `;
+}
+
+function getProductsCopy(lang) {
+  const copies = {
+    en: {
+      heroTitle: "The Voltrix system.",
+      heroBody: "A modular battery platform built from a base unit, expandable battery packs, mounting options and portable add-ons.",
+      exploreKits: "Explore kits",
+      talkToAlva: "Talk to Alva",
+      compositionEyebrow: "System composition",
+      compositionTitle: "One system, built in layers.",
+      compositionBody: "Start with the Voltrix base. Add battery packs for capacity. Extend use with selected add-ons when power needs to move beyond the wall or closer to the work area.",
+      featuredEyebrow: "Featured setup",
+      featuredBody: "A fixed 5 kWh starting setup for seasonal homes, everyday energy support and expandable outdoor use.",
+      featuredNote: "Includes five NCM battery modules. Actual performance depends on connected devices, installation and usage pattern.",
+      viewKit: "View kit",
+      contactAlva: "Contact Alva",
+      capacityEyebrow: "Capacity guide",
+      capacityTitle: "Choose a setup range before choosing a product.",
+      capacityBody: "Capacity ranges help frame a starting setup. They are guidance for planning, not separate purchasable kits.",
+      rangeNote: "These ranges are planning guidance. Actual performance depends on connected devices, installation and usage pattern.",
+      showroomEyebrow: "Product showroom",
+      showroomTitle: "A platform, not a wall of products.",
+      addonsEyebrow: "Add-ons",
+      addonsTitle: "Use the battery pack in more places.",
+      addonsBody: "Selected add-ons help the same Voltrix battery platform support desks, outdoor routines, service vans and last-meter tasks.",
+      specsEyebrow: "Specs",
+      specsTitle: "System basics",
+      specsNote: "Runtime and performance depend on connected devices, installation and usage pattern.",
+      ctaTitle: "Not sure where to start?",
+      ctaBody: "Talk to Alva about your home, cabin, team routine or field workflow.",
+      exploreSolutions: "Explore solutions",
+    },
+    sv: {
+      heroTitle: "Voltrix-systemet.",
+      heroBody: "En modulär batteriplattform byggd av basenhet, expanderbara batteripack, monteringsval och portabla tillbehör.",
+      exploreKits: "Utforska kit",
+      talkToAlva: "Prata med Alva",
+      compositionEyebrow: "Systemets uppbyggnad",
+      compositionTitle: "Ett system, byggt i lager.",
+      compositionBody: "Börja med Voltrix-basen. Lägg till batteripack för kapacitet. Utöka användningen med valda tillbehör när kraft behöver flyttas bortom väggen eller närmare arbetsytan.",
+      featuredEyebrow: "Utvald setup",
+      featuredBody: "En fast 5 kWh-startsetup för fritidshus, vardaglig energistöd och expanderbar utomhusanvändning.",
+      featuredNote: "Inkluderar fem NCM-batterimoduler. Faktisk prestanda beror på anslutna enheter, installation och användningsmönster.",
+      viewKit: "Visa kit",
+      contactAlva: "Kontakta Alva",
+      capacityEyebrow: "Kapacitetsguide",
+      capacityTitle: "Välj setup-intervall innan du väljer produkt.",
+      capacityBody: "Kapacitetsintervall hjälper till att rama in en startsetup. De är vägledning för planering, inte separata köpbara kit.",
+      rangeNote: "Intervallen är planeringsstöd. Faktisk prestanda beror på anslutna enheter, installation och användningsmönster.",
+      showroomEyebrow: "Produktshowroom",
+      showroomTitle: "En plattform, inte en vägg av produkter.",
+      addonsEyebrow: "Tillbehör",
+      addonsTitle: "Använd batteripacket på fler platser.",
+      addonsBody: "Valda tillbehör hjälper samma Voltrix-plattform att stödja skrivbord, utomhusrutiner, servicebilar och uppgifter nära arbetsplatsen.",
+      specsEyebrow: "Specifikationer",
+      specsTitle: "Systemgrunder",
+      specsNote: "Drifttid och prestanda beror på anslutna enheter, installation och användningsmönster.",
+      ctaTitle: "Osäker på var du ska börja?",
+      ctaBody: "Prata med Alva om ditt hem, din stuga, teamets rutin eller fältarbete.",
+      exploreSolutions: "Utforska lösningar",
+    },
+  };
+
+  const baseCopy = {
+    productsEyebrow: "Products",
+    viewProduct: "View product",
+  };
+  const svData = {
+    productsEyebrow: "Produkter",
+    viewProduct: "Visa produkt",
+    compositionLabels: [
+      ["Basenhet", "Den smala energikärnan i systemet."],
+      ["Batteripack", "Expanderbar kapacitet i samma plattform."],
+      ["Montering", "Rent stöd för installation och placering."],
+      ["VoltDock", "En kompakt hubb för enheter och tillfälliga arbetsplatser."],
+      ["Backpack Power", "Användbar kraft närmare platsen där den behövs."],
+      ["Mobilitetslager", "Utvalt stöd när ett batteri behöver flyttas längre."],
+    ],
+    showroomProducts: [
+      { key: "base", category: "Kärnsystem", name: "Voltrix Base", body: "Energikärnan för att organisera, ladda och bygga ut Voltrix-systemet.", slug: "voltrix-5-pack-kit" },
+      { key: "battery", category: "Kapacitet", name: "Battery Pack", body: "Expanderbar kapacitet för hemrutiner, utomhusbruk och utvalda fältflöden.", slug: "voltrix-battery-module" },
+      { key: "voltdock", category: "Tillbehör", name: "VoltDock", body: "En kompakt hubb för enheter, skrivbord och tillfälliga arbetsplatser.", slug: "voltdock" },
+      { key: "backpack", category: "Tillbehör", name: "Backpack Power", body: "Bär användbar kraft närmare platsen där livet eller arbetet sker.", href: "/views/b2b.html" },
+      { key: "mounting", category: "Installation", name: "Montering", body: "Rent installationsstöd för basenheten och batteripack.", href: "/views/b2b.html" },
+      { key: "mobility", category: "Mobilitet", name: "Mobilitetsval", body: "Utvalt stöd för att flytta ett batteri längre från den fasta setupen.", href: "/views/b2b.html" },
+    ],
+    capacityRanges: [
+      { label: "Voltrix Starter", range: "1-5 kWh", body: "För stugor, terrasser och lättare vardagsrutiner.", note: "Rekommenderad startpunkt: Voltrix 5-Pack Kit", href: "/products/starter/" },
+      { label: "Voltrix Medium", range: "6-8 kWh", body: "För större säsongsboenden, längre vistelser och mer utomhusbruk.", note: "Planera med Alva", href: "/products/medium/" },
+      { label: "Voltrix Max", range: "9-12 kWh", body: "För längre autonomi, professionella arbetsflöden och framtida expansion.", note: "Planera med Alva", href: "/products/max/" },
+    ],
+    addons: [
+      { key: "voltdock", name: "VoltDock", body: "För enheter, skrivbord och tillfälliga arbetsplatser.", slug: "voltdock" },
+      { key: "backpack", name: "Backpack Power", body: "För sista metern och för att bära kraften närmare.", href: "/views/b2b.html" },
+      { key: "mobility", name: "Mobilitetsval", body: "För utvalda rutiner där ett batteri behöver flyttas längre.", href: "/views/b2b.html" },
+    ],
+    specs: [
+      ["Batterikemi", "NCM"],
+      ["Batteriexpansion", "1-12 kWh per inverter/base setup"],
+      ["5-Pack Kit-kapacitet", "5 kWh"],
+      ["Mer kapacitet", "Ytterligare inverter/base setup krävs"],
+      ["Utomhusklassning", "IP65"],
+      ["Temperaturområde", "-20 C till +65 C"],
+      ["Kommunikation", "WiFi / Bluetooth"],
+      ["Kontroll", "Molnplattform / app"],
+      ["Tillbehör", "VoltDock, Backpack Power, mobilitetsval"],
+    ],
+  };
+  const selectedCopy = copies[lang] ?? copies.en;
+
+  return lang === "sv" ? { ...baseCopy, ...selectedCopy, ...svData } : { ...baseCopy, ...selectedCopy };
 }

@@ -320,6 +320,19 @@ const LANGUAGE_OVERRIDES = {
   },
 };
 
+LANGUAGE_OVERRIDES.sv.pages = {
+  solutions: {
+    eyebrow: "Lösningar",
+    title: "Börja med hur du använder energi.",
+    body: "Välj scenariot som passar ditt hem, dina säsongsrutiner eller ditt fältarbete.",
+  },
+  support: {
+    eyebrow: "Support",
+    title: "Kunskap för att välja, använda och bygga ut Voltrix.",
+    body: "En första supportstruktur för instruktioner, FAQ, felsökning och direktkontakt.",
+  },
+};
+
 const CLUSTER_OVERRIDES = {
   [MARKET_CLUSTERS.ITALY]: {},
 };

@@ -1,0 +1,59 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "Vendure: Server",
+      "type": "node",
+      "request": "launch",
+      "runtimeExecutable": "npm.cmd",
+      "runtimeArgs": ["run", "dev:server"],
+      "cwd": "${workspaceFolder}/vendure",
+      "console": "integratedTerminal",
+      "skipFiles": ["<node_internals>/**"],
+      "serverReadyAction": {
+        "pattern": "Dashboard UI:\\s+(http://localhost:2605/dashboard)",
+        "uriFormat": "%s",
+        "action": "openExternally"
+      }
+    },
+    {
+      "name": "Vendure: Worker",
+      "type": "node",
+      "request": "launch",
+      "runtimeExecutable": "npm.cmd",
+      "runtimeArgs": ["run", "dev:worker"],
+      "cwd": "${workspaceFolder}/vendure",
+      "console": "integratedTerminal",
+      "skipFiles": ["<node_internals>/**"]
+    },
+    {
+      "name": "Vendure: Dashboard Dev (development only)",
+      "type": "node",
+      "request": "launch",
+      "runtimeExecutable": "npm.cmd",
+      "runtimeArgs": ["run", "dev:dashboard"],
+      "cwd": "${workspaceFolder}/vendure",
+      "console": "integratedTerminal",
+      "skipFiles": ["<node_internals>/**"]
+    }
+  ],
+  "compounds": [
+    {
+      "name": "Vendure: Server + Worker",
+      "configurations": [
+        "Vendure: Server",
+        "Vendure: Worker"
+      ],
+      "stopAll": true
+    },
+    {
+      "name": "Vendure: Server + Worker + Dashboard Dev",
+      "configurations": [
+        "Vendure: Server",
+        "Vendure: Worker",
+        "Vendure: Dashboard Dev (development only)"
+      ],
+      "stopAll": true
+    }
+  ]
+}

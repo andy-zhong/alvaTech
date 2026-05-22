@@ -215,10 +215,16 @@
 }
 
 .showroom-featured {
+  position: relative;
   display: grid;
   grid-template-columns: minmax(0, 1fr) minmax(320px, 0.86fr);
   gap: clamp(34px, 5vw, 70px);
   align-items: center;
+}
+
+.showroom-featured__copy {
+  position: relative;
+  z-index: 1;
 }
 
 .showroom-capacity-scale {

@@ -92,8 +92,47 @@
 
 /* Quantity stepper for fixed-price items */
 .cart-line__qty {
-  margin-top: 0;
+  margin-top: 2px;
+}
+
+.cart-quantity-stepper {
+  display: inline-grid;
+  grid-template-columns: 34px minmax(34px, auto) 34px;
+  align-items: center;
+  min-height: 34px;
+  background: transparent;
+}
+
+.cart-quantity-stepper__button {
   display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 34px;
+  min-width: 34px;
+  height: 34px;
+  border: 0;
+  background: transparent;
+  color: var(--text-dark);
+  cursor: pointer;
+  font-family: inherit;
+  font-size: 1rem;
+  font-weight: 700;
+  line-height: 1;
+}
+
+.cart-quantity-stepper__button:hover,
+.cart-quantity-stepper__button:focus-visible {
+  background: rgba(15, 42, 36, 0.06);
+}
+
+.cart-quantity-stepper__value {
+  min-width: 34px;
+  padding: 0 10px;
+  color: var(--text-dark);
+  font-size: 0.9rem;
+  font-weight: 700;
+  line-height: 34px;
+  text-align: center;
 }
 
 /* ─── Right column ───────────────────────────────────────────────────────── */
@@ -187,6 +226,13 @@
   opacity: 0.35;
   margin: 0;
   line-height: 1.5;
+}
+
+.cart-summary__sync-error {
+  color: #9f2d20;
+  font-size: 0.82rem;
+  line-height: 1.45;
+  margin: 2px 0 0;
 }
 
 /* ─── Action buttons ─────────────────────────────────────────────────────── */
@@ -412,12 +458,6 @@ body[data-page="buy-product"] .section {
 .cart-line__remove:hover,
 .cart-line__remove:focus-visible {
   color: #9f2e24;
-}
-
-.cart-line__qty.battery-control {
-  border: 1px solid var(--line-soft);
-  border-radius: 999px;
-  background: transparent;
 }
 
 .cart-sidebar {

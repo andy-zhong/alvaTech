@@ -1,4 +1,5 @@
 const ABOUT_COPY = {
+  en: {
   eyebrow: "ABOUT ALVA",
   headline: "A Swedish energy company building practical green technology for everyday use.",
   body:
@@ -29,14 +30,47 @@ const ABOUT_COPY = {
   ctaHeadline: "Explore how Alva is building the next generation of flexible energy products.",
   productsButton: "View products",
   solutionsButton: "Explore solutions",
+  },
+  sv: {
+    eyebrow: "OM ALVA",
+    headline: "Ett svenskt energibolag som bygger praktisk grön teknik för vardagen.",
+    body:
+      "Alva Technology är ett svenskt bolag fokuserat på innovativa gröna energiprodukter som gör ren kraft mer flexibel, användbar och tillgänglig i vardagen.",
+    statementHeadline: "Vi tror att energi ska flytta närmare platserna där livet och arbetet sker.",
+    statementBody:
+      "Energiomställningen handlar inte bara om att producera renare el. Den handlar också om att göra energin enklare att lagra, flytta och använda där människor faktiskt behöver den - hemma, utomhus, på plats och i vardagens rutiner.",
+    buildEyebrow: "VAD VI BYGGER",
+    buildHeadline: "Gröna energiprodukter med en ny känsla av flexibilitet.",
+    buildBody:
+      "Alva utvecklar modulära energisystem som utmanar hur lagringsprodukter vanligtvis används. I stället för att se batterier som fast utrustning bygger vi plattformar som stödjer kompakt installation, kapacitetsutbyggnad och portabel användning med kompatibla komponenter.",
+    buildPoints: [
+      "Modulära batteriplattformar",
+      "Expanderbar energilagring",
+      "Portabla tillbehör",
+      "Produktdesign för nordiska förhållanden",
+    ],
+    mattersHeadline: "Från fast lagring till användbar kraft på fler platser.",
+    mattersBody:
+      "Många energiprodukter är byggda kring en fast plats. Alva arbetar annorlunda. Våra system är byggda för rutinerna runt produkten: fritidshus, utomhusmiljöer, servicebilar, fältteam och stunderna när användbar kraft behöver flytta bortom väggen.",
+    swedishEyebrow: "SVENSK DESIGN",
+    swedishHeadline: "Utformat för nordiska rutiner, väder och sätt att leva.",
+    swedishBody:
+      "Som svenskt bolag designar Alva med nordiska förhållanden i åtanke: skiftande årstider, kompakta ytor, utomhusrutiner och behovet av pålitliga produkter som känns enkla att använda. Målet är att kombinera teknisk innovation med lugn, funktionell design.",
+    philosophyHeadline: "Innovation ska kännas praktisk.",
+    philosophyBody:
+      "Vi fokuserar på produkter som inte bara är tekniskt avancerade, utan också begripliga, modulära och användbara i verkliga situationer. För Alva betyder innovation att skapa energisystem som passar in i vardagen i stället för att kräva att människor anpassar sina rutiner efter tekniken.",
+    ctaHeadline: "Utforska hur Alva bygger nästa generation flexibla energiprodukter.",
+    productsButton: "Visa produkter",
+    solutionsButton: "Utforska lösningar",
+  },
 };
 
 function getRelativePath(page) {
   return window.location.pathname.includes("/views/") ? `./${page}` : `views/${page}`;
 }
 
-export function renderAboutPage() {
-  const copy = ABOUT_COPY;
+export function renderAboutPage({ lang } = {}) {
+  const copy = ABOUT_COPY[lang] ?? ABOUT_COPY.en;
   const productsPath = getRelativePath("products.html");
   const solutionsPath = getRelativePath("solutions.html");
 

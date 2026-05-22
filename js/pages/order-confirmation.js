@@ -50,12 +50,25 @@ const ORDER_CONFIRMATION_COPY = {
 };
 
 function getCopy(lang) {
-  return ORDER_CONFIRMATION_COPY[lang] ?? ORDER_CONFIRMATION_COPY.en;
+  const copy = ORDER_CONFIRMATION_COPY[lang] ?? ORDER_CONFIRMATION_COPY.en;
+  const vendureCopy = lang === "sv"
+    ? {
+        vendureLabel: "Vendure-order",
+        vendureSource: "Ordern skapades i Vendure och kan granskas i Dashboard.",
+      }
+    : {
+        vendureLabel: "Vendure order",
+        vendureSource: "This order was created in Vendure and can be reviewed in the Dashboard.",
+      };
+
+  return { ...copy, ...vendureCopy };
 }
 
 export function renderOrderConfirmationPage(lang = "sv") {
   const copy = getCopy(lang);
-  const orderNumber = new URLSearchParams(window.location.search).get("order") || "";
+  const params = new URLSearchParams(window.location.search);
+  const orderNumber = params.get("order") || "";
+  const isVendureOrder = params.get("source") === "vendure";
 
   return `
     <section class="section">
@@ -73,9 +86,15 @@ export function renderOrderConfirmationPage(lang = "sv") {
 
         ${orderNumber ? `
           <div class="order-confirm__number">
-            <p class="order-confirm__number-label">${copy.numberLabel}</p>
+            <p class="order-confirm__number-label">${isVendureOrder ? copy.vendureLabel : copy.numberLabel}</p>
             <p class="order-confirm__number-value">${orderNumber}</p>
           </div>
+        ` : ""}
+
+        ${isVendureOrder ? `
+          <p class="order-confirm__source">
+            ${copy.vendureSource}
+          </p>
         ` : ""}
 
         <p class="order-confirm__message">${copy.message}</p>

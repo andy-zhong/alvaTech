@@ -60,12 +60,14 @@ const SOLUTION_ICONS = {
 
 export function renderSolutionsPage({ lang }) {
   const content = getPlatformContent(lang);
+  const page = content.pages?.solutions ?? OVERVIEW_COPY.hero;
+  const platform = content.platform ?? OVERVIEW_COPY.platform;
 
   return `
     <section class="solutions-overview-hero">
-      <span class="eyebrow">${OVERVIEW_COPY.hero.eyebrow}</span>
-      <h1>${OVERVIEW_COPY.hero.title}</h1>
-      <p>${OVERVIEW_COPY.hero.body}</p>
+      <span class="eyebrow">${page.eyebrow}</span>
+      <h1>${page.title}</h1>
+      <p>${page.body}</p>
     </section>
 
     <section class="solutions-overview-cards" aria-label="Voltrix solution paths">
@@ -73,16 +75,16 @@ export function renderSolutionsPage({ lang }) {
     </section>
 
     <section class="solutions-overview-platform">
-      <span class="eyebrow">${OVERVIEW_COPY.platform.eyebrow}</span>
-      <h2>${OVERVIEW_COPY.platform.title}</h2>
-      <p>${OVERVIEW_COPY.platform.body}</p>
+      <span class="eyebrow">${platform.eyebrow}</span>
+      <h2>${platform.title}</h2>
+      <p>${platform.body}</p>
     </section>
   `;
 }
 
 function renderSolutionCard(solution) {
   const href = SOLUTION_ROUTES[solution.id] ?? "/views/solutions.html";
-  const copy = OVERVIEW_COPY.cards[solution.id] ?? {
+  const copy = {
     label: solution.label ?? solution.title,
     title: solution.title,
     body: solution.body,

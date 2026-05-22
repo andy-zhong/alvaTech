@@ -21,3 +21,10 @@ logs/
 # Build / temp
 dist/
 build/
+
+# Vendure local runtime data
+vendure/vendure.sqlite
+vendure/vendure.sqlite-*
+vendure/.vendure/
+vendure/static/assets/
+vendure/static/email/test-emails/

@@ -111,7 +111,7 @@ export function renderHomePage({ lang }) {
             <p>${content.productFit.body}</p>
           </div>
           <div class="platform-section-actions">
-            <a class="button button--primary" href="/views/products.html">${content.productFit.primary}</a>
+            <a class="button button--primary" href="/views/product.html?slug=voltrix-5-pack-kit">${content.productFit.primary}</a>
             <a class="button button--secondary" href="/views/products.html">${content.productFit.secondary}</a>
           </div>
         </div>

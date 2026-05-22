@@ -1,5 +1,6 @@
 import { getProductBySlug, getProductContent } from "../services/product-service.js";
 import { getStoredLanguage, t } from "../services/language-service.js";
+import { isVendureCartEnabled, syncLocalCartToVendure } from "../services/vendure-cart-sync.js";
 
 const CART_COPY = {
   en: {
@@ -7,12 +8,14 @@ const CART_COPY = {
     summaryTitle: "Order summary",
     checkout: "Continue to checkout",
     continue: "Continue shopping",
+    syncing: "Syncing cart...",
   },
   sv: {
     title: "Granska din konfiguration",
     summaryTitle: "Konfigurationssammanfattning",
     checkout: "Fortsatt till kassan",
     continue: "Justera system",
+    syncing: "Synkar varukorg...",
   },
   fi: {
     title: "Tarkista kokoonpano",
@@ -100,13 +103,14 @@ export function renderBuyProductPage({ lang, route }) {
           <p class="cart-summary__legal">${t(lang, "cartTaxNote")}</p>
 
           <div class="cart-actions">
-            <a class="button button--primary" href="/views/checkout.html">
+            <a class="button button--primary" href="/views/checkout.html" data-vendure-checkout-link>
               ${copy.checkout}
             </a>
             <a class="button button--secondary" href="/views/products.html">
               ${copy.continue}
             </a>
           </div>
+          <p class="cart-summary__sync-error" data-vendure-sync-error hidden></p>
         </aside>
 
       </div>
@@ -147,11 +151,11 @@ function renderCartLine(item, lang) {
       <div class="cart-line__body">
         <p class="cart-line__name">${content.name}</p>
         <p class="cart-line__meta">${item.unitPrice.toLocaleString("sv-SE")} SEK ${t(lang, "cartPerUnit")}</p>
-        <div class="battery-control cart-line__qty">
-          <button class="battery-btn qty-decrease" data-item-id="${item.cartItemId}"
+        <div class="cart-quantity-stepper cart-line__qty">
+          <button class="cart-quantity-stepper__button qty-decrease" data-item-id="${item.cartItemId}"
                   aria-label="${t(lang, "cartDecrease")}">-</button>
-          <span class="battery-count qty-value" data-item-id="${item.cartItemId}">${qty}</span>
-          <button class="battery-btn qty-increase" data-item-id="${item.cartItemId}"
+          <span class="cart-quantity-stepper__value qty-value" data-item-id="${item.cartItemId}">${qty}</span>
+          <button class="cart-quantity-stepper__button qty-increase" data-item-id="${item.cartItemId}"
                   aria-label="${t(lang, "cartIncrease")}">+</button>
         </div>
       </div>
@@ -190,6 +194,7 @@ function renderSummaryRow(item, lang) {
 
 export function afterRenderBuyProduct({ lang } = {}) {
   const activeLang = lang || getStoredLanguage();
+  const checkoutLink = document.querySelector("[data-vendure-checkout-link]");
 
   document.querySelectorAll(".cart-line__remove").forEach((btn) => {
     btn.addEventListener("click", () => {
@@ -204,6 +209,19 @@ export function afterRenderBuyProduct({ lang } = {}) {
 
   document.querySelectorAll(".qty-increase").forEach((btn) => {
     btn.addEventListener("click", () => updateCartQuantity(btn.dataset.itemId, +1, activeLang));
+  });
+
+  checkoutLink?.addEventListener("click", async (event) => {
+    if (!isVendureCartEnabled()) {
+      return;
+    }
+
+    event.preventDefault();
+    if (checkoutLink.getAttribute("aria-disabled") === "true") {
+      return;
+    }
+
+    await syncCartThenContinue(checkoutLink.href, checkoutLink);
   });
 }
 
@@ -251,4 +269,42 @@ function updateCartQuantity(cartItemId, delta, lang) {
   if (qtyEl)   qtyEl.innerText   = newQty;
   if (priceEl) priceEl.innerText = `${lineTotal.toLocaleString("sv-SE")} SEK`;
   if (totalEl) totalEl.innerText = `${grandTotal.toLocaleString("sv-SE")} SEK`;
+}
+
+async function syncCartThenContinue(nextUrl, checkoutLink) {
+  const errorEl = document.querySelector("[data-vendure-sync-error]");
+  const originalLabel = checkoutLink.textContent.trim();
+  const copy = getCartCopy(getStoredLanguage());
+
+  checkoutLink.setAttribute("aria-disabled", "true");
+  checkoutLink.textContent = copy.syncing;
+  hideVendureSyncError(errorEl);
+
+  try {
+    const cart = JSON.parse(localStorage.getItem("cart")) || [];
+    await syncLocalCartToVendure(cart);
+    window.location.href = nextUrl;
+  } catch (error) {
+    showVendureSyncError(errorEl, error.message || String(error));
+    checkoutLink.removeAttribute("aria-disabled");
+    checkoutLink.textContent = originalLabel;
+  }
+}
+
+function showVendureSyncError(errorEl, message) {
+  if (!errorEl) {
+    return;
+  }
+
+  errorEl.hidden = false;
+  errorEl.textContent = message;
+}
+
+function hideVendureSyncError(errorEl) {
+  if (!errorEl) {
+    return;
+  }
+
+  errorEl.hidden = true;
+  errorEl.textContent = "";
 }

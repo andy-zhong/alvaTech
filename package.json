@@ -4,6 +4,10 @@
   "description": "",
   "main": "index.js",
   "scripts": {
+    "commerce:dev": "npm --prefix vendure run dev",
+    "commerce:server": "npm --prefix vendure run dev:server",
+    "commerce:worker": "npm --prefix vendure run dev:worker",
+    "commerce:build": "npm --prefix vendure run build",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {

@@ -48,6 +48,55 @@ const SUPPORT_COPY = {
     ctaPrimary: "Contact Alva",
     ctaSecondary: "View products",
   },
+  sv: {
+    eyebrow: "Support",
+    title: "Support för att välja, använda och bygga ut Voltrix.",
+    body:
+      "En enkel startpunkt för vägledning, vanliga frågor och grundläggande felsökning innan du kontaktar Alva.",
+    quickLinks: [
+      ["Instruktioner", "Installation och vardagsanvändning", "#instructions"],
+      ["FAQ", "Vanliga produkt- och orderfrågor", "#faqs"],
+      ["Felsökning", "Första kontroller före support", "#troubleshooting"],
+    ],
+    instructions: {
+      eyebrow: "Instruktioner",
+      title: "Börja med grunderna.",
+      intro:
+        "Dessa anteckningar är en första guide för planering och användning av en Voltrix-setup. Slutliga installationsdetaljer ska bekräftas med Alva eller en godkänd installatör.",
+      items: [
+        ["Planera placeringen", "Placera systemet där ventilation, åtkomst och kabeldragning kan hanteras rent."],
+        ["Kontrollera batterimodulerna", "Se till att batteripacken sitter rätt och att synliga kontakter är rena och oskadade."],
+        ["Anslut tillbehör varsamt", "Använd kompatibla tillbehör som VoltDock endast med avsedd batterimodul och kraftkonfiguration."],
+        ["Spara produktinformation", "Spara orderinformation, produktnamn och bilder av setupen innan du begär support."],
+      ],
+    },
+    faqs: {
+      eyebrow: "FAQ",
+      title: "Vanliga frågor.",
+      items: [
+        ["Kan jag bygga ut senare?", "Ja. Voltrix är byggt som en modulär plattform, men kapacitetsplanering bör bekräftas före köp."],
+        ["Ingår installation?", "Installation beror på vald setup och marknad. Alva bekräftar tillgängliga alternativ under planeringen."],
+        ["Kan jag använda VoltDock utan batteri?", "VoltDock kan även användas från vägguttag, beroende på konfiguration."],
+        ["Var får jag orderhjälp?", "Använd kontaktsidan och inkludera orderdetaljer så att teamet kan hitta rätt setup."],
+      ],
+    },
+    troubleshooting: {
+      eyebrow: "Felsökning",
+      title: "Första kontroller.",
+      intro:
+        "Om något inte fungerar som väntat, börja med kontrollerna nedan. Sluta använda produkten vid synlig skada, ovanlig lukt, värme eller ljud.",
+      checks: [
+        ["Ingen ström", "Kontrollera att batteriet är laddat, sitter korrekt och att kablar eller uttag är anslutna."],
+        ["Enheten laddar inte", "Prova en annan kabel, kontrollera enhetens effektbehov och testa en enhet i taget."],
+        ["Oväntad avstängning", "Låt enheten vila, ta bort onödiga laster och kontrollera om batterikapaciteten är låg."],
+        ["Supportärende", "Skicka produktnamn, orderreferens, bilder och en kort beskrivning av vad som hände."],
+      ],
+    },
+    ctaTitle: "Behöver du hjälp med en riktig setup?",
+    ctaBody: "Kontakta Alva med produkt, orderreferens och en kort beskrivning av ärendet.",
+    ctaPrimary: "Kontakta Alva",
+    ctaSecondary: "Visa produkter",
+  },
 };
 
 function getSupportCopy(lang) {
