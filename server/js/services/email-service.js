@@ -10,14 +10,20 @@ const transporter = nodemailer.createTransport({
 
 async function sendB2BMail(data) {
   const { company, contact, email, phone, message } = data;
+  const recipients = (process.env.SALES_EMAIL || process.env.COMPANY_EMAIL || process.env.EMAIL_USER || "")
+    .split(",")
+    .map((item) => item.trim())
+    .filter(Boolean);
 
-  // 🔥 split multiple emails
-  const recipients = process.env.SALES_EMAIL.split(",");
+  if (!recipients.length) {
+    throw new Error("No sales recipient email is configured.");
+  }
 
   await transporter.sendMail({
     from: `"Alva Technology" <${process.env.EMAIL_USER}>`,
-    to: recipients, // 🔥 flera mottagare
-    subject: "New B2B Request",
+    to: recipients,
+    replyTo: email,
+    subject: `New Alva inquiry${company ? ` from ${company}` : ""}`,
     text: `
 Company: ${company}
 Contact person: ${contact}

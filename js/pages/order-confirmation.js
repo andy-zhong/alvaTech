@@ -1,18 +1,18 @@
 const ORDER_CONFIRMATION_COPY = {
   en: {
-    title: "Order Placed",
-    numberLabel: "Order Number",
+    title: "Order request received",
+    numberLabel: "Request number",
     message:
-      "Thank you. We've received your order and sent a confirmation to your email. Our team will be in touch shortly to confirm the details and arrange delivery.",
-    continueShopping: "Continue Shopping",
-    backHome: "Back to Home",
+      "Thank you. Alva has received your request. Our team will confirm price, availability and delivery window before any payment is arranged.",
+    continueShopping: "View products",
+    backHome: "Back to home",
   },
   sv: {
-    title: "Beställning mottagen",
-    numberLabel: "Ordernummer",
+    title: "Orderförfrågan mottagen",
+    numberLabel: "Förfrågningsnummer",
     message:
-      "Tack. Vi har tagit emot din beställning och skickat en bekräftelse till din e-post. Vårt team kontaktar dig inom kort för att bekräfta detaljerna och planera leveransen.",
-    continueShopping: "Fortsätt handla",
+      "Tack. Alva har tagit emot er förfrågan. Vi bekräftar pris, tillgänglighet och leveransfönster innan betalning ordnas.",
+    continueShopping: "Visa produkter",
     backHome: "Till startsidan",
   },
   fi: {
@@ -53,12 +53,16 @@ function getCopy(lang) {
   const copy = ORDER_CONFIRMATION_COPY[lang] ?? ORDER_CONFIRMATION_COPY.en;
   const vendureCopy = lang === "sv"
     ? {
-        vendureLabel: "Vendure-order",
-        vendureSource: "Ordern skapades i Vendure och kan granskas i Dashboard.",
+        vendureLabel: "Förfrågningsreferens",
+        vendureSource: "Förfrågan har skapats för intern granskning. Ingen betalning debiteras i detta steg.",
+        stripeLabel: "Orderreferens",
+        stripeSource: "Betalningen hanteras säkert via Stripe. Alva bekräftar ordern när betalningsstatusen har uppdaterats.",
       }
     : {
-        vendureLabel: "Vendure order",
-        vendureSource: "This order was created in Vendure and can be reviewed in the Dashboard.",
+        vendureLabel: "Request reference",
+        vendureSource: "This request has been created for internal review. Payment is not captured at this step.",
+        stripeLabel: "Order reference",
+        stripeSource: "Payment is handled securely by Stripe. Alva will confirm the order when payment status has updated.",
       };
 
   return { ...copy, ...vendureCopy };
@@ -69,6 +73,12 @@ export function renderOrderConfirmationPage(lang = "sv") {
   const params = new URLSearchParams(window.location.search);
   const orderNumber = params.get("order") || "";
   const isVendureOrder = params.get("source") === "vendure";
+  const isStripeOrder = params.get("source") === "stripe";
+
+  if (isStripeOrder) {
+    localStorage.removeItem("cart");
+    sessionStorage.removeItem("alvaPendingStripeOrder");
+  }
 
   return `
     <section class="section">
@@ -86,14 +96,14 @@ export function renderOrderConfirmationPage(lang = "sv") {
 
         ${orderNumber ? `
           <div class="order-confirm__number">
-            <p class="order-confirm__number-label">${isVendureOrder ? copy.vendureLabel : copy.numberLabel}</p>
+            <p class="order-confirm__number-label">${isStripeOrder ? copy.stripeLabel : isVendureOrder ? copy.vendureLabel : copy.numberLabel}</p>
             <p class="order-confirm__number-value">${orderNumber}</p>
           </div>
         ` : ""}
 
-        ${isVendureOrder ? `
+        ${isVendureOrder || isStripeOrder ? `
           <p class="order-confirm__source">
-            ${copy.vendureSource}
+            ${isStripeOrder ? copy.stripeSource : copy.vendureSource}
           </p>
         ` : ""}
 

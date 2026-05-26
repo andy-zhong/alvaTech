@@ -1,6 +1,9 @@
 import { getProductBySlug, getProductContent } from "../services/product-service.js";
 import { getStoredLanguage, t } from "../services/language-service.js";
 import { isVendureCartEnabled, syncLocalCartToVendure } from "../services/vendure-cart-sync.js";
+import { refreshCartPricesFromBackend } from "../services/commerce-catalog.js";
+
+const CART_NOTICE_KEY = "alva-cart-notice";
 
 const CART_COPY = {
   en: {
@@ -72,6 +75,7 @@ export function renderBuyProductPage({ lang, route }) {
 
   const grandTotal = cart.reduce((sum, item) => sum + item.unitPrice * (item.quantity || 1), 0);
   const itemCount  = cart.reduce((sum, item) => sum + (item.quantity || 1), 0);
+  const notice = consumeCartNotice();
 
   return `
     <section class="section">
@@ -81,6 +85,7 @@ export function renderBuyProductPage({ lang, route }) {
           ${itemCount} ${itemCount === 1 ? t(lang, "cartItemSingular") : t(lang, "cartItemPlural")}
         </span>
       </div>
+      ${notice ? `<p class="cart-summary__sync-error">${notice}</p>` : ""}
 
       <div class="cart-layout">
 
@@ -196,6 +201,8 @@ export function afterRenderBuyProduct({ lang } = {}) {
   const activeLang = lang || getStoredLanguage();
   const checkoutLink = document.querySelector("[data-vendure-checkout-link]");
 
+  hydrateBackendCartSnapshot(activeLang);
+
   document.querySelectorAll(".cart-line__remove").forEach((btn) => {
     btn.addEventListener("click", () => {
       removeCartItem(btn.dataset.itemId);
@@ -282,6 +289,19 @@ async function syncCartThenContinue(nextUrl, checkoutLink) {
 
   try {
     const cart = JSON.parse(localStorage.getItem("cart")) || [];
+    const refresh = await refreshCartPricesFromBackend(cart);
+
+    if (refresh.unavailable.length) {
+      throw new Error("One or more products are no longer available in the backend catalog.");
+    }
+
+    if (refresh.changed) {
+      localStorage.setItem("cart", JSON.stringify(refresh.updatedCart));
+      setCartNotice("Prices were updated from the backend. Review the cart and continue again.");
+      rerenderCart(getStoredLanguage());
+      return;
+    }
+
     await syncLocalCartToVendure(cart);
     window.location.href = nextUrl;
   } catch (error) {
@@ -307,4 +327,36 @@ function hideVendureSyncError(errorEl) {
 
   errorEl.hidden = true;
   errorEl.textContent = "";
+}
+
+async function hydrateBackendCartSnapshot(lang) {
+  if (!isVendureCartEnabled()) {
+    return;
+  }
+
+  try {
+    const cart = JSON.parse(localStorage.getItem("cart")) || [];
+    if (!cart.length) return;
+
+    const refresh = await refreshCartPricesFromBackend(cart);
+    if (!refresh.changed || refresh.unavailable.length) {
+      return;
+    }
+
+    localStorage.setItem("cart", JSON.stringify(refresh.updatedCart));
+    setCartNotice("Prices were updated from the backend.");
+    rerenderCart(lang);
+  } catch (error) {
+    console.warn("[commerce] Could not refresh cart prices:", error);
+  }
+}
+
+function setCartNotice(message) {
+  sessionStorage.setItem(CART_NOTICE_KEY, message);
+}
+
+function consumeCartNotice() {
+  const notice = sessionStorage.getItem(CART_NOTICE_KEY);
+  sessionStorage.removeItem(CART_NOTICE_KEY);
+  return notice;
 }

@@ -475,6 +475,53 @@ body[data-page="checkout"] .section {
   color: #9f2e24;
 }
 
+.checkout-payment {
+  display: grid;
+  gap: 18px;
+  padding: 22px 0;
+  border-top: 1px solid var(--line-soft);
+  border-bottom: 1px solid var(--line-soft);
+}
+
+.checkout-payment[hidden] {
+  display: none;
+}
+
+.checkout-payment__header {
+  display: grid;
+  gap: 6px;
+}
+
+.checkout-payment__eyebrow,
+.checkout-payment__title,
+.checkout-payment__status {
+  margin: 0;
+}
+
+.checkout-payment__eyebrow {
+  color: rgba(15, 42, 36, 0.56);
+  font-size: 0.72rem;
+  font-weight: 900;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+.checkout-payment__title {
+  color: var(--text-dark);
+  font-size: 1.18rem;
+  line-height: 1.25;
+}
+
+.checkout-payment__status {
+  color: rgba(15, 42, 36, 0.62);
+  font-size: 0.86rem;
+  line-height: 1.5;
+}
+
+.checkout-payment__element {
+  min-height: 64px;
+}
+
 .checkout-submit {
   width: min(100%, 420px);
   box-shadow: none;

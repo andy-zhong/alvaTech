@@ -1,0 +1,3 @@
+window.ALVA_API_BASE_URL = "";
+window.ALVA_VENDURE_SHOP_API = "";
+window.ALVA_STRIPE_PUBLISHABLE_KEY = "";

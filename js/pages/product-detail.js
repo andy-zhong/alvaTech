@@ -1,5 +1,10 @@
 import { getProductBySlug, getProductContent } from "../services/product-service.js";
 import { t } from "../services/language-service.js";
+import {
+  fetchCommerceCatalog,
+  formatCommercePrice,
+  getCommerceRecordForSlug,
+} from "../services/commerce-catalog.js";
 
 let batteryCount = 1;
 let currentMediaIndex = 0;
@@ -292,14 +297,14 @@ export function renderProductDetailPage({ lang, slug, route }) {
 
       <article class="detail-copy">
         <span class="eyebrow">${t(lang, "detailEyebrow")}</span>
-        <div class="price-badge">${product.price}</div>
+        <div class="price-badge" data-commerce-price="${product.slug}">${product.price}</div>
         <h1>${content.name}</h1>
         <p>${content.intro}</p>
 
         ${renderBatterySelector(product, labels)}
 
         <div class="detail-actions">
-          <button class="button button--primary" id="add-to-cart">
+          <button class="button button--primary" id="add-to-cart" data-commerce-action="${product.slug}">
             ${labels.configure}
           </button>
           <a class="button button--secondary" href="${route("views/b2b.html")}">
@@ -555,6 +560,7 @@ export function afterRenderProductDetail(product) {
   const content = getProductContent(product, lang);
 
   initProductMediaViewer(product, content);
+  hydrateCommercePrice(product, lang);
 
   const button = document.getElementById("add-to-cart");
 
@@ -600,6 +606,39 @@ export function afterRenderProductDetail(product) {
       addSimpleToCart(product);
       window.location.href = "/views/buy-product.html";
     });
+  }
+}
+
+async function hydrateCommercePrice(product, lang) {
+  const priceEl = document.querySelector(`[data-commerce-price="${product.slug}"]`);
+  const actionEl = document.querySelector(`[data-commerce-action="${product.slug}"]`);
+
+  try {
+    const catalog = await fetchCommerceCatalog();
+    const record = getCommerceRecordForSlug(catalog, product.slug);
+
+    if (!record) {
+      if (actionEl) {
+        actionEl.disabled = true;
+        actionEl.textContent = lang === "sv" ? "Begär tillgänglighet" : "Request availability";
+      }
+      return;
+    }
+
+    const formatted = formatCommercePrice(record, lang);
+    if (formatted && priceEl) {
+      priceEl.textContent = formatted;
+    }
+
+    if (typeof record.price === "number") {
+      if (product.config?.batteryPrice) {
+        product.config.batteryPrice = record.price;
+      } else {
+        product.basePrice = record.price;
+      }
+    }
+  } catch (error) {
+    console.warn("[commerce] Could not hydrate product price:", error);
   }
 }
 

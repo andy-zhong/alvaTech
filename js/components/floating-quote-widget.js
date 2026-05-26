@@ -8,6 +8,8 @@
  *   — all other UI logic (collapse/expand/close, validation, i18n) is unchanged
  */
 
+import { apiUrl } from "../app/runtime-config.js";
+
 const WIDGET_COPY = {
   en: {
     collapsedText:  "Need help choosing the right kit?",
@@ -430,7 +432,7 @@ export function mountFloatingQuoteWidget({ lang }) {
     render();
 
     try {
-      const res  = await fetch("/api/quote", {
+      const res  = await fetch(apiUrl("/api/quote"), {
         method:  "POST",
         headers: { "Content-Type": "application/json" },
         body:    JSON.stringify(model.values),

@@ -24,18 +24,40 @@
           Looking for a business solution, bulk pricing, or a custom setup? Fill in the form and our team will contact you.
         </p>
 
-        <form id="b2b-form" class="b2b-form">
+        <form id="b2b-form" class="b2b-form" novalidate>
+          <p id="b2b-status" class="b2b-status hidden" role="status" aria-live="polite"></p>
+
           <div class="form-row">
-            <input type="text" name="company" placeholder="Company name" required />
-            <input type="text" name="contact" placeholder="Contact person" required />
+            <label class="b2b-field">
+              <span id="b2b-label-company">Company name</span>
+              <input type="text" name="company" autocomplete="organization" />
+              <small class="b2b-field-error" data-error-for="company"></small>
+            </label>
+            <label class="b2b-field">
+              <span id="b2b-label-contact">Contact person</span>
+              <input type="text" name="contact" autocomplete="name" required />
+              <small class="b2b-field-error" data-error-for="contact"></small>
+            </label>
           </div>
 
           <div class="form-row">
-            <input type="email" name="email" placeholder="Email address" required />
-            <input type="tel" name="phone" placeholder="Phone number" required />
+            <label class="b2b-field">
+              <span id="b2b-label-email">Email address</span>
+              <input type="email" name="email" autocomplete="email" required />
+              <small class="b2b-field-error" data-error-for="email"></small>
+            </label>
+            <label class="b2b-field">
+              <span id="b2b-label-phone">Phone number</span>
+              <input type="tel" name="phone" autocomplete="tel" required />
+              <small class="b2b-field-error" data-error-for="phone"></small>
+            </label>
           </div>
 
-          <textarea name="message" placeholder="Tell us what you're looking for..." required></textarea>
+          <label class="b2b-field">
+            <span id="b2b-label-message">Tell us what you're looking for</span>
+            <textarea name="message" required></textarea>
+            <small class="b2b-field-error" data-error-for="message"></small>
+          </label>
 
           <!-- 🔥 FIX: id för translations -->
           <button id="b2b-submit" type="submit" class="button button--primary">
@@ -43,8 +65,8 @@
           </button>
 
           <!-- 🔥 redan korrekt -->
-          <p id="b2b-success" class="b2b-success hidden">
-            ✅ Your request has been sent. We will contact you shortly.
+          <p id="b2b-success" class="b2b-success hidden" role="status" aria-live="polite">
+            Your request has been sent. We will contact you shortly.
           </p>
         </form>
 
@@ -54,6 +76,7 @@
 
   <div id="footer"></div>
 
+  <script src="../js/config.js"></script>
   <script type="module" src="../js/main.js"></script>
 </body>
 </html>

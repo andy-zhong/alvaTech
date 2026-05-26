@@ -45,14 +45,22 @@ export async function submitVendureGuestCheckout(payload, cart = []) {
   }
 }
 
-async function runVendureGuestCheckout(payload, cart) {
-  const activeOrder = await ensureActiveOrder(cart);
+export async function prepareVendureGuestCheckoutForPayment(payload, cart = []) {
+  try {
+    return await runVendureGuestCheckoutPreparation(payload, cart);
+  } catch (error) {
+    if (!isNoActiveOrderMessage(error)) {
+      throw error;
+    }
 
-  await assertOrderHasLines(activeOrder);
-  await applyCustomer(payload, cart);
-  await applyAddresses(payload, cart);
-  await applyCustomerNote(payload, cart);
-  await applyFirstEligibleShippingMethod(cart);
+    clearVendureCartSyncSignature();
+    await syncLocalCartToVendure(cart);
+    return runVendureGuestCheckoutPreparation(payload, cart);
+  }
+}
+
+async function runVendureGuestCheckout(payload, cart) {
+  const preparedOrder = await runVendureGuestCheckoutPreparation(payload, cart);
   const paymentOrder = await authorizePayment(cart);
 
   clearVendureCartSyncSignature();
@@ -60,6 +68,23 @@ async function runVendureGuestCheckout(payload, cart) {
   return {
     orderCode: paymentOrder.code,
     orderState: paymentOrder.state,
+    preparedOrder,
+  };
+}
+
+async function runVendureGuestCheckoutPreparation(payload, cart) {
+  const activeOrder = await ensureActiveOrder(cart);
+
+  await assertOrderHasLines(activeOrder);
+  await applyCustomer(payload, cart);
+  await applyAddresses(payload, cart);
+  await applyCustomerNote(payload, cart);
+  await applyFirstEligibleShippingMethod(cart);
+  const preparedOrder = await transitionOrderToPaymentState(cart);
+
+  return {
+    orderCode: preparedOrder.code,
+    orderState: preparedOrder.state,
   };
 }
 
@@ -94,7 +119,7 @@ async function ensureActiveOrder(cart) {
   const syncedOrder = await getActiveOrderOrNull();
 
   if (!syncedOrder?.lines?.length) {
-    throw new Error("No active Vendure order found. Return to the cart and continue again.");
+    throw new Error("The selected products could not be prepared for submission. Return to the cart and continue again.");
   }
 
   return syncedOrder;
@@ -107,7 +132,7 @@ async function getActiveOrderOrNull() {
 
 async function assertOrderHasLines(order) {
   if (!order.lines?.length) {
-    throw new Error("Vendure order has no items. Return to the cart and continue again.");
+    throw new Error("The order request has no products. Return to the cart and continue again.");
   }
 }
 
@@ -164,12 +189,7 @@ async function applyFirstEligibleShippingMethod(cart) {
 }
 
 async function authorizePayment(cart) {
-  const transitioned = await withActiveOrderRecovery("transitionOrderToState", cart, () => transitionVendureOrderToState("ArrangingPayment"));
-  const transitionResult = unwrapVendureResult(transitioned);
-
-  if (transitionResult?.errorCode && transitionResult.errorCode !== "ORDER_STATE_TRANSITION_ERROR") {
-    throw new Error(transitionResult.message || `transitionOrderToState failed with ${transitionResult.errorCode}`);
-  }
+  await transitionOrderToPaymentState(cart);
 
   const paymentResult = await withActiveOrderRecovery("addPaymentToOrder", cart, () => addVendurePaymentToOrder({
       method: DEFAULT_PAYMENT_METHOD,
@@ -185,6 +205,22 @@ async function authorizePayment(cart) {
   }
 
   return order;
+}
+
+async function transitionOrderToPaymentState(cart) {
+  const transitioned = await withActiveOrderRecovery("transitionOrderToState", cart, () => transitionVendureOrderToState("ArrangingPayment"));
+  const transitionResult = unwrapVendureResult(transitioned);
+
+  if (transitionResult?.errorCode && transitionResult.errorCode !== "ORDER_STATE_TRANSITION_ERROR") {
+    throw new Error(transitionResult.message || `transitionOrderToState failed with ${transitionResult.errorCode}`);
+  }
+
+  if (transitionResult?.errorCode === "ORDER_STATE_TRANSITION_ERROR") {
+    const data = await getVendureActiveOrder();
+    return data.activeOrder;
+  }
+
+  return transitionResult;
 }
 
 function assertNoVendureError(result, label) {
@@ -209,7 +245,7 @@ async function withActiveOrderRecovery(label, cart, operation) {
   const retryUnwrapped = unwrapVendureResult(retryResult);
 
   if (isNoActiveOrderError(retryUnwrapped)) {
-    throw new Error(`${label}: ${retryUnwrapped.message || "No active Vendure order after recovery."}`);
+    throw new Error(`${label}: ${retryUnwrapped.message || "The selected products could not be prepared after retry."}`);
   }
 
   return retryResult;

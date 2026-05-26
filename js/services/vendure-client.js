@@ -374,3 +374,11 @@ export async function addVendurePaymentToOrder(input = { method: "standard-payme
     }
   `, { input });
 }
+
+export async function createVendureStripePaymentIntent() {
+  return vendureRequest(`
+    mutation CreateStripePaymentIntent {
+      createStripePaymentIntent
+    }
+  `);
+}

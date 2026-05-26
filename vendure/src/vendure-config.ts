@@ -9,6 +9,7 @@ import { defaultEmailHandlers, EmailPlugin, FileBasedTemplateLoader } from '@ven
 import { AssetServerPlugin } from '@vendure/asset-server-plugin';
 import { DashboardPlugin } from '@vendure/dashboard/plugin';
 import { GraphiqlPlugin } from '@vendure/graphiql-plugin';
+import { StripePlugin } from '@vendure-community/stripe-plugin';
 import 'dotenv/config';
 import path from 'path';
 import { AlvaOrderReviewPlugin } from './plugins/alva-order-review/alva-order-review.plugin';
@@ -16,6 +17,7 @@ import { AlvaOrderReviewPlugin } from './plugins/alva-order-review/alva-order-re
 const IS_DEV = process.env.APP_ENV === 'dev';
 const serverPort = +process.env.PORT || 2605;
 const storefrontUrl = process.env.STOREFRONT_URL || 'http://localhost:3000';
+const storefrontOrigins = parseOrigins(process.env.STOREFRONT_ORIGINS || storefrontUrl);
 const localStorefrontOrigins = [
     storefrontUrl,
     'http://localhost:5500',
@@ -26,6 +28,13 @@ const localStorefrontOrigins = [
     'http://127.0.0.1:5173',
 ];
 
+function parseOrigins(value: string): string[] {
+    return value
+        .split(',')
+        .map(origin => origin.trim())
+        .filter(Boolean);
+}
+
 export const config: VendureConfig = {
     apiOptions: {
         port: serverPort,
@@ -33,7 +42,7 @@ export const config: VendureConfig = {
         shopApiPath: 'shop-api',
         trustProxy: IS_DEV ? false : 1,
         cors: {
-            origin: IS_DEV ? Array.from(new Set(localStorefrontOrigins)) : storefrontUrl,
+            origin: IS_DEV ? Array.from(new Set(localStorefrontOrigins)) : storefrontOrigins,
             credentials: true,
         },
         // The following options are useful in development mode,
@@ -83,6 +92,13 @@ export const config: VendureConfig = {
         DefaultJobQueuePlugin.init({ useDatabaseForBuffer: true }),
         DefaultSearchPlugin.init({ bufferUpdates: false, indexStockStatus: true }),
         AlvaOrderReviewPlugin,
+        StripePlugin.init({
+            metadata: (injector, ctx, order) => ({
+                source: 'alva-storefront',
+                orderCode: order.code,
+                channelCode: ctx.channel.code,
+            }),
+        }),
         EmailPlugin.init({
             devMode: true,
             outputPath: path.join(__dirname, '../static/email/test-emails'),

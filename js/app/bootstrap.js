@@ -188,6 +188,10 @@ async function mountPage({ page, lang, route, productUrl, buyProductUrl, getCurr
       setTimeout(() => initB2BForm(), 0);
       break;
 
+    case "privacy-policy":
+      document.title = "Privacy Policy | Alva Technology";
+      break;
+
     default:
       container.innerHTML = renderMissingProduct({ lang, route });
       break;

@@ -4,8 +4,14 @@
  */
 import { getProductBySlug, getProductContent } from "../services/product-service.js";
 import { getStoredLanguage, t } from "../services/language-service.js";
-import { getVendureActiveOrder } from "../services/vendure-client.js";
-import { submitVendureGuestCheckout } from "../services/vendure-guest-checkout.js";
+import { createVendureStripePaymentIntent, getVendureActiveOrder } from "../services/vendure-client.js";
+import { prepareVendureGuestCheckoutForPayment, submitVendureGuestCheckout } from "../services/vendure-guest-checkout.js";
+import { refreshCartPricesFromBackend } from "../services/commerce-catalog.js";
+import {
+  confirmStripePayment,
+  createStripePaymentElement,
+  isStripeCheckoutConfigured,
+} from "../services/stripe-checkout.js";
 
 // Render
 
@@ -115,6 +121,8 @@ export function renderCheckoutPage({ lang }) {
               </div>
             </fieldset>
 
+            ${renderPaymentSection(copy)}
+
             <!-- Submit -->
             <div id="form-error" class="checkout-form-error" style="display:none;"></div>
 
@@ -199,6 +207,11 @@ export function bindCheckoutPage({ lang }) {
   const submitBtn = document.getElementById("submit-btn");
   const formError = document.getElementById("form-error");
   const copy = getCheckoutCopy(lang);
+  const paymentSection = document.querySelector("[data-stripe-payment-section]");
+  const paymentMount = document.querySelector("[data-stripe-payment-element]");
+  const paymentStatus = document.querySelector("[data-stripe-payment-status]");
+  let stripePayment = null;
+  let stripeOrder = null;
 
   if (!form) return;
 
@@ -208,7 +221,38 @@ export function bindCheckoutPage({ lang }) {
     e.preventDefault();
 
     clearErrors();
-    if (!validateForm(lang)) return;
+    formError.style.display = "none";
+
+    if (stripePayment) {
+      submitBtn.disabled = true;
+      submitBtn.textContent = copy.confirmingPayment;
+
+      try {
+        sessionStorage.setItem("alvaPendingStripeOrder", stripeOrder?.orderCode || "");
+        const result = await confirmStripePayment({
+          ...stripePayment,
+          returnUrl: buildStripeReturnUrl(stripeOrder?.orderCode),
+        });
+
+        if (result?.error) {
+          throw new Error(result.error.message || copy.paymentError);
+        }
+      } catch (err) {
+        formError.textContent = err.message || copy.paymentError;
+        formError.style.display = "block";
+        submitBtn.disabled = false;
+        submitBtn.textContent = copy.payNow;
+      }
+
+      return;
+    }
+
+    if (!validateForm(lang)) {
+      formError.textContent = copy.requiredSummary;
+      formError.style.display = "block";
+      focusFirstInvalidCheckoutField();
+      return;
+    }
 
     // Loading state
     submitBtn.disabled    = true;
@@ -216,7 +260,35 @@ export function bindCheckoutPage({ lang }) {
     formError.style.display = "none";
 
     try {
+      const cartRefresh = await refreshCartPricesFromBackend(getLocalCart());
+
+      if (cartRefresh.unavailable.length) {
+        throw new Error(copy.unavailableError);
+      }
+
+      if (cartRefresh.changed) {
+        localStorage.setItem("cart", JSON.stringify(cartRefresh.updatedCart));
+        throw new Error(copy.priceChangedError);
+      }
+
       const payload = buildPayload(lang);
+
+      if (isStripeCheckoutConfigured()) {
+        const preparedOrder = await prepareVendureGuestCheckoutForPayment(payload, getLocalCart());
+        const intentData = await createVendureStripePaymentIntent();
+        const clientSecret = intentData.createStripePaymentIntent;
+
+        stripePayment = await createStripePaymentElement(clientSecret, "[data-stripe-payment-element]");
+        stripeOrder = preparedOrder;
+
+        if (paymentSection) paymentSection.hidden = false;
+        if (paymentStatus) paymentStatus.textContent = copy.paymentReady;
+        paymentMount?.scrollIntoView({ behavior: "smooth", block: "center" });
+        setCheckoutFieldsDisabled(true);
+        submitBtn.disabled = false;
+        submitBtn.textContent = copy.payNow;
+        return;
+      }
 
       const vendureOrder = await submitVendureGuestCheckout(payload, getLocalCart());
       localStorage.removeItem("cart");
@@ -246,6 +318,31 @@ function renderVendureOrderStatus(copy = getCheckoutCopy("en")) {
       </div>
       <p class="checkout-vendure-status__meta" data-vendure-order-meta>${copy.vendureMeta}</p>
     </section>`;
+}
+
+function renderPaymentSection(copy = getCheckoutCopy("en")) {
+  return `
+    <section class="checkout-payment" data-stripe-payment-section hidden>
+      <div class="checkout-payment__header">
+        <p class="checkout-payment__eyebrow">${copy.paymentEyebrow}</p>
+        <h2 class="checkout-payment__title">${copy.paymentTitle}</h2>
+      </div>
+      <p class="checkout-payment__status" data-stripe-payment-status>${copy.paymentPreparing}</p>
+      <div class="checkout-payment__element" data-stripe-payment-element></div>
+    </section>`;
+}
+
+function buildStripeReturnUrl(orderCode) {
+  const url = new URL("/views/order-confirmation.html", window.location.origin);
+  if (orderCode) url.searchParams.set("order", orderCode);
+  url.searchParams.set("source", "stripe");
+  return url.toString();
+}
+
+function setCheckoutFieldsDisabled(disabled) {
+  document.querySelectorAll("#checkout-form .field-input").forEach((field) => {
+    field.disabled = disabled;
+  });
 }
 
 async function hydrateVendureOrderStatus(copy = getCheckoutCopy("en"), lang = "en") {
@@ -346,6 +443,10 @@ function clearErrors() {
   document.querySelectorAll(".field-input").forEach((el) => el.classList.remove("is-invalid"));
 }
 
+function focusFirstInvalidCheckoutField() {
+  document.querySelector(".field-input.is-invalid")?.focus();
+}
+
 // Build API payload
 
 
@@ -390,86 +491,106 @@ function getLocalCart() {
 function getCheckoutCopy(lang) {
   const copies = {
     en: {
-      title: "Checkout",
-      contact: "Contact Information",
-      firstName: "First Name",
-      lastName: "Last Name",
-      delivery: "Delivery Address",
-      additional: "Additional Information",
-      notes: "Delivery Notes (Optional)",
-      submit: "Place Order",
-      legal: "No payment is charged now. Our team will contact you to confirm your order and arrange delivery and payment.",
+      title: "Request a confirmed offer",
+      contact: "Contact information",
+      firstName: "First name",
+      lastName: "Last name",
+      delivery: "Delivery address",
+      additional: "Additional information",
+      notes: "Delivery notes (optional)",
+      submit: "Submit order request",
+      legal: "No payment is charged now. Alva will confirm price, availability and delivery window before payment is arranged.",
       countryValue: "Sweden",
       confirmedSeparately: "Confirmed separately",
       calculatedSeparately: "Calculated separately",
       vat: "VAT",
       summaryNote: "Shipping and VAT calculated separately.",
       editCart: "Edit cart",
-      vendureEyebrow: "Vendure order",
-      vendureChecking: "Checking active order...",
-      vendureMeta: "Syncing with the commerce backend.",
-      placingOrder: "Placing order...",
-      genericError: "Something went wrong. Please try again.",
+      vendureEyebrow: "Order request",
+      vendureChecking: "Checking selected products...",
+      vendureMeta: "Confirming current backend catalog data.",
+      placingOrder: "Submitting request...",
+      genericError: "We could not submit the request right now. Please review the form and try again.",
+      requiredSummary: "Please complete all required contact and delivery fields before submitting your order request.",
+      priceChangedError: "Prices were updated from the backend. Return to the cart and review before continuing.",
+      unavailableError: "One or more products are no longer available. Return to the cart and adjust your request.",
+      paymentEyebrow: "Secure payment",
+      paymentTitle: "Pay by card or Klarna",
+      paymentPreparing: "Preparing secure payment...",
+      paymentReady: "Your details are locked for this payment attempt. Complete payment below.",
+      payNow: "Pay securely",
+      confirmingPayment: "Confirming payment...",
+      paymentError: "The payment could not be confirmed. Review the payment details and try again.",
       notAvailable: "n/a",
       batterySingular: "battery module",
       batteryPlural: "battery modules",
-      vendureNoOrderTitle: "No active Vendure order found",
-      vendureNoOrderMeta: "Return to the cart and continue again to sync the order.",
-      vendureErrorTitle: "Vendure order check failed",
-      vendureSyncedTitle: (code) => `Order ${code} is synced`,
+      vendureNoOrderTitle: "Selected products are not synced yet",
+      vendureNoOrderMeta: "Return to the cart and continue again so the request can be prepared.",
+      vendureErrorTitle: "Product check failed",
+      vendureSyncedTitle: (code) => `Request ${code} is prepared`,
       vendureSyncedMeta: (count, total, state) => `${count} line${count === 1 ? "" : "s"} - ${total} - ${state}`,
       required: {
-        firstName: "First name is required",
-        lastName: "Last name is required",
-        email: "Email is required",
-        phone: "Phone number is required",
-        street: "Street address is required",
-        postalCode: "Postal code is required",
-        city: "City is required",
-        country: "Country is required",
+        firstName: "Enter your first name.",
+        lastName: "Enter your last name.",
+        email: "Enter your email address.",
+        phone: "Enter your phone number.",
+        street: "Enter the delivery street address.",
+        postalCode: "Enter the postal code.",
+        city: "Enter the city.",
+        country: "Enter the country.",
       },
-      invalidEmail: "Please enter a valid email address",
+      invalidEmail: "Enter a valid email address.",
     },
     sv: {
-      title: "Kassa",
+      title: "Begär bekräftad offert",
       contact: "Kontaktuppgifter",
       firstName: "Förnamn",
       lastName: "Efternamn",
       delivery: "Leveransadress",
       additional: "Ytterligare information",
       notes: "Leveransnoteringar (valfritt)",
-      submit: "Lägg order",
-      legal: "Ingen betalning debiteras nu. Vårt team kontaktar dig för att bekräfta ordern och ordna leverans och betalning.",
+      submit: "Skicka orderförfrågan",
+      legal: "Ingen betalning debiteras nu. Alva bekräftar pris, tillgänglighet och leveransfönster innan betalning ordnas.",
       countryValue: "Sverige",
       confirmedSeparately: "Bekräftas separat",
       calculatedSeparately: "Beräknas separat",
       vat: "Moms",
       summaryNote: "Frakt och moms beräknas separat.",
       editCart: "Ändra varukorg",
-      vendureEyebrow: "Vendure-order",
-      vendureChecking: "Kontrollerar aktiv order...",
-      vendureMeta: "Synkar med handelsbackend.",
-      placingOrder: "Lägger order...",
-      genericError: "Något gick fel. Försök igen.",
+      vendureEyebrow: "Orderförfrågan",
+      vendureChecking: "Kontrollerar valda produkter...",
+      vendureMeta: "Bekräftar aktuell katalogdata från backend.",
+      placingOrder: "Skickar förfrågan...",
+      genericError: "Vi kunde inte skicka förfrågan just nu. Granska formuläret och försök igen.",
+      requiredSummary: "Fyll i alla obligatoriska kontakt- och leveransuppgifter innan du skickar orderförfrågan.",
+      priceChangedError: "Priserna har uppdaterats från backend. Gå tillbaka till varukorgen och granska innan du fortsätter.",
+      unavailableError: "En eller flera produkter är inte längre tillgängliga. Gå tillbaka till varukorgen och justera din förfrågan.",
+      paymentEyebrow: "Säker betalning",
+      paymentTitle: "Betala med kort eller Klarna",
+      paymentPreparing: "Förbereder säker betalning...",
+      paymentReady: "Uppgifterna är låsta för detta betalningsförsök. Slutför betalningen nedan.",
+      payNow: "Betala säkert",
+      confirmingPayment: "Bekräftar betalning...",
+      paymentError: "Betalningen kunde inte bekräftas. Kontrollera betalningsuppgifterna och försök igen.",
       notAvailable: "ej tillgängligt",
       batterySingular: "batterimodul",
       batteryPlural: "batterimoduler",
-      vendureNoOrderTitle: "Ingen aktiv Vendure-order hittades",
-      vendureNoOrderMeta: "Gå tillbaka till varukorgen och fortsätt igen för att synka ordern.",
-      vendureErrorTitle: "Kontroll av Vendure-order misslyckades",
-      vendureSyncedTitle: (code) => `Order ${code} är synkad`,
+      vendureNoOrderTitle: "Valda produkter är inte synkade ännu",
+      vendureNoOrderMeta: "Gå tillbaka till varukorgen och fortsätt igen så att förfrågan kan förberedas.",
+      vendureErrorTitle: "Produktkontrollen misslyckades",
+      vendureSyncedTitle: (code) => `Förfrågan ${code} är förberedd`,
       vendureSyncedMeta: (count, total, state) => `${count} rad${count === 1 ? "" : "er"} - ${total} - ${state}`,
       required: {
-        firstName: "Förnamn krävs",
-        lastName: "Efternamn krävs",
-        email: "E-post krävs",
-        phone: "Telefonnummer krävs",
-        street: "Gatuadress krävs",
-        postalCode: "Postnummer krävs",
-        city: "Ort krävs",
-        country: "Land krävs",
+        firstName: "Ange förnamn.",
+        lastName: "Ange efternamn.",
+        email: "Ange e-postadress.",
+        phone: "Ange telefonnummer.",
+        street: "Ange leveransadress.",
+        postalCode: "Ange postnummer.",
+        city: "Ange ort.",
+        country: "Ange land.",
       },
-      invalidEmail: "Ange en giltig e-postadress",
+      invalidEmail: "Ange en giltig e-postadress.",
     },
   };
 

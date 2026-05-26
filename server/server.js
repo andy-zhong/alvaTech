@@ -9,6 +9,14 @@ const path    = require("path");
 const app  = express();
 const PORT = process.env.PORT || 3000;
 
+function parseAllowedOrigins(value) {
+  if (!value || value === "*") return value || "*";
+  return value
+    .split(",")
+    .map((origin) => origin.trim())
+    .filter(Boolean);
+}
+
 // ── Safe route loader ──────────────────────────────────────────────────────
 // If a route file doesn't exist yet the server still starts — just warns.
 function loadRoute(routePath) {
@@ -34,7 +42,7 @@ const pool = require("./db/connection");
 
 // ── Middleware ─────────────────────────────────────────────────────────────
 app.use(cors({
-  origin:         process.env.CORS_ORIGIN || "*",
+  origin:         parseAllowedOrigins(process.env.CORS_ORIGIN),
   methods:        ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
   allowedHeaders: ["Content-Type", "Authorization"],
 }));

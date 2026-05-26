@@ -12,6 +12,7 @@
  */
 
 import { hasAnalyticsConsent } from "./consent.js";
+import { apiUrl } from "../app/runtime-config.js";
 
 const ENDPOINT    = "/api/track";
 const FLUSH_AFTER = 8;        // flush when this many events queued
@@ -93,9 +94,9 @@ function flush(useBeacon = false) {
   });
 
   if (useBeacon && navigator.sendBeacon) {
-    navigator.sendBeacon(ENDPOINT, new Blob([payload], { type: "application/json" }));
+    navigator.sendBeacon(apiUrl(ENDPOINT), new Blob([payload], { type: "application/json" }));
   } else {
-    fetch(ENDPOINT, {
+    fetch(apiUrl(ENDPOINT), {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: payload,
