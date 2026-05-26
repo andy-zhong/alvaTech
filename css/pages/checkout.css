@@ -475,6 +475,27 @@ body[data-page="checkout"] .section {
   color: #9f2e24;
 }
 
+.checkout-form-error[data-state="warning"] {
+  display: grid;
+  gap: 8px;
+  border-color: rgba(148, 105, 21, 0.28);
+  background: rgba(148, 105, 21, 0.08);
+  color: #4b3b16;
+  line-height: 1.55;
+}
+
+.checkout-form-error[data-state="warning"] strong {
+  color: var(--text-dark);
+  font-size: 0.92rem;
+}
+
+.checkout-price-review__list {
+  display: grid;
+  gap: 6px;
+  margin: 4px 0 0;
+  padding-left: 18px;
+}
+
 .checkout-payment {
   display: grid;
   gap: 18px;
@@ -512,14 +533,56 @@ body[data-page="checkout"] .section {
   line-height: 1.25;
 }
 
+.checkout-payment__secure,
 .checkout-payment__status {
   color: rgba(15, 42, 36, 0.62);
   font-size: 0.86rem;
   line-height: 1.5;
 }
 
+.checkout-payment__secure {
+  margin: 0;
+}
+
+.checkout-payment__methods {
+  display: grid;
+  gap: 10px;
+  padding: 14px 0;
+  border-top: 1px solid rgba(15, 42, 36, 0.1);
+  border-bottom: 1px solid rgba(15, 42, 36, 0.1);
+}
+
+.checkout-payment-method {
+  display: grid;
+  gap: 4px;
+}
+
+.checkout-payment-method__title,
+.checkout-payment-method__helper,
+.checkout-payment__klarna {
+  margin: 0;
+}
+
+.checkout-payment-method__title {
+  color: var(--text-dark);
+  font-size: 0.95rem;
+  font-weight: 850;
+}
+
+.checkout-payment-method__helper,
+.checkout-payment__klarna {
+  color: rgba(15, 42, 36, 0.6);
+  font-size: 0.84rem;
+  line-height: 1.5;
+}
+
+.checkout-payment__klarna {
+  padding-top: 2px;
+}
+
 .checkout-payment__element {
   min-height: 64px;
+  padding-top: 2px;
 }
 
 .checkout-submit {

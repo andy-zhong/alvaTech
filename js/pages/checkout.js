@@ -141,7 +141,7 @@ export function renderCheckoutPage({ lang }) {
           <div class="checkout-summary-panel">
             <h3 class="checkout-summary-title">${t(lang, "checkoutSummary")}</h3>
 
-            <div class="checkout-summary-items">
+            <div class="checkout-summary-items" data-checkout-summary-items>
               ${cart.map((item) => renderSummaryItem(item, lang)).join("")}
             </div>
 
@@ -149,7 +149,7 @@ export function renderCheckoutPage({ lang }) {
 
             <div class="checkout-summary-row">
               <span>${t(lang, "checkoutSubtotal")}</span>
-              <span>${grandTotal.toLocaleString("sv-SE")} SEK</span>
+              <span data-checkout-subtotal>${grandTotal.toLocaleString("sv-SE")} SEK</span>
             </div>
             <div class="checkout-summary-row">
               <span>${t(lang, "checkoutShipping")}</span>
@@ -161,7 +161,7 @@ export function renderCheckoutPage({ lang }) {
             </div>
             <div class="checkout-summary-row checkout-summary-row--total">
               <span>${t(lang, "checkoutTotal")}</span>
-              <span>${grandTotal.toLocaleString("sv-SE")} SEK</span>
+              <span data-checkout-total>${grandTotal.toLocaleString("sv-SE")} SEK</span>
             </div>
             <p class="checkout-summary-note">
               ${copy.summaryNote}
@@ -238,7 +238,8 @@ export function bindCheckoutPage({ lang }) {
           throw new Error(result.error.message || copy.paymentError);
         }
       } catch (err) {
-        formError.textContent = err.message || copy.paymentError;
+        console.warn("[checkout] Stripe payment confirmation failed:", err);
+        formError.textContent = getFriendlyCheckoutError(err, copy.paymentError, copy);
         formError.style.display = "block";
         submitBtn.disabled = false;
         submitBtn.textContent = copy.payNow;
@@ -268,7 +269,11 @@ export function bindCheckoutPage({ lang }) {
 
       if (cartRefresh.changed) {
         localStorage.setItem("cart", JSON.stringify(cartRefresh.updatedCart));
-        throw new Error(copy.priceChangedError);
+        renderUpdatedSummary(cartRefresh.updatedCart, lang);
+        showPriceReviewNotice(formError, cartRefresh, copy, lang);
+        submitBtn.disabled = false;
+        submitBtn.textContent = copy.reviewedSubmit;
+        return;
       }
 
       const payload = buildPayload(lang);
@@ -296,8 +301,8 @@ export function bindCheckoutPage({ lang }) {
       return;
 
     } catch (err) {
-      formError.textContent  = err.message || copy.genericError;
-      formError.style.display = "block";
+      console.warn("[checkout] Submission failed:", err);
+      showFormError(formError, getFriendlyCheckoutError(err, copy.genericError, copy));
       submitBtn.disabled    = false;
       submitBtn.textContent = copy.submit;
     }
@@ -326,6 +331,14 @@ function renderPaymentSection(copy = getCheckoutCopy("en")) {
       <div class="checkout-payment__header">
         <p class="checkout-payment__eyebrow">${copy.paymentEyebrow}</p>
         <h2 class="checkout-payment__title">${copy.paymentTitle}</h2>
+        <p class="checkout-payment__secure">${copy.paymentSecurity}</p>
+      </div>
+      <div class="checkout-payment__methods" aria-label="${copy.paymentMethodsLabel}">
+        <div class="checkout-payment-method">
+          <p class="checkout-payment-method__title">${copy.cardPaymentTitle}</p>
+          <p class="checkout-payment-method__helper">${copy.cardPaymentHelper}</p>
+        </div>
+        <p class="checkout-payment__klarna">${copy.klarnaAvailability}</p>
       </div>
       <p class="checkout-payment__status" data-stripe-payment-status>${copy.paymentPreparing}</p>
       <div class="checkout-payment__element" data-stripe-payment-element></div>
@@ -343,6 +356,64 @@ function setCheckoutFieldsDisabled(disabled) {
   document.querySelectorAll("#checkout-form .field-input").forEach((field) => {
     field.disabled = disabled;
   });
+}
+
+function renderUpdatedSummary(cart, lang) {
+  const itemsEl = document.querySelector("[data-checkout-summary-items]");
+  const subtotalEl = document.querySelector("[data-checkout-subtotal]");
+  const totalEl = document.querySelector("[data-checkout-total]");
+  const grandTotal = cart.reduce((sum, item) => sum + item.unitPrice * (item.quantity || 1), 0);
+  const formattedTotal = `${grandTotal.toLocaleString("sv-SE")} SEK`;
+
+  if (itemsEl) {
+    itemsEl.innerHTML = cart.map((item) => renderSummaryItem(item, lang)).join("");
+  }
+  if (subtotalEl) subtotalEl.textContent = formattedTotal;
+  if (totalEl) totalEl.textContent = formattedTotal;
+}
+
+function showPriceReviewNotice(formError, cartRefresh, copy, lang) {
+  const changes = cartRefresh.changes
+    .map((change) => {
+      const item = cartRefresh.updatedCart.find((cartItem) => cartItem.slug === change.slug);
+      const product = getProductBySlug(change.slug);
+      const content = product ? getProductContent(product, lang || getStoredLanguage()) : null;
+      const name = content?.name || item?.productName || change.slug;
+      return `<li><strong>${name}</strong>: ${formatSek(change.from)} -> ${formatSek(change.to)}</li>`;
+    })
+    .join("");
+
+  formError.dataset.state = "warning";
+  formError.innerHTML = `
+    <strong>${copy.priceReviewTitle}</strong>
+    <span>${copy.priceReviewBody}</span>
+    ${changes ? `<ul class="checkout-price-review__list">${changes}</ul>` : ""}
+  `;
+  formError.style.display = "block";
+  formError.style.position = "relative";
+  formError.style.zIndex = "2";
+  setTimeout(() => formError.scrollIntoView({ behavior: "smooth", block: "center" }), 0);
+}
+
+function showFormError(formError, message) {
+  formError.removeAttribute("data-state");
+  formError.removeAttribute("style");
+  formError.textContent = message;
+  formError.style.display = "block";
+}
+
+function getFriendlyCheckoutError(error, fallback, copy = getCheckoutCopy(getStoredLanguage())) {
+  const message = error?.message || String(error || "");
+
+  if (/Order contents may only be modified when in the "AddingItems" state/i.test(message)) {
+    return copy.orderLockedError;
+  }
+
+  return message || fallback;
+}
+
+function formatSek(value) {
+  return `${Number(value || 0).toLocaleString("sv-SE")} SEK`;
 }
 
 async function hydrateVendureOrderStatus(copy = getCheckoutCopy("en"), lang = "en") {
@@ -373,9 +444,10 @@ async function hydrateVendureOrderStatus(copy = getCheckoutCopy("en"), lang = "e
       order.state,
     );
   } catch (error) {
+    console.warn("[vendure] Active order status check failed:", error);
     status.dataset.state = "error";
     title.textContent = copy.vendureErrorTitle;
-    meta.textContent = error.message || String(error);
+    meta.textContent = copy.genericError;
   }
 }
 
@@ -514,13 +586,22 @@ function getCheckoutCopy(lang) {
       requiredSummary: "Please complete all required contact and delivery fields before submitting your order request.",
       priceChangedError: "Prices were updated from the backend. Return to the cart and review before continuing.",
       unavailableError: "One or more products are no longer available. Return to the cart and adjust your request.",
+      priceReviewTitle: "Review updated catalog pricing",
+      priceReviewBody: "No payment has started. We refreshed the cart from Alva's current backend catalog before payment so you can review the exact price first. Continue only if the updated price looks correct.",
+      reviewedSubmit: "Continue with updated prices",
       paymentEyebrow: "Secure payment",
-      paymentTitle: "Pay by card or Klarna",
+      paymentTitle: "Payment",
+      paymentSecurity: "Secure payment powered by Stripe. Alva does not store card details.",
+      paymentMethodsLabel: "Payment methods",
+      cardPaymentTitle: "Card payment",
+      cardPaymentHelper: "Visa, Mastercard and selected debit cards.",
+      klarnaAvailability: "Klarna is shown when available for your country and order.",
       paymentPreparing: "Preparing secure payment...",
       paymentReady: "Your details are locked for this payment attempt. Complete payment below.",
       payNow: "Pay securely",
       confirmingPayment: "Confirming payment...",
       paymentError: "The payment could not be confirmed. Review the payment details and try again.",
+      orderLockedError: "This order is already in checkout. Continue payment or start a new cart.",
       notAvailable: "n/a",
       batterySingular: "battery module",
       batteryPlural: "battery modules",
@@ -565,13 +646,22 @@ function getCheckoutCopy(lang) {
       requiredSummary: "Fyll i alla obligatoriska kontakt- och leveransuppgifter innan du skickar orderförfrågan.",
       priceChangedError: "Priserna har uppdaterats från backend. Gå tillbaka till varukorgen och granska innan du fortsätter.",
       unavailableError: "En eller flera produkter är inte längre tillgängliga. Gå tillbaka till varukorgen och justera din förfrågan.",
+      priceReviewTitle: "Granska uppdaterat katalogpris",
+      priceReviewBody: "Ingen betalning har startats. Vi har hämtat aktuellt pris från Alvas backend-katalog före betalning så att du kan granska exakt pris först. Fortsätt bara om det uppdaterade priset ser rätt ut.",
+      reviewedSubmit: "Fortsätt med uppdaterade priser",
       paymentEyebrow: "Säker betalning",
-      paymentTitle: "Betala med kort eller Klarna",
+      paymentTitle: "Betalning",
+      paymentSecurity: "Säker betalning via Stripe. Alva lagrar inte kortuppgifter.",
+      paymentMethodsLabel: "Betalmetoder",
+      cardPaymentTitle: "Kortbetalning",
+      cardPaymentHelper: "Visa, Mastercard och utvalda betalkort.",
+      klarnaAvailability: "Klarna visas när det är tillgängligt för ditt land och din beställning.",
       paymentPreparing: "Förbereder säker betalning...",
       paymentReady: "Uppgifterna är låsta för detta betalningsförsök. Slutför betalningen nedan.",
       payNow: "Betala säkert",
       confirmingPayment: "Bekräftar betalning...",
       paymentError: "Betalningen kunde inte bekräftas. Kontrollera betalningsuppgifterna och försök igen.",
+      orderLockedError: "Den här beställningen är redan i kassan. Fortsätt betalningen eller börja med en ny varukorg.",
       notAvailable: "ej tillgängligt",
       batterySingular: "batterimodul",
       batteryPlural: "batterimoduler",

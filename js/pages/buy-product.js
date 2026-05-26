@@ -1,9 +1,11 @@
 import { getProductBySlug, getProductContent } from "../services/product-service.js";
 import { getStoredLanguage, t } from "../services/language-service.js";
+import { getVendureActiveOrder } from "../services/vendure-client.js";
 import { isVendureCartEnabled, syncLocalCartToVendure } from "../services/vendure-cart-sync.js";
 import { refreshCartPricesFromBackend } from "../services/commerce-catalog.js";
 
 const CART_NOTICE_KEY = "alva-cart-notice";
+let cartModificationLocked = false;
 
 const CART_COPY = {
   en: {
@@ -12,6 +14,7 @@ const CART_COPY = {
     checkout: "Continue to checkout",
     continue: "Continue shopping",
     syncing: "Syncing cart...",
+    orderLocked: "This order is already in checkout. Continue payment or start a new cart.",
   },
   sv: {
     title: "Granska din konfiguration",
@@ -19,6 +22,7 @@ const CART_COPY = {
     checkout: "Fortsatt till kassan",
     continue: "Justera system",
     syncing: "Synkar varukorg...",
+    orderLocked: "Den här beställningen är redan i kassan. Fortsätt betalningen eller börja med en ny varukorg.",
   },
   fi: {
     title: "Tarkista kokoonpano",
@@ -115,6 +119,7 @@ export function renderBuyProductPage({ lang, route }) {
               ${copy.continue}
             </a>
           </div>
+          <p class="cart-summary__sync-error" data-vendure-order-lock hidden></p>
           <p class="cart-summary__sync-error" data-vendure-sync-error hidden></p>
         </aside>
 
@@ -201,6 +206,8 @@ export function afterRenderBuyProduct({ lang } = {}) {
   const activeLang = lang || getStoredLanguage();
   const checkoutLink = document.querySelector("[data-vendure-checkout-link]");
 
+  cartModificationLocked = false;
+  hydrateCartOrderState(activeLang);
   hydrateBackendCartSnapshot(activeLang);
 
   document.querySelectorAll(".cart-line__remove").forEach((btn) => {
@@ -244,12 +251,16 @@ function rerenderCart(lang) {
 }
 
 function removeCartItem(cartItemId) {
+  if (cartModificationLocked) return;
+
   const cart    = JSON.parse(localStorage.getItem("cart")) || [];
   const updated = cart.filter((item) => item.cartItemId !== cartItemId);
   localStorage.setItem("cart", JSON.stringify(updated));
 }
 
 function updateCartQuantity(cartItemId, delta, lang) {
+  if (cartModificationLocked) return;
+
   const cart  = JSON.parse(localStorage.getItem("cart")) || [];
   const index = cart.findIndex((item) => item.cartItemId === cartItemId);
   if (index < 0) return;
@@ -289,6 +300,14 @@ async function syncCartThenContinue(nextUrl, checkoutLink) {
 
   try {
     const cart = JSON.parse(localStorage.getItem("cart")) || [];
+    const activeOrder = await getActiveVendureOrderOrNull();
+
+    if (isLockedVendureOrder(activeOrder)) {
+      showLockedOrderState(copy);
+      window.location.href = nextUrl;
+      return;
+    }
+
     const refresh = await refreshCartPricesFromBackend(cart);
 
     if (refresh.unavailable.length) {
@@ -305,7 +324,8 @@ async function syncCartThenContinue(nextUrl, checkoutLink) {
     await syncLocalCartToVendure(cart);
     window.location.href = nextUrl;
   } catch (error) {
-    showVendureSyncError(errorEl, error.message || String(error));
+    console.warn("[vendure] Cart sync failed:", error);
+    showVendureSyncError(errorEl, getFriendlyVendureError(error, copy));
     checkoutLink.removeAttribute("aria-disabled");
     checkoutLink.textContent = originalLabel;
   }
@@ -349,6 +369,66 @@ async function hydrateBackendCartSnapshot(lang) {
   } catch (error) {
     console.warn("[commerce] Could not refresh cart prices:", error);
   }
+}
+
+async function hydrateCartOrderState(lang) {
+  if (!isVendureCartEnabled()) {
+    return;
+  }
+
+  const copy = getCartCopy(lang);
+
+  try {
+    const activeOrder = await getActiveVendureOrderOrNull();
+
+    if (!isLockedVendureOrder(activeOrder)) {
+      return;
+    }
+
+    showLockedOrderState(copy);
+    setCartModificationDisabled(true);
+  } catch (error) {
+    console.warn("[vendure] Could not inspect active order state:", error);
+  }
+}
+
+async function getActiveVendureOrderOrNull() {
+  const data = await getVendureActiveOrder();
+  return data.activeOrder || null;
+}
+
+function isLockedVendureOrder(order) {
+  return !!order?.lines?.length && order.state !== "AddingItems";
+}
+
+function showLockedOrderState(copy) {
+  const lockEl = document.querySelector("[data-vendure-order-lock]");
+
+  if (!lockEl) {
+    return;
+  }
+
+  lockEl.hidden = false;
+  lockEl.textContent = copy.orderLocked;
+}
+
+function setCartModificationDisabled(disabled) {
+  cartModificationLocked = disabled;
+
+  document.querySelectorAll(".qty-decrease, .qty-increase, .cart-line__remove").forEach((button) => {
+    button.disabled = disabled;
+    button.setAttribute("aria-disabled", String(disabled));
+  });
+}
+
+function getFriendlyVendureError(error, copy) {
+  const message = error?.message || String(error);
+
+  if (/Order contents may only be modified when in the "AddingItems" state/i.test(message)) {
+    return copy.orderLocked;
+  }
+
+  return message;
 }
 
 function setCartNotice(message) {
