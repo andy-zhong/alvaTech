@@ -5,6 +5,8 @@ import {
     RequestContextService,
     ChannelService,
     runMigrations,
+    TransactionalConnection,
+    User,
 } from '@vendure/core';
 import { config } from '../vendure-config';
 
@@ -40,11 +42,31 @@ async function configureStripePayment() {
         const requestContextService = app.get(RequestContextService);
         const paymentMethodService = app.get(PaymentMethodService);
         const channelService = app.get(ChannelService);
+        const connection = app.get(TransactionalConnection);
+        const channel = await channelService.getDefaultChannel();
+        const superadminCredentials = config.authOptions.superadminCredentials;
+
+        if (!superadminCredentials?.identifier) {
+            throw new Error('SuperAdmin credentials are not configured. Set SUPERADMIN_USERNAME before configuring Stripe payments.');
+        }
+
+        const superAdminUser = await connection.rawConnection.getRepository(User).findOne({
+            where: {
+                identifier: superadminCredentials.identifier,
+            },
+            relations: ['roles', 'roles.channels'],
+        });
+
+        if (!superAdminUser) {
+            throw new Error('SuperAdmin user was not found. Check SUPERADMIN_USERNAME and run the Vendure setup before configuring Stripe payments.');
+        }
+
         const ctx = await requestContextService.create({
             apiType: 'admin',
+            channelOrToken: channel,
             languageCode: LanguageCode.en,
+            user: superAdminUser,
         });
-        const channel = await channelService.getDefaultChannel(ctx);
         const existing = (await paymentMethodService.findAll(ctx, {
             take: 1,
             filter: {

@@ -8,6 +8,7 @@ import {
     Permission,
     PluginCommonModule,
     RequestContext,
+    SessionService,
     Transaction,
     TransactionalConnection,
     VendurePlugin,
@@ -24,6 +25,28 @@ const adminApiExtensions = gql`
         cancelAlvaOrder(orderId: ID!, reason: String!): Order!
     }
 `;
+
+const shopApiExtensions = gql`
+    extend type Mutation {
+        clearAlvaActiveOrder: Boolean!
+    }
+`;
+
+@Resolver()
+class AlvaShopCartResolver {
+    constructor(private sessionService: SessionService) {}
+
+    @Transaction()
+    @Mutation()
+    @Allow(Permission.Public)
+    async clearAlvaActiveOrder(@Ctx() ctx: RequestContext): Promise<boolean> {
+        if (ctx.session) {
+            await this.sessionService.unsetActiveOrder(ctx, ctx.session);
+        }
+
+        return true;
+    }
+}
 
 @Resolver()
 class AlvaOrderReviewResolver {
@@ -119,10 +142,14 @@ function isErrorResult(result: unknown): result is { errorCode: string; message?
 
 @VendurePlugin({
     imports: [PluginCommonModule],
-    providers: [AlvaOrderReviewResolver],
+    providers: [AlvaOrderReviewResolver, AlvaShopCartResolver],
     adminApiExtensions: {
         schema: adminApiExtensions,
         resolvers: [AlvaOrderReviewResolver],
+    },
+    shopApiExtensions: {
+        schema: shopApiExtensions,
+        resolvers: [AlvaShopCartResolver],
     },
     configuration: config => {
         const orderFields = config.customFields?.Order ?? [];

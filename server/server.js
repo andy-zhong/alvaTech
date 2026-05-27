@@ -49,8 +49,15 @@ app.use(cors({
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-// Serve the project root as static files
-app.use(express.static(path.join(__dirname, "..")));
+// Serve the project root as static files. Disable browser caching for local
+// storefront assets so checkout/payment changes are visible after a restart.
+app.use(express.static(path.join(__dirname, ".."), {
+  setHeaders(res, filePath) {
+    if (/\.(?:js|css|html)$/i.test(filePath)) {
+      res.setHeader("Cache-Control", "no-store, must-revalidate");
+    }
+  },
+}));
 
 // ── API Routes (each mounted exactly once) ─────────────────────────────────
 if (authRoutes)     app.use("/auth",           authRoutes);

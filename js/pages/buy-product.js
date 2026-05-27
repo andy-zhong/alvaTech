@@ -1,7 +1,11 @@
 import { getProductBySlug, getProductContent } from "../services/product-service.js";
 import { getStoredLanguage, t } from "../services/language-service.js";
-import { getVendureActiveOrder } from "../services/vendure-client.js";
-import { isVendureCartEnabled, syncLocalCartToVendure } from "../services/vendure-cart-sync.js";
+import { clearVendureActiveOrder, getVendureActiveOrder } from "../services/vendure-client.js";
+import {
+  clearVendureCartSyncSignature,
+  isVendureCartEnabled,
+  syncLocalCartToVendure,
+} from "../services/vendure-cart-sync.js";
 import { refreshCartPricesFromBackend } from "../services/commerce-catalog.js";
 
 const CART_NOTICE_KEY = "alva-cart-notice";
@@ -15,6 +19,8 @@ const CART_COPY = {
     continue: "Continue shopping",
     syncing: "Syncing cart...",
     orderLocked: "This order is already in checkout. Continue payment or start a new cart.",
+    orderComplete: "Your previous order is complete. Start a new cart to place another order.",
+    startNewCart: "Start a new cart",
   },
   sv: {
     title: "Granska din konfiguration",
@@ -23,6 +29,8 @@ const CART_COPY = {
     continue: "Justera system",
     syncing: "Synkar varukorg...",
     orderLocked: "Den här beställningen är redan i kassan. Fortsätt betalningen eller börja med en ny varukorg.",
+    orderComplete: "Din föregående beställning är klar. Börja med en ny varukorg för att lägga en ny order.",
+    startNewCart: "Börja med en ny varukorg",
   },
   fi: {
     title: "Tarkista kokoonpano",
@@ -119,7 +127,12 @@ export function renderBuyProductPage({ lang, route }) {
               ${copy.continue}
             </a>
           </div>
-          <p class="cart-summary__sync-error" data-vendure-order-lock hidden></p>
+          <div class="cart-summary__sync-error cart-summary__sync-error--action" data-vendure-order-lock hidden>
+            <span data-vendure-order-lock-message></span>
+            <button class="cart-start-new" type="button" data-start-new-cart>
+              ${copy.startNewCart}
+            </button>
+          </div>
           <p class="cart-summary__sync-error" data-vendure-sync-error hidden></p>
         </aside>
 
@@ -225,6 +238,10 @@ export function afterRenderBuyProduct({ lang } = {}) {
     btn.addEventListener("click", () => updateCartQuantity(btn.dataset.itemId, +1, activeLang));
   });
 
+  document.querySelector("[data-start-new-cart]")?.addEventListener("click", () => {
+    startNewCart();
+  });
+
   checkoutLink?.addEventListener("click", async (event) => {
     if (!isVendureCartEnabled()) {
       return;
@@ -303,7 +320,7 @@ async function syncCartThenContinue(nextUrl, checkoutLink) {
     const activeOrder = await getActiveVendureOrderOrNull();
 
     if (isLockedVendureOrder(activeOrder)) {
-      showLockedOrderState(copy);
+      showLockedOrderState(copy, activeOrder);
       window.location.href = nextUrl;
       return;
     }
@@ -385,7 +402,7 @@ async function hydrateCartOrderState(lang) {
       return;
     }
 
-    showLockedOrderState(copy);
+    showLockedOrderState(copy, activeOrder);
     setCartModificationDisabled(true);
   } catch (error) {
     console.warn("[vendure] Could not inspect active order state:", error);
@@ -401,15 +418,18 @@ function isLockedVendureOrder(order) {
   return !!order?.lines?.length && order.state !== "AddingItems";
 }
 
-function showLockedOrderState(copy) {
+function showLockedOrderState(copy, order = null) {
   const lockEl = document.querySelector("[data-vendure-order-lock]");
+  const messageEl = document.querySelector("[data-vendure-order-lock-message]");
 
-  if (!lockEl) {
+  if (!lockEl || !messageEl) {
     return;
   }
 
   lockEl.hidden = false;
-  lockEl.textContent = copy.orderLocked;
+  messageEl.textContent = isCompletedVendureOrder(order)
+    ? copy.orderComplete
+    : copy.orderLocked;
 }
 
 function setCartModificationDisabled(disabled) {
@@ -429,6 +449,24 @@ function getFriendlyVendureError(error, copy) {
   }
 
   return message;
+}
+
+function isCompletedVendureOrder(order) {
+  return ["PaymentAuthorized", "PaymentSettled"].includes(order?.state);
+}
+
+async function startNewCart() {
+  try {
+    await clearVendureActiveOrder();
+  } catch (error) {
+    console.warn("[vendure] Could not clear active order:", error);
+  }
+
+  localStorage.removeItem("cart");
+  clearVendureCartSyncSignature();
+  sessionStorage.removeItem(CART_NOTICE_KEY);
+  sessionStorage.removeItem("alvaPendingStripeOrder");
+  window.location.href = "/views/products.html";
 }
 
 function setCartNotice(message) {

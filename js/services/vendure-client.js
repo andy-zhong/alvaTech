@@ -382,3 +382,11 @@ export async function createVendureStripePaymentIntent() {
     }
   `);
 }
+
+export async function clearVendureActiveOrder() {
+  return vendureRequest(`
+    mutation ClearAlvaActiveOrder {
+      clearAlvaActiveOrder
+    }
+  `);
+}

@@ -52,7 +52,7 @@ async function cleanupTestOrders() {
             }
         }
 
-        console.log(`${apply ? 'Applying' : 'Dry run'} local test order cleanup.`);
+        console.log(`${apply ? 'Applying' : 'Dry run'} local draft order cleanup.`);
         const deletableOrders = orders.filter(order => order.active && order.state === 'AddingItems');
         const skippedOrders = orders.filter(order => !deletableOrders.includes(order));
 
@@ -67,7 +67,7 @@ async function cleanupTestOrders() {
         }
 
         if (!apply) {
-            console.log('No changes made. Re-run with --apply to delete local test orders.');
+            console.log('No changes made. Re-run with --apply to delete local draft test orders.');
             return;
         }
 

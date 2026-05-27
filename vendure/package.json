@@ -15,6 +15,8 @@
     "catalog:disable-demo:dry-run": "ts-node ./src/scripts/disable-demo-catalog.ts",
     "orders:cleanup": "ts-node ./src/scripts/cleanup-test-orders.ts --apply",
     "orders:cleanup:dry-run": "ts-node ./src/scripts/cleanup-test-orders.ts",
+    "orders:expire-pending": "ts-node ./src/scripts/expire-pending-orders.ts --apply",
+    "orders:expire-pending:dry-run": "ts-node ./src/scripts/expire-pending-orders.ts",
     "build": "tsc",
     "build:dashboard": "vite build",
     "start:server": "node ./dist/index.js",
