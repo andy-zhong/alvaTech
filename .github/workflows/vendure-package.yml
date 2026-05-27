@@ -22,7 +22,7 @@ concurrency:
   cancel-in-progress: true
 
 env:
-  IMAGE_NAME: ghcr.io/${{ github.repository_owner }}/alvatech-vendure
+  IMAGE_NAME: ghcr.io/andy-zhong/alvatech-vendure
 
 jobs:
   build-and-push:
