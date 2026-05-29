@@ -20,6 +20,8 @@ const serverPort = +process.env.PORT || 2605;
 const storefrontUrl = process.env.STOREFRONT_URL || 'http://localhost:3000';
 const storefrontOrigins = parseOrigins(process.env.STOREFRONT_ORIGINS || storefrontUrl);
 const cookieSecret = getCookieSecret();
+const superadminUsername = requiredEnv('SUPERADMIN_USERNAME');
+const superadminPassword = requiredEnv('SUPERADMIN_PASSWORD');
 const localStorefrontOrigins = [
     storefrontUrl,
     'http://localhost:5500',
@@ -131,8 +133,8 @@ export const config: VendureConfig = {
     authOptions: {
         tokenMethod: ['bearer', 'cookie'],
         superadminCredentials: {
-            identifier: process.env.SUPERADMIN_USERNAME,
-            password: process.env.SUPERADMIN_PASSWORD,
+            identifier: superadminUsername,
+            password: superadminPassword,
         },
         cookieOptions: {
           secret: cookieSecret,
