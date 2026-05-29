@@ -1,0 +1,463 @@
+@media (max-width: 860px) {
+  body {
+    -webkit-text-size-adjust: 100%;
+  }
+
+  main {
+    padding-top: calc(var(--site-header-height) + 18px);
+  }
+
+  .site-header {
+    box-shadow: 0 10px 26px rgba(15, 42, 36, 0.08);
+  }
+
+  .site-header__inner {
+    width: min(1440px, calc(100% - 28px));
+  }
+
+  .site-nav {
+    border-radius: 0 0 18px 18px;
+  }
+
+  .site-nav__link,
+  .nav-dropdown__trigger,
+  .nav-dropdown__menu a {
+    color: rgba(17, 17, 17, 0.78);
+    font-weight: 800;
+  }
+
+  .nav-dropdown__menu a {
+    color: rgba(17, 17, 17, 0.58);
+  }
+
+  .site-header__actions {
+    min-width: 0;
+  }
+
+  .navbar__cart,
+  .lang-picker__button,
+  .site-header__menu-toggle {
+    touch-action: manipulation;
+  }
+
+  .lang-picker__menu {
+    right: 0;
+    min-width: 156px;
+  }
+
+  .button {
+    min-height: 46px;
+    padding-inline: 18px;
+  }
+
+  .hero__actions,
+  .page-hero__actions,
+  .detail-actions,
+  .showroom-actions,
+  .solution-page__actions,
+  .platform-hero__actions,
+  .platform-final__actions,
+  .platform-section-actions {
+    gap: 10px;
+  }
+
+  .platform-hero {
+    min-height: calc(100svh - var(--site-header-height));
+    align-items: end;
+  }
+
+  .platform-hero__image {
+    opacity: 0.56;
+    background-position: 69% 48%;
+    transform: scaleX(-1) scale(1.16);
+  }
+
+  .platform-hero__overlay {
+    background:
+      linear-gradient(180deg, rgba(7, 26, 22, 0.18), rgba(7, 26, 22, 0.76) 58%, rgba(7, 26, 22, 0.92)),
+      radial-gradient(circle at 74% 20%, rgba(32, 180, 85, 0.12), transparent 34%);
+  }
+
+  .platform-hero__inner {
+    padding-top: clamp(42px, 10svh, 72px);
+    padding-bottom: clamp(46px, 10svh, 78px);
+  }
+
+  .platform-hero__content {
+    gap: 18px;
+  }
+
+  .platform-hero__tabs {
+    overflow-x: auto;
+    flex-wrap: nowrap;
+    padding-bottom: 4px;
+    scrollbar-width: none;
+  }
+
+  .platform-hero__tabs::-webkit-scrollbar {
+    display: none;
+  }
+
+  .platform-hero__tab {
+    flex: 0 0 auto;
+    white-space: nowrap;
+  }
+
+  .platform-hero h1,
+  .showroom-hero h1,
+  .solutions-overview-hero h1,
+  .solution-page-hero h1,
+  .page-hero h1 {
+    line-height: 1.02;
+    letter-spacing: -0.04em;
+  }
+
+  .platform-hero h1 {
+    font-size: clamp(2.25rem, 9vw, 3.25rem);
+  }
+
+  .platform-hero__title,
+  .platform-hero__copy,
+  .platform-hero p,
+  .platform-hero__benefits {
+    min-height: 0;
+  }
+
+  .platform-hero__title span {
+    white-space: normal;
+  }
+
+  .platform-hero p {
+    max-width: 34rem;
+    margin-top: 12px;
+    font-size: 1rem;
+    line-height: 1.58;
+  }
+
+  .platform-hero__benefits {
+    gap: 10px;
+  }
+
+  .platform-hero__benefits span {
+    min-height: 0;
+    padding-top: 10px;
+  }
+
+  .platform-home-section,
+  .showroom-section,
+  .showroom-cta,
+  .solutions-overview-platform,
+  .solution-page-statement,
+  .solution-page-split,
+  .solution-page-timeline,
+  .solution-page-ecosystem-cards,
+  .solution-page-ecosystem-strip,
+  .solution-page-proof,
+  .solution-page-note,
+  .solution-page-cta {
+    padding-top: clamp(46px, 10vw, 68px);
+    padding-bottom: clamp(48px, 11vw, 72px);
+  }
+
+  .showroom-hero,
+  .solutions-overview-hero,
+  .solution-page-hero {
+    padding-top: clamp(34px, 8vw, 56px);
+    padding-bottom: clamp(44px, 10vw, 70px);
+  }
+
+  .home-section-inner,
+  .showroom-hero,
+  .showroom-section,
+  .showroom-cta,
+  .solutions-overview-hero,
+  .solutions-overview-cards,
+  .solutions-overview-platform,
+  .solution-page-hero,
+  .solution-page-statement,
+  .solution-page-split,
+  .solution-page-timeline,
+  .solution-page-band,
+  .solution-page-ecosystem-cards,
+  .solution-page-ecosystem-strip,
+  .solution-page-proof,
+  .solution-page-note,
+  .solution-page-cta,
+  .editorial-section,
+  .editorial-section--soft,
+  .editorial-cta-band {
+    padding-inline: 20px;
+  }
+
+  .platform-home-section h2,
+  .platform-final h2,
+  .showroom-section h2,
+  .showroom-featured h2,
+  .showroom-cta h2,
+  .solutions-overview-platform h2,
+  .solution-page-statement h2,
+  .solution-page-split h2,
+  .solution-page-timeline h2,
+  .solution-page-band h2,
+  .solution-page-ecosystem-cards h2,
+  .solution-page-ecosystem-strip h2,
+  .solution-page-proof h2,
+  .solution-page-note h2,
+  .solution-page-cta h2 {
+    font-size: clamp(1.85rem, 8vw, 2.75rem);
+    line-height: 1.08;
+    letter-spacing: -0.04em;
+  }
+
+  .platform-home-section p,
+  .showroom-section p,
+  .showroom-featured p,
+  .showroom-cta p,
+  .solutions-overview-platform p,
+  .solution-page-hero p,
+  .solution-page-statement p,
+  .solution-page-split p,
+  .solution-page-timeline p,
+  .solution-page-band p,
+  .solution-page-ecosystem-cards p,
+  .solution-page-ecosystem-strip p,
+  .solution-page-proof p,
+  .solution-page-note p,
+  .solution-page-cta p {
+    line-height: 1.62;
+  }
+
+  .showroom-hero,
+  .solution-page-hero {
+    gap: 28px;
+  }
+
+  .showroom-hero h1,
+  .solutions-overview-hero h1,
+  .solution-page-hero h1 {
+    font-size: clamp(2.25rem, 10vw, 3.45rem);
+  }
+
+  .showroom-hero__media,
+  .showroom-composition__image,
+  .showroom-featured__image,
+  .solution-page__visual,
+  .solution-page__image,
+  .platform-usecase__visual,
+  .platform-solution-detail__visual {
+    min-height: clamp(230px, 64vw, 330px);
+  }
+
+  .showroom-product {
+    gap: 14px;
+  }
+
+  .showroom-product__media,
+  .showroom-addon__media,
+  .platform-preset-card__media,
+  body:not([data-page="checkout"]) .buy-hub__item img,
+  body:not([data-page="checkout"]) .product-card > img {
+    min-height: 0;
+    aspect-ratio: 1.2;
+  }
+
+  .platform-section-head,
+  .platform-preset-head,
+  .cart-header {
+    gap: 14px;
+  }
+
+  .platform-benefit-card,
+  .platform-feature-card,
+  .platform-tier-card,
+  .platform-support-card,
+  .platform-solution-card,
+  .solutions-overview-card,
+  .solution-page-addon,
+  .page-hero,
+  .detail-media,
+  .detail-copy,
+  .checkout-card,
+  .panel {
+    border-radius: 18px;
+  }
+
+  .floating-quote-widget {
+    right: 14px;
+    bottom: 14px;
+    width: calc(100vw - 28px);
+  }
+}
+
+@media (max-width: 640px) {
+  .button,
+  .cart-actions .button,
+  .checkout-submit {
+    width: 100%;
+  }
+
+  .hero__actions,
+  .page-hero__actions,
+  .detail-actions,
+  .showroom-actions,
+  .solution-page__actions,
+  .platform-hero__actions,
+  .platform-final__actions,
+  .platform-section-actions {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .platform-hero__benefits small {
+    display: none;
+  }
+
+  .showroom-annotation,
+  .showroom-spec-row {
+    padding-block: 14px;
+  }
+
+  .solution-page-tags,
+  .solution-page-proof__badges {
+    gap: 8px;
+  }
+
+  .solution-page-tags span,
+  .solution-page-proof__badges span {
+    min-height: 32px;
+    font-size: 0.8rem;
+  }
+
+  .cart-line,
+  .cart-line:first-child {
+    gap: 14px;
+  }
+
+  body[data-page="buy-product"] .section {
+    padding-inline: 16px;
+  }
+}
+
+@media (max-width: 430px) {
+  :root {
+    --site-header-height: 66px;
+  }
+
+  main {
+    width: min(var(--max-width), calc(100% - 24px));
+    padding-top: calc(var(--site-header-height) + 14px);
+  }
+
+  .site-header__inner {
+    width: min(1440px, calc(100% - 20px));
+    padding-block: 8px;
+  }
+
+  .brand__image {
+    height: 30px;
+    max-width: 122px;
+  }
+
+  .navbar__cart,
+  .lang-picker__button,
+  .site-header__menu-toggle {
+    width: 38px;
+    height: 38px;
+    min-height: 38px;
+    flex-basis: 38px;
+  }
+
+  .navbar__cart svg {
+    width: 18px;
+    height: 18px;
+  }
+
+  .site-nav {
+    max-height: calc(100svh - var(--site-header-height) - 10px);
+    padding: 8px;
+  }
+
+  .site-nav__link,
+  .nav-dropdown__trigger {
+    min-height: 44px;
+    font-size: 0.94rem;
+  }
+
+  .nav-dropdown__menu a {
+    min-height: 36px;
+    font-size: 0.86rem;
+  }
+
+  .platform-hero {
+    min-height: calc(100svh - var(--site-header-height));
+  }
+
+  .platform-hero__inner {
+    padding-top: 34px;
+    padding-bottom: 42px;
+  }
+
+  .platform-hero h1,
+  .showroom-hero h1,
+  .solutions-overview-hero h1,
+  .solution-page-hero h1 {
+    font-size: clamp(2rem, 11vw, 2.85rem);
+  }
+
+  .platform-home-section h2,
+  .platform-final h2,
+  .showroom-section h2,
+  .showroom-featured h2,
+  .showroom-cta h2,
+  .solutions-overview-platform h2,
+  .solution-page-statement h2,
+  .solution-page-split h2,
+  .solution-page-timeline h2,
+  .solution-page-band h2,
+  .solution-page-ecosystem-cards h2,
+  .solution-page-ecosystem-strip h2,
+  .solution-page-proof h2,
+  .solution-page-note h2,
+  .solution-page-cta h2 {
+    font-size: clamp(1.72rem, 8.5vw, 2.35rem);
+  }
+
+  .home-section-inner,
+  .showroom-hero,
+  .showroom-section,
+  .showroom-cta,
+  .solutions-overview-hero,
+  .solutions-overview-cards,
+  .solutions-overview-platform,
+  .solution-page-hero,
+  .solution-page-statement,
+  .solution-page-split,
+  .solution-page-timeline,
+  .solution-page-band,
+  .solution-page-ecosystem-cards,
+  .solution-page-ecosystem-strip,
+  .solution-page-proof,
+  .solution-page-note,
+  .solution-page-cta,
+  .editorial-section,
+  .editorial-section--soft,
+  .editorial-cta-band {
+    padding-inline: 16px;
+  }
+
+  .platform-home-section,
+  .showroom-section,
+  .showroom-cta,
+  .solutions-overview-platform,
+  .solution-page-statement,
+  .solution-page-split,
+  .solution-page-timeline,
+  .solution-page-ecosystem-cards,
+  .solution-page-ecosystem-strip,
+  .solution-page-proof,
+  .solution-page-note,
+  .solution-page-cta {
+    padding-top: 40px;
+    padding-bottom: 44px;
+  }
+}

@@ -121,10 +121,9 @@ main {
 
 @media (max-width: 860px) {
   :root {
-    --site-header-height: 142px;
+    --site-header-height: 74px;
   }
 
-  .site-header__inner,
   .hero__top,
   .section-head,
   .site-footer__inner {
@@ -133,12 +132,18 @@ main {
   }
 
   .site-header__inner {
-    min-height: auto;
-    padding: 16px 0;
+    position: relative;
+    min-height: var(--site-header-height);
+    padding: 10px 0;
+    gap: 14px;
   }
 }
 
 @media (max-width: 560px) {
+  main {
+    width: min(var(--max-width), calc(100% - 28px));
+  }
+
   main {
     padding-bottom: 72px;
   }

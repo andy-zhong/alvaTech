@@ -116,6 +116,7 @@ export function initHeader({ page, lang, route }) {
   setTranslations(lang);
   updateCart();
   renderLanguage(lang, route);
+  bindMobileMenu(lang);
 }
 
 function clearActiveLinks() {
@@ -192,4 +193,42 @@ function renderLanguage(lang, route) {
     console.error("[header] Failed to render language picker:", err);
     el.innerHTML = "";
   }
+}
+
+function bindMobileMenu(lang) {
+  const header = document.querySelector(".site-header");
+  const toggle = document.querySelector(".site-header__menu-toggle");
+  const nav = document.getElementById("site-nav");
+
+  if (!header || !toggle || !nav) {
+    return;
+  }
+
+  const openLabel = lang === "sv" ? "Öppna meny" : "Open menu";
+  const closeLabel = lang === "sv" ? "Stäng meny" : "Close menu";
+
+  function setOpen(isOpen) {
+    header.classList.toggle("is-menu-open", isOpen);
+    toggle.setAttribute("aria-expanded", String(isOpen));
+    toggle.setAttribute("aria-label", isOpen ? closeLabel : openLabel);
+    nav.setAttribute("aria-hidden", String(!isOpen));
+  }
+
+  toggle.setAttribute("aria-label", openLabel);
+  nav.setAttribute("aria-hidden", "true");
+  toggle.addEventListener("click", () => {
+    setOpen(!header.classList.contains("is-menu-open"));
+  });
+
+  nav.addEventListener("click", (event) => {
+    if (event.target.closest("a")) {
+      setOpen(false);
+    }
+  });
+
+  document.addEventListener("keydown", (event) => {
+    if (event.key === "Escape") {
+      setOpen(false);
+    }
+  });
 }
