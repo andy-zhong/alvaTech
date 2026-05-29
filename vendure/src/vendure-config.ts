@@ -20,8 +20,7 @@ const serverPort = +process.env.PORT || 2605;
 const storefrontUrl = process.env.STOREFRONT_URL || 'http://localhost:3000';
 const storefrontOrigins = parseOrigins(process.env.STOREFRONT_ORIGINS || storefrontUrl);
 const cookieSecret = getCookieSecret();
-const superadminUsername = requiredEnv('SUPERADMIN_USERNAME');
-const superadminPassword = requiredEnv('SUPERADMIN_PASSWORD');
+const superadminCredentials = getSuperadminCredentials();
 const localStorefrontOrigins = [
     storefrontUrl,
     'http://localhost:5500',
@@ -52,6 +51,20 @@ function getCookieSecret(): string {
         return process.env.COOKIE_SECRET || 'dashboard-build-placeholder-cookie-secret';
     }
     return requiredEnv('COOKIE_SECRET');
+}
+
+function getSuperadminCredentials(): { identifier: string; password: string } {
+    if (isDashboardBuild()) {
+        return {
+            identifier: process.env.SUPERADMIN_USERNAME || 'dashboard-build-superadmin',
+            password: process.env.SUPERADMIN_PASSWORD || 'dashboard-build-superadmin-password',
+        };
+    }
+
+    return {
+        identifier: requiredEnv('SUPERADMIN_USERNAME'),
+        password: requiredEnv('SUPERADMIN_PASSWORD'),
+    };
 }
 
 function isDashboardBuild(): boolean {
@@ -133,8 +146,8 @@ export const config: VendureConfig = {
     authOptions: {
         tokenMethod: ['bearer', 'cookie'],
         superadminCredentials: {
-            identifier: superadminUsername,
-            password: superadminPassword,
+            identifier: superadminCredentials.identifier,
+            password: superadminCredentials.password,
         },
         cookieOptions: {
           secret: cookieSecret,
