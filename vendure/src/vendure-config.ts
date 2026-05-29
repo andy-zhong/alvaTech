@@ -19,7 +19,7 @@ const IS_DEV = process.env.APP_ENV === 'dev';
 const serverPort = +process.env.PORT || 2605;
 const storefrontUrl = process.env.STOREFRONT_URL || 'http://localhost:3000';
 const storefrontOrigins = parseOrigins(process.env.STOREFRONT_ORIGINS || storefrontUrl);
-const cookieSecret = requiredEnv('COOKIE_SECRET');
+const cookieSecret = getCookieSecret();
 const localStorefrontOrigins = [
     storefrontUrl,
     'http://localhost:5500',
@@ -43,6 +43,18 @@ function requiredEnv(name: string): string {
         throw new Error(`Missing required environment variable ${name}. Set ${name} before starting the Vendure server or worker.`);
     }
     return value;
+}
+
+function getCookieSecret(): string {
+    if (isDashboardBuild()) {
+        return process.env.COOKIE_SECRET || 'dashboard-build-placeholder-cookie-secret';
+    }
+    return requiredEnv('COOKIE_SECRET');
+}
+
+function isDashboardBuild(): boolean {
+    return process.env.npm_lifecycle_event === 'build:dashboard'
+        || process.env.VENDURE_DASHBOARD_BUILD === 'true';
 }
 
 function envBoolean(name: string, defaultValue: boolean): boolean {
