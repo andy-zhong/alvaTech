@@ -8,7 +8,7 @@ This project is prepared for Cloudflare + AWS, but does not require either accou
 - DNS/CDN/SSL: Cloudflare Free plan.
 - Static frontend: Cloudflare Pages, or Nginx on AWS if Pages is not available.
 - Backend: AWS Lightsail running Express and Vendure.
-- Database: SQLite is acceptable for internal/demo use. Move Vendure to PostgreSQL before real paid ecommerce.
+- Database: SQLite is only for local/internal demo use. Docker/AWS staging and production should use PostgreSQL.
 
 ## Public DNS Plan
 
@@ -85,26 +85,42 @@ STRIPE_WEBHOOK_SECRET=
 
 For production, do not leave `CORS_ORIGIN=*`.
 
+Stripe secret values belong only in backend env files. The frontend must only receive `window.ALVA_STRIPE_PUBLISHABLE_KEY`, and that value must be a publishable key beginning with `pk_`.
+
 ## Vendure Env
 
 Copy `vendure/.env.example` to `vendure/.env` on the server and fill production values:
 
 ```env
 APP_ENV=production
+NODE_ENV=production
 PORT=2605
 STOREFRONT_URL=https://www.alvatechnology.com
 STOREFRONT_ORIGINS=https://www.alvatechnology.com,https://alvatechnology.com
 COOKIE_SECRET=<long random secret>
 SUPERADMIN_USERNAME=<admin username>
 SUPERADMIN_PASSWORD=<strong password>
+
+DB_TYPE=postgres
+DB_HOST=postgres
+DB_PORT=5432
+DB_NAME=alva_staging
+DB_USERNAME=alva_vendure
+DB_PASSWORD=<database password>
+DB_SYNCHRONIZE=false
+
 PAYMENT_MODE=order_request
 STRIPE_SECRET_KEY=
 STRIPE_WEBHOOK_SECRET=
+STRIPE_ALLOWED_METHODS=card,klarna
 ```
+
+For a Docker Compose deployment, `DB_HOST` must be the Postgres service name on the Docker network, such as `postgres`, not `127.0.0.1`.
+
+For a first empty staging database, `DB_SYNCHRONIZE=true` may be used only for the initial schema creation. Set it back to `false` once the first startup succeeds.
 
 Before real paid orders:
 
-- replace SQLite with PostgreSQL
 - disable dev email mode
 - configure real payment methods in Vendure Admin
 - use Stripe test keys on staging before any live keys

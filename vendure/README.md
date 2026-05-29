@@ -137,6 +137,38 @@ will compile the TypeScript sources into the `/dist` directory.
 For production, there are many possibilities which depend on your operational requirements as well as your production
 hosting environment.
 
+The Docker/AWS deployment should use PostgreSQL, not the local SQLite database. The server and worker must use the same image tag and the same env file:
+
+```env
+APP_ENV=production
+NODE_ENV=production
+PORT=2605
+STOREFRONT_URL=https://www.alvatechnology.com
+STOREFRONT_ORIGINS=https://www.alvatechnology.com,https://alvatechnology.com
+COOKIE_SECRET=<long random secret>
+SUPERADMIN_USERNAME=<admin username>
+SUPERADMIN_PASSWORD=<strong password>
+
+DB_TYPE=postgres
+DB_HOST=postgres
+DB_PORT=5432
+DB_NAME=alva_staging
+DB_USERNAME=alva_vendure
+DB_PASSWORD=<database password>
+DB_SYNCHRONIZE=false
+
+PAYMENT_MODE=order_request
+STRIPE_SECRET_KEY=
+STRIPE_WEBHOOK_SECRET=
+STRIPE_ALLOWED_METHODS=card,klarna
+```
+
+In Docker Compose, `DB_HOST=postgres` means the Postgres service named `postgres` on the shared Docker network. Do not use `127.0.0.1` from inside the Vendure container.
+
+For an empty staging database, `DB_SYNCHRONIZE=true` may be used for the first schema creation only. Change it back to `false` after the first successful startup.
+
+Stripe environment values are backend-only except for the frontend publishable key in `js/config.js`. Never place `STRIPE_SECRET_KEY` or `STRIPE_WEBHOOK_SECRET` in frontend files.
+
 ### Running directly
 
 You can run the built files directly with the `start` script:

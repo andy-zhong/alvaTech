@@ -61,6 +61,13 @@ window.ALVA_STRIPE_PUBLISHABLE_KEY = "pk_live_...";
 
 Only publish `pk_test_` on staging. Never put Stripe secret keys in frontend files.
 
+Stripe variable boundaries:
+
+- `ALVA_STRIPE_PUBLISHABLE_KEY` is frontend-only and must be a publishable key: `pk_test_...` on staging, `pk_live_...` only after go-live approval.
+- `STRIPE_SECRET_KEY` is backend-only and must never be committed to frontend files.
+- `STRIPE_WEBHOOK_SECRET` is backend-only and must match the Stripe webhook endpoint signing secret.
+- `STRIPE_ALLOWED_METHODS` is backend/runtime configuration for enabled payment method types such as `card,klarna`.
+
 ## Express Staging Env
 
 Use:
@@ -93,9 +100,53 @@ Use:
 
 ```env
 APP_ENV=production
+NODE_ENV=production
 PORT=2605
 STOREFRONT_URL=https://staging.alvatechnology.com
 STOREFRONT_ORIGINS=https://staging.alvatechnology.com,https://new.alvatechnology.com
+COOKIE_SECRET=<long random secret>
+SUPERADMIN_USERNAME=<admin username>
+SUPERADMIN_PASSWORD=<strong password>
+
+DB_TYPE=postgres
+DB_HOST=postgres
+DB_PORT=5432
+DB_NAME=alva_staging
+DB_USERNAME=alva_vendure
+DB_PASSWORD=<same value as POSTGRES_PASSWORD>
+DB_SYNCHRONIZE=false
+
+PAYMENT_MODE=order_request
+STRIPE_SECRET_KEY=
+STRIPE_WEBHOOK_SECRET=
+STRIPE_ALLOWED_METHODS=card,klarna
+```
+
+For a first empty staging Postgres database, `DB_SYNCHRONIZE=true` can be used temporarily to let Vendure create the schema. After the first successful startup, change it back to `DB_SYNCHRONIZE=false`.
+
+In Docker Compose, `DB_HOST` must be the Postgres service name on the Docker network, for example `postgres`. Do not set `DB_HOST=127.0.0.1` inside the Vendure container, because that points to the Vendure container itself.
+
+The current Vendure implementation still keeps the dummy payment handler for order-request testing. The Stripe plugin is installed and registered, but no real collection happens until a Stripe payment method is created in the Vendure Admin UI with test or live credentials. Stripe customer IDs are not stored in Vendure yet, so this step does not require a customer-field migration.
+
+### Docker Compose Env
+
+Use one `.env` file for both Postgres and Vendure:
+
+```env
+POSTGRES_DB=alva_staging
+POSTGRES_USER=alva_vendure
+POSTGRES_PASSWORD=<database password>
+
+DB_TYPE=postgres
+DB_HOST=postgres
+DB_PORT=5432
+DB_NAME=alva_staging
+DB_USERNAME=alva_vendure
+DB_PASSWORD=<same value as POSTGRES_PASSWORD>
+
+NODE_ENV=production
+APP_ENV=production
+PORT=2605
 COOKIE_SECRET=<long random secret>
 SUPERADMIN_USERNAME=<admin username>
 SUPERADMIN_PASSWORD=<strong password>
@@ -106,7 +157,7 @@ STRIPE_WEBHOOK_SECRET=
 STRIPE_ALLOWED_METHODS=card,klarna
 ```
 
-The current Vendure implementation still keeps the dummy payment handler for order-request testing. The Stripe plugin is installed and registered, but no real collection happens until a Stripe payment method is created in the Vendure Admin UI with test or live credentials. Stripe customer IDs are not stored in Vendure yet, so this step does not require a customer-field migration.
+The server and worker containers must use the same image tag and the same `.env` file so they share the same `VendureConfig` and database connection.
 
 ## Payment Implementation Path
 
