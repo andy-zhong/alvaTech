@@ -180,6 +180,8 @@ NODE_ENV=production
 PORT=2605
 STOREFRONT_URL=https://www.alvatechnology.se
 STOREFRONT_ORIGINS=https://www.alvatechnology.se,https://alvatechnology.se
+PUBLIC_API_URL=https://api.alvatechnology.se
+ASSET_URL_PREFIX=https://api.alvatechnology.se/assets/
 COOKIE_SECRET=<long random secret>
 SUPERADMIN_USERNAME=<admin username>
 SUPERADMIN_PASSWORD=<strong password>
@@ -208,6 +210,8 @@ For the production-mode staging backend at `staging-api.alvatechnology.se`, allo
 STOREFRONT_URL=https://staging.alvatechnology.se
 STOREFRONT_ORIGINS=https://staging.alvatechnology.se,https://www.alvatechnology.se
 CORS_ORIGIN=https://staging.alvatechnology.se,https://www.alvatechnology.se
+PUBLIC_API_URL=https://staging-api.alvatechnology.se
+ASSET_URL_PREFIX=https://staging-api.alvatechnology.se/assets/
 ```
 
 Restart the backend after changing these values.

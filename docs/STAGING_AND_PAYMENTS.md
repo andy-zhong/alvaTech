@@ -105,6 +105,8 @@ NODE_ENV=production
 PORT=2605
 STOREFRONT_URL=https://staging.alvatechnology.se
 STOREFRONT_ORIGINS=https://staging.alvatechnology.se,https://www.alvatechnology.se
+PUBLIC_API_URL=https://staging-api.alvatechnology.se
+ASSET_URL_PREFIX=https://staging-api.alvatechnology.se/assets/
 COOKIE_SECRET=<long random secret>
 SUPERADMIN_USERNAME=<admin username>
 SUPERADMIN_PASSWORD=<strong password>
@@ -137,6 +139,14 @@ CORS_ORIGIN=https://staging.alvatechnology.se,https://www.alvatechnology.se
 ```
 
 Restart the Vendure and Express processes after changing these values.
+
+Vendure asset URLs are generated from the backend origin. On staging, asset URLs should look like:
+
+```text
+https://staging-api.alvatechnology.se/assets/source/92/voltdock01.png
+```
+
+If assets show `https://www.my-shop.com/assets/...`, set `PUBLIC_API_URL` or `ASSET_URL_PREFIX` and restart Vendure server and worker.
 
 ### Docker Compose Env
 

@@ -19,6 +19,9 @@ const IS_DEV = process.env.APP_ENV === 'dev';
 const serverPort = +process.env.PORT || 2605;
 const storefrontUrl = process.env.STOREFRONT_URL || 'http://localhost:3000';
 const storefrontOrigins = parseOrigins(process.env.STOREFRONT_ORIGINS || storefrontUrl);
+const publicApiUrl = process.env.PUBLIC_API_URL?.trim();
+const assetUrlPrefix = process.env.ASSET_URL_PREFIX?.trim()
+    || (publicApiUrl ? `${publicApiUrl.replace(/\/+$/, '')}/assets/` : undefined);
 const cookieSecret = getCookieSecret();
 const superadminCredentials = getSuperadminCredentials();
 const localStorefrontOrigins = [
@@ -165,10 +168,7 @@ export const config: VendureConfig = {
         AssetServerPlugin.init({
             route: 'assets',
             assetUploadDir: path.join(__dirname, '../static/assets'),
-            // For local dev, the correct value for assetUrlPrefix should
-            // be guessed correctly, but for production it will usually need
-            // to be set manually to match your production url.
-            assetUrlPrefix: IS_DEV ? undefined : 'https://www.my-shop.com/assets/',
+            assetUrlPrefix: IS_DEV ? undefined : assetUrlPrefix,
         }),
         DefaultSchedulerPlugin.init(),
         DefaultJobQueuePlugin.init({ useDatabaseForBuffer: true }),
