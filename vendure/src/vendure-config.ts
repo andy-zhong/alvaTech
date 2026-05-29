@@ -12,12 +12,14 @@ import { GraphiqlPlugin } from '@vendure/graphiql-plugin';
 import { StripePlugin } from '@vendure-community/stripe-plugin';
 import 'dotenv/config';
 import path from 'path';
+import { DataSourceOptions } from 'typeorm';
 import { AlvaOrderReviewPlugin } from './plugins/alva-order-review/alva-order-review.plugin';
 
 const IS_DEV = process.env.APP_ENV === 'dev';
 const serverPort = +process.env.PORT || 2605;
 const storefrontUrl = process.env.STOREFRONT_URL || 'http://localhost:3000';
 const storefrontOrigins = parseOrigins(process.env.STOREFRONT_ORIGINS || storefrontUrl);
+const cookieSecret = requiredEnv('COOKIE_SECRET');
 const localStorefrontOrigins = [
     storefrontUrl,
     'http://localhost:5500',
@@ -33,6 +35,67 @@ function parseOrigins(value: string): string[] {
         .split(',')
         .map(origin => origin.trim())
         .filter(Boolean);
+}
+
+function requiredEnv(name: string): string {
+    const value = process.env[name]?.trim();
+    if (!value) {
+        throw new Error(`Missing required environment variable ${name}. Set ${name} before starting the Vendure server or worker.`);
+    }
+    return value;
+}
+
+function envBoolean(name: string, defaultValue: boolean): boolean {
+    const value = process.env[name]?.trim().toLowerCase();
+    if (value == null || value === '') {
+        return defaultValue;
+    }
+    return ['1', 'true', 'yes', 'on'].includes(value);
+}
+
+function envInt(name: string, defaultValue: number): number {
+    const raw = process.env[name]?.trim();
+    if (!raw) {
+        return defaultValue;
+    }
+    const value = Number(raw);
+    if (!Number.isInteger(value) || value <= 0) {
+        throw new Error(`Invalid ${name}: expected a positive integer, received "${raw}".`);
+    }
+    return value;
+}
+
+function getDbConnectionOptions(): DataSourceOptions {
+    const dbType = (process.env.DB_TYPE || 'sqlite').trim().toLowerCase();
+    const synchronize = envBoolean('DB_SYNCHRONIZE', IS_DEV);
+    const common = {
+        synchronize,
+        migrations: [path.join(__dirname, './migrations/*.+(js|ts)')],
+        logging: false,
+    };
+
+    if (dbType === 'postgres') {
+        return {
+            ...common,
+            type: 'postgres',
+            host: requiredEnv('DB_HOST'),
+            port: envInt('DB_PORT', 5432),
+            database: requiredEnv('DB_NAME'),
+            username: requiredEnv('DB_USERNAME'),
+            password: requiredEnv('DB_PASSWORD'),
+            ssl: envBoolean('DB_SSL', false) ? { rejectUnauthorized: false } : false,
+        };
+    }
+
+    if (dbType === 'sqlite' || dbType === 'better-sqlite3') {
+        return {
+            ...common,
+            type: 'better-sqlite3',
+            database: process.env.DB_PATH || path.join(__dirname, '../vendure.sqlite'),
+        };
+    }
+
+    throw new Error(`Unsupported DB_TYPE "${dbType}". Use "postgres" or "sqlite".`);
 }
 
 export const config: VendureConfig = {
@@ -60,18 +123,10 @@ export const config: VendureConfig = {
             password: process.env.SUPERADMIN_PASSWORD,
         },
         cookieOptions: {
-          secret: process.env.COOKIE_SECRET,
+          secret: cookieSecret,
         },
     },
-    dbConnectionOptions: {
-        type: 'better-sqlite3',
-        // See the README.md "Migrations" section for an explanation of
-        // the `synchronize` and `migrations` options.
-        synchronize: IS_DEV,
-        migrations: [path.join(__dirname, './migrations/*.+(js|ts)')],
-        logging: false,
-        database: path.join(__dirname, '../vendure.sqlite'),
-    },
+    dbConnectionOptions: getDbConnectionOptions(),
     paymentOptions: {
         paymentMethodHandlers: [dummyPaymentHandler],
     },

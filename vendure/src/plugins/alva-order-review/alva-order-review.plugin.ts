@@ -142,7 +142,6 @@ function isErrorResult(result: unknown): result is { errorCode: string; message?
 
 @VendurePlugin({
     imports: [PluginCommonModule],
-    providers: [AlvaOrderReviewResolver, AlvaShopCartResolver],
     adminApiExtensions: {
         schema: adminApiExtensions,
         resolvers: [AlvaOrderReviewResolver],
