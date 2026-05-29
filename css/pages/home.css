@@ -513,7 +513,7 @@
 .platform-solution-tab__image--summer {
   background:
     linear-gradient(rgba(15, 42, 36, 0.12), rgba(15, 42, 36, 0.12)),
-    url("/Picture/products/voltrix/summerhouse/summerhouse03.jpg") center / cover no-repeat;
+    url("/Picture/products/voltrix/summerhouse/summerhouse03-optimized.jpg") center / cover no-repeat;
 }
 
 .platform-solution-tab__image--field {
@@ -525,7 +525,7 @@
 .platform-solution-detail__visual--summer {
   background:
     linear-gradient(rgba(15, 42, 36, 0.12), rgba(15, 42, 36, 0.12)),
-    url("/Picture/products/voltrix/summerhouse/summerhouse02.jpg") center / cover no-repeat;
+    url("/Picture/products/voltrix/summerhouse/summerhouse02-optimized.jpg") center / cover no-repeat;
 }
 
 .platform-solution-detail__visual--field {
@@ -749,7 +749,7 @@
 .platform-visual--summer {
   background:
     linear-gradient(rgba(15, 42, 36, 0.16), rgba(15, 42, 36, 0.16)),
-    url("/Picture/products/voltrix/summerhouse/summerhouse02.jpg") center / cover no-repeat;
+    url("/Picture/products/voltrix/summerhouse/summerhouse02-optimized.jpg") center / cover no-repeat;
 }
 
 .platform-visual--field {
@@ -823,7 +823,7 @@
 .platform-usecase__visual--summer {
   background:
     linear-gradient(rgba(15, 42, 36, 0.12), rgba(15, 42, 36, 0.12)),
-    url("/Picture/products/voltrix/summerhouse/summerhouse03.jpg") center / cover no-repeat;
+    url("/Picture/products/voltrix/summerhouse/summerhouse03-optimized.jpg") center / cover no-repeat;
 }
 
 .platform-usecase__copy ul {

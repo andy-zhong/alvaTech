@@ -8,6 +8,9 @@
     "commerce:server": "npm --prefix vendure run dev:server",
     "commerce:worker": "npm --prefix vendure run dev:worker",
     "commerce:build": "npm --prefix vendure run build",
+    "package:frontend": "powershell -ExecutionPolicy Bypass -File scripts/package-frontend.ps1 -Environment all",
+    "package:frontend:staging": "powershell -ExecutionPolicy Bypass -File scripts/package-frontend.ps1 -Environment staging",
+    "package:frontend:production": "powershell -ExecutionPolicy Bypass -File scripts/package-frontend.ps1 -Environment production",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {

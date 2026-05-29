@@ -28,7 +28,7 @@ const COMPONENTS = [
   {
     name: "Mounting",
     body: "Clean support for installation and placement.",
-    image: "/Picture/products/voltrix/summerhouse/summerhouse02.jpg",
+    image: "/Picture/products/voltrix/summerhouse/summerhouse02-optimized.jpg",
   },
 ];
 

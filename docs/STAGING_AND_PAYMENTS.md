@@ -14,10 +14,9 @@ www.alvatechnology.com
 Add non-conflicting staging records for the new site:
 
 ```text
-staging.alvatechnology.com        new frontend
-api-staging.alvatechnology.com    Express API
-commerce-staging.alvatechnology.com Vendure Shop API
-admin-staging.alvatechnology.com  Vendure dashboard
+staging.alvatechnology.se         new frontend
+staging-api.alvatechnology.se     Express API and Vendure Shop API
+staging-api.alvatechnology.se/dashboard Vendure dashboard
 ```
 
 The production switch happens later by changing only `@` and `www` DNS records. Keep the old site available at `old.alvatechnology.com` before switching.
@@ -27,10 +26,8 @@ The production switch happens later by changing only `@` and `www` DNS records. 
 Protect all staging hostnames with Cloudflare Access:
 
 ```text
-staging.alvatechnology.com
-api-staging.alvatechnology.com
-commerce-staging.alvatechnology.com
-admin-staging.alvatechnology.com
+staging.alvatechnology.se
+staging-api.alvatechnology.se
 ```
 
 Use an allow policy for internal email addresses or the company email domain. Do not rely on the staging hostname being unknown.
@@ -38,28 +35,32 @@ Use an allow policy for internal email addresses or the company email domain. Do
 When real payment webhooks are added, do not put the webhook URL behind an interactive login page. Use a separate bypass rule for the webhook path and verify the provider signature in the backend:
 
 ```text
-api-staging.alvatechnology.com/api/webhooks/stripe
+staging-api.alvatechnology.se/api/webhooks/stripe
 ```
 
 ## Frontend Config
 
+The frontend reads these values at runtime from `js/config.js`. For local development, an empty config means same-origin Express API requests and Vendure fallback to `http://localhost:2605/shop-api`.
+
 For staging, deploy `js/config.js` with:
 
 ```js
-window.ALVA_API_BASE_URL = "https://api-staging.alvatechnology.com";
-window.ALVA_VENDURE_SHOP_API = "https://commerce-staging.alvatechnology.com/shop-api";
+window.ALVA_API_BASE_URL = "https://staging-api.alvatechnology.se";
+window.ALVA_VENDURE_SHOP_API = "https://staging-api.alvatechnology.se/shop-api";
 window.ALVA_STRIPE_PUBLISHABLE_KEY = "pk_test_...";
 ```
 
 For production later:
 
 ```js
-window.ALVA_API_BASE_URL = "https://api.alvatechnology.com";
-window.ALVA_VENDURE_SHOP_API = "https://commerce.alvatechnology.com/shop-api";
+window.ALVA_API_BASE_URL = "https://api.alvatechnology.se";
+window.ALVA_VENDURE_SHOP_API = "https://api.alvatechnology.se/shop-api";
 window.ALVA_STRIPE_PUBLISHABLE_KEY = "pk_live_...";
 ```
 
 Only publish `pk_test_` on staging. Never put Stripe secret keys in frontend files.
+
+When deploying the static frontend to 1Panel, make sure `js/config.js` uses public HTTPS URLs. Do not use Docker service names or `localhost` in frontend config for staging or production, because those values run in the visitor's browser, not inside the server.
 
 Stripe variable boundaries:
 
@@ -75,7 +76,7 @@ Use:
 ```env
 NODE_ENV=production
 PORT=3000
-CORS_ORIGIN=https://staging.alvatechnology.com,https://new.alvatechnology.com
+CORS_ORIGIN=https://staging.alvatechnology.se,https://www.alvatechnology.se
 
 PAYMENT_MODE=order_request
 STRIPE_SECRET_KEY=
@@ -102,8 +103,8 @@ Use:
 APP_ENV=production
 NODE_ENV=production
 PORT=2605
-STOREFRONT_URL=https://staging.alvatechnology.com
-STOREFRONT_ORIGINS=https://staging.alvatechnology.com,https://new.alvatechnology.com
+STOREFRONT_URL=https://staging.alvatechnology.se
+STOREFRONT_ORIGINS=https://staging.alvatechnology.se,https://www.alvatechnology.se
 COOKIE_SECRET=<long random secret>
 SUPERADMIN_USERNAME=<admin username>
 SUPERADMIN_PASSWORD=<strong password>
@@ -127,6 +128,15 @@ For a first empty staging Postgres database, `DB_SYNCHRONIZE=true` can be used t
 In Docker Compose, `DB_HOST` must be the Postgres service name on the Docker network, for example `postgres`. Do not set `DB_HOST=127.0.0.1` inside the Vendure container, because that points to the Vendure container itself.
 
 The current Vendure implementation still keeps the dummy payment handler for order-request testing. The Stripe plugin is installed and registered, but no real collection happens until a Stripe payment method is created in the Vendure Admin UI with test or live credentials. Stripe customer IDs are not stored in Vendure yet, so this step does not require a customer-field migration.
+
+The `staging-api.alvatechnology.se` backend is a production-mode backend for staging. It must allow browser requests from both active frontend hostnames:
+
+```env
+STOREFRONT_ORIGINS=https://staging.alvatechnology.se,https://www.alvatechnology.se
+CORS_ORIGIN=https://staging.alvatechnology.se,https://www.alvatechnology.se
+```
+
+Restart the Vendure and Express processes after changing these values.
 
 ### Docker Compose Env
 
@@ -168,7 +178,7 @@ The server and worker containers must use the same image tag and the same `.env`
 5. Point the webhook at:
 
 ```text
-https://commerce-staging.alvatechnology.com/payments/stripe
+https://staging-api.alvatechnology.se/payments/stripe
 ```
 
 6. Enable payment methods in Stripe test mode: `card` and `klarna`.
@@ -198,8 +208,8 @@ Before switching:
 Then change:
 
 ```text
-www.alvatechnology.com -> new frontend
-alvatechnology.com -> new frontend or redirect to www
+www.alvatechnology.se -> new frontend
+alvatechnology.se -> redirect to www
 ```
 
 Keep staging online after launch for future release testing.

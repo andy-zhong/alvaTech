@@ -28,7 +28,7 @@ const PRODUCT_ASSETS = {
     galleryImages: [],
   },
   mounting: {
-    primaryImage: "/Picture/products/voltrix/summerhouse/summerhouse02.jpg",
+    primaryImage: "/Picture/products/voltrix/summerhouse/summerhouse02-optimized.jpg",
     hoverImage: "/Picture/products/voltrix/voltrix04.png",
     galleryImages: [],
   },

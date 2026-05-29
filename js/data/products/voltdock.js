@@ -15,8 +15,8 @@ export const VOLTDOCK_PRODUCT = {
     createMediaItem("/Picture/products/voltdock/voltdock02.png", "VoltDock detail view"),
     createMediaItem("/Picture/products/voltdock/voltdock03.png", "VoltDock desktop use"),
     createMediaItem("/Picture/products/voltdock/voltdock04.png", "VoltDock product angle"),
-    createMediaItem("/Picture/products/voltdock/voltdock10.jpg", "VoltDock overview"),
-    createMediaItem("/Picture/products/voltdock/voltdock07.jpg", "VoltDock with battery"),
+    createMediaItem("/Picture/products/voltdock/voltdock10-optimized.jpg", "VoltDock overview"),
+    createMediaItem("/Picture/products/voltdock/voltdock07-optimized.jpg", "VoltDock with battery"),
   ],
 
   price: "3 990 SEK",

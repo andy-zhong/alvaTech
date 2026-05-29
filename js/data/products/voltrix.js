@@ -15,8 +15,8 @@ export const VOLTRIX_PRODUCT = {
     createMediaItem("/Picture/products/voltrix/voltrix05.png", "Voltrix base unit"),
     createMediaItem("/Picture/products/voltrix/voltrix01.jpg", "Voltrix overview"),
     createMediaItem("/Picture/products/voltrix/voltrix03.jpg", "Voltrix side profile"),
-    createMediaItem("/Picture/products/voltrix/voltrix06.jpg", "Voltrix expanded system"),
-    createMediaItem("/Picture/products/voltrix/summerhouse/summerhouse02.jpg", "Voltrix wall mounted"),
+    createMediaItem("/Picture/products/voltrix/voltrix06-optimized.jpg", "Voltrix expanded system"),
+    createMediaItem("/Picture/products/voltrix/summerhouse/summerhouse02-optimized.jpg", "Voltrix wall mounted"),
     createMediaItem("/Picture/products/voltrix/field/field05.png", "Voltrix field setup"),
   ],
 

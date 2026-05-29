@@ -321,6 +321,42 @@ Recommended future integration point:
 - keep UI rendering in `js/pages/buy-product.js`
 - connect real payment logic through API endpoints in the server layer
 
+## Backend URL Configuration
+
+The storefront reads backend URLs from `js/config.js`.
+
+Local default:
+
+```js
+window.ALVA_API_BASE_URL = "";
+window.ALVA_VENDURE_SHOP_API = "";
+window.ALVA_STRIPE_PUBLISHABLE_KEY = "";
+```
+
+With the default config:
+
+- Express API requests use the same origin as the frontend.
+- Vendure requests use `http://localhost:2605/shop-api`.
+- If the frontend is opened from `127.0.0.1`, Vendure uses `http://127.0.0.1:2605/shop-api`.
+
+For local development where the static frontend runs on `http://localhost:5500` and Express runs on `http://localhost:3000`, use:
+
+```js
+window.ALVA_API_BASE_URL = "http://localhost:3000";
+window.ALVA_VENDURE_SHOP_API = "http://localhost:2605/shop-api";
+window.ALVA_STRIPE_PUBLISHABLE_KEY = "";
+```
+
+For production or staging, use public HTTPS backend hostnames:
+
+```js
+window.ALVA_API_BASE_URL = "https://api.alvatechnology.se";
+window.ALVA_VENDURE_SHOP_API = "https://api.alvatechnology.se/shop-api";
+window.ALVA_STRIPE_PUBLISHABLE_KEY = "";
+```
+
+Never put backend-only secrets in `js/config.js`. Stripe secret keys, webhook secrets, database credentials and admin credentials belong only in backend environment files.
+
 ## Legacy / Historical Files
 
 The repo still contains some older folders from earlier iterations, such as:

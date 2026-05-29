@@ -58,6 +58,18 @@ services:
         labels:
             - "io.vendure.create.name=vendure"
 
+    portainer:
+        image: portainer/portainer-ce:lts
+        command: --http-enabled
+        ports:
+            - "8000:8000"
+            - "9000:9000"
+            - "9443:9443"
+        volumes:
+            - /var/run/docker.sock:/var/run/docker.sock
+            - portainer_data:/data
+        restart: always
+
     # RECOMMENDED
     # Want to use Typesense instead of our default search engine?
     # Checkout our advanced search plugin: https://vendure.io/hub/vendure-plus-advanced-search-plugin
@@ -125,3 +137,5 @@ volumes:
         driver: local
         labels:
             - "io.vendure.create.name=vendure"
+    portainer_data:
+        driver: local
