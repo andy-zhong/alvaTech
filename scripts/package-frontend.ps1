@@ -1,12 +1,66 @@
 param(
     [ValidateSet("staging", "production", "all")]
-    [string]$Environment = "all"
+    [string]$Environment = "all",
+    [string]$EnvFile = ".env",
+    [string]$StagingStripePublishableKey,
+    [string]$ProductionStripePublishableKey
 )
 
 $ErrorActionPreference = "Stop"
 
 $repoRoot = Resolve-Path (Join-Path $PSScriptRoot "..")
 $distDir = Join-Path $repoRoot "dist"
+
+function Import-DotEnvFile {
+    param([string]$Path)
+
+    $resolvedPath = if ([System.IO.Path]::IsPathRooted($Path)) {
+        $Path
+    } else {
+        Join-Path $repoRoot $Path
+    }
+
+    if (-not (Test-Path -LiteralPath $resolvedPath)) {
+        return
+    }
+
+    foreach ($line in Get-Content -LiteralPath $resolvedPath) {
+        $trimmed = $line.Trim()
+        if ($trimmed.Length -eq 0 -or $trimmed.StartsWith("#")) {
+            continue
+        }
+
+        $separatorIndex = $trimmed.IndexOf("=")
+        if ($separatorIndex -lt 1) {
+            continue
+        }
+
+        $name = $trimmed.Substring(0, $separatorIndex).Trim()
+        $value = $trimmed.Substring($separatorIndex + 1).Trim()
+
+        if ($value.Length -ge 2) {
+            $first = $value[0]
+            $last = $value[$value.Length - 1]
+            if (($first -eq '"' -and $last -eq '"') -or ($first -eq "'" -and $last -eq "'")) {
+                $value = $value.Substring(1, $value.Length - 2)
+            }
+        }
+
+        if (-not [System.Environment]::GetEnvironmentVariable($name, "Process")) {
+            [System.Environment]::SetEnvironmentVariable($name, $value, "Process")
+        }
+    }
+}
+
+Import-DotEnvFile -Path $EnvFile
+
+if (-not $StagingStripePublishableKey) {
+    $StagingStripePublishableKey = $env:ALVA_STAGING_STRIPE_PUBLISHABLE_KEY
+}
+
+if (-not $ProductionStripePublishableKey) {
+    $ProductionStripePublishableKey = $env:ALVA_PRODUCTION_STRIPE_PUBLISHABLE_KEY
+}
 
 $frontendRoots = @(
     "index.html",
@@ -41,12 +95,12 @@ $configs = @{
     staging = @{
         ApiBaseUrl = "https://staging-api.alvatechnology.se"
         VendureShopApi = "https://staging-api.alvatechnology.se/shop-api"
-        StripePublishableKey = ""
+        StripePublishableKey = $StagingStripePublishableKey
     }
     production = @{
         ApiBaseUrl = "https://api.alvatechnology.se"
         VendureShopApi = "https://api.alvatechnology.se/shop-api"
-        StripePublishableKey = ""
+        StripePublishableKey = $ProductionStripePublishableKey
     }
 }
 
@@ -77,6 +131,22 @@ window.ALVA_STRIPE_PUBLISHABLE_KEY = "$stripePublishableKey";
 "@
 
     Set-Content -LiteralPath $configPath -Value $content -Encoding UTF8
+}
+
+function Add-ConfigCacheBuster {
+    param(
+        [string]$StageDir,
+        [string]$Version
+    )
+
+    Get-ChildItem -LiteralPath $StageDir -Recurse -File -Filter "*.html" | ForEach-Object {
+        $content = Get-Content -LiteralPath $_.FullName -Raw
+        $updated = $content -replace '(src="(?:\.\./|\./|/)js/config\.js)(?:\?v=[^"]*)?(")', "`${1}?v=$Version`${2}"
+
+        if ($updated -ne $content) {
+            Set-Content -LiteralPath $_.FullName -Value $updated -Encoding UTF8
+        }
+    }
 }
 
 function Remove-IfInside {
@@ -126,6 +196,7 @@ function New-FrontendPackage {
     }
 
     Write-RuntimeConfig -StageDir $stageDir -Name $Name -Config $configs[$Name]
+    Add-ConfigCacheBuster -StageDir $stageDir -Version $timestamp
 
     $manifest = @"
 Package: alvatech frontend
@@ -133,6 +204,8 @@ Environment: $Name
 Created: $(Get-Date -Format "yyyy-MM-dd HH:mm:ss zzz")
 API base URL: $($configs[$Name].ApiBaseUrl)
 Vendure Shop API: $($configs[$Name].VendureShopApi)
+Stripe publishable key configured: $([bool]$configs[$Name].StripePublishableKey)
+Config cache-buster: $timestamp
 "@
     Set-Content -LiteralPath (Join-Path $stageDir "package-info.txt") -Value $manifest -Encoding UTF8
 

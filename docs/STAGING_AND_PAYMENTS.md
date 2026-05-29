@@ -50,6 +50,15 @@ window.ALVA_VENDURE_SHOP_API = "https://staging-api.alvatechnology.se/shop-api";
 window.ALVA_STRIPE_PUBLISHABLE_KEY = "pk_test_...";
 ```
 
+When creating the staging frontend zip, set the Stripe publishable key as an environment variable:
+
+```powershell
+$env:ALVA_STAGING_STRIPE_PUBLISHABLE_KEY="pk_test_..."
+npm.cmd run package:frontend:staging
+```
+
+If `ALVA_STRIPE_PUBLISHABLE_KEY` is empty, the storefront will create an order request only and will not render the Stripe payment window.
+
 For production later:
 
 ```js

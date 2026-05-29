@@ -43,6 +43,7 @@
       "runtimeExecutable": "npm.cmd",
       "runtimeArgs": ["run", "package:frontend:staging"],
       "cwd": "${workspaceFolder}",
+      "envFile": "${workspaceFolder}/.env",
       "console": "integratedTerminal",
       "skipFiles": ["<node_internals>/**"]
     },
@@ -53,6 +54,7 @@
       "runtimeExecutable": "npm.cmd",
       "runtimeArgs": ["run", "package:frontend:production"],
       "cwd": "${workspaceFolder}",
+      "envFile": "${workspaceFolder}/.env",
       "console": "integratedTerminal",
       "skipFiles": ["<node_internals>/**"]
     },
@@ -63,6 +65,7 @@
       "runtimeExecutable": "npm.cmd",
       "runtimeArgs": ["run", "package:frontend"],
       "cwd": "${workspaceFolder}",
+      "envFile": "${workspaceFolder}/.env",
       "console": "integratedTerminal",
       "skipFiles": ["<node_internals>/**"]
     }

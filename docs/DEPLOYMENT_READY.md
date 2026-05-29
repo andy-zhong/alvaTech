@@ -116,7 +116,7 @@ Staging package config:
 ```js
 window.ALVA_API_BASE_URL = "https://staging-api.alvatechnology.se";
 window.ALVA_VENDURE_SHOP_API = "https://staging-api.alvatechnology.se/shop-api";
-window.ALVA_STRIPE_PUBLISHABLE_KEY = "";
+window.ALVA_STRIPE_PUBLISHABLE_KEY = "pk_test_...";
 ```
 
 Production package config:
@@ -149,6 +149,13 @@ public/alvatech-frontend-production-1panel-20260529-124309/index.html
 ```
 
 Only set `ALVA_STRIPE_PUBLISHABLE_KEY` after Stripe checkout is actually enabled. Secret keys must stay in backend env files.
+
+For staging Stripe testing, set the publishable key as an environment variable when packaging:
+
+```powershell
+$env:ALVA_STAGING_STRIPE_PUBLISHABLE_KEY="pk_test_..."
+npm.cmd run package:frontend:staging
+```
 
 ## Express Env
 

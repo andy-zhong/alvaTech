@@ -1,5 +1,4 @@
 import {
-  addVendurePaymentToOrder,
   getVendureActiveOrder,
   getVendureEligibleShippingMethods,
   setVendureCustomerForOrder,
@@ -10,8 +9,6 @@ import {
   transitionVendureOrderToState,
 } from "./vendure-client.js";
 import { clearVendureCartSyncSignature, syncLocalCartToVendure } from "./vendure-cart-sync.js";
-
-const DEFAULT_PAYMENT_METHOD = "standard-payment";
 
 const COUNTRY_CODES = {
   sweden: "SE",
@@ -61,13 +58,12 @@ export async function prepareVendureGuestCheckoutForPayment(payload, cart = []) 
 
 async function runVendureGuestCheckout(payload, cart) {
   const preparedOrder = await runVendureGuestCheckoutPreparation(payload, cart);
-  const paymentOrder = await authorizePayment(cart);
 
   clearVendureCartSyncSignature();
 
   return {
-    orderCode: paymentOrder.code,
-    orderState: paymentOrder.state,
+    orderCode: preparedOrder.orderCode,
+    orderState: preparedOrder.orderState,
     preparedOrder,
   };
 }
@@ -186,25 +182,6 @@ async function applyFirstEligibleShippingMethod(cart) {
     await withActiveOrderRecovery("setOrderShippingMethod", cart, () => setVendureOrderShippingMethod(method.id)),
     "setOrderShippingMethod",
   );
-}
-
-async function authorizePayment(cart) {
-  await transitionOrderToPaymentState(cart);
-
-  const paymentResult = await withActiveOrderRecovery("addPaymentToOrder", cart, () => addVendurePaymentToOrder({
-      method: DEFAULT_PAYMENT_METHOD,
-      metadata: {
-        source: "alva-storefront-checkout",
-      },
-    }),
-  );
-  const order = unwrapVendureResult(paymentResult);
-
-  if (order?.errorCode) {
-    throw new Error(order.message || `addPaymentToOrder failed with ${order.errorCode}`);
-  }
-
-  return order;
 }
 
 async function transitionOrderToPaymentState(cart) {
