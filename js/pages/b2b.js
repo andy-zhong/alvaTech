@@ -2,6 +2,7 @@ import { getStoredLanguage, t } from "../services/language-service.js";
 import { apiUrl } from "../app/runtime-config.js";
 
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+const ESTIMATE_PREFILL_KEY = "alva-estimator-request-summary";
 
 const COPY = {
   en: {
@@ -48,6 +49,7 @@ const COPY = {
 
 export function initB2BForm() {
   applyB2BTranslations();
+  prefillEstimateRequest();
 
   const form = document.getElementById("b2b-form");
   if (!form || form.dataset.bound === "true") return;
@@ -58,6 +60,21 @@ export function initB2BForm() {
   form.querySelectorAll("input, textarea").forEach((field) => {
     field.addEventListener("input", () => clearFieldError(field.name));
   });
+}
+
+function prefillEstimateRequest() {
+  const field = document.querySelector('[name="message"]');
+  if (!field || field.value.trim()) return;
+
+  const params = new URLSearchParams(window.location.search);
+  const queryValue = params.get("request");
+  const storedValue = sessionStorage.getItem(ESTIMATE_PREFILL_KEY);
+  const value = queryValue || storedValue;
+
+  if (!value) return;
+
+  field.value = value;
+  sessionStorage.removeItem(ESTIMATE_PREFILL_KEY);
 }
 
 async function handleSubmit(event) {

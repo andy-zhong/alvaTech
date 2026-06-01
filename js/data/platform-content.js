@@ -20,10 +20,10 @@ const SHARED_PLATFORM_CONTENT = {
   heroScenarios: {
     summerHouse: {
       id: "summer-house",
-      label: "Summer House",
+      label: "Summer house",
       headline: "Energy freedom for your summer house",
       headlineLines: ["Energy freedom", "for your summer house"],
-      body: "Start with one slim Voltrix setup, then expand battery capacity and add portable options as routines grow.",
+      body: "Ready to carry useful energy beyond the wall when everyday life moves outdoors -- from the cabin to the garden",
       benefits: [
         "Summer houses & cabins",
         "Modular battery platform",
@@ -32,14 +32,14 @@ const SHARED_PLATFORM_CONTENT = {
     },
     field: {
       id: "field",
-      label: "Field",
-      headline: "Portable energy for field teams",
-      headlineLines: ["Portable energy", "for field teams"],
-      body: "Charge battery packs at base, bring them into the van, and use them where practical power is needed.",
+      label: "Installer",
+      headline: "Portable energy for installer teams",
+      headlineLines: ["Portable energy", "for installer teams"],
+      body: "Charge battery packs at the office or workshop, bring them into the van, and use them where practical power is needed.",
       benefits: [
         "Installers & service teams",
-        "Central charging",
-        "Portable field routines",
+        "Centralized charging",
+        "Portable installer routines",
       ],
     },
   },
@@ -87,13 +87,13 @@ const SHARED_PLATFORM_CONTENT = {
   solutions: [
     {
       id: "summer-house",
-      label: "Summer House",
+      label: "Summer house",
       title: "For cabins, terraces and second homes",
       body: "Store useful energy in one modular setup and bring it closer to outdoor life.",
-      cta: "Explore Summer House",
+      cta: "Explore Summer house",
       href: "/views/solution-summer-house.html",
       detail: {
-        eyebrow: "Summer House",
+        eyebrow: "Summer house",
         title: "Energy that fits the rhythm of the summer house.",
         body:
           "A modular setup for cabins, terraces and second homes - designed to keep useful energy close to the places where everyday life moves outdoors.",
@@ -107,18 +107,18 @@ const SHARED_PLATFORM_CONTENT = {
     },
     {
       id: "field",
-      label: "Field",
+      label: "Installer",
       title: "For installers and service teams",
-      body: "Charge batteries at base, bring them into the van, and use them where work happens.",
-      cta: "Explore Field",
+      body: "Charge batteries at the office or workshop, bring them into the van, and use them where installation work happens.",
+      cta: "Explore Installer",
       href: "/views/solution-field.html",
       detail: {
-        eyebrow: "Field",
-        title: "Portable energy for field teams.",
+        eyebrow: "Installer",
+        title: "Portable energy for installer teams.",
         body:
-          "Charge batteries centrally at base, bring selected packs into the service van, and use them on site with compatible add-ons when useful power needs to move with the work.",
+          "Charge batteries centrally at the office or workshop, bring selected packs into the service van, and use them on site with compatible add-ons when useful power needs to move with the work.",
         bullets: [
-          "Central charging at base",
+          "Centralized charging at the office or workshop",
           "Bring only the batteries needed for the route or job",
           "Use VoltDock for devices and temporary workstations",
           "Use Backpack Power for last-meter tasks",
@@ -190,7 +190,7 @@ const SHARED_PLATFORM_CONTENT = {
     solutions: {
       eyebrow: "Solutions",
       title: "Start with the way you use energy.",
-      body: "Choose the scenario that fits your home, seasonal routines or field workflow.",
+      body: "Choose the scenario that fits your home, seasonal routines or installer workflow.",
     },
     support: {
       eyebrow: "Support",

@@ -1,4 +1,5 @@
 import { getAllProducts } from "../services/product-service.js";
+import { bindSetupEstimator, renderSetupEstimator } from "../components/setup-estimator.js";
 
 const PRODUCT_ASSETS = {
   kit: {
@@ -60,7 +61,7 @@ const SHOWROOM_PRODUCTS = [
     key: "battery",
     category: "Capacity",
     name: "Battery Pack",
-    body: "Expandable capacity for home routines, outdoor use and selected field workflows.",
+    body: "Expandable capacity for home routines, outdoor use and selected installer workflows.",
     slug: "voltrix-battery-module",
   },
   {
@@ -90,30 +91,6 @@ const SHOWROOM_PRODUCTS = [
     name: "Mobility option",
     body: "Selected support for moving one battery further from the fixed setup.",
     href: "/views/b2b.html",
-  },
-];
-
-const CAPACITY_RANGES = [
-  {
-    label: "Voltrix Starter",
-    range: "1-5 kWh",
-    body: "For cabins, terraces and lighter everyday routines.",
-    note: "Recommended starting point: Voltrix 5-Pack Kit",
-    href: "/products/starter/",
-  },
-  {
-    label: "Voltrix Medium",
-    range: "6-8 kWh",
-    body: "For larger seasonal homes, longer stays and more outdoor use.",
-    note: "Plan with Alva",
-    href: "/products/medium/",
-  },
-  {
-    label: "Voltrix Max",
-    range: "9-12 kWh",
-    body: "For extended autonomy, professional workflows and future expansion.",
-    note: "Plan with Alva",
-    href: "/products/max/",
   },
 ];
 
@@ -160,7 +137,6 @@ export function renderProductsPage({ lang, productUrl }) {
     : "/views/b2b.html";
   const compositionLabels = copy.compositionLabels ?? COMPOSITION_LABELS;
   const showroomProducts = copy.showroomProducts ?? SHOWROOM_PRODUCTS;
-  const capacityRanges = copy.capacityRanges ?? CAPACITY_RANGES;
   const addons = copy.addons ?? ADDONS;
   const specs = copy.specs ?? SPECS;
 
@@ -211,24 +187,7 @@ export function renderProductsPage({ lang, productUrl }) {
       </div>
     </section>
 
-    <section class="showroom-section showroom-section--sage showroom-capacity editorial-section--soft" aria-labelledby="capacity-title">
-      <div class="showroom-section__head">
-        <span class="eyebrow">${copy.capacityEyebrow}</span>
-        <h2 id="capacity-title">${copy.capacityTitle}</h2>
-        <p>${copy.capacityBody}</p>
-      </div>
-      <div class="showroom-capacity-scale">
-        ${capacityRanges.map((item) => `
-          <a class="showroom-capacity-range" href="${item.href}">
-            <span>${item.label}</span>
-            <strong>${item.range}</strong>
-            <p>${item.body}</p>
-            <small>${item.note}</small>
-          </a>
-        `).join("")}
-      </div>
-      <p class="showroom-note">${copy.rangeNote}</p>
-    </section>
+    ${renderSetupEstimator({ context: "products" })}
 
     <section class="showroom-section editorial-section" aria-labelledby="showroom-title">
       <div class="showroom-section__head">
@@ -279,6 +238,8 @@ export function renderProductsPage({ lang, productUrl }) {
 }
 
 export function afterRenderProductsPage() {
+  bindSetupEstimator();
+
   document.querySelectorAll("[data-product-link]").forEach((link) => {
     link.addEventListener("click", (event) => {
       const slug = link.getAttribute("data-product-link");
@@ -350,10 +311,6 @@ function getProductsCopy(lang) {
       featuredNote: "Includes five NCM battery modules. Actual performance depends on connected devices, installation and usage pattern.",
       viewKit: "View kit",
       contactAlva: "Contact Alva",
-      capacityEyebrow: "Capacity guide",
-      capacityTitle: "Choose a setup range before choosing a product.",
-      capacityBody: "Capacity ranges help frame a starting setup. They are guidance for planning, not separate purchasable kits.",
-      rangeNote: "These ranges are planning guidance. Actual performance depends on connected devices, installation and usage pattern.",
       showroomEyebrow: "Product showroom",
       showroomTitle: "A platform, not a wall of products.",
       addonsEyebrow: "Add-ons",
@@ -363,7 +320,7 @@ function getProductsCopy(lang) {
       specsTitle: "System basics",
       specsNote: "Runtime and performance depend on connected devices, installation and usage pattern.",
       ctaTitle: "Not sure where to start?",
-      ctaBody: "Talk to Alva about your home, cabin, team routine or field workflow.",
+      ctaBody: "Talk to Alva about your home, cabin, team routine or installer workflow.",
       exploreSolutions: "Explore solutions",
     },
     sv: {
@@ -379,10 +336,6 @@ function getProductsCopy(lang) {
       featuredNote: "Inkluderar fem NCM-batterimoduler. Faktisk prestanda beror på anslutna enheter, installation och användningsmönster.",
       viewKit: "Visa kit",
       contactAlva: "Kontakta Alva",
-      capacityEyebrow: "Kapacitetsguide",
-      capacityTitle: "Välj setup-intervall innan du väljer produkt.",
-      capacityBody: "Kapacitetsintervall hjälper till att rama in en startsetup. De är vägledning för planering, inte separata köpbara kit.",
-      rangeNote: "Intervallen är planeringsstöd. Faktisk prestanda beror på anslutna enheter, installation och användningsmönster.",
       showroomEyebrow: "Produktshowroom",
       showroomTitle: "En plattform, inte en vägg av produkter.",
       addonsEyebrow: "Tillbehör",
@@ -419,11 +372,6 @@ function getProductsCopy(lang) {
       { key: "backpack", category: "Tillbehör", name: "Backpack Power", body: "Bär användbar kraft närmare platsen där livet eller arbetet sker.", href: "/views/b2b.html" },
       { key: "mounting", category: "Installation", name: "Montering", body: "Rent installationsstöd för basenheten och batteripack.", href: "/views/b2b.html" },
       { key: "mobility", category: "Mobilitet", name: "Mobilitetsval", body: "Utvalt stöd för att flytta ett batteri längre från den fasta setupen.", href: "/views/b2b.html" },
-    ],
-    capacityRanges: [
-      { label: "Voltrix Starter", range: "1-5 kWh", body: "För stugor, terrasser och lättare vardagsrutiner.", note: "Rekommenderad startpunkt: Voltrix 5-Pack Kit", href: "/products/starter/" },
-      { label: "Voltrix Medium", range: "6-8 kWh", body: "För större säsongsboenden, längre vistelser och mer utomhusbruk.", note: "Planera med Alva", href: "/products/medium/" },
-      { label: "Voltrix Max", range: "9-12 kWh", body: "För längre autonomi, professionella arbetsflöden och framtida expansion.", note: "Planera med Alva", href: "/products/max/" },
     ],
     addons: [
       { key: "voltdock", name: "VoltDock", body: "För enheter, skrivbord och tillfälliga arbetsplatser.", slug: "voltdock" },

@@ -69,6 +69,9 @@ function getCartCopy(lang) {
 export function renderBuyProductPage({ lang, route }) {
   const copy = getCartCopy(lang);
   const cart = JSON.parse(localStorage.getItem("cart")) || [];
+  const realCart = cart.filter((item) => !isPlanningEstimateItem(item));
+  const hasPlanningEstimate = cart.some(isPlanningEstimateItem);
+  const hasRealItems = realCart.length > 0;
 
   if (cart.length === 0) {
     return `
@@ -85,9 +88,12 @@ export function renderBuyProductPage({ lang, route }) {
       </section>`;
   }
 
-  const grandTotal = cart.reduce((sum, item) => sum + item.unitPrice * (item.quantity || 1), 0);
+  const grandTotal = realCart.reduce((sum, item) => sum + item.unitPrice * (item.quantity || 1), 0);
   const itemCount  = cart.reduce((sum, item) => sum + (item.quantity || 1), 0);
   const notice = consumeCartNotice();
+  const primaryHref = hasPlanningEstimate ? "/views/b2b.html" : "/views/checkout.html";
+  const primaryLabel = hasPlanningEstimate ? "Request quote" : copy.checkout;
+  const primaryAttrs = hasPlanningEstimate ? "data-planning-quote-link" : "data-vendure-checkout-link";
 
   return `
     <section class="section">
@@ -114,14 +120,14 @@ export function renderBuyProductPage({ lang, route }) {
 
           <div class="cart-summary__row cart-summary__row--total">
             <span>${t(lang, "cartTotal")}</span>
-            <span id="cart-grand-total">${grandTotal.toLocaleString("sv-SE")} SEK</span>
+            <span id="cart-grand-total">${hasRealItems ? `${grandTotal.toLocaleString("sv-SE")} SEK` : "Quote required"}</span>
           </div>
 
-          <p class="cart-summary__legal">${t(lang, "cartTaxNote")}</p>
+          <p class="cart-summary__legal">${hasPlanningEstimate ? "Planning estimates are not live Vendure order lines. Request quote to confirm configuration." : t(lang, "cartTaxNote")}</p>
 
           <div class="cart-actions">
-            <a class="button button--primary" href="/views/checkout.html" data-vendure-checkout-link>
-              ${copy.checkout}
+            <a class="button button--primary" href="${primaryHref}" ${primaryAttrs}>
+              ${primaryLabel}
             </a>
             <a class="button button--secondary" href="/views/products.html">
               ${copy.continue}
@@ -141,6 +147,10 @@ export function renderBuyProductPage({ lang, route }) {
 }
 
 function renderCartLine(item, lang) {
+  if (isPlanningEstimateItem(item)) {
+    return renderPlanningEstimateLine(item, lang);
+  }
+
   const product = getProductBySlug(item.slug);
   if (!product) return "";
   const content   = getProductContent(product, lang);
@@ -192,7 +202,45 @@ function renderCartLine(item, lang) {
     </div>`;
 }
 
+function renderPlanningEstimateLine(item, lang) {
+  const details = Array.isArray(item.details) ? item.details : [];
+
+  return `
+    <div class="cart-line cart-line--planning" data-item-id="${item.cartItemId}">
+      <div class="cart-line__img cart-line__img--planning" aria-hidden="true">Estimate</div>
+      <div class="cart-line__body">
+        <p class="cart-line__name">${item.title || "Estimated Voltrix setup"}</p>
+        <p class="cart-line__meta">${item.subtitle || "Planning estimate, final quote may differ."}</p>
+        <dl class="cart-line__details">
+          ${details.map(([label, value]) => `
+            <div>
+              <dt>${label}</dt>
+              <dd>${value}</dd>
+            </div>
+          `).join("")}
+        </dl>
+        <p class="cart-line__meta">Request quote to confirm configuration.</p>
+      </div>
+      <div class="cart-line__right">
+        <p class="cart-line__price">${item.estimatedPriceRange || "Price range pending"}</p>
+        <button class="cart-line__remove" data-item-id="${item.cartItemId}"
+                aria-label="${t(lang, "cartRemove")}">
+          ${t(lang, "cartRemove")}
+        </button>
+      </div>
+    </div>`;
+}
+
 function renderSummaryRow(item, lang) {
+  if (isPlanningEstimateItem(item)) {
+    return `
+      <div class="cart-summary__row">
+        <span style="max-width:180px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;"
+              title="${item.title || "Estimated Voltrix setup"}">${item.title || "Estimated Voltrix setup"}</span>
+        <span>${item.estimatedPriceRange || "Quote"}</span>
+      </div>`;
+  }
+
   const product = getProductBySlug(item.slug);
   if (!product) return "";
   const content   = getProductContent(product, lang);
@@ -253,6 +301,13 @@ export function afterRenderBuyProduct({ lang } = {}) {
     }
 
     await syncCartThenContinue(checkoutLink.href, checkoutLink);
+  });
+
+  document.querySelector("[data-planning-quote-link]")?.addEventListener("click", () => {
+    const summary = getFirstPlanningEstimateSummary();
+    if (summary) {
+      sessionStorage.setItem("alva-estimator-request-summary", summary);
+    }
   });
 }
 
@@ -317,6 +372,17 @@ async function syncCartThenContinue(nextUrl, checkoutLink) {
 
   try {
     const cart = JSON.parse(localStorage.getItem("cart")) || [];
+    const realCart = cart.filter((item) => !isPlanningEstimateItem(item));
+
+    if (!realCart.length) {
+      const summary = getFirstPlanningEstimateSummary(cart);
+      if (summary) {
+        sessionStorage.setItem("alva-estimator-request-summary", summary);
+      }
+      window.location.href = "/views/b2b.html";
+      return;
+    }
+
     const activeOrder = await getActiveVendureOrderOrNull();
 
     if (isLockedVendureOrder(activeOrder)) {
@@ -325,20 +391,20 @@ async function syncCartThenContinue(nextUrl, checkoutLink) {
       return;
     }
 
-    const refresh = await refreshCartPricesFromBackend(cart);
+    const refresh = await refreshCartPricesFromBackend(realCart);
 
     if (refresh.unavailable.length) {
       throw new Error("One or more products are no longer available in the backend catalog.");
     }
 
     if (refresh.changed) {
-      localStorage.setItem("cart", JSON.stringify(refresh.updatedCart));
+      localStorage.setItem("cart", JSON.stringify([...refresh.updatedCart, ...cart.filter(isPlanningEstimateItem)]));
       setCartNotice("Prices were updated from the backend. Review the cart and continue again.");
       rerenderCart(getStoredLanguage());
       return;
     }
 
-    await syncLocalCartToVendure(cart);
+    await syncLocalCartToVendure(realCart);
     window.location.href = nextUrl;
   } catch (error) {
     console.warn("[vendure] Cart sync failed:", error);
@@ -373,14 +439,16 @@ async function hydrateBackendCartSnapshot(lang) {
 
   try {
     const cart = JSON.parse(localStorage.getItem("cart")) || [];
-    if (!cart.length) return;
+    const realCart = cart.filter((item) => !isPlanningEstimateItem(item));
+    const planningItems = cart.filter(isPlanningEstimateItem);
+    if (!realCart.length) return;
 
-    const refresh = await refreshCartPricesFromBackend(cart);
+    const refresh = await refreshCartPricesFromBackend(realCart);
     if (!refresh.changed || refresh.unavailable.length) {
       return;
     }
 
-    localStorage.setItem("cart", JSON.stringify(refresh.updatedCart));
+    localStorage.setItem("cart", JSON.stringify([...refresh.updatedCart, ...planningItems]));
     setCartNotice("Prices were updated from the backend.");
     rerenderCart(lang);
   } catch (error) {
@@ -477,4 +545,13 @@ function consumeCartNotice() {
   const notice = sessionStorage.getItem(CART_NOTICE_KEY);
   sessionStorage.removeItem(CART_NOTICE_KEY);
   return notice;
+}
+
+function isPlanningEstimateItem(item) {
+  return item?.type === "planning-estimate";
+}
+
+function getFirstPlanningEstimateSummary(cart = null) {
+  const items = Array.isArray(cart) ? cart : JSON.parse(localStorage.getItem("cart") || "[]");
+  return items.find(isPlanningEstimateItem)?.summary || "";
 }

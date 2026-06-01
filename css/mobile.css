@@ -80,7 +80,7 @@
 
   .platform-hero__inner {
     padding-top: clamp(42px, 10svh, 72px);
-    padding-bottom: clamp(46px, 10svh, 78px);
+    padding-bottom: clamp(28px, 7svh, 54px);
   }
 
   .platform-hero__content {
@@ -88,9 +88,12 @@
   }
 
   .platform-hero__tabs {
+    justify-self: center;
     overflow-x: auto;
     flex-wrap: nowrap;
-    padding-bottom: 4px;
+    justify-content: center;
+    gap: clamp(18px, 7vw, 34px);
+    max-width: 100%;
     scrollbar-width: none;
   }
 
@@ -394,7 +397,7 @@
 
   .platform-hero__inner {
     padding-top: 34px;
-    padding-bottom: 42px;
+    padding-bottom: 28px;
   }
 
   .platform-hero h1,

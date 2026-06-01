@@ -116,7 +116,7 @@ const SOLUTION_PAGE_COPY = {
     ecosystemBody:
       "Voltrix is the charging and energy base. From there, batteries can move into the service van, support a temporary workstation, travel to the final work point and return to base for the next cycle.",
     ecosystem: [
-      ["Voltrix base", "Central charging and energy organization at base."],
+      ["Voltrix base", "Centralized charging and energy organization at the office or workshop."],
       ["Battery packs", "Prepared centrally and moved with the team as needed."],
       ["VoltDock", "A compact hub for devices, field admin and temporary workstations."],
       ["Backpack Power", "Last-meter power and practical battery transport."],

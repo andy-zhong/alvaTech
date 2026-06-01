@@ -1,27 +1,14 @@
 import { getPlatformContent } from "../data/platform-content.js";
+import { bindSetupEstimator, renderSetupEstimator } from "../components/setup-estimator.js";
 
 const ICONS = ["01", "02", "03", "04"];
 const BENEFIT_ICONS = ["modules", "expand", "deploy", "tool"];
 const FEATURE_ICONS = ["overview", "batteryPlus", "deploy"];
-const PRODUCT_PRESET_IMAGES = [
-  {
-    src: "/Picture/products/voltrix/1-12_battery/Voltrix_5b.png",
-    alt: "Voltrix system with five battery modules",
-  },
-  {
-    src: "/Picture/products/voltrix/1-12_battery/Voltrix_8b.png",
-    alt: "Voltrix system with eight battery modules",
-  },
-  {
-    src: "/Picture/products/voltrix/1-12_battery/Voltrix_12b.png",
-    alt: "Voltrix system with twelve battery modules",
-  },
-];
-const PRODUCT_PRESET_LINKS = [
-  "/products/starter/",
-  "/products/medium/",
-  "/products/max/",
-];
+const HERO_SCENARIOS = ["summerHouse", "field"];
+const HERO_ROTATION_DELAY_MS = 7000;
+const HERO_MANUAL_PAUSE_MS = 9000;
+const HERO_COPY_SWITCH_DELAY_MS = 260;
+
 export function renderHomePage({ lang }) {
   const content = getPlatformContent(lang);
   const defaultScenario = content.heroScenarios.summerHouse;
@@ -38,11 +25,6 @@ export function renderHomePage({ lang }) {
 
       <div class="home-section-inner platform-hero__inner">
         <div class="platform-hero__content">
-          <div class="platform-hero__tabs" role="tablist" aria-label="Energy scenarios">
-            ${renderHeroTab("summerHouse", content.heroScenarios.summerHouse, true)}
-            ${renderHeroTab("field", content.heroScenarios.field, false)}
-          </div>
-
           <div class="platform-hero__copy" data-hero-copy>
             ${renderHeroHeadline(defaultScenario)}
             <p>${defaultScenario.body}</p>
@@ -56,6 +38,11 @@ export function renderHomePage({ lang }) {
             <a class="button button--primary" href="/views/products.html">${content.heroCtas.primary}</a>
             <a class="button button--secondary" href="#platform-section">${content.heroCtas.secondary}</a>
           </div>
+        </div>
+
+        <div class="platform-hero__tabs" role="tablist" aria-label="Energy scenarios">
+          ${renderHeroTab("summerHouse", content.heroScenarios.summerHouse, true)}
+          ${renderHeroTab("field", content.heroScenarios.field, false)}
         </div>
       </div>
     </section>
@@ -86,21 +73,7 @@ export function renderHomePage({ lang }) {
       </div>
     </section>
 
-    <section class="platform-home-section platform-home-section--milk" aria-labelledby="product-presets-title">
-      <div class="home-section-inner platform-product-area platform-product-area--ranges">
-        <div class="platform-preset-head">
-          <div>
-            <span class="platform-eyebrow">Products</span>
-            <h2 id="product-presets-title">Choose your Voltrix system.</h2>
-          </div>
-          <a class="platform-text-link" href="/views/products.html">Compare systems</a>
-        </div>
-
-        <div class="platform-preset-grid">
-          ${content.productTiers.slice(0, 3).map((tier, index) => renderProductPreset(tier, index)).join("")}
-        </div>
-      </div>
-    </section>
+    ${renderSetupEstimator({ context: "home" })}
 
     <section class="platform-home-section platform-home-section--sage" aria-labelledby="product-fit-title">
       <div class="home-section-inner platform-product-area platform-product-area--featured">
@@ -188,30 +161,10 @@ export function renderHomePage({ lang }) {
   `;
 }
 
-function renderProductPreset(tier, index) {
-  const sizes = ["Small", "Medium", "Large"];
-  const image = PRODUCT_PRESET_IMAGES[index];
-  const href = PRODUCT_PRESET_LINKS[index] ?? "/views/products.html";
-
-  return `
-    <article class="platform-preset-card reveal" style="--delay:${(index * 0.07).toFixed(2)}s">
-      <figure class="platform-preset-card__media">
-        <img src="${image.src}" alt="${image.alt}">
-      </figure>
-      <div class="platform-preset-card__body">
-        <span class="platform-preset-card__size">${sizes[index]}</span>
-        <span class="platform-preset-card__range">${tier.range}</span>
-        <h3>${tier.title}</h3>
-        <p>${tier.body}</p>
-        <a href="${href}">View product -></a>
-      </div>
-    </article>
-  `;
-}
-
 export function bindHomePage({ lang }) {
   bindScenarioTabs(lang);
   bindSolutionShowcase();
+  bindSetupEstimator();
   initScrollReveal();
 }
 
@@ -362,10 +315,40 @@ function bindScenarioTabs(lang) {
   const tabs = [...root.querySelectorAll("[data-scenario]")];
   const copy = root.querySelector("[data-hero-copy]");
   const benefits = root.querySelector("[data-hero-benefits]");
+  let activeScenario = "summerHouse";
+  let rotationTimer;
+  let copyTimer;
 
-  function setScenario(key) {
+  function stopRotation() {
+    clearTimeout(rotationTimer);
+  }
+
+  function scheduleRotation(delay = HERO_ROTATION_DELAY_MS) {
+    stopRotation();
+    rotationTimer = setTimeout(() => {
+      const currentIndex = HERO_SCENARIOS.indexOf(activeScenario);
+      const nextScenario = HERO_SCENARIOS[(currentIndex + 1) % HERO_SCENARIOS.length] ?? HERO_SCENARIOS[0];
+      setScenario(nextScenario);
+      scheduleRotation();
+    }, delay);
+  }
+
+  function pauseThenResumeRotation() {
+    scheduleRotation(HERO_MANUAL_PAUSE_MS);
+  }
+
+  function setScenario(key, options = {}) {
     const scenario = content.heroScenarios[key];
     if (!scenario || !copy || !benefits) return;
+
+    if (activeScenario === key) {
+      if (options.manual) {
+        pauseThenResumeRotation();
+      }
+      return;
+    }
+
+    activeScenario = key;
 
     tabs.forEach((tab) => {
       const isActive = tab.dataset.scenario === key;
@@ -376,8 +359,9 @@ function bindScenarioTabs(lang) {
     root.dataset.activeScenario = key;
     copy.classList.add("is-switching");
     benefits.classList.add("is-switching");
+    clearTimeout(copyTimer);
 
-    setTimeout(() => {
+    copyTimer = setTimeout(() => {
       copy.innerHTML = `
         ${renderHeroHeadline(scenario)}
         <p>${scenario.body}</p>
@@ -385,13 +369,19 @@ function bindScenarioTabs(lang) {
       benefits.innerHTML = renderHeroBenefits(scenario.benefits);
       copy.classList.remove("is-switching");
       benefits.classList.remove("is-switching");
-    }, 140);
+    }, HERO_COPY_SWITCH_DELAY_MS);
+
+    if (options.manual) {
+      pauseThenResumeRotation();
+    }
   }
 
-  root.dataset.activeScenario = "summerHouse";
+  root.dataset.activeScenario = activeScenario;
   tabs.forEach((tab) => {
-    tab.addEventListener("click", () => setScenario(tab.dataset.scenario));
+    tab.addEventListener("click", () => setScenario(tab.dataset.scenario, { manual: true }));
   });
+
+  scheduleRotation();
 }
 
 function bindSolutionShowcase() {

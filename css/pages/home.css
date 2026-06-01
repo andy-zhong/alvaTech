@@ -37,7 +37,9 @@
   filter: saturate(0.96);
   transform: scaleX(-1) scale(1.28);
   transform-origin: center;
-  transition: opacity 240ms ease, transform 240ms ease;
+  transition:
+    opacity 680ms cubic-bezier(0.22, 0.6, 0.36, 1),
+    transform 680ms cubic-bezier(0.22, 0.6, 0.36, 1);
 }
 
 .platform-hero__field {
@@ -48,7 +50,9 @@
     url("/Picture/home/HomePageBackground_2-optimized.jpg") center / cover no-repeat;
   filter: saturate(0.96);
   transform: scale(1.01);
-  transition: opacity 240ms ease, transform 240ms ease;
+  transition:
+    opacity 680ms cubic-bezier(0.22, 0.6, 0.36, 1),
+    transform 680ms cubic-bezier(0.22, 0.6, 0.36, 1);
 }
 
 .platform-hero[data-active-scenario="field"] .platform-hero__image {
@@ -102,8 +106,10 @@
   position: relative;
   z-index: 1;
   width: 100%;
+  display: grid;
+  gap: clamp(28px, 6svh, 58px);
   padding-top: clamp(76px, 11svh, 118px);
-  padding-bottom: clamp(88px, 12svh, 132px);
+  padding-bottom: clamp(34px, 6svh, 72px);
 }
 
 .platform-hero__content {
@@ -122,6 +128,17 @@
   gap: 12px;
 }
 
+.platform-hero__tabs {
+  justify-self: center;
+  width: fit-content;
+  max-width: 100%;
+  gap: clamp(24px, 4vw, 48px);
+  padding: 0;
+  border: 0;
+  background: transparent;
+  text-shadow: 0 1px 18px rgba(0, 0, 0, 0.38);
+}
+
 .platform-hero .button--primary,
 .platform-final .button--primary {
   color: #071a16;
@@ -137,31 +154,58 @@
 }
 
 .platform-hero__tab {
-  min-height: 42px;
-  padding: 0 18px;
-  border-radius: 999px;
-  border: 1px solid rgba(255, 255, 255, 0.2);
-  color: rgba(243, 246, 242, 0.8);
-  background: rgba(255, 255, 255, 0.04);
+  position: relative;
+  min-height: 34px;
+  padding: 0 0 9px;
+  border: 0;
+  border-radius: 0;
+  color: rgba(243, 246, 242, 0.58);
+  background: transparent;
   font-size: 0.78rem;
   font-weight: 800;
-  letter-spacing: 0.08em;
+  letter-spacing: 0.06em;
   text-transform: uppercase;
-  transition: background 180ms ease, border-color 180ms ease, color 180ms ease, transform 180ms ease;
+  cursor: pointer;
+  transition:
+    color 220ms ease,
+    opacity 220ms ease,
+    transform 220ms ease;
+}
+
+.platform-hero__tab::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 1px;
+  background: #c7e27a;
+  opacity: 0;
+  transform: scaleX(0.45);
+  transform-origin: center;
+  transition:
+    opacity 240ms ease,
+    transform 520ms cubic-bezier(0.22, 0.6, 0.36, 1);
 }
 
 .platform-hero__tab:hover,
 .platform-hero__tab:focus-visible,
 .platform-hero__tab.is-active {
   color: #ffffff;
-  border-color: rgba(32, 180, 85, 0.76);
-  background: rgba(15, 107, 63, 0.78);
-  transform: translateY(-1px);
+  background: transparent;
+  transform: none;
+}
+
+.platform-hero__tab.is-active::after {
+  opacity: 1;
+  transform: scaleX(1);
 }
 
 .platform-hero__copy,
 .platform-hero__benefits {
-  transition: opacity 160ms ease, transform 160ms ease;
+  transition:
+    opacity 320ms cubic-bezier(0.22, 0.6, 0.36, 1),
+    transform 320ms cubic-bezier(0.22, 0.6, 0.36, 1);
 }
 
 .platform-hero__copy {
@@ -1034,7 +1078,7 @@
 
   .platform-hero__inner {
     padding-top: 62px;
-    padding-bottom: 76px;
+    padding-bottom: 42px;
   }
 
   .platform-hero h1 {
@@ -1093,18 +1137,15 @@
 
 /* Nordic editorial commerce refinement */
 .platform-hero__tab {
-  min-height: auto;
-  padding: 0 0 8px;
+  min-height: 34px;
+  padding: 0 0 9px;
   border: 0;
-  border-bottom: 1px solid rgba(243, 246, 242, 0.28);
   border-radius: 0;
-  background: transparent;
 }
 
 .platform-hero__tab:hover,
 .platform-hero__tab:focus-visible,
 .platform-hero__tab.is-active {
-  border-color: #c7e27a;
   background: transparent;
   transform: none;
 }

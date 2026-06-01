@@ -7,6 +7,7 @@ import { getStoredLanguage, t }   from "../services/language-service.js";
 import { createRouteHelpers }     from "../utils/routes.js";
 import { renderHomePage, bindHomePage } from "../pages/home.js";
 import { renderProductsPage, afterRenderProductsPage } from "../pages/products.js";
+import { renderProductScenarioPage } from "../pages/product-scenarios.js";
 import {
   renderProductDetailPage,
   renderMissingProduct,
@@ -89,6 +90,21 @@ async function mountPage({ page, lang, route, productUrl, buyProductUrl, getCurr
       document.title = t(lang, "metaProductsTitle");
       container.innerHTML = renderProductsPage({ lang, productUrl });
       afterRenderProductsPage();
+      break;
+
+    case "product-summerhouse":
+      document.title = "For Summer house | Alva Technology";
+      container.innerHTML = renderProductScenarioPage({ lang, type: "summerhouse" });
+      break;
+
+    case "product-installer":
+      document.title = "For Installer | Alva Technology";
+      container.innerHTML = renderProductScenarioPage({ lang, type: "installer" });
+      break;
+
+    case "product-accessories":
+      document.title = "Accessories | Alva Technology";
+      container.innerHTML = renderProductScenarioPage({ lang, type: "accessories" });
       break;
 
     case "product-starter":
