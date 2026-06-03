@@ -27,6 +27,7 @@ import {
 } from "../pages/system-range.js";
 import { renderSupportPage }      from "../pages/support.js";
 import { renderAccountPage }      from "../pages/account.js";
+import { renderWarrantyReturnsPage } from "../pages/warranty-returns.js";
 import { getProductBySlug }       from "../services/product-service.js";
 import { initB2BForm }            from "../pages/b2b.js";
 
@@ -93,17 +94,17 @@ async function mountPage({ page, lang, route, productUrl, buyProductUrl, getCurr
       break;
 
     case "product-summerhouse":
-      document.title = "For Summer house | Alva Technology";
+      document.title = lang === "sv" ? "För fritidshus | Alva Technology" : "For Summer house | Alva Technology";
       container.innerHTML = renderProductScenarioPage({ lang, type: "summerhouse" });
       break;
 
     case "product-installer":
-      document.title = "For Installer | Alva Technology";
+      document.title = lang === "sv" ? "För installatörer | Alva Technology" : "For Installer | Alva Technology";
       container.innerHTML = renderProductScenarioPage({ lang, type: "installer" });
       break;
 
     case "product-accessories":
-      document.title = "Accessories | Alva Technology";
+      document.title = lang === "sv" ? "Tillbehör | Alva Technology" : "Accessories | Alva Technology";
       container.innerHTML = renderProductScenarioPage({ lang, type: "accessories" });
       break;
 
@@ -123,22 +124,22 @@ async function mountPage({ page, lang, route, productUrl, buyProductUrl, getCurr
       break;
 
     case "solutions":
-      document.title = "Solutions | Alva Technology";
+      document.title = lang === "sv" ? "Lösningar | Alva Technology" : "Solutions | Alva Technology";
       container.innerHTML = renderSolutionsPage({ lang, route });
       break;
 
     case "solution-summer-house":
-      document.title = "Summer House | Alva Technology";
+      document.title = lang === "sv" ? "Fritidshus | Alva Technology" : "Summer House | Alva Technology";
       container.innerHTML = renderSolutionDetailPage({ lang, type: "summer-house" });
       break;
 
     case "solution-field":
-      document.title = "Field Teams | Alva Technology";
+      document.title = lang === "sv" ? "Installatör | Alva Technology" : "Field Teams | Alva Technology";
       container.innerHTML = renderSolutionDetailPage({ lang, type: "field" });
       break;
 
     case "support":
-      document.title = "Support | Alva Technology";
+      document.title = lang === "sv" ? "Support | Alva Technology" : "Support | Alva Technology";
       container.innerHTML = renderSupportPage({ lang });
       break;
 
@@ -167,7 +168,7 @@ async function mountPage({ page, lang, route, productUrl, buyProductUrl, getCurr
       break;
 
     case "checkout":
-      document.title = "Checkout | Alva Technology";
+      document.title = lang === "sv" ? "Kassa | Alva Technology" : "Checkout | Alva Technology";
       try {
         const m = await import("../pages/checkout.js");
         container.innerHTML = m.renderCheckoutPage({ lang });
@@ -179,7 +180,7 @@ async function mountPage({ page, lang, route, productUrl, buyProductUrl, getCurr
       break;
 
     case "order-confirmation":
-      document.title = "Order Confirmed | Alva Technology";
+      document.title = lang === "sv" ? "Order bekräftad | Alva Technology" : "Order Confirmed | Alva Technology";
       try {
         const m = await import("../pages/order-confirmation.js");
         container.innerHTML = m.renderOrderConfirmationPage(lang);
@@ -200,12 +201,17 @@ async function mountPage({ page, lang, route, productUrl, buyProductUrl, getCurr
       break;
 
     case "b2b":
-      document.title = "B2B | Alva Technology";
+      document.title = lang === "sv" ? "Företag | Alva Technology" : "B2B | Alva Technology";
       setTimeout(() => initB2BForm(), 0);
       break;
 
     case "privacy-policy":
-      document.title = "Privacy Policy | Alva Technology";
+      document.title = lang === "sv" ? "Integritetspolicy | Alva Technology" : "Privacy Policy | Alva Technology";
+      break;
+
+    case "warranty-returns":
+      document.title = lang === "sv" ? "Garanti, returer och support | Alva Technology" : "Warranty, returns & support | Alva Technology";
+      container.innerHTML = renderWarrantyReturnsPage({ lang });
       break;
 
     default:

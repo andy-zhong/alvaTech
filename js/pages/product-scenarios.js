@@ -6,8 +6,8 @@ const SCENARIO_ASSETS = {
     product: "/Picture/products/voltrix/voltrix02.png",
   },
   installer: {
-    hero: "/Picture/products/voltrix/field/field02.png",
-    product: "/Picture/products/voltrix/field/field03.png",
+    hero: "/Picture/products/voltrix/field/field01.png",
+    product: "/Picture/products/voltrix/field/field04-optimized.jpg",
   },
   accessories: {
     hero: "/Picture/products/voltdock/voltdock07-optimized.jpg",
@@ -17,18 +17,25 @@ const SCENARIO_ASSETS = {
 
 const ADD_ONS = {
   backpack: {
-    name: "Backpack Power Mounting",
-    image: "/Picture/products/voltrix/field/field03.png",
+    name: "Backpack Power",
+    image: "/Picture/products/backpack/backpack_1inverter+1battery-optimized.jpg",
     category: "Portable use",
     body: "Mounting support for routines where one battery needs to move closer to the point of use.",
-    href: "/views/b2b.html",
+    href: "/views/product.html?slug=backpack-power",
   },
   mounting: {
     name: "Mounting accessories",
-    image: "/Picture/products/voltrix/summerhouse/summerhouse02-optimized.jpg",
+    image: null,
     category: "Mounting",
     body: "Clean support for placement around the Voltrix base unit and battery packs.",
     href: "/views/b2b.html",
+  },
+  solarTracking: {
+    name: "Solar tracking system",
+    image: null,
+    category: "Solar extension",
+    body: "A future solar-focused extension for summer house setups that want to make more of available daylight.",
+    href: "/views/product.html?slug=solar-tracking-system",
   },
 };
 
@@ -108,7 +115,7 @@ const SCENARIO_COPY = {
       usecaseTitle: "Byggt runt platserna där fritidshuslivet faktiskt händer.",
       usecases: [
         ["Terrass & trädgård", "Håll praktisk energi nära utemöbler, trädgårdsrutiner och mindre vardagsenheter utan att miljön känns teknisk."],
-        ["Gästhus & uteplatser", "Använd samma Voltrix-plattform runt sekundära ytor där användbar kraft ska vara nära och organiserad."],
+        ["Gästhus & uteplatser", "Använd samma Voltrix-plattform runt sekundära ytor där användbar energi ska vara nära och organiserad."],
         ["Brygga, förråd & säsongsrutiner", "Stöd utvalda utomhusrutiner med batteripack och tillbehör där ett fast vägguttag inte passar."],
       ],
       productsEyebrow: "Rekommenderade produkter",
@@ -120,16 +127,16 @@ const SCENARIO_COPY = {
     },
     installer: {
       eyebrow: "För installatörer",
-      title: "Praktisk kraft för installatörsrutiner.",
-      body: "Charge battery packs at the office or workshop, bring them into the van, and use them where practical power is needed.",
+      title: "Praktisk el för installatörernas vardag.",
+      body: "Ladda batteripack på kontoret eller i verkstaden, ta med dem i servicebilen och använd dem där praktisk el behövs.",
       primary: "Utforska produkter för installatörer",
       secondary: "Visa alla produkter",
       usecaseEyebrow: "Installatörsrutiner",
-      usecaseTitle: "Organisera kraft runt bilen, rutten och arbetsdagen.",
+      usecaseTitle: "Organisera energi runt bilen, rutten och arbetsdagen.",
       usecases: [
         ["Ladda på kontoret eller verkstaden", "Håll batteripack förberedda innan dagen börjar utan att fordonsrutinen blir ett separat energiprojekt."],
-        ["Ta energi in i servicebilen", "Flytta utvalda pack med teamet så användbar kraft finns tillgänglig för mobila arbetsrutiner."],
-        ["Använd praktisk kraft på plats", "Stöd laddning, belysning, mobila arbetsytor och mindre enhetsrutiner där en kompakt kraftpunkt hjälper arbetet vidare."],
+        ["Ta energi in i servicebilen", "Flytta utvalda pack med teamet så användbar energi finns tillgänglig för mobila arbetsrutiner."],
+        ["Använd praktisk el på plats", "Stöd laddning, belysning, mobila arbetsytor och mindre enhetsrutiner där en kompakt energipunkt hjälper arbetet vidare."],
       ],
       productsEyebrow: "Rekommenderade produkter",
       productsTitle: "Produkter för batteripack, portabel användning och organiserade servicebilar.",
@@ -149,7 +156,7 @@ const SCENARIO_COPY = {
       usecases: [
         ["Laddning", "Använd VoltDock och kompatibla batteripack runt skrivbord, enheter och vardagliga laddpunkter."],
         ["Montering", "Håll basenhet, batteripack och utvalda tillbehör organiserade på platserna där de används."],
-        ["Portabel användning", "Utöka utvalda fritidshus- och installatörsrutiner med val som tar användbar kraft närmare."],
+        ["Portabel användning", "Utöka utvalda fritidshus- och installatörsrutiner med val som tar användbar energi närmare."],
       ],
       productsEyebrow: "Produktfokus",
       productsTitle: "Tillbehör runt Voltrix-plattformen.",
@@ -173,14 +180,16 @@ const RECOMMENDATIONS = {
   installer: [
     { slug: "voltrix-battery-module", category: "Battery packs" },
     { slug: "voltdock", category: "Charging add-on" },
-    { addOn: "backpack" },
+    { slug: "backpack-power", category: "Portable use" },
     { addOn: "mounting" },
   ],
   accessories: [
-    { slug: "voltrix-battery-module", category: "Battery packs" },
     { slug: "voltdock", category: "Charging" },
-    { addOn: "backpack" },
-    { addOn: "mounting" },
+    { slug: "backpack-power", category: "Portable use" },
+    { slug: "bike-accessory", category: "Mobility" },
+    { slug: "voltrix-wall-mounting", category: "Mounting" },
+    { slug: "voltrix-stand-mounting", category: "Mounting" },
+    { slug: "solar-tracking-system", category: "Solar extension" },
   ],
 };
 
@@ -260,9 +269,7 @@ function renderRecommendation(item, products, copy, lang) {
     const content = getProductContent(product, lang);
     return `
       <a class="showroom-product product-scenario-product" href="/views/product.html?slug=${encodeURIComponent(product.slug)}">
-        <figure class="showroom-product__media showroom-image frameless-image-stage">
-          <img src="${product.thumbnail ?? product.heroImage}" alt="${content.name}">
-        </figure>
+        ${renderRecommendationMedia(product.thumbnail ?? product.heroImage, content.name)}
         <div class="showroom-product__copy">
           <span>${item.category}</span>
           <h3>${content.name}</h3>
@@ -278,9 +285,7 @@ function renderRecommendation(item, products, copy, lang) {
 
   return `
     <a class="showroom-product product-scenario-product" href="${addOn.href}">
-      <figure class="showroom-product__media showroom-image frameless-image-stage">
-        <img src="${addOn.image}" alt="${addOn.name}">
-      </figure>
+      ${renderRecommendationMedia(addOn.image, addOn.name)}
       <div class="showroom-product__copy">
         <span>${addOn.category}</span>
         <h3>${addOn.name}</h3>
@@ -288,5 +293,21 @@ function renderRecommendation(item, products, copy, lang) {
       </div>
       <span class="showroom-link">${copy.contactAlva} <b aria-hidden="true">-&gt;</b></span>
     </a>
+  `;
+}
+
+function renderRecommendationMedia(src, alt) {
+  if (!src) {
+    return `
+      <figure class="showroom-product__media showroom-image showroom-image--placeholder frameless-image-stage" aria-label="${alt}">
+        <span>Coming soon</span>
+      </figure>
+    `;
+  }
+
+  return `
+    <figure class="showroom-product__media showroom-image frameless-image-stage">
+      <img src="${src}" alt="${alt}">
+    </figure>
   `;
 }

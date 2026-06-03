@@ -32,6 +32,7 @@
 
   .site-header__actions {
     min-width: 0;
+    gap: 10px;
   }
 
   .navbar__cart,

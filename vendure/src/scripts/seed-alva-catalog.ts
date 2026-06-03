@@ -26,7 +26,8 @@ type AlvaSeedProduct = {
     price: number;
     stockOnHand: number;
     assetName: string;
-    assetPath: string;
+    assetPath?: string;
+    enabled?: boolean;
 };
 
 const ALVA_PRODUCTS: AlvaSeedProduct[] = [
@@ -34,23 +35,34 @@ const ALVA_PRODUCTS: AlvaSeedProduct[] = [
         slug: 'voltrix-5-pack-kit',
         name: 'Voltrix 5-Pack Kit',
         description:
-            'A fixed 5 kWh starting setup within the Starter range. Includes five NCM battery modules for seasonal homes, everyday energy support and expandable outdoor use.',
+            'A fixed 5 kWh starting setup. Includes five NMC battery modules for seasonal homes, everyday energy support and expandable outdoor use.',
         sku: 'ALVA-VOLTRIX-5PACK',
         price: 1098000,
         stockOnHand: 25,
         assetName: 'Alva Voltrix 5-Pack Kit',
-        assetPath: '../Picture/products/voltrix/voltrix02.png',
+        assetPath: 'products/voltrix/voltrix02.png',
     },
     {
         slug: 'voltrix-battery-module',
         name: 'Voltrix Battery Module',
         description:
-            'A 1 kWh NCM battery module for expanding or replacing capacity in the Voltrix energy system.',
+            'A 1 kWh NMC battery module for expanding or replacing capacity in the Voltrix energy system.',
         sku: 'ALVA-VOLTRIX-BATTERY-1KWH',
         price: 299000,
         stockOnHand: 100,
         assetName: 'Alva Voltrix Battery Module',
-        assetPath: '../Picture/products/battery/battery01.png',
+        assetPath: 'products/battery/battery01.png',
+    },
+    {
+        slug: 'voltrix-inverter',
+        name: 'Voltrix Inverter',
+        description:
+            'The inverter unit for building and expanding a Voltrix Battery Pack setup.',
+        sku: 'ALVA-VOLTRIX-INVERTER',
+        price: 1098000,
+        stockOnHand: 40,
+        assetName: 'Alva Voltrix Inverter',
+        assetPath: 'products/inverter/Inverter01.png',
     },
     {
         slug: 'voltdock',
@@ -61,7 +73,62 @@ const ALVA_PRODUCTS: AlvaSeedProduct[] = [
         price: 399000,
         stockOnHand: 40,
         assetName: 'Alva VoltDock',
-        assetPath: '../Picture/products/voltdock/voltdock01.png',
+        assetPath: 'products/voltdock/voltdock01.png',
+    },
+    {
+        slug: 'backpack-power',
+        name: 'Backpack Power',
+        description:
+            'A carrying add-on for moving Battery Packs closer to outdoor tasks and last-meter work.',
+        sku: 'ALVA-BACKPACK-POWER',
+        price: 149000,
+        stockOnHand: 40,
+        assetName: 'Alva Backpack Power',
+        assetPath: 'products/backpack/backpack_1inverter+1battery-optimized.jpg',
+    },
+    {
+        slug: 'bike-accessory',
+        name: 'Bike accessory',
+        description:
+            'A light mobility add-on for moving Battery Packs further in local routines.',
+        sku: 'ALVA-BIKE-ACCESSORY',
+        price: 99000,
+        stockOnHand: 40,
+        assetName: 'Alva Bike accessory',
+        assetPath: 'products/bike/bike01-optimized.png',
+    },
+    {
+        slug: 'voltrix-wall-mounting',
+        name: 'Voltrix Wall Mounting',
+        description:
+            'A future wall-mounted support option for organizing Voltrix Battery Packs. Coming soon - price not included.',
+        sku: 'ALVA-VOLTRIX-WALL-MOUNTING',
+        price: 0,
+        stockOnHand: 0,
+        assetName: 'Alva Voltrix Wall Mounting',
+        enabled: false,
+    },
+    {
+        slug: 'voltrix-stand-mounting',
+        name: 'Voltrix Stand Mounting',
+        description:
+            'A future freestanding support option for organizing Voltrix Battery Packs. Coming soon - price not included.',
+        sku: 'ALVA-VOLTRIX-STAND-MOUNTING',
+        price: 0,
+        stockOnHand: 0,
+        assetName: 'Alva Voltrix Stand Mounting',
+        enabled: false,
+    },
+    {
+        slug: 'solar-tracking-system',
+        name: 'Solar tracking system',
+        description:
+            'A future solar-focused extension for summer house setups that want to make more of available daylight. Coming soon - price not included.',
+        sku: 'ALVA-SOLAR-TRACKING-SYSTEM',
+        price: 0,
+        stockOnHand: 0,
+        assetName: 'Alva Solar tracking system',
+        enabled: false,
     },
 ];
 
@@ -72,8 +139,11 @@ const ALVA_COLLECTION = {
 };
 
 const ALVA_ASSET_TAG = 'alva-seed';
+const DEFAULT_SEED_ASSET_ROOT = path.join(process.cwd(), 'static', 'seed-assets');
 
 async function seedAlvaCatalog() {
+    validateRequiredSeedAssets();
+
     await runMigrations(config);
 
     const worker = await bootstrapWorker(config, {
@@ -105,30 +175,32 @@ async function seedAlvaCatalog() {
 
         for (const seedProduct of ALVA_PRODUCTS) {
             const asset = await ensureAlvaAsset(assetService, ctx, seedProduct);
-            assetIds.push(asset.id);
+            if (asset) {
+                assetIds.push(asset.id);
+            }
             const existingVariant = await findVariantBySku(productVariantService, ctx, seedProduct.sku);
             const existingProduct = existingVariant
                 ? await productVariantService.getProductForVariant(ctx, existingVariant)
                 : await productService.findOneBySlug(ctx, seedProduct.slug);
 
             if (existingProduct) {
-                await updateProduct(productService, ctx, existingProduct, seedProduct, asset.id);
+                await updateProduct(productService, ctx, existingProduct, seedProduct, asset?.id);
                 productIds.push(existingProduct.id);
 
                 if (existingVariant) {
-                    await updateVariant(productVariantService, ctx, existingVariant, seedProduct, stockLocation.id, currencyCode, asset.id);
+                    await updateVariant(productVariantService, ctx, existingVariant, seedProduct, stockLocation.id, currencyCode, asset?.id);
                     updated.push(seedProduct.slug);
                 } else {
-                    await createVariant(productVariantService, ctx, existingProduct.id, seedProduct, stockLocation.id, currencyCode, asset.id);
+                    await createVariant(productVariantService, ctx, existingProduct.id, seedProduct, stockLocation.id, currencyCode, asset?.id);
                     updated.push(`${seedProduct.slug} (created variant)`);
                 }
                 continue;
             }
 
             const product = await productService.create(ctx, {
-                enabled: true,
-                featuredAssetId: asset.id,
-                assetIds: [asset.id],
+                enabled: seedProduct.enabled ?? true,
+                featuredAssetId: asset?.id,
+                assetIds: asset ? [asset.id] : [],
                 translations: [
                     {
                         languageCode: LanguageCode.en,
@@ -141,7 +213,7 @@ async function seedAlvaCatalog() {
 
             productIds.push(product.id);
 
-            await createVariant(productVariantService, ctx, product.id, seedProduct, stockLocation.id, currencyCode, asset.id);
+            await createVariant(productVariantService, ctx, product.id, seedProduct, stockLocation.id, currencyCode, asset?.id);
 
             created.push(seedProduct.slug);
         }
@@ -170,12 +242,50 @@ seedAlvaCatalog().catch(err => {
     process.exitCode = 1;
 });
 
+function getSeedAssetRoot(): string {
+    return process.env.ALVA_SEED_ASSET_ROOT || DEFAULT_SEED_ASSET_ROOT;
+}
+
+function resolveSeedAssetPath(seedProduct: AlvaSeedProduct): string | undefined {
+    if (!seedProduct.assetPath) {
+        return undefined;
+    }
+
+    return path.resolve(getSeedAssetRoot(), seedProduct.assetPath);
+}
+
+function validateRequiredSeedAssets() {
+    const missingFiles = ALVA_PRODUCTS
+        .map(seedProduct => ({
+            seedProduct,
+            filePath: resolveSeedAssetPath(seedProduct),
+        }))
+        .filter((item): item is { seedProduct: AlvaSeedProduct; filePath: string } => !!item.filePath)
+        .filter(item => !fs.existsSync(item.filePath));
+
+    if (!missingFiles.length) {
+        return;
+    }
+
+    const formatted = missingFiles
+        .map(item => `- ${item.seedProduct.sku}: ${item.filePath}`)
+        .join('\n');
+
+    throw new Error(
+        `Missing required Alva seed asset files. No catalog changes were made.\n${formatted}`,
+    );
+}
+
 async function ensureAlvaAsset(
     assetService: AssetService,
     ctx: Parameters<AssetService['findAll']>[0],
     seedProduct: AlvaSeedProduct,
-): Promise<Translated<Asset>> {
-    const filePath = path.resolve(process.cwd(), seedProduct.assetPath);
+): Promise<Translated<Asset> | undefined> {
+    const filePath = resolveSeedAssetPath(seedProduct);
+    if (!filePath) {
+        return undefined;
+    }
+
     const fileName = path.basename(filePath);
 
     const existing = await assetService.findAll(ctx, {
@@ -200,10 +310,6 @@ async function ensureAlvaAsset(
                 },
             ],
         });
-    }
-
-    if (!fs.existsSync(filePath)) {
-        throw new Error(`Missing local Alva seed asset: ${filePath}`);
     }
 
     const asset = await assetService.createFromFileStream(fs.createReadStream(filePath), filePath, ctx);
@@ -298,13 +404,13 @@ async function updateProduct(
     ctx: Parameters<ProductService['update']>[0],
     product: Translated<Product>,
     seedProduct: AlvaSeedProduct,
-    assetId: string | number,
+    assetId: string | number | undefined,
 ) {
     await productService.update(ctx, {
         id: product.id,
-        enabled: true,
-        featuredAssetId: assetId,
-        assetIds: [assetId],
+        enabled: seedProduct.enabled ?? true,
+        featuredAssetId: assetId ?? null as never,
+        assetIds: assetId ? [assetId] : [],
         translations: [
             {
                 languageCode: LanguageCode.en,
@@ -323,16 +429,16 @@ async function updateVariant(
     seedProduct: AlvaSeedProduct,
     stockLocationId: string | number,
     currencyCode: CurrencyCode,
-    assetId: string | number,
+    assetId: string | number | undefined,
 ) {
     await productVariantService.update(ctx, [
         {
             id: variant.id,
-            enabled: true,
+            enabled: seedProduct.enabled ?? true,
             sku: seedProduct.sku,
             price: seedProduct.price,
-            featuredAssetId: assetId,
-            assetIds: [assetId],
+            featuredAssetId: assetId ?? null as never,
+            assetIds: assetId ? [assetId] : [],
             stockLevels: [
                 {
                     stockLocationId,
@@ -364,16 +470,16 @@ async function createVariant(
     seedProduct: AlvaSeedProduct,
     stockLocationId: string | number,
     currencyCode: CurrencyCode,
-    assetId: string | number,
+    assetId: string | number | undefined,
 ) {
     const variants = await productVariantService.create(ctx, [
         {
             productId,
-            enabled: true,
+            enabled: seedProduct.enabled ?? true,
             sku: seedProduct.sku,
             price: seedProduct.price,
             featuredAssetId: assetId,
-            assetIds: [assetId],
+            assetIds: assetId ? [assetId] : [],
             stockLevels: [
                 {
                     stockLocationId,

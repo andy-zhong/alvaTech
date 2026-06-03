@@ -73,6 +73,8 @@ export function renderHomePage({ lang }) {
       </div>
     </section>
 
+    ${renderAddOnsSection(content.addOns)}
+
     ${renderSetupEstimator({ context: "home" })}
 
     <section class="platform-home-section platform-home-section--sage" aria-labelledby="product-fit-title">
@@ -232,6 +234,44 @@ function renderSolutionShowcase(platform, solutions) {
         ${solutions.map((solution) => renderSolutionDetail(solution)).join("")}
       </div>
     </div>
+  `;
+}
+
+function renderAddOnsSection(addOns) {
+  return `
+    <section class="platform-home-section platform-home-section--milk platform-addons-section" aria-labelledby="platform-addons-title">
+      <div class="home-section-inner platform-addons">
+        <div class="platform-section-head platform-section-head--narrow">
+          <div>
+            <span class="platform-eyebrow">${addOns.eyebrow}</span>
+            <h2 id="platform-addons-title">${addOns.title}</h2>
+            <p>${addOns.body}</p>
+          </div>
+        </div>
+
+        <div class="platform-addons__grid">
+          ${addOns.items.map((item, index) => renderAddOnItem(item, index)).join("")}
+        </div>
+
+        <p class="platform-addons__note">${addOns.note}</p>
+      </div>
+    </section>
+  `;
+}
+
+function renderAddOnItem(item, index) {
+  return `
+    <article class="platform-addon reveal" style="--delay:${(index * 0.06).toFixed(2)}s">
+      <figure class="platform-addon__media ${item.image ? "" : "platform-addon__media--placeholder"}" aria-label="${escapeHtml(item.title)}">
+        ${item.image
+          ? `<img src="${item.image}" alt="${escapeHtml(item.title)}">`
+          : `<span>${escapeHtml(item.title)}</span>`}
+      </figure>
+      <div class="platform-addon__copy">
+        <h3>${item.title}</h3>
+        <p>${item.body}</p>
+      </div>
+    </article>
   `;
 }
 

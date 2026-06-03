@@ -321,6 +321,10 @@
   pointer-events: none;
 }
 
+.navbar__cart-count:empty {
+  display: none;
+}
+
 /* ─────────────────────────────────────────────────────────────────────────
    BATTERY SELECTOR (product detail)
    ───────────────────────────────────────────────────────────────────────── */
@@ -605,6 +609,101 @@ body[data-page="buy-product"] .cart-line__meta {
   margin: 0;
 }
 
+body[data-page="buy-product"] .cart-line__assurance {
+  display: grid;
+  max-width: 520px;
+  margin-top: 4px;
+  color: rgba(15, 42, 36, 0.66);
+  font-size: 0.78rem;
+  line-height: 1.48;
+}
+
+body[data-page="buy-product"] .cart-line__assurance summary {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: fit-content;
+  color: rgba(15, 42, 36, 0.7);
+  cursor: pointer;
+  list-style: none;
+}
+
+body[data-page="buy-product"] .cart-line__assurance summary::-webkit-details-marker {
+  display: none;
+}
+
+body[data-page="buy-product"] .cart-line__assurance summary span {
+  color: var(--text-dark);
+  font-size: 0.76rem;
+  font-weight: 900;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+body[data-page="buy-product"] .cart-line__assurance summary b {
+  display: inline-grid;
+  place-items: center;
+  width: 18px;
+  height: 18px;
+  border: 1px solid rgba(15, 42, 36, 0.16);
+  color: rgba(15, 42, 36, 0.66);
+  font-size: 0.82rem;
+  font-weight: 800;
+  line-height: 1;
+  transition: transform 0.18s ease;
+}
+
+body[data-page="buy-product"] .cart-line__assurance[open] summary b {
+  transform: rotate(45deg);
+}
+
+body[data-page="buy-product"] .cart-line__assurance-panel {
+  display: grid;
+  gap: 7px;
+  margin-top: 10px;
+  padding-top: 12px;
+  border-top: 1px solid rgba(15, 42, 36, 0.1);
+}
+
+body[data-page="buy-product"] .cart-line__assurance ul {
+  display: grid;
+  gap: 3px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+body[data-page="buy-product"] .cart-line__assurance li {
+  position: relative;
+  padding-left: 13px;
+}
+
+body[data-page="buy-product"] .cart-line__assurance li::before {
+  position: absolute;
+  top: 0.62em;
+  left: 0;
+  width: 4px;
+  height: 4px;
+  border-radius: 999px;
+  background: var(--accent-green);
+  content: "";
+}
+
+body[data-page="buy-product"] .cart-line__assurance a {
+  width: fit-content;
+  color: var(--text-dark);
+  font-weight: 800;
+  text-decoration: underline;
+  text-decoration-color: rgba(15, 42, 36, 0.24);
+  text-underline-offset: 3px;
+}
+
+body[data-page="buy-product"] .cart-line__assurance a:hover,
+body[data-page="buy-product"] .cart-line__assurance a:focus-visible {
+  color: #0f6b3f;
+  text-decoration-color: currentColor;
+}
+
 body[data-page="buy-product"] .cart-line__right {
   min-width: 132px;
   gap: 12px;
@@ -719,6 +818,11 @@ body[data-page="buy-product"] .cart-start-new:focus-visible {
 @media (max-width: 760px) {
   body[data-page="buy-product"] .cart-line__right {
     min-width: 0;
+  }
+
+  body[data-page="buy-product"] .cart-line__assurance {
+    max-width: none;
+    font-size: 0.76rem;
   }
 
   .cart-line__details div {

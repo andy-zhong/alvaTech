@@ -55,6 +55,34 @@
   pointer-events: none; /* so clicks register on the stage, not the image */
 }
 
+.media-placeholder {
+  display: grid;
+  place-items: center;
+  min-width: 100%;
+  min-height: 100%;
+  background:
+    linear-gradient(135deg, rgba(4, 48, 38, 0.045), rgba(4, 48, 38, 0.015)),
+    #f4f5ef;
+  color: rgba(8, 45, 37, 0.58);
+}
+
+.media-placeholder span,
+.media-thumb__placeholder {
+  font-size: 0.76rem;
+  font-weight: 800;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+.media-thumb__placeholder {
+  display: grid;
+  width: 100%;
+  height: 100%;
+  place-items: center;
+  color: rgba(8, 45, 37, 0.58);
+  background: #f4f5ef;
+}
+
 /* ─── Expand hint icon (bottom-right corner of stage) ───────────────────── */
 
 .media-stage__expand-hint {

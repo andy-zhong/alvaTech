@@ -2,6 +2,9 @@ import { getAllProducts } from "../services/product-service.js";
 import { bindSetupEstimator, renderSetupEstimator } from "../components/setup-estimator.js";
 
 const PRODUCT_ASSETS = {
+  solarTracking: {
+    placeholderLabel: "Coming soon",
+  },
   kit: {
     primaryImage: "/Picture/products/voltrix/voltrix02.png",
     hoverImage: "/Picture/products/voltrix/voltrix05.png",
@@ -13,9 +16,20 @@ const PRODUCT_ASSETS = {
     hoverImage: "/Picture/products/voltrix/voltrix02.png",
     galleryImages: [],
   },
+  compositionUsecase: {
+    primaryImage: "/Picture/products/voltrix/summerhouse/summerhouse01-optimized.jpg",
+    hoverImage: "/Picture/products/voltrix/summerhouse/summerhouse01-optimized.jpg",
+    imageClass: "showroom-composition__image--usecase",
+    galleryImages: [],
+  },
   battery: {
     primaryImage: "/Picture/products/battery/battery01.png",
     hoverImage: "/Picture/products/battery/battery04.jpg",
+    galleryImages: [],
+  },
+  inverter: {
+    primaryImage: "/Picture/products/inverter/Inverter01.png",
+    hoverImage: "/Picture/products/inverter/inverter02.png",
     galleryImages: [],
   },
   voltdock: {
@@ -24,36 +38,34 @@ const PRODUCT_ASSETS = {
     galleryImages: [],
   },
   backpack: {
-    primaryImage: "/Picture/products/voltrix/field/field03.png",
-    hoverImage: "/Picture/products/voltrix/field/field02.png",
+    primaryImage: "/Picture/products/backpack/backpack_1inverter+1battery-optimized.jpg",
+    hoverImage: "/Picture/products/backpack/backpack03-optimized.jpg",
     galleryImages: [],
   },
   mounting: {
-    primaryImage: "/Picture/products/voltrix/summerhouse/summerhouse02-optimized.jpg",
-    hoverImage: "/Picture/products/voltrix/voltrix04.png",
-    galleryImages: [],
+    placeholderLabel: "Coming soon",
   },
   mobility: {
-    primaryImage: "/Picture/products/voltrix/field/field01.png",
-    hoverImage: "/Picture/products/voltrix/field/field03.png",
+    primaryImage: "/Picture/products/bike/bike01-optimized.png",
+    hoverImage: "/Picture/products/bike/bike02-optimized.jpg",
     galleryImages: [],
   },
 };
 
 const COMPOSITION_LABELS = [
-  ["Base unit", "The slim energy core for the system."],
-  ["Battery packs", "Expandable capacity in the same platform."],
-  ["Mounting", "Clean support for installation and placement."],
-  ["VoltDock", "A compact hub for devices and temporary desks."],
-  ["Backpack Power", "Useful power closer to the point of use."],
-  ["Mobility layer", "Selected support when one battery needs to move further."],
+  ["MODULAR STORAGE", "Start with the capacity you need today, then expand as routines grow."],
+  ["SOLAR-READY SETUP", "Use available solar input and store useful energy for when it matters most."],
+  ["SLIM FOOTPRINT", "A vertical setup designed for cabins, homes, terraces and compact spaces."],
+  ["NORDIC READY", "Built for changing conditions, with outdoor-ready protection and all-season use."],
+  ["BEYOND THE WALL", "Bring stored energy closer to terraces, gardens, vans and daily routines."],
+  ["ONE BATTERY PLATFORM", "Use the same Battery Packs across home, outdoor and selected workday scenarios."],
 ];
 
 const SHOWROOM_PRODUCTS = [
   {
     key: "base",
     category: "Core system",
-    name: "Voltrix Base",
+    name: "Voltrix",
     body: "The energy core for organizing, charging and expanding the Voltrix system.",
     slug: "voltrix-5-pack-kit",
   },
@@ -63,6 +75,13 @@ const SHOWROOM_PRODUCTS = [
     name: "Battery Pack",
     body: "Expandable capacity for home routines, outdoor use and selected installer workflows.",
     slug: "voltrix-battery-module",
+  },
+  {
+    key: "inverter",
+    category: "Core system",
+    name: "Inverter",
+    body: "The inverter unit for building and expanding a Voltrix Battery Pack setup.",
+    slug: "voltrix-inverter",
   },
   {
     key: "voltdock",
@@ -76,47 +95,65 @@ const SHOWROOM_PRODUCTS = [
     category: "Add-on",
     name: "Backpack Power",
     body: "Carry useful power closer to where life or work happens.",
-    href: "/views/b2b.html",
+    slug: "backpack-power",
+  },
+  {
+    key: "mobility",
+    category: "Mobility",
+    name: "Bike accessory",
+    body: "Selected support for moving one battery further from the fixed setup.",
+    slug: "bike-accessory",
   },
   {
     key: "mounting",
     category: "Installation",
     name: "Mounting",
-    body: "Clean installation support for the base unit and battery packs.",
-    href: "/views/b2b.html",
+    body: "Wall-mounted and freestanding support options for Voltrix battery setups.",
+    href: "/views/products/accessories",
   },
   {
-    key: "mobility",
-    category: "Mobility",
-    name: "Mobility option",
-    body: "Selected support for moving one battery further from the fixed setup.",
-    href: "/views/b2b.html",
+    key: "solarTracking",
+    category: "Solar extension",
+    name: "Solar tracking system",
+    body: "A future solar-focused extension for summer house setups.",
+    slug: "solar-tracking-system",
   },
 ];
 
 const ADDONS = [
   {
-    key: "voltdock",
-    name: "VoltDock",
-    body: "For devices, desks and temporary workstations.",
-    slug: "voltdock",
-  },
-  {
     key: "backpack",
-    name: "Backpack Power",
-    body: "For last-meter use and carrying useful power closer.",
-    href: "/views/b2b.html",
+    title: "Backpack Power",
+    body: "Carry Battery Packs further for outdoor tasks, garden projects and last-meter work.",
+    image: "/Picture/products/backpack/backpack_1inverter+1battery-optimized.jpg",
+    href: "/views/product.html?slug=backpack-power",
   },
   {
-    key: "mobility",
-    name: "Mobility option",
-    body: "For selected routines where one battery needs to move further.",
-    href: "/views/b2b.html",
+    key: "voltdock",
+    title: "VoltDock",
+    body: "Turn a Battery Pack into a compact hub for devices, lights and everyday power.",
+    image: "/Picture/products/voltdock/voltdock01.png",
+    href: "/views/product.html?slug=voltdock",
+  },
+  {
+    key: "bike",
+    title: "Bike accessory",
+    body: "Move Battery Packs further with a light mobility add-on for local movement.",
+    image: "/Picture/products/bike/bike01-optimized.png",
+    href: "/views/product.html?slug=bike-accessory",
+  },
+  {
+    key: "solarTracking",
+    title: "Solar tracking system",
+    body: "A future solar add-on for summer house setups that want to make more of available daylight.",
+    note: "Coming soon — price not included.",
+    image: null,
+    href: "/views/product.html?slug=solar-tracking-system",
   },
 ];
 
 const SPECS = [
-  ["Battery chemistry", "NCM"],
+  ["Battery chemistry", "NMC"],
   ["Battery expansion", "1-12 kWh per inverter/base setup"],
   ["5-Pack Kit capacity", "5 kWh"],
   ["More capacity", "Additional inverter/base setup required"],
@@ -151,7 +188,7 @@ export function renderProductsPage({ lang, productUrl }) {
           <a class="button button--secondary" href="/views/b2b.html">${copy.talkToAlva}</a>
         </div>
       </div>
-      ${renderImage(PRODUCT_ASSETS.kit, "Voltrix system", "showroom-hero__media")}
+      ${renderHeroMedia()}
     </section>
 
     <section class="showroom-section showroom-section--sage showroom-composition editorial-section--soft" aria-labelledby="composition-title">
@@ -161,7 +198,7 @@ export function renderProductsPage({ lang, productUrl }) {
         <p>${copy.compositionBody}</p>
       </div>
       <div class="showroom-composition__body">
-        ${renderImage(PRODUCT_ASSETS.base, "Voltrix base and battery platform", "showroom-composition__image")}
+        ${renderImage(PRODUCT_ASSETS.compositionUsecase, "Voltrix in a summer house setting", "showroom-composition__image")}
         <div class="showroom-annotation-list thin-divider-list">
           ${compositionLabels.map(([label, body]) => `
             <div class="showroom-annotation">
@@ -187,6 +224,8 @@ export function renderProductsPage({ lang, productUrl }) {
       </div>
     </section>
 
+    ${renderProductsAddOnsSection(copy, addons)}
+
     ${renderSetupEstimator({ context: "products" })}
 
     <section class="showroom-section editorial-section" aria-labelledby="showroom-title">
@@ -196,17 +235,6 @@ export function renderProductsPage({ lang, productUrl }) {
       </div>
       <div class="showroom-product-list">
         ${showroomProducts.map((item) => renderShowroomItem(item, productHref, copy)).join("")}
-      </div>
-    </section>
-
-    <section class="showroom-section showroom-addons editorial-section" aria-labelledby="addons-title">
-      <div class="showroom-section__head">
-        <span class="eyebrow">${copy.addonsEyebrow}</span>
-        <h2 id="addons-title">${copy.addonsTitle}</h2>
-        <p>${copy.addonsBody}</p>
-      </div>
-      <div class="showroom-addon-shelf product-shelf">
-        ${addons.map((item) => renderAddon(item, productHref)).join("")}
       </div>
     </section>
 
@@ -271,19 +299,77 @@ function renderShowroomItem(item, productHref, copy) {
   `;
 }
 
-function renderAddon(item, productHref) {
-  const href = item.slug ? productHref(item.slug) : item.href;
+function renderHeroMedia() {
+  return `
+    <figure class="showroom-hero__media showroom-hero__media--cycle showroom-image frameless-image-stage">
+      <img
+        class="showroom-hero__cycle-image showroom-hero__cycle-image--product"
+        src="${PRODUCT_ASSETS.kit.primaryImage}"
+        alt="Voltrix system"
+      >
+      <img
+        class="showroom-hero__cycle-image showroom-hero__cycle-image--usecase"
+        src="/Picture/products/voltrix/summerhouse/summerhouse02-optimized.jpg"
+        alt=""
+        aria-hidden="true"
+      >
+    </figure>
+  `;
+}
+
+function renderProductsAddOnsSection(copy, addons) {
+  return `
+    <section class="showroom-section showroom-product-addons editorial-section" aria-labelledby="products-addons-title">
+      <div class="showroom-product-addons__inner">
+        <div class="showroom-section__head">
+          <span class="eyebrow">${copy.addonsEyebrow}</span>
+          <h2 id="products-addons-title">${copy.addonsTitle}</h2>
+          <p>${copy.addonsBody}</p>
+        </div>
+
+        <div class="showroom-product-addons__grid">
+          ${addons.map((item) => renderProductAddOnItem(item)).join("")}
+        </div>
+
+        <div class="showroom-product-addons__footer">
+          <p>${copy.addonsNote}</p>
+          <a class="showroom-link" href="/views/products/accessories">${copy.exploreAccessories} <b aria-hidden="true">-&gt;</b></a>
+        </div>
+      </div>
+    </section>
+  `;
+}
+
+function renderProductAddOnItem(item) {
+  const tag = item.href ? "a" : "article";
+  const href = item.href ? ` href="${item.href}"` : "";
 
   return `
-    <a class="showroom-addon" href="${href}">
-      ${renderImage(PRODUCT_ASSETS[item.key], item.name, "showroom-addon__media")}
-      <strong>${item.name}</strong>
-      <span>${item.body}</span>
-    </a>
+    <${tag} class="showroom-product-addon"${href}>
+      <figure class="showroom-product-addon__media ${item.image ? "" : "showroom-product-addon__media--placeholder"}" aria-label="${escapeHtml(item.title)}">
+        ${item.image
+          ? `<img src="${item.image}" alt="${escapeHtml(item.title)}">`
+          : `<span>${escapeHtml(item.title)}</span>`}
+      </figure>
+      <div class="showroom-product-addon__copy">
+        <h3>${item.title}</h3>
+        <p>${item.body}</p>
+        ${item.note ? `<small>${item.note}</small>` : ""}
+      </div>
+    </${tag}>
   `;
 }
 
 function renderImage(asset, alt, className) {
+  if (!asset?.primaryImage) {
+    const label = asset?.placeholderLabel || alt;
+    return `
+      <figure class="${className} showroom-image showroom-image--placeholder frameless-image-stage" aria-label="${escapeHtml(alt)}">
+        <span>${escapeHtml(label)}</span>
+      </figure>
+    `;
+  }
+
   const primaryImage = asset.primaryImage;
   const hoverImage = asset.hoverImage ?? asset.primaryImage;
   const imageClass = asset.imageClass ? ` ${asset.imageClass}` : "";
@@ -294,6 +380,15 @@ function renderImage(asset, alt, className) {
       <img class="showroom-image__hover" src="${hoverImage}" alt="" aria-hidden="true">
     </figure>
   `;
+}
+
+function escapeHtml(value) {
+  return String(value)
+    .replaceAll("&", "&amp;")
+    .replaceAll("<", "&lt;")
+    .replaceAll(">", "&gt;")
+    .replaceAll('"', "&quot;")
+    .replaceAll("'", "&#039;");
 }
 
 function getProductsCopy(lang) {
@@ -308,14 +403,16 @@ function getProductsCopy(lang) {
       compositionBody: "Start with the Voltrix base. Add battery packs for capacity. Extend use with selected add-ons when power needs to move beyond the wall or closer to the work area.",
       featuredEyebrow: "Featured setup",
       featuredBody: "A fixed 5 kWh starting setup for seasonal homes, everyday energy support and expandable outdoor use.",
-      featuredNote: "Includes five NCM battery modules. Actual performance depends on connected devices, installation and usage pattern.",
+      featuredNote: "Includes five NMC battery modules. Actual performance depends on connected devices, installation and usage pattern.",
       viewKit: "View kit",
       contactAlva: "Contact Alva",
       showroomEyebrow: "Product showroom",
       showroomTitle: "A platform, not a wall of products.",
       addonsEyebrow: "Add-ons",
-      addonsTitle: "Use the battery pack in more places.",
-      addonsBody: "Selected add-ons help the same Voltrix battery platform support desks, outdoor routines, service vans and last-meter tasks.",
+      addonsTitle: "Take Voltrix beyond the wall.",
+      addonsBody: "Expand how Battery Packs are used with simple add-ons for everyday outdoor life, mobile routines and selected workday needs.",
+      addonsNote: "Most add-ons pair with the same Battery Pack platform. Solar tracking system is a separate solar-focused extension.",
+      exploreAccessories: "Explore accessories",
       specsEyebrow: "Specs",
       specsTitle: "System basics",
       specsNote: "Runtime and performance depend on connected devices, installation and usage pattern.",
@@ -330,22 +427,24 @@ function getProductsCopy(lang) {
       talkToAlva: "Prata med Alva",
       compositionEyebrow: "Systemets uppbyggnad",
       compositionTitle: "Ett system, byggt i lager.",
-      compositionBody: "Börja med Voltrix-basen. Lägg till batteripack för kapacitet. Utöka användningen med valda tillbehör när kraft behöver flyttas bortom väggen eller närmare arbetsytan.",
+      compositionBody: "Börja med Voltrix-basen. Lägg till batteripack för kapacitet. Utöka användningen med valda tillbehör när energi behöver flyttas bortom väggen eller närmare arbetsytan.",
       featuredEyebrow: "Utvald setup",
       featuredBody: "En fast 5 kWh-startsetup för fritidshus, vardaglig energistöd och expanderbar utomhusanvändning.",
-      featuredNote: "Inkluderar fem NCM-batterimoduler. Faktisk prestanda beror på anslutna enheter, installation och användningsmönster.",
+      featuredNote: "Inkluderar fem NMC-batterimoduler. Faktisk prestanda beror på anslutna enheter, installation och användningsmönster.",
       viewKit: "Visa kit",
       contactAlva: "Kontakta Alva",
       showroomEyebrow: "Produktshowroom",
       showroomTitle: "En plattform, inte en vägg av produkter.",
-      addonsEyebrow: "Tillbehör",
-      addonsTitle: "Använd batteripacket på fler platser.",
-      addonsBody: "Valda tillbehör hjälper samma Voltrix-plattform att stödja skrivbord, utomhusrutiner, servicebilar och uppgifter nära arbetsplatsen.",
+      addonsEyebrow: "Add-ons",
+      addonsTitle: "Take Voltrix beyond the wall.",
+      addonsBody: "Expand how Battery Packs are used with simple add-ons for everyday outdoor life, mobile routines and selected workday needs.",
+      addonsNote: "Most add-ons pair with the same Battery Pack platform. Solar tracking system is a separate solar-focused extension.",
+      exploreAccessories: "Explore accessories",
       specsEyebrow: "Specifikationer",
       specsTitle: "Systemgrunder",
       specsNote: "Drifttid och prestanda beror på anslutna enheter, installation och användningsmönster.",
       ctaTitle: "Osäker på var du ska börja?",
-      ctaBody: "Prata med Alva om ditt hem, din stuga, teamets rutin eller fältarbete.",
+      ctaBody: "Prata med Alva om ditt hem, din stuga eller teamets installatörsrutiner.",
       exploreSolutions: "Utforska lösningar",
     },
   };
@@ -357,29 +456,18 @@ function getProductsCopy(lang) {
   const svData = {
     productsEyebrow: "Produkter",
     viewProduct: "Visa produkt",
-    compositionLabels: [
-      ["Basenhet", "Den smala energikärnan i systemet."],
-      ["Batteripack", "Expanderbar kapacitet i samma plattform."],
-      ["Montering", "Rent stöd för installation och placering."],
-      ["VoltDock", "En kompakt hubb för enheter och tillfälliga arbetsplatser."],
-      ["Backpack Power", "Användbar kraft närmare platsen där den behövs."],
-      ["Mobilitetslager", "Utvalt stöd när ett batteri behöver flyttas längre."],
-    ],
+    compositionLabels: COMPOSITION_LABELS,
     showroomProducts: [
       { key: "base", category: "Kärnsystem", name: "Voltrix Base", body: "Energikärnan för att organisera, ladda och bygga ut Voltrix-systemet.", slug: "voltrix-5-pack-kit" },
       { key: "battery", category: "Kapacitet", name: "Battery Pack", body: "Expanderbar kapacitet för hemrutiner, utomhusbruk och utvalda fältflöden.", slug: "voltrix-battery-module" },
       { key: "voltdock", category: "Tillbehör", name: "VoltDock", body: "En kompakt hubb för enheter, skrivbord och tillfälliga arbetsplatser.", slug: "voltdock" },
-      { key: "backpack", category: "Tillbehör", name: "Backpack Power", body: "Bär användbar kraft närmare platsen där livet eller arbetet sker.", href: "/views/b2b.html" },
+      { key: "backpack", category: "Tillbehör", name: "Backpack Power", body: "Bär användbar energi närmare platsen där livet eller arbetet sker.", slug: "backpack-power" },
       { key: "mounting", category: "Installation", name: "Montering", body: "Rent installationsstöd för basenheten och batteripack.", href: "/views/b2b.html" },
-      { key: "mobility", category: "Mobilitet", name: "Mobilitetsval", body: "Utvalt stöd för att flytta ett batteri längre från den fasta setupen.", href: "/views/b2b.html" },
+      { key: "mobility", category: "Mobilitet", name: "Bike accessory", body: "Utvalt stöd för att flytta ett batteri längre från den fasta setupen.", slug: "bike-accessory" },
     ],
-    addons: [
-      { key: "voltdock", name: "VoltDock", body: "För enheter, skrivbord och tillfälliga arbetsplatser.", slug: "voltdock" },
-      { key: "backpack", name: "Backpack Power", body: "För sista metern och för att bära kraften närmare.", href: "/views/b2b.html" },
-      { key: "mobility", name: "Mobilitetsval", body: "För utvalda rutiner där ett batteri behöver flyttas längre.", href: "/views/b2b.html" },
-    ],
+    addons: ADDONS,
     specs: [
-      ["Batterikemi", "NCM"],
+      ["Batterikemi", "NMC"],
       ["Batteriexpansion", "1-12 kWh per inverter/base setup"],
       ["5-Pack Kit-kapacitet", "5 kWh"],
       ["Mer kapacitet", "Ytterligare inverter/base setup krävs"],
@@ -392,5 +480,7 @@ function getProductsCopy(lang) {
   };
   const selectedCopy = copies[lang] ?? copies.en;
 
-  return lang === "sv" ? { ...baseCopy, ...selectedCopy, ...svData } : { ...baseCopy, ...selectedCopy };
+  return lang === "sv"
+    ? { ...baseCopy, ...selectedCopy, ...svData, showroomProducts: SHOWROOM_PRODUCTS }
+    : { ...baseCopy, ...selectedCopy };
 }

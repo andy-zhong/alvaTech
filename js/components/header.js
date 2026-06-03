@@ -25,7 +25,6 @@ const NAV_COPY = {
     instructions: "Instructions",
     faqs: "FAQs",
     troubleshooting: "Troubleshooting",
-    findSystem: "Find your system",
   },
   sv: {
     solutions: "Lösningar",
@@ -34,7 +33,7 @@ const NAV_COPY = {
     about: "Om",
     contact: "Kontakt",
     summerHouse: "Fritidshus",
-    field: "Fältarbete",
+    field: "Installatör",
     forSummerHouse: "För fritidshus",
     forInstaller: "För installatörer",
     accessories: "Tillbehör",
@@ -46,7 +45,6 @@ const NAV_COPY = {
     instructions: "Instruktioner",
     faqs: "FAQ",
     troubleshooting: "Felsökning",
-    findSystem: "Hitta ditt system",
   },
   fi: {
     solutions: "Ratkaisut",
@@ -63,7 +61,6 @@ const NAV_COPY = {
     instructions: "Ohjeet",
     faqs: "UKK",
     troubleshooting: "Vianmaaritys",
-    findSystem: "Löydä järjestelmä",
   },
   no: {
     solutions: "Løsninger",
@@ -80,7 +77,6 @@ const NAV_COPY = {
     instructions: "Instruksjoner",
     faqs: "FAQ",
     troubleshooting: "Feilsøking",
-    findSystem: "Finn ditt system",
   },
   da: {
     solutions: "Løsninger",
@@ -97,7 +93,6 @@ const NAV_COPY = {
     instructions: "Instruktioner",
     faqs: "FAQ",
     troubleshooting: "Fejlfinding",
-    findSystem: "Find dit system",
   },
   it: {
     solutions: "Soluzioni",
@@ -114,7 +109,6 @@ const NAV_COPY = {
     instructions: "Istruzioni",
     faqs: "FAQ",
     troubleshooting: "Risoluzione problemi",
-    findSystem: "Trova il sistema",
   },
 };
 

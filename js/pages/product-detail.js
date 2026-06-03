@@ -162,7 +162,7 @@ function getProductMedia(product, fallbackAlt) {
   const gallery = Array.isArray(product.gallery) ? product.gallery : [];
 
   const uniqueGallery = gallery.filter((item) => {
-    if (!item?.src) return false;
+    if (!item?.src && item?.type !== "placeholder") return false;
     return !(item.src === hero.src && (item.type ?? "image") === (hero.type ?? "image"));
   });
 
@@ -180,6 +180,12 @@ function renderMainMedia(media, fallbackAlt) {
               <source src="${src}">${alt}</video>`;
   }
 
+  if (type === "placeholder" || !src) {
+    return `<div id="detail-main-media" class="media-main-asset media-placeholder" role="img" aria-label="${alt}">
+              <span>Coming soon</span>
+            </div>`;
+  }
+
   return `<img id="detail-main-media" class="media-main-asset" src="${src}" alt="${alt}">`;
 }
 
@@ -188,14 +194,16 @@ function renderThumbnail(media, index, isActive, fallbackAlt, labels) {
   const src = media?.src ?? "";
   const alt = media?.alt ?? `${fallbackAlt} ${index + 1}`;
 
-  const inner = type === "video"
-    ? `<span class="media-thumb__video-wrap">
+  const inner = type === "placeholder" || !src
+    ? `<span class="media-thumb__placeholder">Soon</span>`
+    : type === "video"
+      ? `<span class="media-thumb__video-wrap">
          <video class="media-thumb__asset" muted playsinline preload="metadata">
            <source src="${src}">
          </video>
          <span class="media-thumb__video-badge">&#9654;</span>
        </span>`
-    : `<img class="media-thumb__asset" src="${src}" alt="${alt}">`;
+      : `<img class="media-thumb__asset" src="${src}" alt="${alt}">`;
 
   return `
     <button class="media-thumb ${isActive ? "is-active" : ""}" type="button"
@@ -304,12 +312,15 @@ export function renderProductDetailPage({ lang, slug, route }) {
         ${renderBatterySelector(product, labels)}
 
         <div class="detail-actions">
-          <button class="button button--primary" id="add-to-cart" data-commerce-action="${product.slug}">
-            ${labels.configure}
-          </button>
-          <a class="button button--secondary" href="${route("views/b2b.html")}">
-            ${labels.requestAdvice}
-          </a>
+          ${product.buyEnabled === false
+            ? `<a class="button button--primary" href="${route("views/b2b.html")}">${labels.requestAdvice}</a>
+               <a class="button button--secondary" href="${route("views/products.html")}">${t(lang, "backToProducts")}</a>`
+            : `<button class="button button--primary" id="add-to-cart" data-commerce-action="${product.slug}">
+                ${labels.configure}
+              </button>
+              <a class="button button--secondary" href="${route("views/b2b.html")}">
+                ${labels.requestAdvice}
+              </a>`}
         </div>
       </article>
     </section>
@@ -432,6 +443,10 @@ function setMainStageContent(media, fallbackAlt) {
     stage.innerHTML = `<video id="detail-main-media" class="media-main-asset"
                          controls playsinline preload="metadata" aria-label="${alt}">
                          <source src="${src}">${alt}</video>`;
+  } else if (type === "placeholder" || !src) {
+    stage.innerHTML = `<div id="detail-main-media" class="media-main-asset media-placeholder" role="img" aria-label="${alt}">
+                         <span>Coming soon</span>
+                       </div>`;
   } else {
     stage.innerHTML = `<img id="detail-main-media" class="media-main-asset" src="${src}" alt="${alt}">`;
   }
@@ -446,6 +461,10 @@ function setLightboxContent(lbStage, media, fallbackAlt) {
     lbStage.innerHTML = `<video class="lightbox__asset" controls playsinline preload="metadata"
                            aria-label="${alt}" autoplay>
                            <source src="${src}">${alt}</video>`;
+  } else if (type === "placeholder" || !src) {
+    lbStage.innerHTML = `<div class="lightbox__asset media-placeholder" role="img" aria-label="${alt}">
+                           <span>Coming soon</span>
+                         </div>`;
   } else {
     lbStage.innerHTML = `<img class="lightbox__asset" src="${src}" alt="${alt}">`;
   }
@@ -563,6 +582,10 @@ export function afterRenderProductDetail(product) {
   hydrateCommercePrice(product, lang);
 
   const button = document.getElementById("add-to-cart");
+
+  if (product.buyEnabled === false) {
+    return;
+  }
 
   if (product.config) {
     const minus = document.getElementById("battery-minus");

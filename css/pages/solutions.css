@@ -293,7 +293,7 @@
 .solution-page__visual--field {
   background:
     linear-gradient(rgba(15, 42, 36, 0.12), rgba(15, 42, 36, 0.12)),
-    url("/Picture/products/voltrix/field/field01.png") center / cover no-repeat;
+    url("/Picture/products/voltrix/field/field05-optimized.jpg") center / cover no-repeat;
 }
 
 .solution-page__image--summer-living {
@@ -305,13 +305,60 @@
 .solution-page__image--field-dock {
   background:
     linear-gradient(rgba(15, 42, 36, 0.12), rgba(15, 42, 36, 0.12)),
-    url("/Picture/products/voltrix/field/field02.png") center / cover no-repeat;
+    url("/Picture/products/voltrix/field/field04-optimized.jpg") center / cover no-repeat;
 }
 
 .solution-page__image--field-backpack {
+  position: relative;
+  overflow: hidden;
   background:
     linear-gradient(rgba(15, 42, 36, 0.12), rgba(15, 42, 36, 0.12)),
-    url("/Picture/products/voltrix/field/field03.png") center / cover no-repeat;
+    url("/Picture/products/backpack/backpack02-optimized.jpg") center / cover no-repeat;
+}
+
+.solution-page__image--field-backpack {
+  background: #e6e6df;
+}
+
+.solution-page__image-slide {
+  position: absolute;
+  inset: 0;
+  display: block;
+  background-position: center;
+  background-size: cover;
+  background-repeat: no-repeat;
+  opacity: 0;
+  animation: solutionLastMeterFade 14s ease-in-out infinite;
+  will-change: opacity;
+}
+
+.solution-page__image-slide--field-backpack-one {
+  background-image:
+    linear-gradient(rgba(15, 42, 36, 0.12), rgba(15, 42, 36, 0.12)),
+    url("/Picture/products/backpack/backpack02-optimized.jpg");
+}
+
+.solution-page__image-slide--field-backpack-two {
+  background-image:
+    linear-gradient(rgba(15, 42, 36, 0.12), rgba(15, 42, 36, 0.12)),
+    url("/Picture/products/backpack/backpack03-optimized.jpg");
+  animation-delay: -7s;
+}
+
+@keyframes solutionLastMeterFade {
+  0%,
+  42% {
+    opacity: 1;
+  }
+
+  50%,
+  92% {
+    opacity: 0;
+  }
+
+  100% {
+    opacity: 1;
+  }
 }
 
 .solution-page-statement {

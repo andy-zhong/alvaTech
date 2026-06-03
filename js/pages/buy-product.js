@@ -21,6 +21,13 @@ const CART_COPY = {
     orderLocked: "This order is already in checkout. Continue payment or start a new cart.",
     orderComplete: "Your previous order is complete. Start a new cart to place another order.",
     startNewCart: "Start a new cart",
+    assuranceTitle: "Warranty & returns",
+    assuranceItems: [
+      "Limited warranty information confirmed with your order.",
+      "14-day right of withdrawal for online orders.",
+      "Swedish and EU statutory consumer rights apply.",
+    ],
+    assuranceLink: "Read purchase information",
   },
   sv: {
     title: "Granska din konfiguration",
@@ -31,6 +38,13 @@ const CART_COPY = {
     orderLocked: "Den här beställningen är redan i kassan. Fortsätt betalningen eller börja med en ny varukorg.",
     orderComplete: "Din föregående beställning är klar. Börja med en ny varukorg för att lägga en ny order.",
     startNewCart: "Börja med en ny varukorg",
+    assuranceTitle: "Garanti & returer",
+    assuranceItems: [
+      "Begränsad garantiinformation bekräftas med din order.",
+      "14 dagars ångerrätt för köp online.",
+      "Svenska och EU-lagstadgade konsumenträttigheter gäller.",
+    ],
+    assuranceLink: "Läs köpinformation",
   },
   fi: {
     title: "Tarkista kokoonpano",
@@ -167,6 +181,7 @@ function renderCartLine(item, lang) {
             ${item.batteryCount} ${item.batteryCount === 1 ? t(lang, "cartBatterySingular") : t(lang, "cartBatteryPlural")}
             &nbsp;/&nbsp; ${item.capacity} kWh
           </p>
+          ${renderPurchaseAssurance(lang)}
         </div>
         <div class="cart-line__right">
           <p class="cart-line__price">${lineTotal.toLocaleString("sv-SE")} SEK</p>
@@ -184,6 +199,7 @@ function renderCartLine(item, lang) {
       <div class="cart-line__body">
         <p class="cart-line__name">${content.name}</p>
         <p class="cart-line__meta">${item.unitPrice.toLocaleString("sv-SE")} SEK ${t(lang, "cartPerUnit")}</p>
+        ${renderPurchaseAssurance(lang)}
         <div class="cart-quantity-stepper cart-line__qty">
           <button class="cart-quantity-stepper__button qty-decrease" data-item-id="${item.cartItemId}"
                   aria-label="${t(lang, "cartDecrease")}">-</button>
@@ -200,6 +216,27 @@ function renderCartLine(item, lang) {
         </button>
       </div>
     </div>`;
+}
+
+function renderPurchaseAssurance(lang) {
+  const copy = getCartCopy(lang);
+  const title = copy.assuranceTitle ?? CART_COPY.en.assuranceTitle;
+  const items = copy.assuranceItems ?? CART_COPY.en.assuranceItems;
+  const linkText = copy.assuranceLink ?? CART_COPY.en.assuranceLink;
+
+  return `
+    <details class="cart-line__assurance">
+      <summary>
+        <span>${title}</span>
+        <b aria-hidden="true">+</b>
+      </summary>
+      <div class="cart-line__assurance-panel">
+        <ul>
+          ${items.map((item) => `<li>${item}</li>`).join("")}
+        </ul>
+        <a href="/views/warranty-returns.html">${linkText}</a>
+      </div>
+    </details>`;
 }
 
 function renderPlanningEstimateLine(item, lang) {

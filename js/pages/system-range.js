@@ -64,7 +64,7 @@ const RANGES = {
     pathEyebrow: "Popular setup",
     pathTitle: "Voltrix 5-Pack Kit",
     pathBody:
-      "A fixed 5 kWh starting setup for seasonal homes, everyday energy support and expandable outdoor use. Includes five NCM battery modules. Actual performance depends on connected devices, installation and usage pattern. The 5-Pack Kit is a popular setup within the Starter range, not a separate competing category.",
+      "A fixed 5 kWh starting setup for seasonal homes, everyday energy support and expandable outdoor use. Includes five NMC battery modules. Actual performance depends on connected devices, installation and usage pattern. The 5-Pack Kit is a popular setup within the Starter range, not a separate competing category.",
     pathCta: { label: "View kit", href: "/views/product.html?slug=voltrix-5-pack-kit" },
     shelfTitle: "Build from one platform.",
     compareKey: "starter",

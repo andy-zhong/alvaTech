@@ -126,6 +126,7 @@ export const UI_TRANSLATIONS = {
     accountPanelFourBody: "Customer-facing account management should later include password resets, consent settings, and device sessions.",
 
     footerTagline: "Premium energy technology storefront framework",
+    footerWarrantyReturns: "Warranty, returns & support",
 
     statOne: "01",
     statOneBody: "B2C-ready homepage with direct purchase entry",
@@ -276,6 +277,7 @@ export const UI_TRANSLATIONS = {
     accountPanelFourBody: "Kundnära kontohantering bör senare omfatta lösenordsåterställning, samtycken och enhetssessioner.",
 
     footerTagline: "Storefront-ramverk för premium energiteknik",
+    footerWarrantyReturns: "Garanti, returer och support",
 
     statOne: "01",
     statOneBody: "B2C-anpassad startsida med direkt köpstart",

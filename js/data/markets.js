@@ -22,6 +22,7 @@ export const MARKETS = {
     language: "Finnish",
     cluster: MARKET_CLUSTERS.NORDIC,
     likelyCurrency: "EUR",
+    selectable: false,
   },
   no: {
     code: "no",
@@ -31,6 +32,7 @@ export const MARKETS = {
     language: "Norwegian",
     cluster: MARKET_CLUSTERS.NORDIC,
     likelyCurrency: "NOK",
+    selectable: false,
   },
   da: {
     code: "da",
@@ -40,6 +42,7 @@ export const MARKETS = {
     language: "Danish",
     cluster: MARKET_CLUSTERS.NORDIC,
     likelyCurrency: "DKK",
+    selectable: false,
   },
   en: {
     code: "en",

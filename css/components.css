@@ -973,14 +973,7 @@ body:not([data-page="checkout"]) .product-card > img {
 }
 
 .site-header__actions {
-  gap: 12px;
-}
-
-.site-header__cta {
-  min-height: 44px;
-  padding: 0 18px;
-  font-size: 0.92rem;
-  white-space: nowrap;
+  gap: 16px;
 }
 
 .site-header__menu-toggle {
@@ -995,11 +988,7 @@ body:not([data-page="checkout"]) .product-card > img {
 
   .site-header__actions {
     margin-left: auto;
-    gap: 8px;
-  }
-
-  .site-header__cta {
-    display: none;
+    gap: 10px;
   }
 
   .site-header__menu-toggle {
@@ -1129,7 +1118,7 @@ body:not([data-page="checkout"]) .product-card > img {
   }
 
   .site-header__actions {
-    gap: 6px;
+    gap: 8px;
   }
 
   .navbar__cart,

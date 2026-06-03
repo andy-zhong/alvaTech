@@ -248,11 +248,11 @@ const LOCAL_OVERRIDES = {
       eyebrow: "VOLTRIX AV ALVA",
       title: "Modular energi for nordiska hem.",
       subtitle:
-        "Lagra solenergi, hall reservkraft redo och ta med batterimoduler dit du behover dem.",
+        "Lagra solenergi, håll reservenergi redo och ta med batterimoduler dit du behöver dem.",
       primaryCta: "Konfigurera ditt kit",
       secondaryCta: "Utforska systemet",
       productCta: "Konfigurera system",
-      quickPoints: ["Fritidshus", "Solenergilagring", "Reservkraft", "Portabel energi"],
+      quickPoints: ["Fritidshus", "Solenergilagring", "Reservenergi", "Portabel energi"],
     },
   },
   fi: {

@@ -46,6 +46,38 @@ main {
   font-size: 0.94rem;
 }
 
+.site-footer__legal {
+  display: grid;
+  gap: 8px;
+  max-width: min(100%, 560px);
+}
+
+.site-footer__company {
+  display: grid;
+  gap: 3px;
+  margin: 0;
+  color: rgba(243, 246, 242, 0.58);
+  font-size: 0.82rem;
+  font-style: normal;
+  line-height: 1.45;
+}
+
+.site-footer__legal a {
+  width: fit-content;
+  color: rgba(243, 246, 242, 0.78);
+  font-size: 0.82rem;
+  font-weight: 700;
+  text-decoration: underline;
+  text-decoration-color: rgba(199, 226, 122, 0.46);
+  text-underline-offset: 4px;
+}
+
+.site-footer__legal a:hover,
+.site-footer__legal a:focus-visible {
+  color: #ffffff;
+  text-decoration-color: rgba(199, 226, 122, 0.86);
+}
+
 .section {
   margin-top: 36px;
 }
@@ -129,6 +161,10 @@ main {
   .site-footer__inner {
     flex-direction: column;
     align-items: flex-start;
+  }
+
+  .site-footer__inner {
+    gap: 18px;
   }
 
   .site-header__inner {

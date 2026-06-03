@@ -75,12 +75,40 @@ const SHARED_PLATFORM_CONTENT = {
     body:
       "Voltrix is built around a modular energy base and battery packs that can stay at home, move outdoors, or support selected field routines through compatible add-ons.",
   },
+  addOns: {
+    eyebrow: "Add-ons",
+    title: "Add-ons",
+    body: "Expand how Battery Packs are used with simple add-ons for everyday outdoor life and mobile routines.",
+    note: "Most add-ons work by simply pairing with the same Battery Pack platform. Solar tracking system is a separate solar-focused extension and not a simple plug-on accessory.",
+    items: [
+      {
+        title: "Backpack Power",
+        body: "Carry Battery Packs further for outdoor tasks and mobile use.",
+        image: "/Picture/products/backpack/backpack_1inverter+1battery-optimized.jpg",
+      },
+      {
+        title: "VoltDock",
+        body: "Turn a Battery Pack into a compact hub for devices, lights and everyday power.",
+        image: "/Picture/products/voltdock/voltdock01.png",
+      },
+      {
+        title: "Bike accessory",
+        body: "Bring Battery Packs further with a light mobility add-on for local movement.",
+        image: "/Picture/products/bike/bike01-optimized.png",
+      },
+      {
+        title: "Solar tracking system",
+        body: "A future solar add-on for summer house setups that want to make more of available daylight.",
+        image: null,
+      },
+    ],
+  },
   productFit: {
     eyebrow: "Featured setup",
     title: "Voltrix 5-Pack Kit",
     body:
       "A fixed 5 kWh starting setup for seasonal homes, everyday energy support and expandable outdoor use.",
-    note: "Includes five NCM battery modules. Actual performance depends on connected devices, installation and usage pattern.",
+    note: "Includes five NMC battery modules. Actual performance depends on connected devices, installation and usage pattern.",
     primary: "View kit",
     secondary: "Explore products",
   },
@@ -109,7 +137,7 @@ const SHARED_PLATFORM_CONTENT = {
       id: "field",
       label: "Installer",
       title: "For installers and service teams",
-      body: "Charge batteries at the office or workshop, bring them into the van, and use them where installation work happens.",
+      body: "Charge centrally, then bring practical power from the van to the last meter of work.",
       cta: "Explore Installer",
       href: "/views/solution-field.html",
       detail: {
@@ -208,32 +236,32 @@ const LANGUAGE_OVERRIDES = {
       summerHouse: {
         label: "Fritidshus",
         headlineLines: ["Trygg energi", "i fritidshuset"],
-        body: "Börja med en smal Voltrix-lösning och bygg ut batterikapacitet och portabla tillval när rutinerna växer.",
-        benefits: ["Fritidshus & stugor", "Modulär batteriplattform", "Redo för nordiska rutiner"],
+        body: "Ha användbar energi nära till hands när vardagen flyttar utanför väggarna - från stugan till terrassen, trädgården, gästhuset eller bryggan.",
+        benefits: ["Fritidshus och stugor", "Modulär batteriplattform", "Redo för nordiska rutiner"],
       },
       field: {
-        label: "Fältarbete",
-        headlineLines: ["Portabel kraft", "för arbete på plats"],
-        body: "Ladda batteripack på basen, ta med dem i bilen och använd dem där praktisk kraft behövs.",
-        benefits: ["Installatörer & service", "Central laddning", "Portabla fältrutiner"],
+        label: "Installatör",
+        headlineLines: ["Portabel energi", "för installatörer"],
+        body: "Ladda batteripack på kontoret eller i verkstaden, ta med dem i servicebilen och använd dem där praktisk el behövs.",
+        benefits: ["Installatörer och serviceteam", "Centraliserad laddning", "Portabla arbetsrutiner"],
       },
     },
     heroCtas: { primary: "Utforska kit", secondary: "Se plattformen" },
     benefits: [
       {
         title: "En ren energibas",
-        body: "Voltrix börjar med en smal basenhet och batteripack som håller lagrad energi organiserad i ett modulärt system.",
+        body: "Voltrix börjar med en smal basenhet och batteripack som håller lagrad energi samlad i ett modulärt system.",
         label: "Bas + batteripack",
       },
       {
-        title: "Byggd för expansion",
+        title: "Byggd för att växa",
         body: "Börja med den kapacitet du behöver idag och lägg till batteripack när hemmarutiner eller teamets arbete växer.",
         label: "Skalar över tid",
       },
       {
-        title: "Kraft bortom väggen",
-        body: "Använd batteripack utanför den fasta lösningen — på terrassen, i trädgården, i bilen eller närmare arbetsområdet.",
-        label: "Hem / utomhus / fält",
+        title: "Energi bortom väggen",
+        body: "Använd batteripack utanför den fasta lösningen - på terrassen, i trädgården, i bilen eller närmare arbetsplatsen.",
+        label: "Hem / utomhus / arbete",
       },
       {
         title: "Redo för tillbehör",
@@ -245,7 +273,7 @@ const LANGUAGE_OVERRIDES = {
       eyebrow: "Plattformen",
       title: "En batteriplattform. Flera sätt att använda energi.",
       body:
-        "Voltrix är byggt runt en modulär energibas och batteripack som kan stanna hemma, följa med utomhus eller stödja utvalda fältrutiner med kompatibla tillbehör.",
+        "Voltrix är byggt runt en modulär energibas och batteripack som kan stanna hemma, följa med utomhus eller stödja utvalda arbetsrutiner med kompatibla tillbehör.",
     },
     productFit: { eyebrow: "Produktserie", primary: "Visa produktserie", secondary: "Utforska kit" },
     solutions: [
@@ -264,24 +292,24 @@ const LANGUAGE_OVERRIDES = {
             "Smal lösning för stugor och kompakta ytor",
             "Bygg ut batterikapacitet över tid",
             "Använd batteripack med utvalda utomhustillbehör",
-            "Ta användbar kraft till terrass, trädgård och helgrutiner",
+            "Ta användbar energi till terrass, trädgård och helgrutiner",
           ],
         },
       },
       {
         id: "field",
-        label: "Fältarbete",
+        label: "Installatör",
         title: "För installatörer och serviceteam",
-        body: "Ladda batterier på basen, ta dem med i bilen och använd dem där arbetet sker.",
-        cta: "Utforska fältarbete",
+        body: "Ladda batterier på kontoret eller i verkstaden, ta dem med i bilen och använd dem där arbetet sker.",
+        cta: "Utforska installatörslösning",
         href: "/views/solution-field.html",
         detail: {
-          eyebrow: "Fältarbete",
-          title: "Portabel energi för fältteam.",
+          eyebrow: "Installatör",
+          title: "Portabel energi för installatörer.",
           body:
-            "Ladda batterier centralt på basen, ta utvalda pack i servicebilen och använd dem på plats med kompatibla tillbehör när användbar kraft behöver följa arbetet.",
+            "Ladda batterier på kontoret eller i verkstaden, ta utvalda pack i servicebilen och använd dem på plats med kompatibla tillbehör när energin behöver följa arbetet.",
           bullets: [
-            "Central laddning på basen",
+            "Centraliserad laddning på kontoret eller i verkstaden",
             "Ta bara med de batterier som behövs för rutten eller jobbet",
             "Använd VoltDock för enheter och tillfälliga arbetsstationer",
             "Använd Backpack Power för de sista metrarna",
@@ -324,7 +352,7 @@ LANGUAGE_OVERRIDES.sv.pages = {
   solutions: {
     eyebrow: "Lösningar",
     title: "Börja med hur du använder energi.",
-    body: "Välj scenariot som passar ditt hem, dina säsongsrutiner eller ditt fältarbete.",
+    body: "Välj scenariot som passar ditt hem, dina säsongsrutiner eller installatörernas vardag.",
   },
   support: {
     eyebrow: "Support",
@@ -354,6 +382,7 @@ function mergeNested(base, override = {}) {
       },
     },
     platform: { ...base.platform, ...override.platform },
+    addOns: { ...base.addOns, ...override.addOns },
     productFit: { ...base.productFit, ...override.productFit },
     smartFeatures: { ...base.smartFeatures, ...override.smartFeatures },
     trust: { ...base.trust, ...override.trust },

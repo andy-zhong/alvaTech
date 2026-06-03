@@ -66,7 +66,7 @@ const SUPPORT_COPY = {
       items: [
         ["Planera placeringen", "Placera systemet där ventilation, åtkomst och kabeldragning kan hanteras rent."],
         ["Kontrollera batterimodulerna", "Se till att batteripacken sitter rätt och att synliga kontakter är rena och oskadade."],
-        ["Anslut tillbehör varsamt", "Använd kompatibla tillbehör som VoltDock endast med avsedd batterimodul och kraftkonfiguration."],
+        ["Anslut tillbehör varsamt", "Använd kompatibla tillbehör som VoltDock endast med avsedd batterimodul och rätt systemkonfiguration."],
         ["Spara produktinformation", "Spara orderinformation, produktnamn och bilder av setupen innan du begär support."],
       ],
     },

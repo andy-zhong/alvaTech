@@ -133,16 +133,81 @@
   <script type="module">
     import { acceptAll, rejectAll, getConsent } from "../js/core/consent.js";
 
+    const activeLang = localStorage.getItem("alva-language");
+
+    function mountSwedishPrivacyCopy() {
+      if (activeLang !== "sv") return;
+      const page = document.querySelector(".privacy-page");
+      if (!page) return;
+
+      page.innerHTML = `
+        <h1>Integritetspolicy</h1>
+        <p class="privacy-meta">Senast uppdaterad: April 2026 &nbsp;·&nbsp; Version 1.0</p>
+
+        <h2>1. Vilka vi är</h2>
+        <p>Den här webbplatsen drivs av <strong>Alva Technology</strong>. Vi visar och säljer Voltrix energisystem och relaterade produkter. Kontakta <a href="mailto:privacy@alvatechnology.com">privacy@alvatechnology.com</a> om du har frågor om integritet.</p>
+
+        <h2>2. Vilka uppgifter vi samlar in</h2>
+        <p><strong>Order- och kontaktformulär:</strong> namn, e-post, telefon och leveransadress, så att vi kan hantera din förfrågan eller order.</p>
+        <p><strong>Anonym analys, endast om du samtycker:</strong></p>
+        <table>
+          <thead><tr><th>Uppgift</th><th>Vad det är</th><th>Vad det inte är</th></tr></thead>
+          <tbody>
+            <tr><td>Sessions-ID</td><td>Ett slumpmässigt ID i webbläsarens sessionStorage.</td><td>Inte kopplat till din identitet.</td></tr>
+            <tr><td>Sidsökväg</td><td>Vilken sida som besöktes, till exempel /views/product.html.</td><td>Inte din fulla webbhistorik.</td></tr>
+            <tr><td>Klickad yta</td><td>Text på knapp eller länk.</td><td>Inte det du skriver i formulär.</td></tr>
+            <tr><td>Tid på sida</td><td>Ungefärlig tid på en sida.</td><td>Inte kopplad till inloggning eller konto.</td></tr>
+            <tr><td>Ungefärlig plats</td><td>Land och stad från IP vid första förfrågan.</td><td>IP-adressen sparas inte.</td></tr>
+          </tbody>
+        </table>
+
+        <h2>3. Rättslig grund</h2>
+        <ul>
+          <li><strong>Samtycke:</strong> anonym analys används bara om du accepterar det.</li>
+          <li><strong>Avtal:</strong> orderuppgifter behandlas för att hantera köp eller förfrågningar.</li>
+          <li><strong>Berättigat intresse:</strong> orderdata kan behöva sparas för bokföring och uppföljning.</li>
+        </ul>
+
+        <h2>4. Lagringstid</h2>
+        <table>
+          <thead><tr><th>Data</th><th>Sparas i</th></tr></thead>
+          <tbody>
+            <tr><td>Anonym analys</td><td>90 dagar</td></tr>
+            <tr><td>Orderdata</td><td>7 år enligt svensk bokföringspraxis</td></tr>
+            <tr><td>Företags- och offertförfrågningar</td><td>2 år efter senaste kontakt</td></tr>
+            <tr><td>Samtyckesval</td><td>I din webbläsare tills du rensar lagringen</td></tr>
+          </tbody>
+        </table>
+
+        <h2>5. Cookies och lokal lagring</h2>
+        <p>Vi använder lokal lagring för språkval, varukorg och samtycke. Vi använder inte Google Analytics, Facebook Pixel eller annonseringscookies.</p>
+
+        <h2>6. Dina rättigheter</h2>
+        <p>Enligt GDPR kan du begära tillgång, rättelse, radering och dataportabilitet samt återkalla samtycke. Kontakta <a href="mailto:privacy@alvatechnology.com">privacy@alvatechnology.com</a>. Du kan även vända dig till Integritetsskyddsmyndigheten via <a href="https://www.imy.se" target="_blank" rel="noopener">imy.se</a>.</p>
+
+        <div class="privacy-manage">
+          <h3>Hantera cookiesamtycke</h3>
+          <p>Ändra ditt val för anonym analys när som helst:</p>
+          <div style="display:flex;gap:12px;flex-wrap:wrap;">
+            <button class="button button--primary" id="privacy-accept-btn" style="font-size:0.85rem;padding:10px 18px;">Acceptera analys</button>
+            <button class="button button--secondary" id="privacy-reject-btn" style="font-size:0.85rem;padding:10px 18px;">Avvisa analys</button>
+          </div>
+          <p class="privacy-status" id="privacy-consent-status"></p>
+        </div>
+      `;
+    }
+
     function updateStatus() {
       const c  = getConsent();
       const el = document.getElementById("privacy-consent-status");
       el.textContent = !c || !c.decided
-        ? "No preference saved yet."
+        ? activeLang === "sv" ? "Inget val sparat ännu." : "No preference saved yet."
         : c.analytics
-          ? "✓ You have accepted anonymous analytics."
-          : "✓ You have rejected analytics tracking.";
+          ? activeLang === "sv" ? "Du har accepterat anonym analys." : "✓ You have accepted anonymous analytics."
+          : activeLang === "sv" ? "Du har avvisat anonym analys." : "✓ You have rejected analytics tracking.";
     }
 
+    mountSwedishPrivacyCopy();
     document.getElementById("privacy-accept-btn")?.addEventListener("click", () => { acceptAll(); updateStatus(); });
     document.getElementById("privacy-reject-btn")?.addEventListener("click", () => { rejectAll(); updateStatus(); });
     updateStatus();

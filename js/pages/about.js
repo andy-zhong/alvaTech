@@ -35,10 +35,10 @@ const ABOUT_COPY = {
     eyebrow: "OM ALVA",
     headline: "Ett svenskt energibolag som bygger praktisk grön teknik för vardagen.",
     body:
-      "Alva Technology är ett svenskt bolag fokuserat på innovativa gröna energiprodukter som gör ren kraft mer flexibel, användbar och tillgänglig i vardagen.",
-    statementHeadline: "Vi tror att energi ska flytta närmare platserna där livet och arbetet sker.",
+      "Alva Technology är ett svenskt bolag som utvecklar gröna energiprodukter för en vardag där el behöver vara mer flexibel, användbar och lättare att ha nära till hands.",
+    statementHeadline: "Vi tycker att energi ska finnas närmare platserna där livet och arbetet sker.",
     statementBody:
-      "Energiomställningen handlar inte bara om att producera renare el. Den handlar också om att göra energin enklare att lagra, flytta och använda där människor faktiskt behöver den - hemma, utomhus, på plats och i vardagens rutiner.",
+      "Energiomställningen handlar inte bara om att producera renare el. Den handlar också om att göra energin enklare att lagra, ta med och använda där människor faktiskt behöver den - hemma, utomhus, på jobbet och i vardagens rutiner.",
     buildEyebrow: "VAD VI BYGGER",
     buildHeadline: "Gröna energiprodukter med en ny känsla av flexibilitet.",
     buildBody:
@@ -49,9 +49,9 @@ const ABOUT_COPY = {
       "Portabla tillbehör",
       "Produktdesign för nordiska förhållanden",
     ],
-    mattersHeadline: "Från fast lagring till användbar kraft på fler platser.",
+    mattersHeadline: "Från fast lagring till användbar energi på fler platser.",
     mattersBody:
-      "Många energiprodukter är byggda kring en fast plats. Alva arbetar annorlunda. Våra system är byggda för rutinerna runt produkten: fritidshus, utomhusmiljöer, servicebilar, fältteam och stunderna när användbar kraft behöver flytta bortom väggen.",
+      "Många energiprodukter är byggda kring en fast plats. Alva arbetar annorlunda. Våra system är byggda för rutinerna runt produkten: fritidshus, utomhusmiljöer, servicebilar, installatörer och stunderna när användbar energi behöver flytta bortom väggen.",
     swedishEyebrow: "SVENSK DESIGN",
     swedishHeadline: "Utformat för nordiska rutiner, väder och sätt att leva.",
     swedishBody:

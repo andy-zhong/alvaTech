@@ -563,7 +563,7 @@
 .platform-solution-tab__image--field {
   background:
     linear-gradient(rgba(15, 42, 36, 0.14), rgba(15, 42, 36, 0.14)),
-    url("/Picture/products/voltrix/field/field02.png") center / cover no-repeat;
+    url("/Picture/products/voltrix/field/field02.png") center 54% / cover no-repeat;
 }
 
 .platform-solution-detail__visual--summer {
@@ -575,7 +575,7 @@
 .platform-solution-detail__visual--field {
   background:
     linear-gradient(rgba(15, 42, 36, 0.14), rgba(15, 42, 36, 0.14)),
-    url("/Picture/products/voltrix/field/field01.png") center / cover no-repeat;
+    url("/Picture/products/voltrix/field/field04-optimized.jpg") center / cover no-repeat;
 }
 
 .platform-solution-tab__copy {
@@ -799,13 +799,13 @@
 .platform-visual--field {
   background:
     linear-gradient(rgba(15, 42, 36, 0.14), rgba(15, 42, 36, 0.14)),
-    url("/Picture/products/voltrix/field/field01.png") center / cover no-repeat;
+    url("/Picture/products/voltrix/field/field05-optimized.jpg") center / cover no-repeat;
 }
 
 .platform-usecase__visual--field {
   background:
     linear-gradient(rgba(15, 42, 36, 0.14), rgba(15, 42, 36, 0.14)),
-    url("/Picture/products/voltrix/field/field02.png") center / cover no-repeat;
+    url("/Picture/products/voltrix/field/field04-optimized.jpg") center / cover no-repeat;
 }
 
 .platform-visual--field::before,
@@ -1370,6 +1370,119 @@
   margin-bottom: 0;
 }
 
+.platform-addons {
+  display: grid;
+  gap: clamp(24px, 4vw, 42px);
+}
+
+.platform-addons-section {
+  padding-top: clamp(48px, 6vw, 78px);
+  padding-bottom: clamp(50px, 6vw, 82px);
+}
+
+.platform-addons__grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: clamp(18px, 3vw, 34px) clamp(24px, 5vw, 62px);
+  border-top: 1px solid var(--line-soft);
+}
+
+.platform-addon {
+  min-width: 0;
+  display: grid;
+  grid-template-columns: minmax(150px, 0.42fr) minmax(0, 1fr);
+  gap: clamp(16px, 3vw, 28px);
+  align-items: center;
+  padding: clamp(18px, 2.8vw, 30px) 0;
+  border-bottom: 1px solid var(--line-soft);
+}
+
+.platform-addon__media {
+  position: relative;
+  min-width: 0;
+  aspect-ratio: 1.24;
+  margin: 0;
+  overflow: hidden;
+  background:
+    radial-gradient(circle at 50% 58%, rgba(255, 255, 255, 0.86), rgba(255, 255, 255, 0) 62%),
+    linear-gradient(180deg, rgba(238, 243, 234, 0.82), rgba(238, 243, 234, 0.38));
+}
+
+.platform-addon__media img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  object-position: center;
+  padding: clamp(14px, 2vw, 24px);
+}
+
+.platform-addon__media--placeholder {
+  display: grid;
+  place-items: center;
+  color: rgba(15, 42, 36, 0.56);
+}
+
+.platform-addon__media--placeholder::before,
+.platform-addon__media--placeholder::after {
+  content: "";
+  position: absolute;
+  border: 1px solid rgba(15, 107, 63, 0.16);
+}
+
+.platform-addon__media--placeholder::before {
+  width: 44%;
+  height: 50%;
+}
+
+.platform-addon__media--placeholder::after {
+  width: 28%;
+  height: 32%;
+  transform: translate(18%, 16%);
+  background: rgba(255, 255, 255, 0.28);
+}
+
+.platform-addon__media--placeholder span {
+  position: relative;
+  z-index: 1;
+  max-width: 120px;
+  color: rgba(15, 42, 36, 0.5);
+  font-size: 0.72rem;
+  font-weight: 900;
+  letter-spacing: 0.12em;
+  line-height: 1.35;
+  text-align: center;
+  text-transform: uppercase;
+}
+
+.platform-addon__copy {
+  min-width: 0;
+}
+
+.platform-addon__copy h3 {
+  margin: 0 0 9px;
+  color: #0f2a24;
+  font-size: clamp(1.08rem, 1.45vw, 1.28rem);
+  line-height: 1.16;
+  letter-spacing: -0.03em;
+}
+
+.platform-addon__copy p {
+  max-width: 330px;
+  margin: 0;
+  font-size: 0.92rem;
+  line-height: 1.58;
+}
+
+.platform-addons__note {
+  max-width: 760px;
+  margin: -6px 0 0;
+  padding-top: 18px;
+  border-top: 1px solid var(--line-soft);
+  color: rgba(15, 42, 36, 0.6);
+  font-size: 0.88rem;
+}
+
 .platform-product-feature {
   display: grid;
   grid-template-columns: minmax(0, 1.08fr) minmax(260px, 0.58fr);
@@ -1490,6 +1603,15 @@
     grid-template-columns: 1fr;
   }
 
+  .platform-addons__grid {
+    gap: 0 clamp(22px, 4vw, 36px);
+  }
+
+  .platform-addon {
+    grid-template-columns: 1fr;
+    align-items: start;
+  }
+
   .platform-product-feature__copy {
     max-width: 640px;
     padding-bottom: 0;
@@ -1538,5 +1660,13 @@
 
   .platform-product-feature__media {
     min-height: 280px;
+  }
+
+  .platform-addons__grid {
+    grid-template-columns: 1fr;
+  }
+
+  .platform-addon__media {
+    aspect-ratio: 1.5;
   }
 }

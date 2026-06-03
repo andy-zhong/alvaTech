@@ -31,10 +31,10 @@ export const VOLTRIX_PRODUCT = {
       name: "Voltrix 5-Pack Kit",
       summary: "A fixed 5 kWh starting setup for seasonal homes, everyday energy support and expandable outdoor use.",
       intro:
-        "Voltrix 5-Pack Kit is a fixed 5 kWh starting setup within the Starter range. It includes five NCM battery modules for seasonal homes, everyday energy support and expandable outdoor use.",
+        "Voltrix 5-Pack Kit is a fixed 5 kWh starting setup within the Starter range. It includes five NMC battery modules for seasonal homes, everyday energy support and expandable outdoor use.",
       features: [
         "Fixed 5 kWh setup",
-        "Includes five NCM battery modules",
+        "Includes five NMC battery modules",
         "PV input max power: 2400 W",
         "IP65 protection against dust and water",
         "Operates from -20 C to +65 C",
@@ -46,12 +46,12 @@ export const VOLTRIX_PRODUCT = {
       certifications: [
         "IP65 rated",
         "CE marked",
-        "NCM battery modules",
+        "NMC battery modules",
       ],
       specs: [
-        { label: "Battery chemistry", value: "NCM" },
+        { label: "Battery chemistry", value: "NMC" },
         { label: "Capacity", value: "5 kWh" },
-        { label: "Battery modules", value: "Five NCM modules" },
+        { label: "Battery modules", value: "Five NMC modules" },
         { label: "Battery expansion", value: "1-12 kWh per inverter/base setup" },
         { label: "PV input max power", value: "2400 W" },
         { label: "AC output voltage", value: "230 V" },
@@ -80,7 +80,7 @@ export const VOLTRIX_PRODUCT = {
       name: "Voltrix 5-Pack Kit",
       summary: "A fixed 5 kWh starting setup for seasonal homes, everyday energy support and expandable outdoor use.",
       intro:
-        "Voltrix 5-Pack Kit is a fixed 5 kWh starting setup within the Starter range. It includes five NCM battery modules for seasonal homes, everyday energy support and expandable outdoor use.",
+        "Voltrix 5-Pack Kit is a fixed 5 kWh starting setup within the Starter range. It includes five NMC battery modules for seasonal homes, everyday energy support and expandable outdoor use.",
       features: [
         "Fixed 5 kWh setup",
         "2400 W toppeffekt på AC-utgång",
@@ -88,16 +88,16 @@ export const VOLTRIX_PRODUCT = {
         "IP65-skydd mot damm och vatten",
         "Drift från -20 °C till +65 °C med självuppvärmning",
         "WiFi- och Bluetooth-anslutning via app",
-        "NCM-batterikemi för lång livslängd",
+        "NMC-batterikemi för lång livslängd",
       ],
       certifications: [
         "IP65-klassad",
-        "NCM-celler enligt IEC 62619",
+        "NMC-celler enligt IEC 62619",
         "CE-märkt",
         "Nättyp: L+N+PE",
       ],
       specs: [
-        { label: "Battery chemistry", value: "NCM" },
+        { label: "Battery chemistry", value: "NMC" },
         { label: "Kapacitet per modul", value: "1 kWh" },
         { label: "Capacity", value: "5 kWh" },
         { label: "Max AC-utgång", value: "1600 VA nominell / 2400 VA topp" },
@@ -110,7 +110,7 @@ export const VOLTRIX_PRODUCT = {
         "Solenergilagring för hemmet",
         "Installation på balkong och terrass",
         "Minskat beroende av elnätet",
-        "Reservkraft för viktiga enheter",
+        "Reservenergi för viktiga enheter",
         "Portabel energi även utanför hemmet",
       ],
       faq: [
@@ -125,7 +125,7 @@ export const VOLTRIX_PRODUCT = {
       name: "Voltrix 5-Pack Kit",
       summary: "A fixed 5 kWh starting setup for seasonal homes, everyday energy support and expandable outdoor use.",
       intro:
-        "Voltrix 5-Pack Kit is a fixed 5 kWh starting setup within the Starter range. It includes five NCM battery modules for seasonal homes, everyday energy support and expandable outdoor use.",
+        "Voltrix 5-Pack Kit is a fixed 5 kWh starting setup within the Starter range. It includes five NMC battery modules for seasonal homes, everyday energy support and expandable outdoor use.",
       features: [
         "Laajennettavissa 1-12 akkumoduuliin",
         "2400 W huippu AC-teho",
@@ -133,16 +133,16 @@ export const VOLTRIX_PRODUCT = {
         "IP65-suoja pölyä ja vettä vastaan",
         "Toimii -20 °C ... +65 °C itselämmityksellä",
         "WiFi- ja Bluetooth-yhteys sovellukseen",
-        "NCM-akkukemia pitkää käyttöikää varten",
+        "NMC-akkukemia pitkää käyttöikää varten",
       ],
       certifications: [
         "IP65-luokitus",
-        "IEC 62619 -yhteensopivat NCM-kennot",
+        "IEC 62619 -yhteensopivat NMC-kennot",
         "CE-merkitty",
         "Verkkotyyppi: L+N+PE",
       ],
       specs: [
-        { label: "Battery chemistry", value: "NCM" },
+        { label: "Battery chemistry", value: "NMC" },
         { label: "Kapasiteetti per moduuli", value: "1 kWh" },
         { label: "Capacity", value: "5 kWh" },
         { label: "Maks. AC-lähtö", value: "1600 VA nimellinen / 2400 VA huippu" },
@@ -170,7 +170,7 @@ export const VOLTRIX_PRODUCT = {
       name: "Voltrix 5-Pack Kit",
       summary: "A fixed 5 kWh starting setup for seasonal homes, everyday energy support and expandable outdoor use.",
       intro:
-        "Voltrix 5-Pack Kit is a fixed 5 kWh starting setup within the Starter range. It includes five NCM battery modules for seasonal homes, everyday energy support and expandable outdoor use.",
+        "Voltrix 5-Pack Kit is a fixed 5 kWh starting setup within the Starter range. It includes five NMC battery modules for seasonal homes, everyday energy support and expandable outdoor use.",
       features: [
         "Fixed 5 kWh setup",
         "2400 W topp AC-effekt",
@@ -178,16 +178,16 @@ export const VOLTRIX_PRODUCT = {
         "IP65-beskyttelse mot støv og vann",
         "Drift fra -20 °C til +65 °C med selvoppvarming",
         "WiFi- og Bluetooth-tilkobling via app",
-        "NCM-batterikjemi for lang levetid",
+        "NMC-batterikjemi for lang levetid",
       ],
       certifications: [
         "IP65-klassifisert",
-        "NCM-celler i samsvar med IEC 62619",
+        "NMC-celler i samsvar med IEC 62619",
         "CE-merket",
         "Nettype: L+N+PE",
       ],
       specs: [
-        { label: "Batterikjemi", value: "NCM" },
+        { label: "Batterikjemi", value: "NMC" },
         { label: "Kapasitet per modul", value: "1 kWh" },
         { label: "Capacity", value: "5 kWh" },
         { label: "Maks AC-utgang", value: "1600 VA nominell / 2400 VA topp" },
@@ -215,7 +215,7 @@ export const VOLTRIX_PRODUCT = {
       name: "Voltrix 5-Pack Kit",
       summary: "A fixed 5 kWh starting setup for seasonal homes, everyday energy support and expandable outdoor use.",
       intro:
-        "Voltrix 5-Pack Kit is a fixed 5 kWh starting setup within the Starter range. It includes five NCM battery modules for seasonal homes, everyday energy support and expandable outdoor use.",
+        "Voltrix 5-Pack Kit is a fixed 5 kWh starting setup within the Starter range. It includes five NMC battery modules for seasonal homes, everyday energy support and expandable outdoor use.",
       features: [
         "Fixed 5 kWh setup",
         "2400 W top AC-effekt",
@@ -223,16 +223,16 @@ export const VOLTRIX_PRODUCT = {
         "IP65-beskyttelse mod støv og vand",
         "Drift fra -20 °C til +65 °C med selvopvarmning",
         "WiFi- og Bluetooth-forbindelse via app",
-        "NCM-batterikemi for lang levetid",
+        "NMC-batterikemi for lang levetid",
       ],
       certifications: [
         "IP65-klassificeret",
-        "NCM-celler i henhold til IEC 62619",
+        "NMC-celler i henhold til IEC 62619",
         "CE-mærket",
         "Nettype: L+N+PE",
       ],
       specs: [
-        { label: "Battery chemistry", value: "NCM" },
+        { label: "Battery chemistry", value: "NMC" },
         { label: "Kapacitet pr. modul", value: "1 kWh" },
         { label: "Capacity", value: "5 kWh" },
         { label: "Maks AC-udgang", value: "1600 VA nominelt / 2400 VA top" },
@@ -260,7 +260,7 @@ export const VOLTRIX_PRODUCT = {
       name: "Voltrix 5-Pack Kit",
       summary: "A fixed 5 kWh starting setup for seasonal homes, everyday energy support and expandable outdoor use.",
       intro:
-        "Voltrix 5-Pack Kit is a fixed 5 kWh starting setup within the Starter range. It includes five NCM battery modules for seasonal homes, everyday energy support and expandable outdoor use.",
+        "Voltrix 5-Pack Kit is a fixed 5 kWh starting setup within the Starter range. It includes five NMC battery modules for seasonal homes, everyday energy support and expandable outdoor use.",
       features: [
         "Fixed 5 kWh setup",
         "Potenza AC di picco 2400 W",
@@ -268,16 +268,16 @@ export const VOLTRIX_PRODUCT = {
         "Protezione IP65 contro polvere e acqua",
         "Funzionamento da -20 C a +65 C con autoriscaldamento",
         "Connettivita app WiFi e Bluetooth",
-        "Chimica NCM per lunga durata",
+        "Chimica NMC per lunga durata",
       ],
       certifications: [
         "Classificazione IP65",
-        "Celle NCM conformi a IEC 62619",
+        "Celle NMC conformi a IEC 62619",
         "Marcatura CE",
         "Tipo rete: L+N+PE",
       ],
       specs: [
-        { label: "Battery chemistry", value: "NCM" },
+        { label: "Battery chemistry", value: "NMC" },
         { label: "Capacita per modulo", value: "1 kWh" },
         { label: "Capacity", value: "5 kWh" },
         { label: "Uscita AC max", value: "1600 VA nominale / 2400 VA picco" },

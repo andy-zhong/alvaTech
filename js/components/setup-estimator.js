@@ -31,8 +31,7 @@ const INSTALLER_ACCESSORIES = [
 const SOLAR_OPTIONS = {
   none: "No solar yet",
   existing: "Existing solar",
-  guidance: "Solar guidance",
-  tracking: "Solar tracking interest",
+  tracking: "Solar tracking system",
 };
 
 const USAGE_OPTIONS = {
@@ -47,11 +46,8 @@ const ROUTINE_OPTIONS = {
   extended: "Extended workday",
 };
 
-const CHARGING_OPTIONS = {
-  office: "Office or workshop",
-  van: "In the van",
-  both: "Both",
-};
+const CENTRALIZED_CHARGING_TEXT =
+  "Charge Battery Packs at the office or workshop, bring them into the service van, and use practical power where the workday needs it.";
 
 export function renderSetupEstimator({ context = "home" } = {}) {
   const shellClass = context === "products"
@@ -113,7 +109,6 @@ function renderInstallerPanel() {
     <div class="setup-estimator__panel" data-estimator-panel="installer" hidden>
       ${renderOptionGroup("Number of vans / teams", "vans", { 1: "1", 2: "2", 3: "3", 4: "4+" }, "1")}
       ${renderOptionGroup("Workday routine", "routine", ROUTINE_OPTIONS, "everyday")}
-      ${renderOptionGroup("Charging routine", "charging", CHARGING_OPTIONS, "office")}
       ${renderCheckboxGroup("Accessories", "installer", INSTALLER_ACCESSORIES)}
     </div>
   `;
@@ -209,7 +204,6 @@ export function bindSetupEstimator(scope = document) {
       installer: {
         vans: 1,
         routine: "everyday",
-        charging: "office",
         accessories: new Set(),
       },
     };
@@ -242,7 +236,6 @@ export function bindSetupEstimator(scope = document) {
         if (group === "usage") state.summer.usage = value;
         if (group === "vans") state.installer.vans = Number(value);
         if (group === "routine") state.installer.routine = value;
-        if (group === "charging") state.installer.charging = value;
         update();
       });
     });
@@ -408,12 +401,14 @@ function buildEstimatePayload(state) {
 function buildSummerPayload(state) {
   const result = calculateSummer(state);
   const solarLabels = formatSolarLabels(state.solar);
+  const solarNote = getSolarNote(state.solar);
   const accessoryLabels = formatSelectedAccessoryLabels(SUMMER_ACCESSORIES, state.accessories);
   const details = [
     ["Scenario", "Summer house"],
     ["Approx. summer house size", `${state.size} ${SQUARE_METERS}`],
     ["Usage rhythm", USAGE_OPTIONS[state.usage]],
     ["Solar options", solarLabels],
+    ["Solar note", solarNote],
     ["Accessories", accessoryLabels],
     ["Estimated storage", result.metricMap.estimatedStorage],
     ["Battery Packs", result.metricMap.batteryPacks],
@@ -430,6 +425,7 @@ function buildSummerPayload(state) {
       `Approx. summer house size: ${state.size} ${SQUARE_METERS}`,
       `Usage rhythm: ${USAGE_OPTIONS[state.usage]}`,
       `Solar options: ${solarLabels}`,
+      `Solar note: ${solarNote}`,
       `Accessories: ${accessoryLabels}`,
       `Estimated storage: ${result.metricMap.estimatedStorage}`,
       `Battery Packs: ${result.metricMap.batteryPacks}`,
@@ -447,7 +443,7 @@ function buildInstallerPayload(state) {
     ["Scenario", "Installer"],
     ["Vans / teams", String(state.vans)],
     ["Workday routine", ROUTINE_OPTIONS[state.routine]],
-    ["Charging routine", CHARGING_OPTIONS[state.charging]],
+    ["Centralized charging", CENTRALIZED_CHARGING_TEXT],
     ["Accessories", accessoryLabels],
     ["Battery Packs per van", result.metricMap.perVan],
     ["Total Battery Packs", result.metricMap.totalPacks],
@@ -464,7 +460,7 @@ function buildInstallerPayload(state) {
       "Estimated Voltrix setup - Installer",
       `Vans / teams: ${state.vans}`,
       `Workday routine: ${ROUTINE_OPTIONS[state.routine]}`,
-      `Charging routine: ${CHARGING_OPTIONS[state.charging]}`,
+      `Centralized charging: ${CENTRALIZED_CHARGING_TEXT}`,
       `Accessories: ${accessoryLabels}`,
       `Battery Packs per van: ${result.metricMap.perVan}`,
       `Total Battery Packs: ${result.metricMap.totalPacks}`,
@@ -545,7 +541,6 @@ function calculateInstaller(state) {
   const inverters = calculateInverterRange(min, max);
   const price = calculatePriceRange(min, max, inverters, accessoryItems);
   const addOns = formatAddOns(accessoryItems);
-  const charging = getChargingSummary(state.charging);
   const perVanLabel = formatRange(perVanMin, perVanMax);
   const totalPacksLabel = formatRange(min, max);
   const storageLabel = formatRange(min, max, " kWh");
@@ -571,7 +566,7 @@ function calculateInstaller(state) {
     ],
     notes: [
       addOns,
-      charging,
+      `Centralized charging: ${CENTRALIZED_CHARGING_TEXT}`,
     ].filter(Boolean),
   };
 }
@@ -660,26 +655,10 @@ function getSolarNote(selected) {
   const values = selected instanceof Set ? selected : new Set([selected]);
 
   if (values.has("tracking")) {
-    return `Solar tracking mount: Coming soon ${EM_DASH} price not included.`;
-  }
-  if (values.has("existing") && values.has("guidance")) {
-    return "Solar note: Existing solar and solar guidance selected for quote discussion.";
+    return `Solar tracking system: Coming soon ${EM_DASH} price not included.`;
   }
   if (values.has("existing")) {
-    return "Solar note: Plan around the existing solar setup and confirm final configuration with a quote.";
+    return "Plan around the existing solar setup and confirm final configuration with a quote.";
   }
-  if (values.has("guidance")) {
-    return "Solar note: Include solar guidance in the quote discussion.";
-  }
-  return "Solar note: No solar pricing included in this planning estimate.";
-}
-
-function getChargingSummary(value) {
-  if (value === "van") {
-    return "Charging routine: Support in-van charging where practical, then use battery packs where useful power is needed.";
-  }
-  if (value === "both") {
-    return "Charging routine: Charge battery packs at the office or workshop and support selected in-van charging when useful.";
-  }
-  return "Charging routine: Charge battery packs at the office or workshop, bring them into the van, and use them where practical power is needed.";
+  return "No solar pricing included in this planning estimate.";
 }

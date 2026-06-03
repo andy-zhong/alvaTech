@@ -135,8 +135,149 @@ const SOLUTION_PAGE_COPY = {
   },
 };
 
-export function renderSolutionDetailPage({ type }) {
-  const copy = SOLUTION_PAGE_COPY[type] ?? SOLUTION_PAGE_COPY["summer-house"];
+const SOLUTION_PAGE_SV_COPY = {
+  "summer-house": {
+    ...SOLUTION_PAGE_COPY["summer-house"],
+    eyebrow: "Fritidshus",
+    title: "Energi som följer rytmen i fritidshuset.",
+    intro:
+      "En modulär batteriplattform för stugor, terrasser och andra hem - byggd för att hålla användbar energi nära platserna där vardagen flyttar utomhus.",
+    line: "Börja kompakt. Bygg ut över tid. Ta med energi bortom väggen.",
+    primaryCta: "Utforska Voltrix-kit",
+    secondaryCta: "Kontakta Alva",
+    statement:
+      "Rätt energilösning för ett fritidshus är inte alltid den största.",
+    statementBody:
+      "Det är den som passar platsens rytm: kompakt installation, enkel utbyggnad och användbar energi där vardagen faktiskt händer.",
+    statementTags: ["Kompakt setup", "Utbyggbar kapacitet", "Bortom väggen"],
+    fitTitle: "Ett lättare sätt att stödja säsongslivet.",
+    fitBody:
+      "Fritidshuslivet rör sig mellan innekomfort, terrasskvällar, trädgårdsrutiner och lugna hörn utomhus. Voltrix är byggt som en kompakt plattform som kan växa över tid och ge användbar energi där livet faktiskt händer.",
+    fitBullets: [
+      "För stugor, terrasser och andra hem",
+      "Smal setup för kompakta utrymmen",
+      "Utbyggbar batterikapacitet över tid",
+      "Användbar energi närmare utomhusrutiner",
+    ],
+    setupTitle: "En ren bas för vardagens energi.",
+    setupBody:
+      "Voltrix börjar med en smal basenhet och batteripack som passar naturligt i stugor, på terrasser, balkonger och mindre teknikytor. Börja med kapaciteten du behöver idag och bygg ut när rutinerna växer.",
+    steps: [
+      ["Börja med Voltrix-basen", "En kompakt energibas för stugan eller det andra hemmet."],
+      ["Lägg till batteripack över tid", "Bygg ut kapaciteten när säsongsanvändning, helger eller utomhusrutiner växer."],
+      ["Använd utvalda tillbehör bortom väggen", "Låt batteripack stödja utomhusmoment när användbar energi behövs bort från fasta uttag."],
+    ],
+    bandTitle: "Ta användbar energi närmare livet utomhus.",
+    bandBody:
+      "Från terrassen till trädgårdsrummet, från helgprojekt till lugna hörn bort från fasta uttag, gör Voltrix lagrad energi till en del av hur fritidshuslivet faktiskt rör sig.",
+    bandTags: [
+      "Terrasskvällar",
+      "Trädgårdsrum",
+      "Arbetshörnor utomhus",
+      "Helgprojekt",
+      "Platser bort från fasta uttag",
+    ],
+    ecosystemTitle: "En batteriplattform. Flera sätt att använda den.",
+    ecosystemBody:
+      "Voltrix är energibasen. Därifrån kan batteripack stanna i hemmets setup, följa med till utomhusrutiner eller fungera med utvalda tillbehör när energin behöver flytta med vardagen.",
+    ecosystem: [
+      ["VoltDock", "För enheter, skrivbord, belysning och små utomhusmoment runt stugan."],
+      ["Backpack Power", "För trädgårdsuppgifter, arbetshörnor utomhus och platser där energin ska följa med."],
+      ["Mobilitetstillbehör", "För utvalda rutiner där ett batteri behöver flyttas längre från huset."],
+    ],
+    proofBody:
+      "Byggd för säsongsboenden, utomhusrutiner och praktiska energibehov i skiftande väder.",
+    ctaTitle: "Börja med en praktisk Voltrix-setup.",
+    ctaBody:
+      "Börja med ett rekommenderat kit och bygg sedan ut med batteripack och utvalda tillbehör när rutinerna växer. Faktisk prestanda beror på anslutna enheter, installation och användningsmönster.",
+    ctaPrimary: "Utforska kit",
+    ctaSecondary: "Kontakta Alva",
+    labels: {
+      whyItFits: "Varför det passar",
+      setup: "Setupen",
+      beyondTheWall: "Bortom väggen",
+      ecosystem: "Ekosystemet",
+      nordicConditions: "Nordiska förhållanden",
+      nordicTitle: "Utformat för skiftande nordiska rutiner.",
+      getStarted: "Kom igång",
+    },
+  },
+  field: {
+    ...SOLUTION_PAGE_COPY.field,
+    eyebrow: "Installatör",
+    title: "Portabel energi för installatörer.",
+    intro:
+      "Ladda batterier på kontoret eller i verkstaden, ta utvalda pack i servicebilen och använd dem på plats med kompatibla tillbehör när energin behöver följa arbetet.",
+    line: "Kontor / verkstad -> Servicebil -> Arbetsplats -> Tillbaka",
+    primaryCta: "Planera en installatörssetup",
+    secondaryCta: "Kontakta Alva",
+    statement:
+      "Användbar energi ska inte stanna vid vägguttaget, verkstaden eller parkeringsplatsen.",
+    statementBody:
+      "Voltrix hjälper team att organisera batterier på kontoret eller i verkstaden, ta dem med i bilen och använda dem där arbetet faktiskt sker.",
+    statementTags: ["Centraliserad laddning", "Servicebilar", "Tillfälliga arbetsytor", "Energi sista biten"],
+    workflowTitle: "Från laddning på kontoret till arbete på plats.",
+    workflowBody:
+      "Voltrix fungerar som energibas på kontoret, i verkstaden eller på företagets plats. Batterier kan förberedas innan arbetsdagen, tas med i servicebilen vid behov och återvända för centraliserad laddning.",
+    steps: [
+      ["Förbered innan avfärd", "Ladda batterierna centralt innan teamet åker ut för dagen."],
+      ["Ta bara med det som behövs", "Välj rätt antal batteripack för rutten, jobbet eller förväntad användning."],
+      ["Stöd flexibelt arbete", "Använd VoltDock för telefoner, laptops, surfplattor och tillfälliga arbetsytor i bilen eller på plats."],
+      ["Nå sista biten", "Använd Backpack Power när energin behöver flytta bortom servicebilen och närmare arbetsytan."],
+      ["Tillbaka och ladda", "Ta tillbaka batterierna, ladda centralt och var redo för nästa arbetsdag."],
+    ],
+    dockTitle: "Skapa en flexibel arbetsyta där jobbet behöver den.",
+    dockBody:
+      "Med VoltDock blir ett batteri en kompakt hubb för vardagens enheter: telefoner, laptops, surfplattor, routrar, kameror och kommunikationsutrustning.",
+    dockBodyTwo:
+      "Använd den i servicebilen, vid ett tillfälligt skrivbord eller på plats när teamet behöver ett kort kontorsmoment nära arbetet.",
+    dockTags: ["Mobil administration", "Kommunikation", "Dokumentation", "Samordning", "Tillfälliga arbetsytor"],
+    backpackTitle: "Bär energi närmare arbetet.",
+    backpackBody:
+      "Backpack Power hjälper till att flytta energi bortom servicebilen och in i den sista arbetsytan. Den kan bära ett batteri med inverter som en bärbar energikälla, eller hjälpa till att transportera flera batterier närmare uppgiften.",
+    backpackBullets: [
+      "Parkeringsplatsen ligger långt från arbetsytan",
+      "Kablar är opraktiska",
+      "Energin behöver följa med personen",
+      "Arbetet är inomhus, utspritt eller svårt att nå från bilen",
+    ],
+    ecosystemTitle: "En batteriplattform. Flera arbetsformat.",
+    ecosystemBody:
+      "Voltrix är laddnings- och energibasen. Därifrån kan batterier flytta in i servicebilen, stödja en tillfällig arbetsyta, följa med till sista arbetsmomentet och återvända för nästa cykel.",
+    ecosystem: [
+      ["Voltrix-bas", "Centraliserad laddning och ordning på kontoret eller i verkstaden."],
+      ["Batteripack", "Förberedda centralt och flyttade med teamet vid behov."],
+      ["VoltDock", "En kompakt hubb för enheter, administration och tillfälliga arbetsytor."],
+      ["Backpack Power", "Energi sista biten och praktisk batteritransport."],
+      ["Mobilitetslager", "Valfritt stöd för platser där ett batteri behöver flyttas längre."],
+    ],
+    mobilityBody:
+      "För utvalda situationer där arbetsytan är utspridd eller svår att nå med bil kan ett mobilitetslager hjälpa till att flytta ett batteri längre. Det är inte kärnan i systemet, utan ett tillval för team som behöver ett snabbare sätt att flytta ett batteri mellan åtkomstpunkter.",
+    mobilityTags: ["Större platser", "Avlägsna åtkomstpunkter", "Från parkering till arbetsyta", "Lätt batteritransport"],
+    ctaTitle: "Börja med rätt batteriupplägg för teamet.",
+    ctaBody:
+      "Prata med Alva om era rutter, fordon, teamrutiner och vilken typ av enheter eller arbetsmoment ni behöver stödja. Börja med en praktisk setup och bygg ut när verksamheten växer.",
+    ctaPrimary: "Kontakta Alva",
+    ctaSecondary: "Visa produkter",
+    labels: {
+      workflow: "Arbetsflödet",
+      vanToWorkstation: "Från bil till arbetsyta",
+      lastMeter: "Sista biten",
+      ecosystem: "Ekosystemet",
+      optionalMobility: "Valfri mobilitet",
+      mobilityTitle: "Flytta ett batteri över större arbetsytor.",
+      planSetup: "Planera en setup",
+    },
+  },
+};
+
+function getSolutionCopy(type, lang) {
+  const base = SOLUTION_PAGE_COPY[type] ?? SOLUTION_PAGE_COPY["summer-house"];
+  return lang === "sv" ? (SOLUTION_PAGE_SV_COPY[type] ?? base) : base;
+}
+
+export function renderSolutionDetailPage({ type, lang }) {
+  const copy = getSolutionCopy(type, lang);
 
   return copy.type === "field"
     ? renderFieldPage(copy)
@@ -148,14 +289,14 @@ function renderSummerHousePage(copy) {
     ${renderHero(copy)}
     ${renderStatement(copy)}
     ${renderSplit({
-      eyebrow: "Why it fits",
+      eyebrow: copy.labels?.whyItFits ?? "Why it fits",
       title: copy.fitTitle,
       body: copy.fitBody,
       bullets: copy.fitBullets,
       imageClass: copy.fitImageClass,
     })}
     ${renderTimeline({
-      eyebrow: "The setup",
+      eyebrow: copy.labels?.setup ?? "The setup",
       title: copy.setupTitle,
       body: copy.setupBody,
       steps: copy.steps,
@@ -173,14 +314,14 @@ function renderFieldPage(copy) {
     ${renderHero(copy)}
     ${renderStatement(copy)}
     ${renderTimeline({
-      eyebrow: "The workflow",
+      eyebrow: copy.labels?.workflow ?? "The workflow",
       title: copy.workflowTitle,
       body: copy.workflowBody,
       steps: copy.steps,
       variant: "field",
     })}
     ${renderSplit({
-      eyebrow: "From van to workstation",
+      eyebrow: copy.labels?.vanToWorkstation ?? "From van to workstation",
       title: copy.dockTitle,
       body: copy.dockBody,
       bodyTwo: copy.dockBodyTwo,
@@ -188,7 +329,7 @@ function renderFieldPage(copy) {
       imageClass: copy.dockImageClass,
     })}
     ${renderSplit({
-      eyebrow: "The last meter",
+      eyebrow: copy.labels?.lastMeter ?? "The last meter",
       title: copy.backpackTitle,
       body: copy.backpackBody,
       bullets: copy.backpackBullets,
@@ -234,7 +375,7 @@ function renderStatement(copy) {
 function renderSplit({ eyebrow, title, body, bodyTwo, bullets, tags, imageClass, reverse = false }) {
   return `
     <section class="solution-page-split ${reverse ? "solution-page-split--reverse" : ""}">
-      <div class="solution-page__image ${imageClass}" aria-hidden="true"></div>
+      ${renderSplitImage(imageClass)}
       <div class="solution-page-split__copy">
         <span class="eyebrow">${eyebrow}</span>
         <h2>${title}</h2>
@@ -245,6 +386,19 @@ function renderSplit({ eyebrow, title, body, bodyTwo, bullets, tags, imageClass,
       </div>
     </section>
   `;
+}
+
+function renderSplitImage(imageClass) {
+  if (imageClass === "solution-page__image--field-backpack") {
+    return `
+      <div class="solution-page__image ${imageClass}" aria-hidden="true">
+        <span class="solution-page__image-slide solution-page__image-slide--field-backpack-one"></span>
+        <span class="solution-page__image-slide solution-page__image-slide--field-backpack-two"></span>
+      </div>
+    `;
+  }
+
+  return `<div class="solution-page__image ${imageClass}" aria-hidden="true"></div>`;
 }
 
 function renderTimeline({ eyebrow, title, body, steps, variant }) {
@@ -272,7 +426,7 @@ function renderImageBand(copy) {
   return `
     <section class="solution-page-band ${copy.bandClass}">
       <div class="solution-page-band__content">
-        <span class="eyebrow">Beyond the wall</span>
+        <span class="eyebrow">${copy.labels?.beyondTheWall ?? "Beyond the wall"}</span>
         <h2>${copy.bandTitle}</h2>
         <p>${copy.bandBody}</p>
         <div class="solution-page-tags solution-page-tags--light">
@@ -287,7 +441,7 @@ function renderEcosystemCards(copy) {
   return `
     <section class="solution-page-ecosystem-cards">
       <div class="solution-page-section__head">
-        <span class="eyebrow">The ecosystem</span>
+        <span class="eyebrow">${copy.labels?.ecosystem ?? "The ecosystem"}</span>
         <h2>${copy.ecosystemTitle}</h2>
         <p>${copy.ecosystemBody}</p>
       </div>
@@ -308,7 +462,7 @@ function renderEcosystemStrip(copy) {
   return `
     <section class="solution-page-ecosystem-strip">
       <div class="solution-page-section__head">
-        <span class="eyebrow">The ecosystem</span>
+        <span class="eyebrow">${copy.labels?.ecosystem ?? "The ecosystem"}</span>
         <h2>${copy.ecosystemTitle}</h2>
         <p>${copy.ecosystemBody}</p>
       </div>
@@ -329,8 +483,8 @@ function renderProofBand(copy) {
   return `
     <section class="solution-page-proof">
       <div>
-        <span class="eyebrow">Nordic conditions</span>
-        <h2>Designed for changing Nordic routines.</h2>
+        <span class="eyebrow">${copy.labels?.nordicConditions ?? "Nordic conditions"}</span>
+        <h2>${copy.labels?.nordicTitle ?? "Designed for changing Nordic routines."}</h2>
         <p>${copy.proofBody}</p>
       </div>
       <div class="solution-page-proof__badges">
@@ -346,8 +500,8 @@ function renderMobilityNote(copy) {
   return `
     <section class="solution-page-note">
       <div>
-        <span class="eyebrow">Optional mobility</span>
-        <h2>Move one battery across larger sites.</h2>
+        <span class="eyebrow">${copy.labels?.optionalMobility ?? "Optional mobility"}</span>
+        <h2>${copy.labels?.mobilityTitle ?? "Move one battery across larger sites."}</h2>
         <p>${copy.mobilityBody}</p>
       </div>
       <div class="solution-page-tags">
@@ -360,7 +514,7 @@ function renderMobilityNote(copy) {
 function renderCta(copy) {
   return `
     <section class="solution-page-cta">
-      <span class="eyebrow">${copy.type === "field" ? "Plan a setup" : "Get started"}</span>
+      <span class="eyebrow">${copy.type === "field" ? (copy.labels?.planSetup ?? "Plan a setup") : (copy.labels?.getStarted ?? "Get started")}</span>
       <h2>${copy.ctaTitle}</h2>
       <p>${copy.ctaBody}</p>
       ${copy.ctaHighlight ? `

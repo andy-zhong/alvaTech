@@ -33,26 +33,26 @@ export const BATTERY_PRODUCT = {
   translations: {
     en: {
       name: "Voltrix Battery Module",
-      summary: "1 kWh NCM battery module for expanding or replacing capacity in the Voltrix system.",
+      summary: "1 kWh NMC battery module for expanding or replacing capacity in the Voltrix system.",
       intro:
         "The Voltrix Battery Module is the standard 1 kWh building block of the Voltrix energy system. Add modules to expand your installed capacity or replace an existing unit.",
       features: [
         "1 kWh per module",
-        "NCM chemistry for long cycle life and high safety",
+        "NMC chemistry for long cycle life and high safety",
         "Tool-free installation in all Voltrix hubs",
         "Operates from -20 °C to +65 °C with self-heating",
         "IP65 protection against dust and water",
         "Order 1 to 10 modules at a time",
       ],
       certifications: [
-        "IEC 62619 compliant NCM cells",
+        "IEC 62619 compliant NMC cells",
         "CE marked",
         "IP65 rated",
         "Operating temperature: -20 °C to +65 °C",
       ],
       specs: [
         { label: "Capacity per module", value: "1 kWh" },
-        { label: "Battery chemistry", value: "NCM" },
+        { label: "Battery chemistry", value: "NMC" },
         { label: "Voltage", value: "48 V nominal" },
         { label: "Max. charge current", value: "20 A" },
         { label: "IP rating", value: "IP65" },
@@ -75,26 +75,26 @@ export const BATTERY_PRODUCT = {
     },
     sv: {
       name: "Voltrix Batterimodul",
-      summary: "1 kWh NCM-batterimodul för att bygga ut eller ersätta kapacitet i Voltrix-systemet.",
+      summary: "1 kWh NMC-batterimodul för att bygga ut eller ersätta kapacitet i Voltrix-systemet.",
       intro:
         "Voltrix Batterimodul är systemets standardenhet på 1 kWh. Lägg till moduler för att öka installerad kapacitet eller ersätta en befintlig enhet.",
       features: [
         "1 kWh per modul",
-        "NCM-kemi för lång livslängd och hög säkerhet",
+        "NMC-kemi för lång livslängd och hög säkerhet",
         "Verktygsfri installation i alla Voltrix-hubbar",
         "Drift från -20 °C till +65 °C med självuppvärmning",
         "IP65-skydd mot damm och vatten",
         "Beställ 1 till 10 moduler åt gången",
       ],
       certifications: [
-        "NCM-celler enligt IEC 62619",
+        "NMC-celler enligt IEC 62619",
         "CE-märkt",
         "IP65-klassad",
         "Drifttemperatur: -20 °C till +65 °C",
       ],
       specs: [
         { label: "Kapacitet per modul", value: "1 kWh" },
-        { label: "Batterikemi", value: "NCM" },
+        { label: "Batterikemi", value: "NMC" },
         { label: "Spänning", value: "48 V nominell" },
         { label: "Max laddström", value: "20 A" },
         { label: "IP-klass", value: "IP65" },
@@ -105,7 +105,7 @@ export const BATTERY_PRODUCT = {
         "Bygg ut en befintlig Voltrix-installation",
         "Byt ut en modul i ett installerat system",
         "Lägg till kapacitet vid högre energibehov",
-        "Stöd för off-grid och reservkraft",
+        "Stöd för off-grid och reservenergi",
       ],
       faq: [
         "Är den kompatibel med min Voltrix-hubb? Ja, med alla Voltrix-hubbar.",
@@ -117,26 +117,26 @@ export const BATTERY_PRODUCT = {
     },
     fi: {
       name: "Voltrix-akkumoduuli",
-      summary: "1 kWh NCM-akkumoduuli Voltrix-järjestelmän kapasiteetin laajentamiseen tai vaihtoon.",
+      summary: "1 kWh NMC-akkumoduuli Voltrix-järjestelmän kapasiteetin laajentamiseen tai vaihtoon.",
       intro:
         "Voltrix-akkumoduuli on järjestelmän vakio 1 kWh rakennuspalikka. Lisää moduuleja kasvattaaksesi kapasiteettia tai korvataksesi olemassa olevan yksikön.",
       features: [
         "1 kWh per moduuli",
-        "NCM-kemia pitkää käyttöikää ja turvallisuutta varten",
+        "NMC-kemia pitkää käyttöikää ja turvallisuutta varten",
         "Työkaluton asennus kaikkiin Voltrix-hubeihin",
         "Toimii -20 °C ... +65 °C itselämmityksellä",
         "IP65-suoja pölyä ja vettä vastaan",
         "Tilaa 1-10 moduulia kerralla",
       ],
       certifications: [
-        "IEC 62619 -yhteensopivat NCM-kennot",
+        "IEC 62619 -yhteensopivat NMC-kennot",
         "CE-merkitty",
         "IP65-luokitus",
         "Käyttölämpötila: -20 °C ... +65 °C",
       ],
       specs: [
         { label: "Kapasiteetti per moduuli", value: "1 kWh" },
-        { label: "Akkukemia", value: "NCM" },
+        { label: "Akkukemia", value: "NMC" },
         { label: "Jännite", value: "48 V nimellinen" },
         { label: "Maks. latausvirta", value: "20 A" },
         { label: "IP-luokka", value: "IP65" },
@@ -159,26 +159,26 @@ export const BATTERY_PRODUCT = {
     },
     no: {
       name: "Voltrix-batterimodul",
-      summary: "1 kWh NCM-batterimodul for utvidelse eller utskifting av kapasitet i Voltrix-systemet.",
+      summary: "1 kWh NMC-batterimodul for utvidelse eller utskifting av kapasitet i Voltrix-systemet.",
       intro:
         "Voltrix-batterimodulen er systemets standardenhet på 1 kWh. Legg til moduler for å øke kapasiteten eller erstatte en eksisterende enhet.",
       features: [
         "1 kWh per modul",
-        "NCM-kjemi for lang levetid og høy sikkerhet",
+        "NMC-kjemi for lang levetid og høy sikkerhet",
         "Verktøyfri installasjon i alle Voltrix-huber",
         "Drift fra -20 °C til +65 °C med selvoppvarming",
         "IP65-beskyttelse mot støv og vann",
         "Bestill 1 til 10 moduler om gangen",
       ],
       certifications: [
-        "IEC 62619-kompatible NCM-celler",
+        "IEC 62619-kompatible NMC-celler",
         "CE-merket",
         "IP65-klassifisert",
         "Driftstemperatur: -20 °C til +65 °C",
       ],
       specs: [
         { label: "Kapasitet per modul", value: "1 kWh" },
-        { label: "Batterikjemi", value: "NCM" },
+        { label: "Batterikjemi", value: "NMC" },
         { label: "Spenning", value: "48 V nominell" },
         { label: "Maks ladestrøm", value: "20 A" },
         { label: "IP-klasse", value: "IP65" },
@@ -201,26 +201,26 @@ export const BATTERY_PRODUCT = {
     },
     da: {
       name: "Voltrix-batterimodul",
-      summary: "1 kWh NCM-batterimodul til udvidelse eller udskiftning af kapacitet i Voltrix-systemet.",
+      summary: "1 kWh NMC-batterimodul til udvidelse eller udskiftning af kapacitet i Voltrix-systemet.",
       intro:
         "Voltrix-batterimodulet er systemets standardenhed på 1 kWh. Tilføj moduler for at øge kapaciteten eller erstatte en eksisterende enhed.",
       features: [
         "1 kWh pr. modul",
-        "NCM-kemi for lang levetid og høj sikkerhed",
+        "NMC-kemi for lang levetid og høj sikkerhed",
         "Værktøjsfri installation i alle Voltrix-hubs",
         "Drift fra -20 °C til +65 °C med selvopvarmning",
         "IP65-beskyttelse mod støv og vand",
         "Bestil 1 til 10 moduler ad gangen",
       ],
       certifications: [
-        "IEC 62619-kompatible NCM-celler",
+        "IEC 62619-kompatible NMC-celler",
         "CE-mærket",
         "IP65-klassificeret",
         "Driftstemperatur: -20 °C til +65 °C",
       ],
       specs: [
         { label: "Kapacitet pr. modul", value: "1 kWh" },
-        { label: "Batterikemi", value: "NCM" },
+        { label: "Batterikemi", value: "NMC" },
         { label: "Spænding", value: "48 V nominelt" },
         { label: "Maks. ladestrøm", value: "20 A" },
         { label: "IP-klasse", value: "IP65" },

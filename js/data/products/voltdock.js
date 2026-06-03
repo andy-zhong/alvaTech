@@ -67,7 +67,7 @@ export const VOLTDOCK_PRODUCT = {
     },
     sv: {
       name: "VoltDock",
-      summary: "En skrivbordshub med dubbla strömkällor för laddning, ordning och reservkraft vid skrivbordet.",
+      summary: "En skrivbordshub med dubbla strömkällor för laddning, ordning och reservenergi vid skrivbordet.",
       intro:
         "VoltDock kombinerar laddning, ljudanslutning och inbyggd display i en ren bordsenhet. Använd den från vägguttag till vardags eller tillsammans med en Voltrix-batterimodul för flexibel off-grid-ström.",
       features: [

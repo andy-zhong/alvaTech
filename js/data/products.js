@@ -1,25 +1,28 @@
 /**
  * data/products.js
- * Single source of truth for all products.
- *
- * TO ADD A NEW PRODUCT:
- *   1. Create  data/products/yourproduct.js  following the same structure.
- *   2. Import  YOUR_PRODUCT  here.
- *   3. Add it to the  PRODUCTS  array in the desired display order.
- *
- * Product order here determines order in:
- *   — homepage carousel
- *   — navbar dropdown
- *   — products grid
- *   — buy hub
+ * Single source of truth for storefront products.
  */
 
 import { VOLTRIX_PRODUCT } from "./products/voltrix.js";
-import { BATTERY_PRODUCT  } from "./products/battery.js";
+import { BATTERY_PRODUCT } from "./products/battery.js";
+import { INVERTER_PRODUCT } from "./products/inverter.js";
 import { VOLTDOCK_PRODUCT } from "./products/voltdock.js";
+import { BACKPACK_PRODUCT } from "./products/backpack.js";
+import { BIKE_ACCESSORY_PRODUCT } from "./products/bike.js";
+import { SOLAR_TRACKING_PRODUCT } from "./products/solar-tracking.js";
+import {
+  VOLTRIX_STAND_MOUNTING_PRODUCT,
+  VOLTRIX_WALL_MOUNTING_PRODUCT,
+} from "./products/mounting.js";
 
 export const PRODUCTS = [
-  VOLTRIX_PRODUCT, // Main system — always first
-  BATTERY_PRODUCT, // Expansion batteries
-  VOLTDOCK_PRODUCT, // Desktop accessory
+  VOLTRIX_PRODUCT,
+  BATTERY_PRODUCT,
+  INVERTER_PRODUCT,
+  VOLTDOCK_PRODUCT,
+  BACKPACK_PRODUCT,
+  BIKE_ACCESSORY_PRODUCT,
+  VOLTRIX_WALL_MOUNTING_PRODUCT,
+  VOLTRIX_STAND_MOUNTING_PRODUCT,
+  SOLAR_TRACKING_PRODUCT,
 ];
