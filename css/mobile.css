@@ -465,3 +465,243 @@
     padding-bottom: 44px;
   }
 }
+
+@media (max-width: 860px) {
+  .site-nav {
+    background: #ffffff;
+  }
+
+  .platform-hero {
+    min-height: auto;
+  }
+
+  .platform-hero__image {
+    opacity: 0.72;
+    background-position: 64% 48%;
+    transform: scaleX(-1) scale(1.08);
+  }
+
+  .platform-hero__overlay {
+    background:
+      linear-gradient(180deg, rgba(7, 26, 22, 0.12), rgba(7, 26, 22, 0.62) 54%, rgba(7, 26, 22, 0.88)),
+      radial-gradient(circle at 72% 20%, rgba(32, 180, 85, 0.1), transparent 34%);
+  }
+
+  .platform-hero__inner {
+    gap: 18px;
+    padding-top: 42px;
+    padding-bottom: 24px;
+  }
+
+  .platform-hero__content {
+    gap: 14px;
+  }
+
+  .platform-hero h1 {
+    max-width: 11ch;
+    font-size: clamp(2.05rem, 8.8vw, 2.8rem);
+    line-height: 1.03;
+  }
+
+  .platform-hero p {
+    max-width: 30rem;
+    margin-top: 10px;
+    font-size: 0.96rem;
+    line-height: 1.5;
+  }
+
+  .platform-hero__benefits {
+    gap: 7px;
+  }
+
+  .platform-hero__benefits span {
+    grid-template-columns: auto 1fr;
+    gap: 6px 10px;
+    padding-top: 8px;
+  }
+
+  .platform-hero__benefits em {
+    font-size: 0.88rem;
+  }
+
+  .platform-hero__actions .button {
+    min-height: 44px;
+  }
+
+  .platform-benefit-grid {
+    border-bottom: 1px solid var(--line-soft);
+  }
+
+  .platform-benefit-card,
+  .platform-benefit-card:nth-child(2n) {
+    display: grid;
+    gap: 10px;
+    min-height: 0;
+    padding: 18px 0;
+    border-right: 0;
+    border-bottom: 1px solid var(--line-soft);
+  }
+
+  .platform-benefit-card:last-child {
+    border-bottom: 0;
+  }
+
+  .platform-benefit-card__meta {
+    min-height: 0;
+  }
+
+  .platform-benefit-card__body h2 {
+    margin-bottom: 6px;
+    font-size: 1.08rem;
+    line-height: 1.18;
+  }
+
+  .platform-benefit-card p {
+    font-size: 0.93rem;
+    line-height: 1.48;
+  }
+
+  .platform-benefit-card__tag {
+    min-height: 0;
+    margin-top: 0;
+    font-size: 0.72rem;
+  }
+
+  .platform-addons-section,
+  .platform-home-section.setup-estimator-shell,
+  .showroom-section.setup-estimator-shell {
+    padding-top: 36px;
+    padding-bottom: 38px;
+  }
+
+  .setup-estimator {
+    gap: 16px;
+  }
+
+  .setup-estimator__head {
+    gap: 8px;
+  }
+
+  .setup-estimator__head h2 {
+    max-width: 12ch;
+    font-size: clamp(1.75rem, 7.6vw, 2.25rem);
+    line-height: 1.05;
+  }
+
+  .setup-estimator__head p {
+    max-width: 31rem;
+    font-size: 0.94rem;
+    line-height: 1.48;
+  }
+
+  .setup-estimator__selector {
+    gap: 18px;
+  }
+
+  .setup-estimator__panel {
+    gap: 12px;
+  }
+
+  .setup-estimator__control {
+    padding-bottom: 12px;
+  }
+
+  .setup-estimator__options {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 8px;
+  }
+
+  .setup-estimator__checks {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 8px;
+    max-width: none;
+  }
+
+  .setup-estimator__option,
+  .setup-estimator__check span {
+    width: 100%;
+    min-height: 38px;
+    align-items: center;
+    padding: 8px 10px;
+    border: 1px solid rgba(8, 45, 37, 0.12);
+    border-radius: 12px;
+    background: rgba(255, 255, 255, 0.42);
+    font-size: 0.84rem;
+    line-height: 1.18;
+  }
+
+  .setup-estimator__option {
+    justify-content: center;
+    text-align: center;
+  }
+
+  .setup-estimator__option.is-active,
+  .setup-estimator__check input:checked + span {
+    border-color: rgba(15, 107, 63, 0.55);
+    background: rgba(199, 226, 122, 0.2);
+  }
+
+  .setup-estimator__metric {
+    grid-template-columns: minmax(0, 1fr) auto;
+    gap: 12px;
+    padding: 9px 0;
+  }
+
+  .setup-estimator__metric strong {
+    max-width: 13ch;
+    font-size: 1.05rem;
+    text-align: right;
+    white-space: normal;
+  }
+
+  .setup-estimator__metric:last-child strong {
+    font-size: 1.15rem;
+  }
+
+  .setup-estimator__result-notes p,
+  .setup-estimator__result small {
+    font-size: 0.8rem;
+    line-height: 1.45;
+  }
+
+  .setup-estimator__details {
+    padding: 8px 0;
+  }
+}
+
+@media (max-width: 430px) {
+  .platform-hero__inner {
+    padding-top: 28px;
+  }
+
+  .platform-hero h1 {
+    font-size: clamp(1.95rem, 10vw, 2.45rem);
+  }
+
+  .platform-hero p {
+    font-size: 0.92rem;
+    line-height: 1.46;
+  }
+
+  .platform-hero__tabs {
+    gap: 22px;
+  }
+
+  .platform-hero__tab {
+    font-size: 0.72rem;
+  }
+
+  .setup-estimator__options {
+    grid-template-columns: 1fr;
+  }
+
+  .setup-estimator__checks {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .setup-estimator__check span {
+    font-size: 0.8rem;
+  }
+}
