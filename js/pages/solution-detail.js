@@ -69,12 +69,12 @@ const SOLUTION_PAGE_COPY = {
   },
   field: {
     type: "field",
-    eyebrow: "Field Teams",
-    title: "Portable energy for field teams.",
+    eyebrow: "Installer",
+    title: "Portable energy for installer teams.",
     intro:
-      "Charge batteries centrally at base, bring selected packs into the service van and use them on site with compatible add-ons when useful power needs to move with the work.",
+      "Charge batteries centrally at the office or workshop, bring selected packs into the service van and use them with compatible add-ons when useful power needs to move with the work.",
     line: "Base -> Van -> Site -> Return",
-    primaryCta: "Plan a field setup",
+    primaryCta: "Plan an installer setup",
     primaryHref: "/views/b2b.html",
     secondaryCta: "Talk to Alva",
     secondaryHref: "/views/b2b.html",
@@ -83,13 +83,13 @@ const SOLUTION_PAGE_COPY = {
     statement:
       "Useful power should not stop at the wall socket, the warehouse or the parking spot.",
     statementBody:
-      "Voltrix helps organize batteries at base, move them with the team and use them where work actually happens.",
+      "Voltrix helps organize batteries at the office or workshop, move them with the team and use them where work actually happens.",
     statementTags: ["Base charging", "Service vans", "Temporary workstations", "Last-meter power"],
-    workflowTitle: "From base charging to work on site.",
+    workflowTitle: "From centralized charging to work on site.",
     workflowBody:
-      "Voltrix works as the energy base at your depot, workshop or company site. Batteries can be prepared before the workday, brought into the service van as needed and returned to base for centralized charging.",
+      "Voltrix works as the energy base at your office, workshop or company site. Batteries can be prepared before the workday, brought into the service van as needed and returned for centralized charging.",
     steps: [
-      ["Prepare at base", "Charge batteries centrally before the team leaves for the day."],
+      ["Prepare centrally", "Charge batteries at the office or workshop before the team leaves for the day."],
       ["Bring only what is needed", "Take the right number of battery packs for the route, job type or expected workload."],
       ["Support flexible work", "Use VoltDock for phones, laptops, tablets and temporary workstations in the van or on site."],
       ["Reach the last meter", "Use Backpack Power when energy needs to move beyond the service van and closer to the final work area."],

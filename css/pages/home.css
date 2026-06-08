@@ -1670,3 +1670,221 @@
     aspect-ratio: 1.5;
   }
 }
+
+@media (max-width: 860px) {
+  .platform-hero {
+    --mobile-hero-media-height: clamp(224px, 62vw, 278px);
+    min-height: 0;
+    margin-top: -22px;
+    padding-top: var(--mobile-hero-media-height);
+    display: block;
+    overflow: hidden;
+    background:
+      linear-gradient(180deg, rgba(238, 243, 234, 0.7), rgba(248, 248, 243, 0)),
+      var(--page-bg);
+  }
+
+  .platform-hero__image,
+  .platform-hero__field {
+    position: absolute;
+    inset: 0 0 auto;
+    height: var(--mobile-hero-media-height);
+    overflow: hidden;
+    filter: saturate(0.98);
+    transform: none;
+    transition:
+      opacity 420ms cubic-bezier(0.22, 0.6, 0.36, 1),
+      transform 520ms cubic-bezier(0.22, 0.6, 0.36, 1);
+  }
+
+  .platform-hero__image::after,
+  .platform-hero__field::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    background:
+      linear-gradient(180deg, rgba(248, 248, 243, 0.02), rgba(248, 248, 243, 0.16)),
+      linear-gradient(0deg, rgba(15, 42, 36, 0.08), rgba(15, 42, 36, 0.08));
+  }
+
+  .platform-hero__image {
+    opacity: 1;
+    filter: saturate(1.1) contrast(1.2) brightness(1.12);
+    background: url("/Picture/home/HomePageBackground_1-optimized.jpg") 49% 54% / auto 116% no-repeat;
+  }
+
+  .platform-hero__image::after {
+    content: none;
+  }
+
+  .platform-hero__field {
+    opacity: 0;
+    background: url("/Picture/home/HomePageBackground_2-optimized.jpg") 50% 50% / cover no-repeat;
+  }
+
+  .platform-hero[data-active-scenario="field"] .platform-hero__image {
+    opacity: 0;
+    transform: none;
+  }
+
+  .platform-hero[data-active-scenario="field"] .platform-hero__field {
+    opacity: 1;
+    transform: none;
+  }
+
+  .platform-hero__overlay {
+    display: none;
+  }
+
+  .platform-hero__inner {
+    display: block;
+    width: 100%;
+    box-sizing: border-box;
+    padding: clamp(22px, 6vw, 34px) clamp(20px, 5vw, 34px) clamp(30px, 7vw, 44px);
+  }
+
+  .platform-hero__content {
+    max-width: min(620px, calc(100vw - 40px));
+    gap: 16px;
+  }
+
+  .platform-hero__copy {
+    min-height: 0;
+  }
+
+  .platform-hero h1 {
+    max-width: min(560px, calc(100vw - 40px));
+    color: #0f2a24;
+    font-size: clamp(1.92rem, 8vw, 2.86rem);
+    line-height: 1.02;
+    letter-spacing: -0.047em;
+  }
+
+  .platform-hero__title {
+    min-height: 0;
+  }
+
+  .platform-hero__title span {
+    white-space: normal;
+  }
+
+  .platform-hero p {
+    max-width: min(560px, calc(100vw - 40px));
+    min-height: 0;
+    margin-top: 14px;
+    color: rgba(15, 42, 36, 0.68);
+    font-size: 0.98rem;
+    line-height: 1.55;
+    overflow-wrap: break-word;
+  }
+
+  .platform-hero__actions {
+    gap: 10px;
+    margin-top: 4px;
+  }
+
+  .platform-hero .button {
+    min-height: 48px;
+    padding-inline: 18px;
+  }
+
+  .platform-hero .button--primary {
+    color: #071a16;
+    background: #c7e27a;
+    box-shadow: 0 14px 28px rgba(15, 42, 36, 0.08);
+  }
+
+  .platform-hero .button--secondary {
+    color: #0f2a24;
+    background: rgba(255, 255, 255, 0.72);
+    border-color: rgba(15, 42, 36, 0.12);
+  }
+
+  .platform-hero__tabs {
+    justify-content: flex-start;
+    justify-self: auto;
+    width: 100%;
+    margin-top: 22px;
+    gap: 24px;
+    text-shadow: none;
+    border-bottom: 1px solid rgba(15, 42, 36, 0.12);
+  }
+
+  .platform-hero__tab {
+    min-height: 34px;
+    color: rgba(15, 42, 36, 0.5);
+    font-size: 0.74rem;
+    letter-spacing: 0.07em;
+  }
+
+  .platform-hero__tab:hover,
+  .platform-hero__tab:focus-visible,
+  .platform-hero__tab.is-active {
+    color: #0f2a24;
+  }
+
+  .platform-hero__tab::after {
+    bottom: -1px;
+    background: #0f6b3f;
+  }
+
+  .platform-hero__benefits {
+    display: flex;
+    flex-wrap: wrap;
+    min-height: 0;
+    gap: 8px;
+    max-width: 560px;
+  }
+
+  .platform-hero__benefits span {
+    display: inline-flex;
+    align-items: center;
+    min-height: 30px;
+    gap: 7px;
+    padding: 5px 10px;
+    border: 1px solid rgba(15, 107, 63, 0.12);
+    border-radius: 999px;
+    background: rgba(255, 255, 255, 0.58);
+    color: rgba(15, 42, 36, 0.66);
+    font-size: 0.78rem;
+  }
+
+  .platform-hero__benefits strong {
+    color: #0f6b3f;
+    font-size: 0.68rem;
+  }
+
+  .platform-hero__benefits em {
+    color: #0f2a24;
+    font-size: 0.78rem;
+    line-height: 1.2;
+  }
+
+  .platform-hero__benefits small {
+    display: none;
+  }
+}
+
+@media (max-width: 520px) {
+  .platform-hero {
+    --mobile-hero-media-height: clamp(218px, 60vw, 252px);
+  }
+
+  .platform-hero__inner {
+    padding-inline: 20px;
+  }
+
+  .platform-hero__actions {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .platform-hero__actions .button {
+    width: 100%;
+  }
+
+  .platform-hero__benefits {
+    display: none;
+  }
+}

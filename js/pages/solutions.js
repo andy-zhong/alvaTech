@@ -10,7 +10,7 @@ const OVERVIEW_COPY = {
     eyebrow: "Solutions",
     title: "Energy beyond fixed places.",
     body:
-      "Explore how Voltrix turns one modular battery platform into practical energy for seasonal homes, outdoor routines, service vans and field teams.",
+      "Explore how Voltrix turns one modular battery platform into practical energy for seasonal homes, outdoor routines, service vans and installer teams.",
   },
   cards: {
     "summer-house": {
@@ -21,18 +21,18 @@ const OVERVIEW_COPY = {
       cta: "Explore Summer House",
     },
     field: {
-      label: "Field Teams",
-      title: "For mobile teams and work on site",
+      label: "Installer",
+      title: "For installer teams and service van routines",
       body:
-        "Charge battery packs at base, bring selected packs into the service van, and use VoltDock or Backpack Power when work needs power beyond the parking spot.",
-      cta: "Explore Field",
+        "Charge battery packs at the office or workshop, bring selected packs into the service van, and use VoltDock or Backpack Power when work needs power beyond the parking spot.",
+      cta: "Explore Installer",
     },
   },
   platform: {
     eyebrow: "The platform",
     title: "One battery platform. Different ways to bring energy closer.",
     body:
-      "Voltrix starts with a modular energy base and battery packs. From there, the same platform can support a summer house setup, move into outdoor routines, or help field teams organize portable power through compatible add-ons.",
+      "Voltrix starts with a modular energy base and battery packs. From there, the same platform can support a summer house setup, move into outdoor routines, or help installer teams organize portable power through compatible add-ons.",
   },
 };
 
