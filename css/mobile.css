@@ -529,17 +529,28 @@
   }
 
   .platform-benefit-grid {
+    gap: 0;
+    border-top: 1px solid var(--line-soft);
     border-bottom: 1px solid var(--line-soft);
+  }
+
+  body[data-page="home"] .platform-benefit-card.reveal {
+    opacity: 1;
+    transform: none;
   }
 
   .platform-benefit-card,
   .platform-benefit-card:nth-child(2n) {
     display: grid;
-    gap: 10px;
+    grid-template-columns: 2.4rem minmax(0, 1fr);
+    gap: 4px 12px;
     min-height: 0;
-    padding: 18px 0;
+    padding: 14px 0;
     border-right: 0;
     border-bottom: 1px solid var(--line-soft);
+    border-radius: 0;
+    background: transparent;
+    box-shadow: none;
   }
 
   .platform-benefit-card:last-child {
@@ -547,13 +558,31 @@
   }
 
   .platform-benefit-card__meta {
+    grid-row: 1 / span 2;
+    display: block;
     min-height: 0;
   }
 
+  .platform-benefit-card__meta .platform-icon {
+    display: none;
+  }
+
+  .platform-benefit-card__meta span {
+    display: block;
+    padding-top: 2px;
+    color: #0f6b3f;
+    font-size: 0.72rem;
+    letter-spacing: 0.08em;
+  }
+
+  .platform-benefit-card__body {
+    min-width: 0;
+  }
+
   .platform-benefit-card__body h2 {
-    margin-bottom: 6px;
-    font-size: 1.08rem;
-    line-height: 1.18;
+    margin: 0;
+    font-size: 1rem;
+    line-height: 1.2;
   }
 
   .platform-benefit-card p {
@@ -561,21 +590,118 @@
     line-height: 1.48;
   }
 
+  body[data-page="home"] .platform-benefit-card p,
+  body[data-page="home"] .platform-explain__copy p,
+  body[data-page="home"] .platform-solution-tab p,
+  body[data-page="home"] .platform-section-head--narrow p,
+  body[data-page="home"] .platform-product-feature__copy p,
+  body[data-page="home"] .platform-addons__note {
+    display: none;
+  }
+
+  body[data-page="home"] .platform-explain__copy h2 {
+    width: min(100%, calc(100vw - 40px));
+    max-width: 22rem;
+    font-size: clamp(1.86rem, 8vw, 2.28rem);
+    overflow-wrap: break-word;
+  }
+
   .platform-benefit-card__tag {
+    display: block;
+    grid-column: 2;
+    width: 100%;
     min-height: 0;
     margin-top: 0;
-    font-size: 0.72rem;
+    padding: 0;
+    border: 0;
+    background: transparent;
+    font-size: 0;
+    line-height: 1.2;
+    white-space: normal;
+    overflow-wrap: break-word;
+  }
+
+  body[data-page="home"] .platform-benefit-card__tag::after {
+    display: block;
+    max-width: 30ch;
+    color: #0f6b3f;
+    font-size: 0.74rem;
+    font-weight: 800;
+    line-height: 1.32;
+    white-space: normal;
+    overflow-wrap: break-word;
+  }
+
+  body[data-page="home"] .platform-benefit-card:nth-child(1) .platform-benefit-card__tag::after {
+    content: "A compact base unit with Battery Packs.";
+  }
+
+  body[data-page="home"] .platform-benefit-card:nth-child(2) .platform-benefit-card__tag::after {
+    content: "Start small, add capacity over time.";
+  }
+
+  body[data-page="home"] .platform-benefit-card:nth-child(3) .platform-benefit-card__tag::after {
+    content: "Use energy on the terrace, in the garden or by the van.";
+  }
+
+  body[data-page="home"] .platform-benefit-card:nth-child(4) .platform-benefit-card__tag::after {
+    content: "Connect VoltDock, Backpack Power and mobility accessories.";
+  }
+
+  body[data-page="home"] .platform-solution-tabs {
+    gap: 18px;
+  }
+
+  body[data-page="home"] .platform-solution-tab {
+    gap: 12px;
+    padding: 0 0 18px;
+    overflow: visible;
+    border: 0;
+    border-bottom: 1px solid rgba(8, 45, 37, 0.09);
+    border-radius: 0;
+    background: transparent;
+    box-shadow: none;
+  }
+
+  body[data-page="home"] .platform-solution-tab:last-child {
+    border-bottom: 0;
+  }
+
+  body[data-page="home"] .platform-solution-tab__image {
+    min-height: 0;
+    aspect-ratio: 1.34;
+    margin-inline: 10px;
+    border-radius: 12px;
+  }
+
+  body[data-page="home"] .platform-solution-tab__copy {
+    gap: 7px;
+    padding: 0 10px;
+  }
+
+  body[data-page="home"] .platform-solution-tab__copy strong {
+    font-size: 1.05rem;
+    line-height: 1.22;
+  }
+
+  body[data-page="home"] .platform-solution-tab__copy span {
+    font-size: 0.9rem;
+    line-height: 1.5;
+  }
+
+  body[data-page="home"] .platform-solution-tab__copy .platform-solution-tab__cta {
+    margin-top: 4px;
   }
 
   .platform-addons-section,
   .platform-home-section.setup-estimator-shell,
   .showroom-section.setup-estimator-shell {
-    padding-top: 36px;
-    padding-bottom: 38px;
+    padding-top: 42px;
+    padding-bottom: 44px;
   }
 
   .setup-estimator {
-    gap: 16px;
+    gap: 18px;
   }
 
   .setup-estimator__head {
@@ -589,9 +715,7 @@
   }
 
   .setup-estimator__head p {
-    max-width: 31rem;
-    font-size: 0.94rem;
-    line-height: 1.48;
+    display: none;
   }
 
   .setup-estimator__selector {
@@ -599,22 +723,19 @@
   }
 
   .setup-estimator__panel {
-    gap: 12px;
+    gap: 10px;
   }
 
   .setup-estimator__control {
-    padding-bottom: 12px;
+    padding-bottom: 0;
   }
 
   .setup-estimator__options {
-    display: grid;
-    grid-template-columns: repeat(3, minmax(0, 1fr));
-    gap: 8px;
+    grid-template-columns: 1fr;
   }
 
   .setup-estimator__checks {
-    display: grid;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
+    grid-template-columns: 1fr;
     gap: 8px;
     max-width: none;
   }
@@ -622,7 +743,7 @@
   .setup-estimator__option,
   .setup-estimator__check span {
     width: 100%;
-    min-height: 38px;
+    min-height: 42px;
     align-items: center;
     padding: 8px 10px;
     border: 1px solid rgba(8, 45, 37, 0.12);
@@ -646,7 +767,7 @@
   .setup-estimator__metric {
     grid-template-columns: minmax(0, 1fr) auto;
     gap: 12px;
-    padding: 9px 0;
+    padding: 8px 0;
   }
 
   .setup-estimator__metric strong {
@@ -698,10 +819,47 @@
   }
 
   .setup-estimator__checks {
-    grid-template-columns: 1fr 1fr;
+    grid-template-columns: 1fr;
   }
 
   .setup-estimator__check span {
     font-size: 0.8rem;
+  }
+
+}
+
+@media (max-width: 640px) {
+  .setup-estimator__metric {
+    grid-template-columns: 1fr;
+    gap: 3px;
+    padding: 0;
+    border-bottom: 0;
+  }
+
+  .setup-estimator__metric strong {
+    max-width: none;
+    font-size: 1.12rem;
+    line-height: 1.15;
+    text-align: left;
+    white-space: normal;
+  }
+
+  .setup-estimator__metric:last-child strong,
+  .setup-estimator__metric:nth-child(4) strong {
+    font-size: 1.32rem;
+  }
+
+  .setup-estimator__metric:nth-child(2),
+  .setup-estimator__metric:nth-child(3) {
+    padding-top: 4px;
+    border-top: 1px solid rgba(8, 45, 37, 0.08);
+  }
+
+  .setup-estimator__metric:nth-child(2) strong,
+  .setup-estimator__metric:nth-child(3) strong,
+  .setup-estimator__metric:nth-child(2) span,
+  .setup-estimator__metric:nth-child(3) span {
+    color: rgba(8, 45, 37, 0.54);
+    font-size: 0.82rem;
   }
 }

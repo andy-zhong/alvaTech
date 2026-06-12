@@ -12,6 +12,7 @@ const CART_NOTICE_KEY = "alva-cart-notice";
 const RANGE_DASH = "\u2013";
 const EM_DASH = "\u2014";
 const SQUARE_METERS = "m\u00b2";
+const MOBILE_ACCORDION_QUERY = "(max-width: 640px)";
 
 const SUMMER_ACCESSORIES = [
   { key: "voltDock", label: "VoltDock", priceKey: "voltDock" },
@@ -89,12 +90,15 @@ export function renderSetupEstimator({ context = "home" } = {}) {
 function renderSummerPanel() {
   return `
     <div class="setup-estimator__panel is-active" data-estimator-panel="summer">
-      <div class="setup-estimator__control setup-estimator__control--range">
-        <div class="setup-estimator__control-head">
-          <strong>Approx. summer house size</strong>
-          <output data-summer-size-output>65 ${SQUARE_METERS}</output>
+      <div class="setup-estimator__control setup-estimator__control--range" data-estimator-step="summer-size">
+        ${renderStepToggle("Approx. summer house size")}
+        <div class="setup-estimator__step-body">
+          <div class="setup-estimator__control-head">
+            <strong>Approx. summer house size</strong>
+            <output data-summer-size-output>65 ${SQUARE_METERS}</output>
+          </div>
+          <input type="range" min="20" max="240" value="65" step="5" data-summer-size>
         </div>
-        <input type="range" min="20" max="240" value="65" step="5" data-summer-size>
       </div>
 
       ${renderOptionGroup("Usage rhythm", "usage", USAGE_OPTIONS, "regular")}
@@ -116,18 +120,21 @@ function renderInstallerPanel() {
 
 function renderOptionGroup(label, group, options, activeValue) {
   return `
-    <fieldset class="setup-estimator__control">
+    <fieldset class="setup-estimator__control" data-estimator-step="${group}">
       <legend>${label}</legend>
-      <div class="setup-estimator__options">
-        ${Object.entries(options).map(([value, text]) => `
-          <button
-            class="setup-estimator__option ${value === activeValue ? "is-active" : ""}"
-            type="button"
-            data-estimator-option="${group}"
-            data-estimator-value="${value}">
-            ${text}
-          </button>
-        `).join("")}
+      ${renderStepToggle(label)}
+      <div class="setup-estimator__step-body">
+        <div class="setup-estimator__options">
+          ${Object.entries(options).map(([value, text]) => `
+            <button
+              class="setup-estimator__option ${value === activeValue ? "is-active" : ""}"
+              type="button"
+              data-estimator-option="${group}"
+              data-estimator-value="${value}">
+              ${text}
+            </button>
+          `).join("")}
+        </div>
       </div>
     </fieldset>
   `;
@@ -135,15 +142,18 @@ function renderOptionGroup(label, group, options, activeValue) {
 
 function renderCheckboxGroup(label, scenario, options) {
   return `
-    <fieldset class="setup-estimator__control">
+    <fieldset class="setup-estimator__control" data-estimator-step="${scenario}-accessories">
       <legend>${label}</legend>
-      <div class="setup-estimator__checks">
-        ${options.map((option) => `
-          <label class="setup-estimator__check">
-            <input type="checkbox" data-estimator-accessory="${scenario}" value="${option.key}">
-            <span>${option.label}</span>
-          </label>
-        `).join("")}
+      ${renderStepToggle(label)}
+      <div class="setup-estimator__step-body">
+        <div class="setup-estimator__checks">
+          ${options.map((option) => `
+            <label class="setup-estimator__check">
+              <input type="checkbox" data-estimator-accessory="${scenario}" value="${option.key}">
+              <span>${option.label}</span>
+            </label>
+          `).join("")}
+        </div>
       </div>
     </fieldset>
   `;
@@ -151,17 +161,29 @@ function renderCheckboxGroup(label, scenario, options) {
 
 function renderSolarGroup() {
   return `
-    <fieldset class="setup-estimator__control">
+    <fieldset class="setup-estimator__control" data-estimator-step="solar">
       <legend>Solar</legend>
-      <div class="setup-estimator__checks">
-        ${Object.entries(SOLAR_OPTIONS).map(([value, label]) => `
-          <label class="setup-estimator__check">
-            <input type="checkbox" data-estimator-solar value="${value}" ${value === "none" ? "checked" : ""}>
-            <span>${label}</span>
-          </label>
-        `).join("")}
+      ${renderStepToggle("Solar")}
+      <div class="setup-estimator__step-body">
+        <div class="setup-estimator__checks">
+          ${Object.entries(SOLAR_OPTIONS).map(([value, label]) => `
+            <label class="setup-estimator__check">
+              <input type="checkbox" data-estimator-solar value="${value}" ${value === "none" ? "checked" : ""}>
+              <span>${label}</span>
+            </label>
+          `).join("")}
+        </div>
       </div>
     </fieldset>
+  `;
+}
+
+function renderStepToggle(title) {
+  return `
+    <button class="setup-estimator__step-toggle" type="button" aria-expanded="false" data-estimator-step-toggle>
+      <span>${title}</span>
+      <small data-estimator-step-summary></small>
+    </button>
   `;
 }
 
@@ -208,13 +230,19 @@ export function bindSetupEstimator(scope = document) {
       },
     };
 
-    const update = () => updateEstimator(root, state);
+    setupEstimatorAccordion(root);
+
+    const update = () => {
+      updateEstimator(root, state);
+      updateEstimatorStepSummaries(root, state);
+    };
 
     root.querySelectorAll("[data-estimator-scenario]").forEach((button) => {
       button.addEventListener("click", () => {
         state.scenario = button.dataset.estimatorScenario;
         setScenario(root, state.scenario);
         update();
+        resetEstimatorAccordion(root);
       });
     });
 
@@ -272,6 +300,55 @@ export function bindSetupEstimator(scope = document) {
 
     update();
   });
+}
+
+function setupEstimatorAccordion(root) {
+  root.querySelectorAll("[data-estimator-step]").forEach((step) => {
+    step.querySelector("[data-estimator-step-toggle]")?.addEventListener("click", () => {
+      if (!isMobileEstimatorAccordion()) return;
+      setOpenEstimatorStep(root, step);
+    });
+  });
+
+  resetEstimatorAccordion(root);
+}
+
+function resetEstimatorAccordion(root) {
+  const activePanel = root.querySelector("[data-estimator-panel].is-active");
+  const firstStep = activePanel?.querySelector("[data-estimator-step]");
+  root.querySelectorAll("[data-estimator-step]").forEach((step) => {
+    const isOpen = step === firstStep;
+    step.classList.toggle("is-open", isOpen);
+    step.querySelector("[data-estimator-step-toggle]")?.setAttribute("aria-expanded", isOpen ? "true" : "false");
+  });
+}
+
+function setOpenEstimatorStep(root, targetStep) {
+  const panel = targetStep.closest("[data-estimator-panel]");
+  panel?.querySelectorAll("[data-estimator-step]").forEach((step) => {
+    const isOpen = step === targetStep;
+    step.classList.toggle("is-open", isOpen);
+    step.querySelector("[data-estimator-step-toggle]")?.setAttribute("aria-expanded", isOpen ? "true" : "false");
+  });
+}
+
+function updateEstimatorStepSummaries(root, state) {
+  setStepSummary(root, "summer-size", `${state.summer.size} ${SQUARE_METERS}`);
+  setStepSummary(root, "usage", USAGE_OPTIONS[state.summer.usage]);
+  setStepSummary(root, "solar", formatSolarLabels(state.summer.solar));
+  setStepSummary(root, "summer-accessories", formatSelectedAccessoryLabels(SUMMER_ACCESSORIES, state.summer.accessories));
+  setStepSummary(root, "vans", `${state.installer.vans}`);
+  setStepSummary(root, "routine", ROUTINE_OPTIONS[state.installer.routine]);
+  setStepSummary(root, "installer-accessories", formatSelectedAccessoryLabels(INSTALLER_ACCESSORIES, state.installer.accessories));
+}
+
+function setStepSummary(root, stepName, value) {
+  const summary = root.querySelector(`[data-estimator-step="${stepName}"] [data-estimator-step-summary]`);
+  if (summary) summary.textContent = value;
+}
+
+function isMobileEstimatorAccordion() {
+  return window.matchMedia(MOBILE_ACCORDION_QUERY).matches;
 }
 
 function updateSolarState(root, state, changedInput) {

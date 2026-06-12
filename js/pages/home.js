@@ -431,6 +431,8 @@ function bindSolutionShowcase() {
   const tabs = [...root.querySelectorAll("[data-solution-tab]")];
   const panels = [...root.querySelectorAll("[data-solution-panel]")];
   const panelsRoot = root.querySelector("[data-solution-panels]");
+  const layout = root.querySelector(".platform-solution-layout");
+  const mobileQuery = window.matchMedia("(max-width: 860px)");
   let activeId = null;
   let switchTimer;
 
@@ -450,13 +452,27 @@ function bindSolutionShowcase() {
   }
 
   function scrollToPanels() {
-    if (!panelsRoot || panelsRoot.hidden) return;
+    if (!panelsRoot || panelsRoot.hidden || mobileQuery.matches) return;
 
     requestAnimationFrame(() => {
       const headerOffset = document.querySelector(".site-header")?.offsetHeight || 0;
       const targetTop = panelsRoot.getBoundingClientRect().top + window.scrollY - headerOffset - 24;
       window.scrollTo({ top: Math.max(targetTop, 0), behavior: "smooth" });
     });
+  }
+
+  function placePanels(id) {
+    if (!panelsRoot) return;
+
+    const activeTab = tabs.find((tab) => tab.dataset.solutionTab === id);
+    if (mobileQuery.matches && activeTab) {
+      activeTab.insertAdjacentElement("afterend", panelsRoot);
+      return;
+    }
+
+    if (layout && layout.nextElementSibling !== panelsRoot) {
+      layout.insertAdjacentElement("afterend", panelsRoot);
+    }
   }
 
   function collapseSolution() {
@@ -488,6 +504,7 @@ function bindSolutionShowcase() {
       });
 
       if (panelsRoot) {
+        placePanels(id);
         panelsRoot.hidden = false;
         panelsRoot.classList.remove("is-switching");
         panelsRoot.classList.add("is-open");
@@ -512,6 +529,12 @@ function bindSolutionShowcase() {
 
   tabs.forEach((tab) => {
     tab.addEventListener("click", () => setSolution(tab.dataset.solutionTab));
+  });
+
+  mobileQuery.addEventListener("change", () => {
+    if (activeId && panelsRoot && !panelsRoot.hidden) {
+      placePanels(activeId);
+    }
   });
 }
 
