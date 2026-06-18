@@ -481,6 +481,13 @@
     transform: scaleX(-1) scale(1.08);
   }
 
+  body[data-page="home"] .platform-hero__image {
+    opacity: 1;
+    background: url("/Picture/products/voltrix/summerhouse/summerhouse05.png") center 52% / cover no-repeat;
+    filter: saturate(1.04) contrast(1.02) brightness(1.04);
+    transform: scaleX(-1);
+  }
+
   .platform-hero__overlay {
     background:
       linear-gradient(180deg, rgba(7, 26, 22, 0.12), rgba(7, 26, 22, 0.62) 54%, rgba(7, 26, 22, 0.88)),
