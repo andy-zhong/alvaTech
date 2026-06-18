@@ -140,7 +140,7 @@ export const UI_TRANSLATIONS = {
     backToProducts: "Back to products",
 
     b2bTitle: "Contact us as a company",
-    b2bBody: "Looking for a business solution, bulk pricing, or a custom setup? Fill in the form and our team will contact you.",
+    b2bBody: "Looking for a business solution, a fleet setup, or a custom configuration? Fill in the form and our team will contact you.",
     b2bCompany: "Company name",
     b2bContact: "Contact person",
     b2bEmail: "Email address",
@@ -291,7 +291,7 @@ export const UI_TRANSLATIONS = {
     backToProducts: "Till produkter",
 
     b2bTitle: "Kontakta oss som företag",
-    b2bBody: "Letar ni efter en företagslösning, volympris eller en skräddarsydd lösning? Fyll i formuläret så kontaktar vi er.",
+    b2bBody: "Letar ni efter en företagslösning, en uppsättning för flera platser eller en skräddarsydd lösning? Fyll i formuläret så kontaktar vi er.",
     b2bCompany: "Företagsnamn",
     b2bContact: "Kontaktperson",
     b2bEmail: "E-post",
@@ -441,7 +441,7 @@ export const UI_TRANSLATIONS = {
     backToProducts: "Takaisin tuotteisiin",
 
     b2bTitle: "Ota yhteyttä yrityksenä",
-    b2bBody: "Etsittekö yritysratkaisua, volyymihintoja tai räätälöityä kokonaisuutta? Täyttäkää lomake, niin otamme yhteyttä.",
+    b2bBody: "Etsittekö yritysratkaisua, usean kohteen kokonaisuutta tai räätälöityä ratkaisua? Täyttäkää lomake, niin otamme yhteyttä.",
     b2bCompany: "Yrityksen nimi",
     b2bContact: "Yhteyshenkilö",
     b2bEmail: "Sähköposti",
@@ -591,7 +591,7 @@ export const UI_TRANSLATIONS = {
     backToProducts: "Tilbake til produkter",
 
     b2bTitle: "Kontakt oss som bedrift",
-    b2bBody: "Ser dere etter en bedriftsløsning, volumrabatter eller en skreddersydd løsning? Fyll ut skjemaet, så tar vi kontakt.",
+    b2bBody: "Ser dere etter en bedriftsløsning, et oppsett for flere steder eller en skreddersydd løsning? Fyll ut skjemaet, så tar vi kontakt.",
     b2bCompany: "Firmanavn",
     b2bContact: "Kontaktperson",
     b2bEmail: "E-post",
@@ -741,7 +741,7 @@ export const UI_TRANSLATIONS = {
     backToProducts: "Tilbage til produkter",
 
     b2bTitle: "Kontakt os som virksomhed",
-    b2bBody: "Leder I efter en erhvervsløsning, mængderabat eller en skræddersyet løsning? Udfyld formularen, så kontakter vi jer.",
+    b2bBody: "Leder I efter en erhvervsløsning, en løsning til flere steder eller en skræddersyet løsning? Udfyld formularen, så kontakter vi jer.",
     b2bCompany: "Firmanavn",
     b2bContact: "Kontaktperson",
     b2bEmail: "E-mail",
@@ -885,7 +885,7 @@ export const UI_TRANSLATIONS = {
     backToProducts: "Torna ai prodotti",
 
     b2bTitle: "Contattaci come azienda",
-    b2bBody: "Cerchi una soluzione business, prezzi per volumi o una configurazione su misura? Compila il modulo e ti contatteremo.",
+    b2bBody: "Cerchi una soluzione business, una configurazione per più sedi o una configurazione su misura? Compila il modulo e ti contatteremo.",
     b2bCompany: "Nome azienda",
     b2bContact: "Persona di contatto",
     b2bEmail: "Email",

@@ -165,7 +165,7 @@ const SOLUTION_PAGE_SV_COPY = {
     steps: [
       ["Börja med Voltrix-basen", "En kompakt energibas för stugan eller det andra hemmet."],
       ["Lägg till batteripack över tid", "Bygg ut kapaciteten när säsongsanvändning, helger eller utomhusrutiner växer."],
-      ["Använd utvalda tillbehör bortom väggen", "Låt batteripack stödja utomhusmoment när användbar energi behövs bort från fasta uttag."],
+      ["Använd utvalda tillbehör bortom väggen", "Låt batteripack stödja utomhusaktiviteter när användbar energi behövs bort från fasta uttag."],
     ],
     bandTitle: "Ta användbar energi närmare livet utomhus.",
     bandBody:
@@ -214,7 +214,7 @@ const SOLUTION_PAGE_SV_COPY = {
     statement:
       "Användbar energi ska inte stanna vid vägguttaget, verkstaden eller parkeringsplatsen.",
     statementBody:
-      "Voltrix hjälper team att organisera batterier på kontoret eller i verkstaden, ta dem med i bilen och använda dem där arbetet faktiskt sker.",
+      "Voltrix hjälper team att organisera batterier på kontoret eller i verkstaden, för att sedan ta med dem och använda energin där arbetet faktiskt sker.",
     statementTags: ["Centraliserad laddning", "Servicebilar", "Tillfälliga arbetsytor", "Energi sista biten"],
     workflowTitle: "Från laddning på kontoret till arbete på plats.",
     workflowBody:
@@ -234,7 +234,7 @@ const SOLUTION_PAGE_SV_COPY = {
     dockTags: ["Mobil administration", "Kommunikation", "Dokumentation", "Samordning", "Tillfälliga arbetsytor"],
     backpackTitle: "Bär energi närmare arbetet.",
     backpackBody:
-      "Backpack Power hjälper till att flytta energi bortom servicebilen och in i den sista arbetsytan. Den kan bära ett batteri med inverter som en bärbar energikälla, eller hjälpa till att transportera flera batterier närmare uppgiften.",
+      "Backpack Power hjälper till att flytta energi bortom servicebilen och till den faktiska arbetsytan. Den kan bära ett batteri med inverter som en bärbar energikälla, eller hjälpa till att transportera flera batterier närmare uppgiften.",
     backpackBullets: [
       "Parkeringsplatsen ligger långt från arbetsytan",
       "Kablar är opraktiska",

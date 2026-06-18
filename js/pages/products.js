@@ -146,7 +146,7 @@ const ADDONS = [
     key: "solarTracking",
     title: "Solar tracking system",
     body: "A future solar add-on for summer house setups that want to make more of available daylight.",
-    note: "Coming soon — price not included.",
+    note: "Coming soon.",
     image: null,
     href: "/views/product.html?slug=solar-tracking-system",
   },
@@ -240,7 +240,7 @@ export function renderProductsPage({ lang, productUrl }) {
 
     <section class="showroom-section showroom-section--sage editorial-section--soft" aria-labelledby="specs-title">
       <div class="showroom-section__head">
-        <span class="eyebrow">${copy.specsEyebrow}</span>
+        ${copy.specsEyebrow ? `<span class="eyebrow">${copy.specsEyebrow}</span>` : ""}
         <h2 id="specs-title">${copy.specsTitle}</h2>
       </div>
       <div class="showroom-spec-table spec-table">
@@ -284,7 +284,9 @@ export function afterRenderProductsPage() {
 
 function renderShowroomItem(item, productHref, copy) {
   const href = item.slug ? productHref(item.slug) : item.href;
-  const asset = PRODUCT_ASSETS[item.key];
+  const asset = item.placeholderLabel
+    ? { ...PRODUCT_ASSETS[item.key], placeholderLabel: item.placeholderLabel }
+    : PRODUCT_ASSETS[item.key];
 
   return `
     <a class="showroom-product" href="${href}">
@@ -435,13 +437,13 @@ function getProductsCopy(lang) {
       contactAlva: "Kontakta Alva",
       showroomEyebrow: "Produktshowroom",
       showroomTitle: "En plattform, inte en vägg av produkter.",
-      addonsEyebrow: "Add-ons",
-      addonsTitle: "Take Voltrix beyond the wall.",
-      addonsBody: "Expand how Battery Packs are used with simple add-ons for everyday outdoor life, mobile routines and selected workday needs.",
-      addonsNote: "Most add-ons pair with the same Battery Pack platform. Solar tracking system is a separate solar-focused extension.",
-      exploreAccessories: "Explore accessories",
-      specsEyebrow: "Specifikationer",
-      specsTitle: "Systemgrunder",
+      addonsEyebrow: "Tillbehör",
+      addonsTitle: "Ta Voltrix bortom den fasta installationen.",
+      addonsBody: "Utöka hur Battery Packs används med enkla tillbehör för vardag utomhus, mobila rutiner och utvalda arbetsbehov.",
+      addonsNote: "De flesta tillbehör fungerar med samma Battery Pack-plattform. Solar tracking system är en separat solfokuserad utökning.",
+      exploreAccessories: "Utforska tillbehör",
+      specsEyebrow: "",
+      specsTitle: "Specifikationer",
       specsNote: "Drifttid och prestanda beror på anslutna enheter, installation och användningsmönster.",
       ctaTitle: "Osäker på var du ska börja?",
       ctaBody: "Prata med Alva om ditt hem, din stuga eller teamets installatörsrutiner.",
@@ -456,16 +458,53 @@ function getProductsCopy(lang) {
   const svData = {
     productsEyebrow: "Produkter",
     viewProduct: "Visa produkt",
-    compositionLabels: COMPOSITION_LABELS,
+    compositionLabels: [
+      ["MODULÄR LAGRING", "Börja med kapaciteten du behöver idag och bygg ut när behoven ökar."],
+      ["SOLREDO SETUP", "Använd tillgänglig solel och lagra användbar energi till när den behövs mest."],
+      ["SMALT FORMAT", "En vertikal setup för stugor, hem, terrasser och kompakta ytor."],
+      ["REDO FÖR NORDEN", "Byggd för skiftande förhållanden, med utomhusklassat skydd och användning över säsonger."],
+      ["BORTOM VÄGGEN", "Flytta lagrad energi närmare terrasser, trädgårdar, servicebilar och vardagsrutiner."],
+      ["EN BATTERIPLATTFORM", "Använd samma Battery Packs hemma, utomhus och i utvalda arbetsrutiner."],
+    ],
     showroomProducts: [
       { key: "base", category: "Kärnsystem", name: "Voltrix Base", body: "Energikärnan för att organisera, ladda och bygga ut Voltrix-systemet.", slug: "voltrix-5-pack-kit" },
       { key: "battery", category: "Kapacitet", name: "Battery Pack", body: "Expanderbar kapacitet för hemrutiner, utomhusbruk och utvalda fältflöden.", slug: "voltrix-battery-module" },
       { key: "voltdock", category: "Tillbehör", name: "VoltDock", body: "En kompakt hubb för enheter, skrivbord och tillfälliga arbetsplatser.", slug: "voltdock" },
       { key: "backpack", category: "Tillbehör", name: "Backpack Power", body: "Bär användbar energi närmare platsen där livet eller arbetet sker.", slug: "backpack-power" },
-      { key: "mounting", category: "Installation", name: "Montering", body: "Rent installationsstöd för basenheten och batteripack.", href: "/views/b2b.html" },
+      { key: "mounting", category: "Installation", name: "Montering", body: "Rent installationsstöd för basenheten och batteripack.", href: "/views/b2b.html", placeholderLabel: "Kommer snart" },
       { key: "mobility", category: "Mobilitet", name: "Bike accessory", body: "Utvalt stöd för att flytta ett batteri längre från den fasta setupen.", slug: "bike-accessory" },
     ],
-    addons: ADDONS,
+    addons: [
+      {
+        key: "backpack",
+        title: "Backpack Power",
+        body: "Bär Battery Packs närmare utomhusaktiviteter, trädgårdsprojekt och praktisk energi där arbetet sker.",
+        image: "/Picture/products/backpack/backpack_1inverter+1battery-optimized.jpg",
+        href: "/views/product.html?slug=backpack-power",
+      },
+      {
+        key: "voltdock",
+        title: "VoltDock",
+        body: "Gör ett Battery Pack till en kompakt hubb för enheter, belysning och vardagens energi.",
+        image: "/Picture/products/voltdock/voltdock01.png",
+        href: "/views/product.html?slug=voltdock",
+      },
+      {
+        key: "bike",
+        title: "Bike accessory",
+        body: "Flytta Battery Packs längre med ett lätt mobilitetstillbehör för lokala rutiner.",
+        image: "/Picture/products/bike/bike01-optimized.png",
+        href: "/views/product.html?slug=bike-accessory",
+      },
+      {
+        key: "solarTracking",
+        title: "Solar tracking system",
+        body: "Ett framtida soltillbehör för fritidshus som vill ta bättre vara på tillgängligt dagsljus.",
+        note: "Kommer snart.",
+        image: null,
+        href: "/views/product.html?slug=solar-tracking-system",
+      },
+    ],
     specs: [
       ["Batterikemi", "NMC"],
       ["Batteriexpansion", "1-12 kWh per inverter/base setup"],
@@ -481,6 +520,6 @@ function getProductsCopy(lang) {
   const selectedCopy = copies[lang] ?? copies.en;
 
   return lang === "sv"
-    ? { ...baseCopy, ...selectedCopy, ...svData, showroomProducts: SHOWROOM_PRODUCTS }
+    ? { ...baseCopy, ...selectedCopy, ...svData }
     : { ...baseCopy, ...selectedCopy };
 }

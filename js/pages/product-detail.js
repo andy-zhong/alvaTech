@@ -5,6 +5,7 @@ import {
   formatCommercePrice,
   getCommerceRecordForSlug,
 } from "../services/commerce-catalog.js";
+import { commerceVisibility, getPricingComingSoonLabel } from "../config/commerce-visibility.js";
 
 let batteryCount = 1;
 let currentMediaIndex = 0;
@@ -21,6 +22,8 @@ const DETAIL_COPY = {
     price: "Price",
     imageViewer: "Image viewer",
     closeViewer: "Close",
+    comingSoon: "Coming soon",
+    soon: "Soon",
   },
   sv: {
     showImage: "Visa bild",
@@ -33,6 +36,8 @@ const DETAIL_COPY = {
     price: "Pris",
     imageViewer: "Bildvisare",
     closeViewer: "Stäng",
+    comingSoon: "Kommer snart",
+    soon: "Snart",
   },
   fi: {
     showImage: "Näytä kuva",
@@ -107,15 +112,17 @@ const DETAIL_PLATFORM_COPY = {
   },
   sv: {
     configure: "Konfigurera system",
-    requestAdvice: "Be om radgivning",
-    whoFor: "Vem den passar for",
+    requestAdvice: "Be om rådgivning",
+    whoFor: "Vem den passar för",
     platformFit: "Hur den passar plattformen",
     platformFitBody:
-      "Produkten fungerar som en del av Voltrix modulera energiplattform och kopplar samman lagring, expansion och praktisk anvandning.",
+      "Produkten fungerar som en del av Voltrix modulära energiplattform och kopplar samman lagring, expansion och praktisk användning.",
     modularity: "Kapacitet och modularitet",
     modularityFallback:
-      "Kapacitet och konfiguration beror pa valda moduler och slutlig setup.",
-    trustTitle: "Vagledning fore konfigurering",
+      "Kapacitet och konfiguration beror på valda moduler och slutlig setup.",
+    modularityConfig: ({ min, max, capacity }) =>
+      `Konfigurera från ${min} till ${max} moduler med ${capacity} kWh per modul. Slutlig kapacitet beror på valda moduler och setup.`,
+    trustTitle: "Vägledning före konfigurering",
   },
   it: {
     configure: "Configura sistema",
@@ -144,6 +151,23 @@ const TRUST_POINTS = [
   "Support and guidance available",
 ];
 
+const PLATFORM_USE_CASES_BY_LANG = {
+  sv: [
+    "Fritidshus",
+    "Solenergilagring",
+    "Reservenergi",
+    "Portabel användning / arbetsrutiner",
+  ],
+};
+
+const TRUST_POINTS_BY_LANG = {
+  sv: [
+    "Designad i Sverige",
+    "Skickas från Sverige",
+    "Support och vägledning finns",
+  ],
+};
+
 function calculatePrice(product) {
   return product.config.basePrice + batteryCount * product.config.batteryPrice;
 }
@@ -169,7 +193,7 @@ function getProductMedia(product, fallbackAlt) {
   return [hero, ...uniqueGallery];
 }
 
-function renderMainMedia(media, fallbackAlt) {
+function renderMainMedia(media, fallbackAlt, labels) {
   const type = media?.type ?? "image";
   const src = media?.src ?? "";
   const alt = media?.alt ?? fallbackAlt;
@@ -182,7 +206,7 @@ function renderMainMedia(media, fallbackAlt) {
 
   if (type === "placeholder" || !src) {
     return `<div id="detail-main-media" class="media-main-asset media-placeholder" role="img" aria-label="${alt}">
-              <span>Coming soon</span>
+              <span>${labels.comingSoon}</span>
             </div>`;
   }
 
@@ -195,7 +219,7 @@ function renderThumbnail(media, index, isActive, fallbackAlt, labels) {
   const alt = media?.alt ?? `${fallbackAlt} ${index + 1}`;
 
   const inner = type === "placeholder" || !src
-    ? `<span class="media-thumb__placeholder">Soon</span>`
+    ? `<span class="media-thumb__placeholder">${labels.soon}</span>`
     : type === "video"
       ? `<span class="media-thumb__video-wrap">
          <video class="media-thumb__asset" muted playsinline preload="metadata">
@@ -223,7 +247,7 @@ function renderMediaViewer(product, content, labels) {
           <button class="media-nav media-nav--prev" id="media-prev" type="button" aria-label="${labels.previous}">&lsaquo;</button>
 
           <div class="media-stage__inner" id="media-stage-inner">
-            ${renderMainMedia(activeMedia, content.name)}
+            ${renderMainMedia(activeMedia, content.name, labels)}
           </div>
 
           <button class="media-nav media-nav--next" id="media-next" type="button" aria-label="${labels.next}">&rsaquo;</button>
@@ -244,7 +268,7 @@ function renderMediaViewer(product, content, labels) {
     </article>`;
 }
 
-function renderBatterySelector(product, labels) {
+function renderBatterySelector(product, labels, lang) {
   if (!product.config) return "";
 
   return `
@@ -257,7 +281,7 @@ function renderBatterySelector(product, labels) {
       </div>
       <div class="battery-selector__readout">
         <p>${labels.capacity}: <strong><span id="capacity"></span> kWh</strong></p>
-        <p>${labels.price}: <strong><span id="price"></span> SEK</strong></p>
+        <p>${labels.price}: <strong>${commerceVisibility.showPrices ? `<span id="price"></span> SEK` : getPricingComingSoonLabel(lang)}</strong></p>
       </div>
     </div>`;
 }
@@ -270,7 +294,18 @@ function renderModularityCopy(product, labels) {
   const min = product.config.minBatteries;
   const max = product.config.maxBatteries;
   const capacity = product.config.capacityPerBattery;
+  if (typeof labels.modularityConfig === "function") {
+    return labels.modularityConfig({ min, max, capacity });
+  }
   return `Configure from ${min} to ${max} modules at ${capacity} kWh per module. Final capacity depends on selected modules and setup.`;
+}
+
+function getDisplayPrice(product, labels, lang = "en") {
+  if (!commerceVisibility.showPrices) {
+    return getPricingComingSoonLabel(lang);
+  }
+
+  return product.price === "Coming soon" ? labels.comingSoon : product.price;
 }
 
 function renderLightbox(labels) {
@@ -296,6 +331,11 @@ export function renderProductDetailPage({ lang, slug, route }) {
 
   const content = getProductContent(product, lang);
   const labels = getDetailCopy(lang);
+  const platformUseCases = PLATFORM_USE_CASES_BY_LANG[lang] ?? PLATFORM_USE_CASES;
+  const trustPoints = TRUST_POINTS_BY_LANG[lang] ?? TRUST_POINTS;
+  const visibleFaq = commerceVisibility.showPrices
+    ? content.faq
+    : content.faq.filter((item) => !/(price|pris|SEK|kr|€)/i.test(item));
 
   return `
     ${renderLightbox(labels)}
@@ -305,11 +345,11 @@ export function renderProductDetailPage({ lang, slug, route }) {
 
       <article class="detail-copy">
         <span class="eyebrow">${t(lang, "detailEyebrow")}</span>
-        <div class="price-badge" data-commerce-price="${product.slug}">${product.price}</div>
+        <div class="price-badge" data-commerce-price="${product.slug}">${getDisplayPrice(product, labels, lang)}</div>
         <h1>${content.name}</h1>
         <p>${content.intro}</p>
 
-        ${renderBatterySelector(product, labels)}
+        ${renderBatterySelector(product, labels, lang)}
 
         <div class="detail-actions">
           ${product.buyEnabled === false
@@ -330,7 +370,7 @@ export function renderProductDetailPage({ lang, slug, route }) {
         <article class="detail-platform-panel">
           <span class="eyebrow">${labels.whoFor}</span>
           <div class="detail-pill-grid">
-            ${PLATFORM_USE_CASES.map((item) => `<span class="detail-platform-pill">${item}</span>`).join("")}
+            ${platformUseCases.map((item) => `<span class="detail-platform-pill">${item}</span>`).join("")}
           </div>
         </article>
         <article class="detail-platform-panel">
@@ -351,7 +391,7 @@ export function renderProductDetailPage({ lang, slug, route }) {
         <article class="detail-trust-band">
           <span class="eyebrow">${labels.trustTitle}</span>
           <div class="detail-trust-points">
-            ${TRUST_POINTS.map((point) => `<span>${point}</span>`).join("")}
+            ${trustPoints.map((point) => `<span>${point}</span>`).join("")}
           </div>
         </article>
       </div>
@@ -369,7 +409,7 @@ export function renderProductDetailPage({ lang, slug, route }) {
           <h3>${t(lang, "detailSupport")}</h3>
           <ul class="support-list thin-divider-list">
             <li>${content.summary}</li>
-            <li>${product.price}</li>
+            <li>${getDisplayPrice(product, labels, lang)}</li>
             <li>${t(lang, "productCardStatus")}</li>
           </ul>
         </article>
@@ -408,7 +448,7 @@ export function renderProductDetailPage({ lang, slug, route }) {
         <article class="detail-content-panel">
           <h3>${t(lang, "detailFaq")}</h3>
           <ul class="faq-list thin-divider-list">
-            ${content.faq.map((item) => `<li>${item}</li>`).join("")}
+            ${visibleFaq.map((item) => `<li>${item}</li>`).join("")}
           </ul>
         </article>
       </div>
@@ -438,6 +478,7 @@ function setMainStageContent(media, fallbackAlt) {
   const type = media?.type ?? "image";
   const src = media?.src ?? "";
   const alt = media?.alt ?? fallbackAlt;
+  const labels = getDetailCopy(document.documentElement.lang || "en");
 
   if (type === "video") {
     stage.innerHTML = `<video id="detail-main-media" class="media-main-asset"
@@ -445,7 +486,7 @@ function setMainStageContent(media, fallbackAlt) {
                          <source src="${src}">${alt}</video>`;
   } else if (type === "placeholder" || !src) {
     stage.innerHTML = `<div id="detail-main-media" class="media-main-asset media-placeholder" role="img" aria-label="${alt}">
-                         <span>Coming soon</span>
+                         <span>${labels.comingSoon}</span>
                        </div>`;
   } else {
     stage.innerHTML = `<img id="detail-main-media" class="media-main-asset" src="${src}" alt="${alt}">`;
@@ -456,6 +497,7 @@ function setLightboxContent(lbStage, media, fallbackAlt) {
   const type = media?.type ?? "image";
   const src = media?.src ?? "";
   const alt = media?.alt ?? fallbackAlt;
+  const labels = getDetailCopy(document.documentElement.lang || "en");
 
   if (type === "video") {
     lbStage.innerHTML = `<video class="lightbox__asset" controls playsinline preload="metadata"
@@ -463,7 +505,7 @@ function setLightboxContent(lbStage, media, fallbackAlt) {
                            <source src="${src}">${alt}</video>`;
   } else if (type === "placeholder" || !src) {
     lbStage.innerHTML = `<div class="lightbox__asset media-placeholder" role="img" aria-label="${alt}">
-                           <span>Coming soon</span>
+                           <span>${labels.comingSoon}</span>
                          </div>`;
   } else {
     lbStage.innerHTML = `<img class="lightbox__asset" src="${src}" alt="${alt}">`;
@@ -579,7 +621,9 @@ export function afterRenderProductDetail(product) {
   const content = getProductContent(product, lang);
 
   initProductMediaViewer(product, content);
-  hydrateCommercePrice(product, lang);
+  if (commerceVisibility.showPrices) {
+    hydrateCommercePrice(product, lang);
+  }
 
   const button = document.getElementById("add-to-cart");
 
@@ -594,13 +638,13 @@ export function afterRenderProductDetail(product) {
     const priceEl = document.getElementById("price");
     const capacityEl = document.getElementById("capacity");
 
-    if (!minus || !plus || !countEl || !priceEl || !capacityEl) return;
+    if (!minus || !plus || !countEl || !capacityEl) return;
 
     batteryCount = product.config.minBatteries;
 
     function update() {
       countEl.innerText = batteryCount;
-      priceEl.innerText = calculatePrice(product).toLocaleString("sv-SE");
+      if (priceEl) priceEl.innerText = calculatePrice(product).toLocaleString("sv-SE");
       capacityEl.innerText = calculateCapacity(product);
     }
 

@@ -650,6 +650,12 @@
   line-height: 1.55;
 }
 
+@media (min-width: 1121px) {
+  .solution-page-timeline--field .solution-page-step h3 {
+    min-height: 2.75rem;
+  }
+}
+
 @media (max-width: 1120px) {
   .solutions-overview-cards {
     grid-template-columns: 1fr;

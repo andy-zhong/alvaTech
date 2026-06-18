@@ -61,9 +61,9 @@ export const SOLAR_TRACKING_PRODUCT = {
     },
     sv: {
       name: "Solar tracking system",
-      summary: "En framtida solfokuserad utokning for fritidshussetup som vill nyttja tillgangligt dagsljus battre.",
+      summary: "En framtida solfokuserad utökning för fritidshussetup som vill nyttja tillgängligt dagsljus bättre.",
       intro:
-        "Solar tracking system ar en separat solfokuserad utokning planerad runt Voltrix for fritidshus. Det ar inte ett enkelt plug-on-tillbehor for Battery Pack.",
+        "Solar tracking system är en separat solfokuserad utökning planerad runt Voltrix för fritidshus. Det är inte ett enkelt plug-on-tillbehör för Battery Pack.",
       features: [
         "Framtida solfokuserad utökning",
         "Planerad för fritidshus och utomhusrutiner",
@@ -71,24 +71,24 @@ export const SOLAR_TRACKING_PRODUCT = {
         "Pris och tillgänglighet bekräftas senare",
       ],
       certifications: [
-        "Coming soon",
+        "Kommer snart",
         "Slutlig specifikation, installationskrav och pris bekräftas senare",
       ],
       specs: [
-        { label: "Status", value: "Coming soon" },
+        { label: "Status", value: "Kommer snart" },
         { label: "Användning", value: "Solfokuserad utökning" },
         { label: "Plattform", value: "Voltrix fritidshussetup" },
-        { label: "Pris", value: "Inte inkluderat an" },
+        { label: "Pris", value: "Inte inkluderat än" },
       ],
       useCases: [
-        "Solplanering for fritidshus",
-        "Utomhusrutiner med tillgangligt dagsljus",
-        "Framtida utokning runt Voltrix-plattformen",
+        "Solplanering för fritidshus",
+        "Utomhusrutiner med tillgängligt dagsljus",
+        "Framtida utökning runt Voltrix-plattformen",
       ],
       faq: [
-        "Ar den tillganglig nu? Inte an, den ar planerad som en framtida utokning.",
-        "Ar det ett enkelt Battery Pack-tillbehor? Nej, det ar en separat solfokuserad utokning.",
-        "Ar priset inkluderat? Nej, priset ar inte inkluderat an.",
+        "Är den tillgänglig nu? Inte än, den är planerad som en framtida utökning.",
+        "Är det ett enkelt Battery Pack-tillbehör? Nej, det är en separat solfokuserad utökning.",
+        "Är priset inkluderat? Nej, priset är inte inkluderat än.",
       ],
     },
   },

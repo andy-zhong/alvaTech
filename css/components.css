@@ -678,6 +678,12 @@ body:not([data-page="checkout"]) .product-card > img {
   font-size: clamp(1.2rem, 2vw, 1.75rem);
 }
 
+.setup-estimator__metric--placeholder strong {
+  color: rgba(15, 42, 36, 0.56);
+  font-size: 0.92rem;
+  letter-spacing: 0;
+}
+
 .setup-estimator__result-notes {
   display: grid;
   gap: 4px;

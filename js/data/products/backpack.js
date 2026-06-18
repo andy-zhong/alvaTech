@@ -67,18 +67,18 @@ export const BACKPACK_PRODUCT = {
         "Backpack Power hjälper till att bära användbar energi bortom väggen, från servicebilen eller den fasta setupen till platsen där uppgiften sker.",
       features: [
         "Byggd runt Voltrix Battery Pack-plattformen",
-        "Stöd för sista metern i utvalda utomhus- och arbetsrutiner",
+        "Stöd för praktisk energi där arbetet sker i utvalda utomhus- och arbetsrutiner",
         "Användbar för trädgårdsprojekt, mobila uppgifter och serviceflöden",
-        "Haller Battery Packs organiserade nar de flyttas mellan platser",
+        "Håller Battery Packs organiserade när de flyttas mellan platser",
       ],
       certifications: [
-        "Utformad for Voltrix Battery Pack-plattformen",
-        "Slutlig setup beror pa valda Battery Packs och inverterkonfiguration",
+        "Utformad för Voltrix Battery Pack-plattformen",
+        "Slutlig setup beror på valda Battery Packs och inverterkonfiguration",
       ],
       specs: [
         { label: "Plattform", value: "Voltrix Battery Pack" },
-        { label: "Anvandning", value: "Portabelt bartillbehor" },
-        { label: "Typisk rutin", value: "Utomhusuppgifter och sista metern" },
+        { label: "Användning", value: "Portabelt bärtillbehör" },
+        { label: "Typisk rutin", value: "Utomhusaktiviteter och praktisk energi där arbetet sker" },
         { label: "Prisbas", value: "Endast tillbehör" },
       ],
       useCases: [
@@ -89,7 +89,7 @@ export const BACKPACK_PRODUCT = {
       faq: [
         "Ingår Battery Packs? Nej, det är ett tillbehör runt Battery Pack-plattformen.",
         "Är det ett komplett energisystem? Nej, användningen beror på valda Battery Packs och invertersetup.",
-        "Kan det användas av installatörer? Ja, för utvalda sista-meter-uppgifter där energin behöver flyttas närmare.",
+        "Kan det användas av installatörer? Ja, för utvalda arbetsmoment där energin behöver flyttas närmare.",
       ],
     },
   },

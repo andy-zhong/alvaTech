@@ -12,6 +12,7 @@ import {
   createStripePaymentElement,
   isStripeCheckoutConfigured,
 } from "../services/stripe-checkout.js";
+import { commerceVisibility, getCheckoutDisabledMessage } from "../config/commerce-visibility.js";
 
 // Render
 
@@ -19,6 +20,20 @@ import {
 export function renderCheckoutPage({ lang }) {
   const cart = JSON.parse(localStorage.getItem("cart")) || [];
   const copy = getCheckoutCopy(lang);
+
+  if (!commerceVisibility.allowCheckout) {
+    return `
+      <section class="section">
+        <article class="empty-state checkout-disabled-state">
+          <h1>${getCheckoutDisabledTitle(lang)}</h1>
+          <p class="muted">${getCheckoutDisabledMessage(lang)}</p>
+          <div class="checkout-disabled-state__actions">
+            <a class="button button--secondary" href="/views/buy-product.html">${copy.editCart}</a>
+            <a class="button button--primary" href="/views/b2b.html">${getContactAlvaLabel(lang)}</a>
+          </div>
+        </article>
+      </section>`;
+  }
 
   if (cart.length === 0) {
     return `
@@ -203,6 +218,8 @@ function renderSummaryItem(item, lang) {
 
 
 export function bindCheckoutPage({ lang }) {
+  if (!commerceVisibility.allowCheckout) return;
+
   const form      = document.getElementById("checkout-form");
   const submitBtn = document.getElementById("submit-btn");
   const formError = document.getElementById("form-error");
@@ -558,6 +575,14 @@ function buildPayload(lang) {
 
 function getLocalCart() {
   return JSON.parse(localStorage.getItem("cart")) || [];
+}
+
+function getCheckoutDisabledTitle(lang = "en") {
+  return lang === "sv" ? "Kassan är tillfälligt avstängd" : "Checkout temporarily disabled";
+}
+
+function getContactAlvaLabel(lang = "en") {
+  return lang === "sv" ? "Kontakta Alva" : "Contact Alva";
 }
 
 function getCheckoutCopy(lang) {

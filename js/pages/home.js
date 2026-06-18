@@ -8,10 +8,52 @@ const HERO_SCENARIOS = ["summerHouse", "field"];
 const HERO_ROTATION_DELAY_MS = 7000;
 const HERO_MANUAL_PAUSE_MS = 9000;
 const HERO_COPY_SWITCH_DELAY_MS = 260;
+const APP_SHOWCASE_INTERVAL_MS = 4600;
+const APP_DOWNLOAD_COPY = {
+  en: {
+    label: "Download the app",
+    body: "Scan to get started with the Voltrix app.",
+  },
+  sv: {
+    label: "Ladda ner appen",
+    body: "Skanna för att komma igång med Voltrix-appen.",
+  },
+};
+const APP_SHOWCASE_SLIDES = [
+  {
+    src: "/Picture/products/apps/voltrix_app_effortless.png",
+    width: 318,
+    height: 692,
+    alt: {
+      en: "Voltrix app home screen showing effortless energy control",
+      sv: "Voltrix-appens startvy för enkel energikontroll",
+    },
+  },
+  {
+    src: "/Picture/products/apps/voltrix_app_energy-efficient.png",
+    width: 333,
+    height: 695,
+    alt: {
+      en: "Voltrix app screen showing energy-efficient usage insight",
+      sv: "Voltrix-appvy med energiinsikt",
+    },
+  },
+  {
+    src: "/Picture/products/apps/voltrix_app_add.png",
+    width: 1125,
+    height: 2436,
+    alt: {
+      en: "Voltrix app screen for adding a device",
+      sv: "Voltrix-appvy för att lägga till en enhet",
+    },
+  },
+];
+let appShowcaseCleanup = null;
 
 export function renderHomePage({ lang }) {
   const content = getPlatformContent(lang);
   const defaultScenario = content.heroScenarios.summerHouse;
+  const appDownload = APP_DOWNLOAD_COPY[lang] ?? APP_DOWNLOAD_COPY.en;
 
   return `
     <section class="platform-hero" aria-labelledby="home-hero-title" data-platform-hero>
@@ -96,7 +138,7 @@ export function renderHomePage({ lang }) {
             <img src="/Picture/products/voltrix/voltrix02.png" alt="Voltrix 5-Pack Kit">
           </figure>
           <div class="platform-product-feature__copy">
-            <span class="platform-product-feature__label">Fixed 5 kWh starting setup</span>
+            <span class="platform-product-feature__label">${content.productFit.label ?? "Fixed 5 kWh starting setup"}</span>
             <p>${content.productFit.note ?? content.productTierNote}</p>
           </div>
         </div>
@@ -104,34 +146,31 @@ export function renderHomePage({ lang }) {
     </section>
 
     <section class="platform-home-section platform-home-section--milk" aria-labelledby="smart-title">
-      <div class="home-section-inner platform-smart-layout">
-        <div class="platform-section-head platform-section-head--narrow">
-          <div>
+      <div class="home-section-inner">
+        <div class="platform-smart-showcase" data-app-showcase>
+          <div class="platform-smart-copy reveal">
             <span class="platform-eyebrow">${content.smartFeatures.eyebrow}</span>
             <h2 id="smart-title">${content.smartFeatures.title}</h2>
             <p>${content.smartFeatures.intro}</p>
+            <ul class="platform-smart-list">
+              ${content.smartFeatures.items.map((item) => `
+                <li>
+                  <strong>${item.title}</strong>
+                  <span>${item.body}</span>
+                </li>
+              `).join("")}
+            </ul>
           </div>
-        </div>
-        <div class="platform-smart-body">
-          <div class="platform-phone-mockup reveal" aria-hidden="true">
-            <div class="platform-phone-screen">
-              <span></span>
-              <strong>78%</strong>
-              <small>${content.smartFeatures.phoneLabel}</small>
-              <i></i>
+
+          ${renderAppShowcase(lang)}
+
+          <aside class="platform-app-download reveal" aria-label="${appDownload.label}">
+            <img src="/Picture/products/apps/qr_code.png" alt="${appDownload.label}" width="339" height="331" loading="lazy">
+            <div>
+              <strong>${appDownload.label}</strong>
+              <span>${appDownload.body}</span>
             </div>
-          </div>
-          <div class="platform-feature-grid platform-feature-grid--stacked">
-            ${content.smartFeatures.items.map((item, index) => `
-              <article class="platform-feature-card reveal" style="--delay:${(index * 0.08).toFixed(2)}s">
-                <div class="platform-card-kicker">
-                  ${renderIcon(FEATURE_ICONS[index])}
-                </div>
-                <h3>${item.title}</h3>
-                <p>${item.body}</p>
-              </article>
-            `).join("")}
-          </div>
+          </aside>
         </div>
       </div>
     </section>
@@ -166,6 +205,7 @@ export function renderHomePage({ lang }) {
 export function bindHomePage({ lang }) {
   bindScenarioTabs(lang);
   bindSolutionShowcase();
+  bindAppShowcase();
   bindSetupEstimator();
   initScrollReveal();
 }
@@ -225,13 +265,51 @@ function renderSolutionShowcase(platform, solutions) {
           <p>${platform.body}</p>
         </div>
 
+        <div class="platform-solution-mobile-indicator" role="tablist" aria-label="Voltrix platform mobile solutions">
+          ${solutions.map((solution, index) => renderSolutionMobileIndicator(solution, index)).join("")}
+        </div>
+
         <div class="platform-solution-tabs" role="tablist" aria-label="Voltrix platform solutions">
-          ${solutions.map((solution, index) => renderSolutionTab(solution, index)).join("")}
+          ${solutions.map((solution, index) => renderSolutionSlide(solution, index)).join("")}
         </div>
       </div>
 
       <div class="platform-solution-panels" data-solution-panels hidden>
         ${solutions.map((solution) => renderSolutionDetail(solution)).join("")}
+      </div>
+    </div>
+  `;
+}
+
+function renderAppShowcase(lang) {
+  const regionLabel = lang === "sv" ? "Voltrix-appens skärmar" : "Voltrix app screens";
+  const controlsLabel = lang === "sv" ? "Välj appvy" : "Choose app screen";
+  const dotLabel = lang === "sv" ? "Visa appvy" : "Show app screen";
+
+  return `
+    <div class="platform-app-showcase reveal" role="region" aria-label="${regionLabel}">
+      <div class="platform-app-stage">
+        ${APP_SHOWCASE_SLIDES.map((slide, index) => `
+          <figure class="platform-app-slide ${index === 0 ? "is-active" : ""}" data-app-slide="${index}" aria-hidden="${index === 0 ? "false" : "true"}">
+            <img
+              src="${slide.src}"
+              alt="${slide.alt[lang] ?? slide.alt.en}"
+              width="${slide.width}"
+              height="${slide.height}"
+              ${index === 0 ? 'fetchpriority="high"' : 'loading="lazy"'}>
+          </figure>
+        `).join("")}
+      </div>
+      <div class="platform-app-controls" aria-label="${controlsLabel}">
+        ${APP_SHOWCASE_SLIDES.map((_, index) => `
+          <button
+            class="platform-app-dot ${index === 0 ? "is-active" : ""}"
+            type="button"
+            aria-label="${dotLabel} ${index + 1}"
+            aria-current="${index === 0 ? "true" : "false"}"
+            data-app-dot="${index}">
+          </button>
+        `).join("")}
       </div>
     </div>
   `;
@@ -275,6 +353,28 @@ function renderAddOnItem(item, index) {
   `;
 }
 
+function renderSolutionMobileIndicator(solution, index) {
+  const isActive = index === 0;
+
+  return `
+    <button
+      class="platform-solution-mobile-indicator__button ${isActive ? "is-active" : ""}"
+      type="button"
+      aria-selected="${isActive ? "true" : "false"}"
+      data-solution-indicator="${solution.id}">
+      ${solution.label}
+    </button>
+  `;
+}
+
+function renderSolutionSlide(solution, index) {
+  return `
+    <div class="platform-solution-slide" data-solution-slide="${solution.id}">
+      ${renderSolutionTab(solution, index)}
+    </div>
+  `;
+}
+
 function renderSolutionTab(solution, index) {
   const visualClass = solution.id === "field" ? "platform-solution-tab__image--field" : "platform-solution-tab__image--summer";
 
@@ -294,7 +394,7 @@ function renderSolutionTab(solution, index) {
         <small>${solution.label}</small>
         <strong>${solution.title}</strong>
         <span>${solution.body}</span>
-        <span class="platform-solution-tab__cta">Explore solution <b aria-hidden="true">&rarr;</b></span>
+        <span class="platform-solution-tab__cta">${solution.cta ?? "Explore solution"} <b aria-hidden="true">&rarr;</b></span>
       </span>
     </button>
   `;
@@ -358,6 +458,23 @@ function bindScenarioTabs(lang) {
   let activeScenario = "summerHouse";
   let rotationTimer;
   let copyTimer;
+  let touchStartX = 0;
+  let touchStartY = 0;
+
+  function handleSwipe(deltaX, deltaY) {
+    if (!window.matchMedia("(max-width: 860px)").matches) return;
+    if (Math.abs(deltaX) < 44 || Math.abs(deltaX) < Math.abs(deltaY) * 1.25) return;
+
+    const currentIndex = HERO_SCENARIOS.indexOf(activeScenario);
+    const nextIndex = deltaX < 0
+      ? Math.min(currentIndex + 1, HERO_SCENARIOS.length - 1)
+      : Math.max(currentIndex - 1, 0);
+    const nextScenario = HERO_SCENARIOS[nextIndex];
+
+    if (nextScenario && nextScenario !== activeScenario) {
+      setScenario(nextScenario, { manual: true });
+    }
+  }
 
   function stopRotation() {
     clearTimeout(rotationTimer);
@@ -421,6 +538,30 @@ function bindScenarioTabs(lang) {
     tab.addEventListener("click", () => setScenario(tab.dataset.scenario, { manual: true }));
   });
 
+  root.addEventListener("touchstart", (event) => {
+    if (!window.matchMedia("(max-width: 860px)").matches) return;
+    const touch = event.touches[0];
+    touchStartX = touch.clientX;
+    touchStartY = touch.clientY;
+  }, { passive: true });
+
+  root.addEventListener("touchend", (event) => {
+    if (!window.matchMedia("(max-width: 860px)").matches) return;
+    const touch = event.changedTouches[0];
+    handleSwipe(touch.clientX - touchStartX, touch.clientY - touchStartY);
+  }, { passive: true });
+
+  root.addEventListener("pointerdown", (event) => {
+    if (!window.matchMedia("(max-width: 860px)").matches) return;
+    touchStartX = event.clientX;
+    touchStartY = event.clientY;
+  });
+
+  root.addEventListener("pointerup", (event) => {
+    if (!window.matchMedia("(max-width: 860px)").matches) return;
+    handleSwipe(event.clientX - touchStartX, event.clientY - touchStartY);
+  }, { passive: true });
+
   scheduleRotation();
 }
 
@@ -429,12 +570,16 @@ function bindSolutionShowcase() {
   if (!root) return;
 
   const tabs = [...root.querySelectorAll("[data-solution-tab]")];
+  const slides = [...root.querySelectorAll("[data-solution-slide]")];
+  const indicators = [...root.querySelectorAll("[data-solution-indicator]")];
   const panels = [...root.querySelectorAll("[data-solution-panel]")];
   const panelsRoot = root.querySelector("[data-solution-panels]");
+  const tabsRoot = root.querySelector(".platform-solution-tabs");
   const layout = root.querySelector(".platform-solution-layout");
   const mobileQuery = window.matchMedia("(max-width: 860px)");
   let activeId = null;
   let switchTimer;
+  let scrollTimer;
 
   function updateTabs(id) {
     tabs.forEach((tab) => {
@@ -448,6 +593,36 @@ function bindSolutionShowcase() {
       if (arrow) {
         arrow.textContent = isActive ? "\u2193" : "\u2192";
       }
+    });
+  }
+
+  function updateMobileIndicator(id) {
+    indicators.forEach((indicator) => {
+      const isActive = indicator.dataset.solutionIndicator === id;
+      indicator.classList.toggle("is-active", isActive);
+      indicator.setAttribute("aria-selected", isActive ? "true" : "false");
+    });
+  }
+
+  function getNearestSlideId() {
+    if (!tabsRoot || !slides.length) return null;
+
+    const rootLeft = tabsRoot.getBoundingClientRect().left;
+    return slides.reduce((nearest, slide) => {
+      const distance = Math.abs(slide.getBoundingClientRect().left - rootLeft);
+      return distance < nearest.distance
+        ? { id: slide.dataset.solutionSlide, distance }
+        : nearest;
+    }, { id: slides[0].dataset.solutionSlide, distance: Infinity }).id;
+  }
+
+  function scrollToSlide(id) {
+    if (!mobileQuery.matches) return;
+    const slide = slides.find((item) => item.dataset.solutionSlide === id);
+    slide?.scrollIntoView({
+      behavior: window.matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth",
+      block: "nearest",
+      inline: "start",
     });
   }
 
@@ -497,6 +672,8 @@ function bindSolutionShowcase() {
     }
 
     updateTabs(id);
+    updateMobileIndicator(id);
+    scrollToSlide(id);
 
     const showPanel = () => {
       panels.forEach((panel) => {
@@ -531,11 +708,141 @@ function bindSolutionShowcase() {
     tab.addEventListener("click", () => setSolution(tab.dataset.solutionTab));
   });
 
+  indicators.forEach((indicator) => {
+    indicator.addEventListener("click", () => {
+      const id = indicator.dataset.solutionIndicator;
+      updateMobileIndicator(id);
+      scrollToSlide(id);
+    });
+  });
+
+  tabsRoot?.addEventListener("scroll", () => {
+    if (!mobileQuery.matches) return;
+
+    clearTimeout(scrollTimer);
+    scrollTimer = setTimeout(() => {
+      const id = getNearestSlideId();
+      if (id) updateMobileIndicator(id);
+    }, 80);
+  }, { passive: true });
+
   mobileQuery.addEventListener("change", () => {
     if (activeId && panelsRoot && !panelsRoot.hidden) {
       placePanels(activeId);
     }
   });
+
+  updateMobileIndicator(slides[0]?.dataset.solutionSlide);
+}
+
+function bindAppShowcase() {
+  const root = document.querySelector("[data-app-showcase]");
+  appShowcaseCleanup?.();
+  appShowcaseCleanup = null;
+
+  if (!root) return;
+
+  const carousel = root.querySelector(".platform-app-showcase");
+  const slides = [...root.querySelectorAll("[data-app-slide]")];
+  const dots = [...root.querySelectorAll("[data-app-dot]")];
+  const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
+  let activeIndex = 0;
+  let timer = null;
+  let isPaused = false;
+  let pointerStartX = 0;
+  let pointerStartY = 0;
+  const cleanupHandlers = [];
+
+  if (!carousel || !slides.length) return;
+
+  function on(target, type, handler, options) {
+    target.addEventListener(type, handler, options);
+    cleanupHandlers.push(() => target.removeEventListener(type, handler, options));
+  }
+
+  function setSlide(index, options = {}) {
+    const nextIndex = (index + slides.length) % slides.length;
+    activeIndex = nextIndex;
+
+    slides.forEach((slide, slideIndex) => {
+      const isActive = slideIndex === nextIndex;
+      slide.classList.toggle("is-active", isActive);
+      slide.setAttribute("aria-hidden", isActive ? "false" : "true");
+    });
+
+    dots.forEach((dot, dotIndex) => {
+      const isActive = dotIndex === nextIndex;
+      dot.classList.toggle("is-active", isActive);
+      dot.setAttribute("aria-current", isActive ? "true" : "false");
+      dot.setAttribute("aria-selected", isActive ? "true" : "false");
+    });
+
+    if (options.manual) {
+      restartAutoplay();
+    }
+  }
+
+  function stopAutoplay() {
+    clearInterval(timer);
+    timer = null;
+  }
+
+  function startAutoplay() {
+    if (reducedMotion.matches || isPaused || slides.length < 2 || timer) return;
+    timer = setInterval(() => setSlide(activeIndex + 1), APP_SHOWCASE_INTERVAL_MS);
+  }
+
+  function restartAutoplay() {
+    stopAutoplay();
+    startAutoplay();
+  }
+
+  function pause() {
+    isPaused = true;
+    stopAutoplay();
+  }
+
+  function resume() {
+    isPaused = false;
+    startAutoplay();
+  }
+
+  function handleSwipe(deltaX, deltaY) {
+    if (Math.abs(deltaX) < 42 || Math.abs(deltaX) < Math.abs(deltaY) * 1.4) return;
+    setSlide(activeIndex + (deltaX < 0 ? 1 : -1), { manual: true });
+  }
+
+  dots.forEach((dot) => {
+    on(dot, "click", () => setSlide(Number(dot.dataset.appDot), { manual: true }));
+  });
+
+  on(carousel, "pointerenter", pause);
+  on(carousel, "pointerleave", resume);
+  on(carousel, "focusin", pause);
+  on(carousel, "focusout", resume);
+
+  on(carousel, "pointerdown", (event) => {
+    pointerStartX = event.clientX;
+    pointerStartY = event.clientY;
+  }, { passive: true });
+
+  on(carousel, "pointerup", (event) => {
+    handleSwipe(event.clientX - pointerStartX, event.clientY - pointerStartY);
+  }, { passive: true });
+
+  const handleReducedMotionChange = () => {
+    stopAutoplay();
+    startAutoplay();
+  };
+  on(reducedMotion, "change", handleReducedMotionChange);
+
+  appShowcaseCleanup = () => {
+    stopAutoplay();
+    cleanupHandlers.forEach((cleanup) => cleanup());
+    cleanupHandlers.length = 0;
+  };
+
+  startAutoplay();
 }
 
 function initScrollReveal() {

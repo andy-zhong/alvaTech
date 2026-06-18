@@ -7,6 +7,12 @@ import {
   syncLocalCartToVendure,
 } from "../services/vendure-cart-sync.js";
 import { refreshCartPricesFromBackend } from "../services/commerce-catalog.js";
+import {
+  commerceVisibility,
+  getCheckoutDisabledMessage,
+  getOnlineOrderingComingSoonMessage,
+  getPricingComingSoonLabel,
+} from "../config/commerce-visibility.js";
 
 const CART_NOTICE_KEY = "alva-cart-notice";
 let cartModificationLocked = false;
@@ -76,6 +82,30 @@ function getCartCopy(lang) {
   return CART_COPY[lang] ?? CART_COPY.en;
 }
 
+function getRequestQuoteLabel(lang) {
+  return lang === "sv" ? "Begär offert" : "Request quote";
+}
+
+function getCartSummaryNote(lang, hasPlanningEstimate) {
+  if (!commerceVisibility.allowCheckout) {
+    return getCheckoutDisabledMessage(lang);
+  }
+
+  return hasPlanningEstimate
+    ? "Planning estimates are not live Vendure order lines. Request quote to confirm configuration."
+    : t(lang, "cartTaxNote");
+}
+
+function renderCartPricePlaceholder(lang) {
+  return `<span class="commerce-placeholder">${getPricingComingSoonLabel(lang)}</span>`;
+}
+
+function shouldRenderPlanningDetail(detail) {
+  if (commerceVisibility.showEstimatorPrices) return true;
+  const text = Array.isArray(detail) ? detail.join(" ") : String(detail || "");
+  return !/(price|pris|SEK|kr|€)/i.test(text);
+}
+
 // ─────────────────────────────────────────────────────────────────────────────
 // Render
 // ─────────────────────────────────────────────────────────────────────────────
@@ -105,9 +135,11 @@ export function renderBuyProductPage({ lang, route }) {
   const grandTotal = realCart.reduce((sum, item) => sum + item.unitPrice * (item.quantity || 1), 0);
   const itemCount  = cart.reduce((sum, item) => sum + (item.quantity || 1), 0);
   const notice = consumeCartNotice();
-  const primaryHref = hasPlanningEstimate ? "/views/b2b.html" : "/views/checkout.html";
-  const primaryLabel = hasPlanningEstimate ? "Request quote" : copy.checkout;
-  const primaryAttrs = hasPlanningEstimate ? "data-planning-quote-link" : "data-vendure-checkout-link";
+  const primaryHref = !commerceVisibility.allowCheckout || hasPlanningEstimate ? "/views/b2b.html" : "/views/checkout.html";
+  const primaryLabel = !commerceVisibility.allowCheckout || hasPlanningEstimate ? getRequestQuoteLabel(lang) : copy.checkout;
+  const primaryAttrs = !commerceVisibility.allowCheckout
+    ? "aria-disabled=\"true\" data-checkout-disabled"
+    : hasPlanningEstimate ? "data-planning-quote-link" : "data-vendure-checkout-link";
 
   return `
     <section class="section">
@@ -134,10 +166,12 @@ export function renderBuyProductPage({ lang, route }) {
 
           <div class="cart-summary__row cart-summary__row--total">
             <span>${t(lang, "cartTotal")}</span>
-            <span id="cart-grand-total">${hasRealItems ? `${grandTotal.toLocaleString("sv-SE")} SEK` : "Quote required"}</span>
+            <span id="cart-grand-total">${commerceVisibility.showPrices
+              ? hasRealItems ? `${grandTotal.toLocaleString("sv-SE")} SEK` : "Quote required"
+              : renderCartPricePlaceholder(lang)}</span>
           </div>
 
-          <p class="cart-summary__legal">${hasPlanningEstimate ? "Planning estimates are not live Vendure order lines. Request quote to confirm configuration." : t(lang, "cartTaxNote")}</p>
+          <p class="cart-summary__legal">${getCartSummaryNote(lang, hasPlanningEstimate)}</p>
 
           <div class="cart-actions">
             <a class="button button--primary" href="${primaryHref}" ${primaryAttrs}>
@@ -146,6 +180,7 @@ export function renderBuyProductPage({ lang, route }) {
             <a class="button button--secondary" href="/views/products.html">
               ${copy.continue}
             </a>
+            <p class="cart-actions__notice" data-commerce-disabled-message aria-live="polite" hidden></p>
           </div>
           <div class="cart-summary__sync-error cart-summary__sync-error--action" data-vendure-order-lock hidden>
             <span data-vendure-order-lock-message></span>
@@ -184,7 +219,7 @@ function renderCartLine(item, lang) {
           ${renderPurchaseAssurance(lang)}
         </div>
         <div class="cart-line__right">
-          <p class="cart-line__price">${lineTotal.toLocaleString("sv-SE")} SEK</p>
+          <p class="cart-line__price">${commerceVisibility.showPrices ? `${lineTotal.toLocaleString("sv-SE")} SEK` : renderCartPricePlaceholder(lang)}</p>
           <button class="cart-line__remove" data-item-id="${item.cartItemId}"
                   aria-label="${t(lang, "cartRemove")}">
             ${t(lang, "cartRemove")}
@@ -198,7 +233,7 @@ function renderCartLine(item, lang) {
       <img class="cart-line__img" src="${product.heroImage}" alt="${content.name}">
       <div class="cart-line__body">
         <p class="cart-line__name">${content.name}</p>
-        <p class="cart-line__meta">${item.unitPrice.toLocaleString("sv-SE")} SEK ${t(lang, "cartPerUnit")}</p>
+        <p class="cart-line__meta">${commerceVisibility.showPrices ? `${item.unitPrice.toLocaleString("sv-SE")} SEK ${t(lang, "cartPerUnit")}` : renderCartPricePlaceholder(lang)}</p>
         ${renderPurchaseAssurance(lang)}
         <div class="cart-quantity-stepper cart-line__qty">
           <button class="cart-quantity-stepper__button qty-decrease" data-item-id="${item.cartItemId}"
@@ -209,7 +244,7 @@ function renderCartLine(item, lang) {
         </div>
       </div>
       <div class="cart-line__right">
-        <p class="cart-line__price" data-price-id="${item.cartItemId}">${lineTotal.toLocaleString("sv-SE")} SEK</p>
+        <p class="cart-line__price" data-price-id="${item.cartItemId}">${commerceVisibility.showPrices ? `${lineTotal.toLocaleString("sv-SE")} SEK` : renderCartPricePlaceholder(lang)}</p>
         <button class="cart-line__remove" data-item-id="${item.cartItemId}"
                 aria-label="${t(lang, "cartRemove")}">
           ${t(lang, "cartRemove")}
@@ -240,7 +275,7 @@ function renderPurchaseAssurance(lang) {
 }
 
 function renderPlanningEstimateLine(item, lang) {
-  const details = Array.isArray(item.details) ? item.details : [];
+  const details = Array.isArray(item.details) ? item.details.filter(shouldRenderPlanningDetail) : [];
 
   return `
     <div class="cart-line cart-line--planning" data-item-id="${item.cartItemId}">
@@ -259,7 +294,7 @@ function renderPlanningEstimateLine(item, lang) {
         <p class="cart-line__meta">Request quote to confirm configuration.</p>
       </div>
       <div class="cart-line__right">
-        <p class="cart-line__price">${item.estimatedPriceRange || "Price range pending"}</p>
+        <p class="cart-line__price">${commerceVisibility.showEstimatorPrices ? item.estimatedPriceRange || getPricingComingSoonLabel(lang) : renderCartPricePlaceholder(lang)}</p>
         <button class="cart-line__remove" data-item-id="${item.cartItemId}"
                 aria-label="${t(lang, "cartRemove")}">
           ${t(lang, "cartRemove")}
@@ -274,7 +309,7 @@ function renderSummaryRow(item, lang) {
       <div class="cart-summary__row">
         <span style="max-width:180px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;"
               title="${item.title || "Estimated Voltrix setup"}">${item.title || "Estimated Voltrix setup"}</span>
-        <span>${item.estimatedPriceRange || "Quote"}</span>
+        <span>${commerceVisibility.showEstimatorPrices ? item.estimatedPriceRange || getPricingComingSoonLabel(lang) : renderCartPricePlaceholder(lang)}</span>
       </div>`;
   }
 
@@ -292,7 +327,7 @@ function renderSummaryRow(item, lang) {
     <div class="cart-summary__row">
       <span style="max-width:180px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;"
             title="${label}">${label}</span>
-      <span>${lineTotal.toLocaleString("sv-SE")} SEK</span>
+      <span>${commerceVisibility.showPrices ? `${lineTotal.toLocaleString("sv-SE")} SEK` : renderCartPricePlaceholder(lang)}</span>
     </div>`;
 }
 
@@ -303,10 +338,13 @@ function renderSummaryRow(item, lang) {
 export function afterRenderBuyProduct({ lang } = {}) {
   const activeLang = lang || getStoredLanguage();
   const checkoutLink = document.querySelector("[data-vendure-checkout-link]");
+  const disabledCheckoutLink = document.querySelector("[data-checkout-disabled]");
 
   cartModificationLocked = false;
-  hydrateCartOrderState(activeLang);
-  hydrateBackendCartSnapshot(activeLang);
+  if (commerceVisibility.allowCheckout) {
+    hydrateCartOrderState(activeLang);
+    if (commerceVisibility.showPrices) hydrateBackendCartSnapshot(activeLang);
+  }
 
   document.querySelectorAll(".cart-line__remove").forEach((btn) => {
     btn.addEventListener("click", () => {
@@ -327,7 +365,17 @@ export function afterRenderBuyProduct({ lang } = {}) {
     startNewCart();
   });
 
+  disabledCheckoutLink?.addEventListener("click", (event) => {
+    event.preventDefault();
+    showDisabledCommerceMessage(activeLang);
+  });
+
   checkoutLink?.addEventListener("click", async (event) => {
+    if (!commerceVisibility.allowCheckout) {
+      event.preventDefault();
+      return;
+    }
+
     if (!isVendureCartEnabled()) {
       return;
     }
@@ -394,8 +442,21 @@ function updateCartQuantity(cartItemId, delta, lang) {
   const totalEl = document.getElementById("cart-grand-total");
 
   if (qtyEl)   qtyEl.innerText   = newQty;
-  if (priceEl) priceEl.innerText = `${lineTotal.toLocaleString("sv-SE")} SEK`;
-  if (totalEl) totalEl.innerText = `${grandTotal.toLocaleString("sv-SE")} SEK`;
+  if (commerceVisibility.showPrices && priceEl) priceEl.innerText = `${lineTotal.toLocaleString("sv-SE")} SEK`;
+  if (commerceVisibility.showPrices && totalEl) totalEl.innerText = `${grandTotal.toLocaleString("sv-SE")} SEK`;
+}
+
+function showDisabledCommerceMessage(lang) {
+  const notice = document.querySelector("[data-commerce-disabled-message]");
+  if (!notice) return;
+
+  window.clearTimeout(showDisabledCommerceMessage.timer);
+  notice.textContent = getOnlineOrderingComingSoonMessage(lang);
+  notice.hidden = false;
+  showDisabledCommerceMessage.timer = window.setTimeout(() => {
+    notice.hidden = true;
+    notice.textContent = "";
+  }, 4200);
 }
 
 async function syncCartThenContinue(nextUrl, checkoutLink) {

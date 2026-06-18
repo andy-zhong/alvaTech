@@ -78,11 +78,11 @@ export const VOLTRIX_PRODUCT = {
     },
     sv: {
       name: "Voltrix 5-Pack Kit",
-      summary: "A fixed 5 kWh starting setup for seasonal homes, everyday energy support and expandable outdoor use.",
+      summary: "En fast 5 kWh-startsetup för fritidshus, vardagligt energistöd och expanderbar utomhusanvändning.",
       intro:
-        "Voltrix 5-Pack Kit is a fixed 5 kWh starting setup within the Starter range. It includes five NMC battery modules for seasonal homes, everyday energy support and expandable outdoor use.",
+        "Voltrix 5-Pack Kit är en fast 5 kWh-startsetup inom Starter-serien. Den innehåller fem NMC-batterimoduler för fritidshus, vardagligt energistöd och expanderbar utomhusanvändning.",
       features: [
-        "Fixed 5 kWh setup",
+        "Fast 5 kWh-setup",
         "2400 W toppeffekt på AC-utgång",
         "2400 W solinmatning med dubbel MPPT",
         "IP65-skydd mot damm och vatten",
@@ -97,9 +97,9 @@ export const VOLTRIX_PRODUCT = {
         "Nättyp: L+N+PE",
       ],
       specs: [
-        { label: "Battery chemistry", value: "NMC" },
+        { label: "Batterikemi", value: "NMC" },
         { label: "Kapacitet per modul", value: "1 kWh" },
-        { label: "Capacity", value: "5 kWh" },
+        { label: "Kapacitet", value: "5 kWh" },
         { label: "Max AC-utgång", value: "1600 VA nominell / 2400 VA topp" },
         { label: "Max solinmatning", value: "2400 W" },
         { label: "Antal MPPT", value: "2 oberoende" },

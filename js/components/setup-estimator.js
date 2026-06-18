@@ -1,3 +1,9 @@
+import {
+  commerceVisibility,
+  getPricingComingSoonLabel,
+  getQuantityEstimateOnlyLabel,
+} from "../config/commerce-visibility.js";
+
 export const PLANNING_PRICES = {
   batteryPack: 2990,
   voltDock: 3990,
@@ -10,7 +16,6 @@ export const PLANNING_PRICES = {
 const ESTIMATE_PREFILL_KEY = "alva-estimator-request-summary";
 const CART_NOTICE_KEY = "alva-cart-notice";
 const RANGE_DASH = "\u2013";
-const EM_DASH = "\u2014";
 const SQUARE_METERS = "m\u00b2";
 const MOBILE_ACCORDION_QUERY = "(max-width: 640px)";
 
@@ -29,28 +34,199 @@ const INSTALLER_ACCESSORIES = [
   { key: "bikeAccessory", label: "Bike accessory", priceKey: "bikeAccessory" },
 ];
 
-const SOLAR_OPTIONS = {
-  none: "No solar yet",
-  existing: "Existing solar",
-  tracking: "Solar tracking system",
-};
-
-const USAGE_OPTIONS = {
-  weekend: "Weekend use",
-  regular: "Regular summer use",
-  extended: "Extended stays",
-};
-
-const ROUTINE_OPTIONS = {
-  light: "Light support",
-  everyday: "Everyday installer routine",
-  extended: "Extended workday",
-};
-
 const CENTRALIZED_CHARGING_TEXT =
   "Charge Battery Packs at the office or workshop, bring them into the service van, and use practical power where the workday needs it.";
 
+const ESTIMATOR_COPY = {
+  en: {
+    eyebrow: "Planning estimate",
+    title: "Estimate your Voltrix setup.",
+    body: "Choose a use case and get a practical starting point for battery packs, accessories and an estimated planning price.",
+    summerScenario: "Summer house",
+    installerScenario: "Installer",
+    approximateSize: "Approx. summer house size",
+    usageRhythm: "Usage rhythm",
+    accessories: "Accessories",
+    solar: "Solar",
+    vansTeams: "Number of vans / teams",
+    workdayRoutine: "Workday routine",
+    resultSummer: "Summer house estimate",
+    resultInstaller: "Installer estimate",
+    requestQuote: "Request quote",
+    addToCart: "Add to cart",
+    addedToCart: "Added to cart",
+    planningPrices: "Planning prices only. Final quote may differ.",
+    kwhTitle: "What does 1 kWh mean?",
+    kwhBody: "1 kWh is useful everyday energy. As a rough guide, it can mean many hours of lighting and device charging, roughly 40–70 full phone charges, or part of a day to about a day of efficient fridge support depending on model and conditions.",
+    kwhNote: "Actual runtime depends on appliance power, temperature, charging losses and usage pattern.",
+    usageOptions: {
+      weekend: "Weekend use",
+      regular: "Regular summer use",
+      extended: "Extended stays",
+    },
+    routineOptions: {
+      light: "Light support",
+      everyday: "Everyday installer routine",
+      extended: "Extended workday",
+    },
+    solarOptions: {
+      none: "No solar yet",
+      existing: "Existing solar",
+      tracking: "Solar tracking system",
+    },
+    accessoryLabels: {
+      voltDock: "VoltDock",
+      backpackPowerMounting: "Backpack Power Mounting",
+      bikeAccessory: "Bike accessory",
+      extraBatteryPack: "Extra Battery Pack",
+      extraBatteryPacks: "Extra Battery Packs",
+      vanMounting: "Van mounting",
+    },
+    metrics: {
+      estimatedStorage: "Estimated storage",
+      batteryPacks: "Battery Packs",
+      recommendedInverters: "Recommended inverters",
+      estimatedPriceRange: "Estimated price range",
+      batteryPacksPerVan: "Battery Packs per van",
+      totalBatteryPacks: "Total Battery Packs",
+    },
+    notes: {
+      recommendedEmpty: "Recommended add-ons: Select accessories to include them in the planning estimate.",
+      recommendedPrefix: "Recommended add-ons",
+      noSolar: "No solar pricing included in this planning estimate.",
+      existingSolar: "Plan around the existing solar setup and confirm final configuration with a quote.",
+      tracking: "Solar tracking system: Coming soon — price not included.",
+      centralizedCharging: `Centralized charging: ${CENTRALIZED_CHARGING_TEXT}`,
+      noneSelected: "None selected",
+      finalNote: "Note: Based on preset planning prices. Final configuration and quote may differ.",
+      cartTitlePrefix: "Estimated Voltrix setup",
+      cartSubtitle: "Planning estimate, final quote may differ.",
+      cartNotice: "Planning estimate added to cart. Request quote to confirm configuration.",
+    },
+    invertersSingular: "inverter",
+    invertersPlural: "inverters",
+    details: {
+      scenario: "Scenario",
+      solarOptions: "Solar options",
+      solarNote: "Solar note",
+      vansTeams: "Vans / teams",
+      centralizedCharging: "Centralized charging",
+    },
+    centralizedChargingText: CENTRALIZED_CHARGING_TEXT,
+  },
+  sv: {
+    eyebrow: "Planeringsestimat",
+    title: "Uppskatta din Voltrix-setup.",
+    body: "Välj användning och få en praktisk startpunkt för batteripack, tillbehör och uppskattat planeringspris.",
+    summerScenario: "Fritidshus",
+    installerScenario: "Installatör",
+    approximateSize: "Ungefärlig storlek på fritidshus",
+    usageRhythm: "Användningsrytm",
+    accessories: "Tillbehör",
+    solar: "Solenergi",
+    vansTeams: "Antal servicebilar / team",
+    workdayRoutine: "Arbetsrutin",
+    resultSummer: "Fritidshusestimat",
+    resultInstaller: "Installatörsestimat",
+    requestQuote: "Begär offert",
+    addToCart: "Lägg i varukorg",
+    addedToCart: "Tillagd i varukorgen",
+    planningPrices: "Endast planeringspriser. Slutlig offert kan skilja sig.",
+    kwhTitle: "Vad betyder 1 kWh?",
+    kwhBody: "1 kWh är användbar vardagsenergi. Som grov riktlinje kan det innebära många timmars belysning och enhetsladdning, ungefär 40–70 fulla telefonladdningar eller delar av en dag till cirka en dag för ett effektivt kylskåp beroende på modell och förhållanden.",
+    kwhNote: "Faktisk drifttid beror på apparatens effekt, temperatur, laddförluster och användningsmönster.",
+    usageOptions: {
+      weekend: "Helganvändning",
+      regular: "Regelbunden säsongsanvändning",
+      extended: "Längre vistelser",
+    },
+    routineOptions: {
+      light: "Lätt stöd",
+      everyday: "Vardaglig installatörsrutin",
+      extended: "Längre arbetsdag",
+    },
+    solarOptions: {
+      none: "Ingen solenergi ännu",
+      existing: "Befintlig solenergi",
+      tracking: "Solar tracking system",
+    },
+    accessoryLabels: {
+      voltDock: "VoltDock",
+      backpackPowerMounting: "Backpack Power Mounting",
+      bikeAccessory: "Bike accessory",
+      extraBatteryPack: "Extra Battery Pack",
+      extraBatteryPacks: "Extra Battery Packs",
+      vanMounting: "Montering i servicebil",
+    },
+    metrics: {
+      estimatedStorage: "Uppskattad lagring",
+      batteryPacks: "Battery Packs",
+      recommendedInverters: "Rekommenderade inverters",
+      estimatedPriceRange: "Uppskattat prisintervall",
+      batteryPacksPerVan: "Battery Packs per servicebil",
+      totalBatteryPacks: "Totalt antal Battery Packs",
+    },
+    notes: {
+      recommendedEmpty: "Rekommenderade tillbehör: Välj tillbehör för att inkludera dem i planeringsestimatet.",
+      recommendedPrefix: "Rekommenderade tillbehör",
+      noSolar: "Ingen solenergiprissättning ingår i detta planeringsestimat.",
+      existingSolar: "Planera utifrån befintlig solenergi och bekräfta slutlig konfiguration med offert.",
+      tracking: "Solar tracking system: Kommer snart — pris ingår inte.",
+      centralizedCharging: "Centraliserad laddning: Ladda Battery Packs på kontoret eller i verkstaden, ta sedan med dem i servicebilen och använd praktisk energi där arbetsdagen behöver den.",
+      noneSelected: "Inget valt",
+      finalNote: "Obs: Baserat på förinställda planeringspriser. Slutlig konfiguration och offert kan skilja sig.",
+      cartTitlePrefix: "Uppskattad Voltrix-setup",
+      cartSubtitle: "Planeringsestimat, slutlig offert kan skilja sig.",
+      cartNotice: "Planeringsestimat tillagt i varukorgen. Begär offert för att bekräfta konfigurationen.",
+    },
+    invertersSingular: "inverter",
+    invertersPlural: "inverters",
+    details: {
+      scenario: "Scenario",
+      solarOptions: "Solenergival",
+      solarNote: "Solenergianteckning",
+      vansTeams: "Servicebilar / team",
+      centralizedCharging: "Centraliserad laddning",
+    },
+    centralizedChargingText: "Ladda Battery Packs på kontoret eller i verkstaden, ta sedan med dem i servicebilen och använd praktisk energi där arbetsdagen behöver den.",
+  },
+};
+
+function getEstimatorCopy() {
+  const lang = typeof document !== "undefined" ? document.documentElement.lang : "en";
+  const copy = ESTIMATOR_COPY[lang] ?? ESTIMATOR_COPY.en;
+
+  if (commerceVisibility.showEstimatorPrices) {
+    return copy;
+  }
+
+  return {
+    ...copy,
+    body: lang === "sv"
+      ? "Välj användning och få en praktisk startpunkt för batteripack och tillbehör."
+      : "Choose a use case and get a practical starting point for battery packs and accessories.",
+    planningPrices: getPricingComingSoonLabel(lang),
+    notes: {
+      ...copy.notes,
+      noSolar: lang === "sv"
+        ? "Solenergival används endast för konfigurationen."
+        : "Solar options are used for configuration only.",
+      tracking: lang === "sv" ? "Solar tracking system: Kommer snart." : "Solar tracking system: Coming soon.",
+      finalNote: getQuantityEstimateOnlyLabel(lang),
+      cartSubtitle: getQuantityEstimateOnlyLabel(lang),
+    },
+  };
+}
+
+function getAccessoryOptions(options, copy) {
+  return options.map((item) => ({
+    ...item,
+    label: copy.accessoryLabels[item.key] ?? item.label,
+  }));
+}
+
 export function renderSetupEstimator({ context = "home" } = {}) {
+  const copy = getEstimatorCopy();
   const shellClass = context === "products"
     ? "showroom-section showroom-section--sage editorial-section--soft setup-estimator-shell"
     : "platform-home-section platform-home-section--milk setup-estimator-shell";
@@ -62,24 +238,24 @@ export function renderSetupEstimator({ context = "home" } = {}) {
     <section class="${shellClass}" aria-labelledby="setup-estimator-title" data-setup-estimator>
       <div class="${innerClass}">
         <div class="setup-estimator__head">
-          <span class="platform-eyebrow">Planning estimate</span>
-          <h2 id="setup-estimator-title">Estimate your Voltrix setup.</h2>
-          <p>Choose a use case and get a practical starting point for battery packs, accessories and an estimated planning price.</p>
+          <span class="platform-eyebrow">${copy.eyebrow}</span>
+          <h2 id="setup-estimator-title">${copy.title}</h2>
+          <p>${copy.body}</p>
         </div>
 
         <div class="setup-estimator__selector" role="tablist" aria-label="Estimator use case">
           <button class="setup-estimator__scenario is-active" type="button" role="tab" aria-selected="true" data-estimator-scenario="summer">
-            Summer house
+            ${copy.summerScenario}
           </button>
           <button class="setup-estimator__scenario" type="button" role="tab" aria-selected="false" data-estimator-scenario="installer">
-            Installer
+            ${copy.installerScenario}
           </button>
         </div>
 
         <div class="setup-estimator__body">
-          ${renderSummerPanel()}
-          ${renderInstallerPanel()}
-          ${renderResultPanel()}
+          ${renderSummerPanel(copy)}
+          ${renderInstallerPanel(copy)}
+          ${renderResultPanel(copy)}
         </div>
 
       </div>
@@ -87,33 +263,33 @@ export function renderSetupEstimator({ context = "home" } = {}) {
   `;
 }
 
-function renderSummerPanel() {
+function renderSummerPanel(copy) {
   return `
     <div class="setup-estimator__panel is-active" data-estimator-panel="summer">
       <div class="setup-estimator__control setup-estimator__control--range" data-estimator-step="summer-size">
-        ${renderStepToggle("Approx. summer house size")}
+        ${renderStepToggle(copy.approximateSize)}
         <div class="setup-estimator__step-body">
           <div class="setup-estimator__control-head">
-            <strong>Approx. summer house size</strong>
+            <strong>${copy.approximateSize}</strong>
             <output data-summer-size-output>65 ${SQUARE_METERS}</output>
           </div>
           <input type="range" min="20" max="240" value="65" step="5" data-summer-size>
         </div>
       </div>
 
-      ${renderOptionGroup("Usage rhythm", "usage", USAGE_OPTIONS, "regular")}
-      ${renderSolarGroup()}
-      ${renderCheckboxGroup("Accessories", "summer", SUMMER_ACCESSORIES)}
+      ${renderOptionGroup(copy.usageRhythm, "usage", copy.usageOptions, "regular")}
+      ${renderSolarGroup(copy)}
+      ${renderCheckboxGroup(copy.accessories, "summer", getAccessoryOptions(SUMMER_ACCESSORIES, copy))}
     </div>
   `;
 }
 
-function renderInstallerPanel() {
+function renderInstallerPanel(copy) {
   return `
     <div class="setup-estimator__panel" data-estimator-panel="installer" hidden>
-      ${renderOptionGroup("Number of vans / teams", "vans", { 1: "1", 2: "2", 3: "3", 4: "4+" }, "1")}
-      ${renderOptionGroup("Workday routine", "routine", ROUTINE_OPTIONS, "everyday")}
-      ${renderCheckboxGroup("Accessories", "installer", INSTALLER_ACCESSORIES)}
+      ${renderOptionGroup(copy.vansTeams, "vans", { 1: "1", 2: "2", 3: "3", 4: "4+" }, "1")}
+      ${renderOptionGroup(copy.workdayRoutine, "routine", copy.routineOptions, "everyday")}
+      ${renderCheckboxGroup(copy.accessories, "installer", getAccessoryOptions(INSTALLER_ACCESSORIES, copy))}
     </div>
   `;
 }
@@ -159,14 +335,14 @@ function renderCheckboxGroup(label, scenario, options) {
   `;
 }
 
-function renderSolarGroup() {
+function renderSolarGroup(copy) {
   return `
     <fieldset class="setup-estimator__control" data-estimator-step="solar">
-      <legend>Solar</legend>
-      ${renderStepToggle("Solar")}
+      <legend>${copy.solar}</legend>
+      ${renderStepToggle(copy.solar)}
       <div class="setup-estimator__step-body">
         <div class="setup-estimator__checks">
-          ${Object.entries(SOLAR_OPTIONS).map(([value, label]) => `
+          ${Object.entries(copy.solarOptions).map(([value, label]) => `
             <label class="setup-estimator__check">
               <input type="checkbox" data-estimator-solar value="${value}" ${value === "none" ? "checked" : ""}>
               <span>${label}</span>
@@ -187,28 +363,28 @@ function renderStepToggle(title) {
   `;
 }
 
-function renderResultPanel() {
+function renderResultPanel(copy) {
   return `
     <aside class="setup-estimator__result" aria-live="polite">
-      <span class="setup-estimator__result-label" data-result-label>Summer house estimate</span>
+      <span class="setup-estimator__result-label" data-result-label>${copy.resultSummer}</span>
       <div class="setup-estimator__result-grid" data-result-metrics></div>
       <div class="setup-estimator__result-notes" data-result-notes></div>
-      ${renderKwhHelper()}
+      ${renderKwhHelper(copy)}
       <div class="setup-estimator__result-actions">
-        <a class="button button--primary" href="/views/b2b.html">Request quote</a>
-        <button class="button button--secondary" type="button" data-estimator-add-to-cart>Add to cart</button>
+        <a class="button button--primary" href="/views/b2b.html">${copy.requestQuote}</a>
+        <button class="button button--secondary" type="button" data-estimator-add-to-cart>${copy.addToCart}</button>
       </div>
-      <small>Planning prices only. Final quote may differ.</small>
+      <small>${copy.planningPrices}</small>
     </aside>
   `;
 }
 
-function renderKwhHelper() {
+function renderKwhHelper(copy) {
   return `
     <details class="setup-estimator__details">
-      <summary>What does 1 kWh mean?</summary>
-      <p>1 kWh is useful everyday energy. As a rough guide, it can mean many hours of lighting and device charging, roughly 40${RANGE_DASH}70 full phone charges, or part of a day to about a day of efficient fridge support depending on model and conditions.</p>
-      <small>Actual runtime depends on appliance power, temperature, charging losses and usage pattern.</small>
+      <summary>${copy.kwhTitle}</summary>
+      <p>${copy.kwhBody}</p>
+      <small>${copy.kwhNote}</small>
     </details>
   `;
 }
@@ -333,13 +509,14 @@ function setOpenEstimatorStep(root, targetStep) {
 }
 
 function updateEstimatorStepSummaries(root, state) {
+  const copy = getEstimatorCopy();
   setStepSummary(root, "summer-size", `${state.summer.size} ${SQUARE_METERS}`);
-  setStepSummary(root, "usage", USAGE_OPTIONS[state.summer.usage]);
-  setStepSummary(root, "solar", formatSolarLabels(state.summer.solar));
-  setStepSummary(root, "summer-accessories", formatSelectedAccessoryLabels(SUMMER_ACCESSORIES, state.summer.accessories));
+  setStepSummary(root, "usage", copy.usageOptions[state.summer.usage]);
+  setStepSummary(root, "solar", formatSolarLabels(state.summer.solar, copy));
+  setStepSummary(root, "summer-accessories", formatSelectedAccessoryLabels(getAccessoryOptions(SUMMER_ACCESSORIES, copy), state.summer.accessories, copy));
   setStepSummary(root, "vans", `${state.installer.vans}`);
-  setStepSummary(root, "routine", ROUTINE_OPTIONS[state.installer.routine]);
-  setStepSummary(root, "installer-accessories", formatSelectedAccessoryLabels(INSTALLER_ACCESSORIES, state.installer.accessories));
+  setStepSummary(root, "routine", copy.routineOptions[state.installer.routine]);
+  setStepSummary(root, "installer-accessories", formatSelectedAccessoryLabels(getAccessoryOptions(INSTALLER_ACCESSORIES, copy), state.installer.accessories, copy));
 }
 
 function setStepSummary(root, stepName, value) {
@@ -409,7 +586,7 @@ function updateEstimator(root, state) {
   if (label) label.textContent = result.label;
   if (metrics) {
     metrics.innerHTML = result.metrics.map((metric) => `
-      <div class="setup-estimator__metric">
+      <div class="setup-estimator__metric ${metric.placeholder ? "setup-estimator__metric--placeholder" : ""}">
         <span>${metric.label}</span>
         <strong>${metric.value}</strong>
       </div>
@@ -421,6 +598,7 @@ function updateEstimator(root, state) {
 }
 
 function addCurrentEstimateToCart(root, state) {
+  const copy = getEstimatorCopy();
   const payload = buildEstimatePayload(state);
   const cart = readCart();
   const item = {
@@ -428,25 +606,27 @@ function addCurrentEstimateToCart(root, state) {
     cartItemId: `planning-${Date.now()}-${Math.random().toString(16).slice(2)}`,
     quantity: 1,
     unitPrice: 0,
-    title: `Estimated Voltrix setup - ${payload.scenarioLabel}`,
-    subtitle: "Planning estimate, final quote may differ.",
+    title: `${copy.notes.cartTitlePrefix} - ${payload.scenarioLabel}`,
+    subtitle: copy.notes.cartSubtitle,
     scenario: payload.scenarioLabel,
-    estimatedPriceRange: payload.result.priceRange,
-    estimatedPriceMin: payload.result.priceMin,
-    estimatedPriceMax: payload.result.priceMax,
+    ...(commerceVisibility.showEstimatorPrices ? {
+      estimatedPriceRange: payload.result.priceRange,
+      estimatedPriceMin: payload.result.priceMin,
+      estimatedPriceMax: payload.result.priceMax,
+    } : {}),
     details: payload.cartDetails,
     summary: payload.summary,
   };
 
   cart.push(item);
   localStorage.setItem("cart", JSON.stringify(cart));
-  sessionStorage.setItem(CART_NOTICE_KEY, "Planning estimate added to cart. Request quote to confirm configuration.");
+  sessionStorage.setItem(CART_NOTICE_KEY, copy.notes.cartNotice);
   updateCartCount(cart);
 
   const button = root.querySelector("[data-estimator-add-to-cart]");
   if (button) {
     const original = button.textContent;
-    button.textContent = "Added to cart";
+    button.textContent = copy.addedToCart;
     window.setTimeout(() => {
       button.textContent = original;
     }, 1600);
@@ -470,86 +650,99 @@ function readCart() {
 }
 
 function buildEstimatePayload(state) {
+  const copy = getEstimatorCopy();
   return state.scenario === "installer"
-    ? buildInstallerPayload(state.installer)
-    : buildSummerPayload(state.summer);
+    ? buildInstallerPayload(state.installer, copy)
+    : buildSummerPayload(state.summer, copy);
 }
 
-function buildSummerPayload(state) {
-  const result = calculateSummer(state);
-  const solarLabels = formatSolarLabels(state.solar);
-  const solarNote = getSolarNote(state.solar);
-  const accessoryLabels = formatSelectedAccessoryLabels(SUMMER_ACCESSORIES, state.accessories);
+function buildSummerPayload(state, copy) {
+  const result = calculateSummer(state, copy);
+  const solarLabels = formatSolarLabels(state.solar, copy);
+  const solarNote = getSolarNote(state.solar, copy);
+  const accessoryLabels = formatSelectedAccessoryLabels(getAccessoryOptions(SUMMER_ACCESSORIES, copy), state.accessories, copy);
   const details = [
-    ["Scenario", "Summer house"],
-    ["Approx. summer house size", `${state.size} ${SQUARE_METERS}`],
-    ["Usage rhythm", USAGE_OPTIONS[state.usage]],
-    ["Solar options", solarLabels],
-    ["Solar note", solarNote],
-    ["Accessories", accessoryLabels],
-    ["Estimated storage", result.metricMap.estimatedStorage],
-    ["Battery Packs", result.metricMap.batteryPacks],
-    ["Recommended inverters", result.metricMap.inverters],
-    ["Estimated price range", result.priceRange],
+    [copy.details.scenario, copy.summerScenario],
+    [copy.approximateSize, `${state.size} ${SQUARE_METERS}`],
+    [copy.usageRhythm, copy.usageOptions[state.usage]],
+    [copy.details.solarOptions, solarLabels],
+    [copy.details.solarNote, solarNote],
+    [copy.accessories, accessoryLabels],
+    [copy.metrics.estimatedStorage, result.metricMap.estimatedStorage],
+    [copy.metrics.batteryPacks, result.metricMap.batteryPacks],
+    [copy.metrics.recommendedInverters, result.metricMap.inverters],
   ];
+  if (commerceVisibility.showEstimatorPrices) {
+    details.push([copy.metrics.estimatedPriceRange, result.priceRange]);
+  }
+
+  const summary = [
+    `${copy.notes.cartTitlePrefix} - ${copy.summerScenario}`,
+    `${copy.approximateSize}: ${state.size} ${SQUARE_METERS}`,
+    `${copy.usageRhythm}: ${copy.usageOptions[state.usage]}`,
+    `${copy.details.solarOptions}: ${solarLabels}`,
+    `${copy.details.solarNote}: ${solarNote}`,
+    `${copy.accessories}: ${accessoryLabels}`,
+    `${copy.metrics.estimatedStorage}: ${result.metricMap.estimatedStorage}`,
+    `${copy.metrics.batteryPacks}: ${result.metricMap.batteryPacks}`,
+    `${copy.metrics.recommendedInverters}: ${result.metricMap.inverters}`,
+  ];
+  if (commerceVisibility.showEstimatorPrices) {
+    summary.push(`${copy.metrics.estimatedPriceRange}: ${result.priceRange}`);
+  }
+  summary.push(copy.notes.finalNote);
 
   return {
-    scenarioLabel: "Summer house",
+    scenarioLabel: copy.summerScenario,
     result,
     cartDetails: details,
-    summary: [
-      "Estimated Voltrix setup - Summer house",
-      `Approx. summer house size: ${state.size} ${SQUARE_METERS}`,
-      `Usage rhythm: ${USAGE_OPTIONS[state.usage]}`,
-      `Solar options: ${solarLabels}`,
-      `Solar note: ${solarNote}`,
-      `Accessories: ${accessoryLabels}`,
-      `Estimated storage: ${result.metricMap.estimatedStorage}`,
-      `Battery Packs: ${result.metricMap.batteryPacks}`,
-      `Recommended inverters: ${result.metricMap.inverters}`,
-      `Estimated price range: ${result.priceRange}`,
-      "Note: Based on preset planning prices. Final configuration and quote may differ.",
-    ].join("\n"),
+    summary: summary.join("\n"),
   };
 }
 
-function buildInstallerPayload(state) {
-  const result = calculateInstaller(state);
-  const accessoryLabels = formatSelectedAccessoryLabels(INSTALLER_ACCESSORIES, state.accessories);
+function buildInstallerPayload(state, copy) {
+  const result = calculateInstaller(state, copy);
+  const accessoryLabels = formatSelectedAccessoryLabels(getAccessoryOptions(INSTALLER_ACCESSORIES, copy), state.accessories, copy);
   const details = [
-    ["Scenario", "Installer"],
-    ["Vans / teams", String(state.vans)],
-    ["Workday routine", ROUTINE_OPTIONS[state.routine]],
-    ["Centralized charging", CENTRALIZED_CHARGING_TEXT],
-    ["Accessories", accessoryLabels],
-    ["Battery Packs per van", result.metricMap.perVan],
-    ["Total Battery Packs", result.metricMap.totalPacks],
-    ["Estimated storage", result.metricMap.estimatedStorage],
-    ["Recommended inverters", result.metricMap.inverters],
-    ["Estimated price range", result.priceRange],
+    [copy.details.scenario, copy.installerScenario],
+    [copy.details.vansTeams, String(state.vans)],
+    [copy.workdayRoutine, copy.routineOptions[state.routine]],
+    [copy.details.centralizedCharging, copy.centralizedChargingText],
+    [copy.accessories, accessoryLabels],
+    [copy.metrics.batteryPacksPerVan, result.metricMap.perVan],
+    [copy.metrics.totalBatteryPacks, result.metricMap.totalPacks],
+    [copy.metrics.estimatedStorage, result.metricMap.estimatedStorage],
+    [copy.metrics.recommendedInverters, result.metricMap.inverters],
   ];
+  if (commerceVisibility.showEstimatorPrices) {
+    details.push([copy.metrics.estimatedPriceRange, result.priceRange]);
+  }
+
+  const summary = [
+    `${copy.notes.cartTitlePrefix} - ${copy.installerScenario}`,
+    `${copy.details.vansTeams}: ${state.vans}`,
+    `${copy.workdayRoutine}: ${copy.routineOptions[state.routine]}`,
+    `${copy.details.centralizedCharging}: ${copy.centralizedChargingText}`,
+    `${copy.accessories}: ${accessoryLabels}`,
+    `${copy.metrics.batteryPacksPerVan}: ${result.metricMap.perVan}`,
+    `${copy.metrics.totalBatteryPacks}: ${result.metricMap.totalPacks}`,
+    `${copy.metrics.estimatedStorage}: ${result.metricMap.estimatedStorage}`,
+    `${copy.metrics.recommendedInverters}: ${result.metricMap.inverters}`,
+  ];
+  if (commerceVisibility.showEstimatorPrices) {
+    summary.push(`${copy.metrics.estimatedPriceRange}: ${result.priceRange}`);
+  }
+  summary.push(copy.notes.finalNote);
 
   return {
-    scenarioLabel: "Installer",
+    scenarioLabel: copy.installerScenario,
     result,
     cartDetails: details,
-    summary: [
-      "Estimated Voltrix setup - Installer",
-      `Vans / teams: ${state.vans}`,
-      `Workday routine: ${ROUTINE_OPTIONS[state.routine]}`,
-      `Centralized charging: ${CENTRALIZED_CHARGING_TEXT}`,
-      `Accessories: ${accessoryLabels}`,
-      `Battery Packs per van: ${result.metricMap.perVan}`,
-      `Total Battery Packs: ${result.metricMap.totalPacks}`,
-      `Estimated storage: ${result.metricMap.estimatedStorage}`,
-      `Recommended inverters: ${result.metricMap.inverters}`,
-      `Estimated price range: ${result.priceRange}`,
-      "Note: Based on preset planning prices. Final configuration and quote may differ.",
-    ].join("\n"),
+    summary: summary.join("\n"),
   };
 }
 
-function calculateSummer(state) {
+function calculateSummer(state, copy) {
   const baseRange = getSummerBaseRange(state.size);
   let min = baseRange[0];
   let max = baseRange[1];
@@ -569,7 +762,7 @@ function calculateSummer(state) {
     max += 1;
   }
 
-  const accessoryItems = SUMMER_ACCESSORIES.filter((item) => state.accessories.has(item.key));
+  const accessoryItems = getAccessoryOptions(SUMMER_ACCESSORIES, copy).filter((item) => state.accessories.has(item.key));
   const inverters = calculateInverterRange(min, max);
   const price = calculatePriceRange(min, max, inverters, accessoryItems);
   const addOns = formatAddOns(accessoryItems);
@@ -579,7 +772,7 @@ function calculateSummer(state) {
   const inverterLabel = formatInverterRange(inverters.min, inverters.max);
 
   return {
-    label: "Summer house estimate",
+    label: copy.resultSummer,
     priceRange: price.display,
     priceMin: price.min,
     priceMax: price.max,
@@ -589,10 +782,16 @@ function calculateSummer(state) {
       inverters: inverterLabel,
     },
     metrics: [
-      { label: "Estimated storage", value: storageLabel },
-      { label: "Battery Packs", value: packsLabel },
-      { label: "Recommended inverters", value: inverterLabel },
-      { label: "Estimated price range", value: price.display },
+      { label: copy.metrics.estimatedStorage, value: storageLabel },
+      { label: copy.metrics.batteryPacks, value: packsLabel },
+      { label: copy.metrics.recommendedInverters, value: inverterLabel },
+      {
+        label: copy.metrics.estimatedPriceRange,
+        value: commerceVisibility.showEstimatorPrices
+          ? price.display
+          : getPricingComingSoonLabel(document.documentElement.lang || "en"),
+        placeholder: !commerceVisibility.showEstimatorPrices,
+      },
     ],
     notes: [
       addOns,
@@ -601,7 +800,7 @@ function calculateSummer(state) {
   };
 }
 
-function calculateInstaller(state) {
+function calculateInstaller(state, copy) {
   const perVan = getInstallerPerVanRange(state.routine);
   let perVanMin = perVan[0];
   let perVanMax = perVan[1];
@@ -614,7 +813,7 @@ function calculateInstaller(state) {
   const min = perVanMin * state.vans;
   const max = perVanMax * state.vans;
 
-  const accessoryItems = INSTALLER_ACCESSORIES.filter((item) => state.accessories.has(item.key));
+  const accessoryItems = getAccessoryOptions(INSTALLER_ACCESSORIES, copy).filter((item) => state.accessories.has(item.key));
   const inverters = calculateInverterRange(min, max);
   const price = calculatePriceRange(min, max, inverters, accessoryItems);
   const addOns = formatAddOns(accessoryItems);
@@ -624,7 +823,7 @@ function calculateInstaller(state) {
   const inverterLabel = formatInverterRange(inverters.min, inverters.max);
 
   return {
-    label: "Installer estimate",
+    label: copy.resultInstaller,
     priceRange: price.display,
     priceMin: price.min,
     priceMax: price.max,
@@ -635,15 +834,21 @@ function calculateInstaller(state) {
       inverters: inverterLabel,
     },
     metrics: [
-      { label: "Battery Packs per van", value: perVanLabel },
-      { label: "Total Battery Packs", value: totalPacksLabel },
-      { label: "Estimated storage", value: storageLabel },
-      { label: "Recommended inverters", value: inverterLabel },
-      { label: "Estimated price range", value: price.display },
+      { label: copy.metrics.batteryPacksPerVan, value: perVanLabel },
+      { label: copy.metrics.totalBatteryPacks, value: totalPacksLabel },
+      { label: copy.metrics.estimatedStorage, value: storageLabel },
+      { label: copy.metrics.recommendedInverters, value: inverterLabel },
+      {
+        label: copy.metrics.estimatedPriceRange,
+        value: commerceVisibility.showEstimatorPrices
+          ? price.display
+          : getPricingComingSoonLabel(document.documentElement.lang || "en"),
+        placeholder: !commerceVisibility.showEstimatorPrices,
+      },
     ],
     notes: [
       addOns,
-      `Centralized charging: ${CENTRALIZED_CHARGING_TEXT}`,
+      copy.notes.centralizedCharging,
     ].filter(Boolean),
   };
 }
@@ -701,41 +906,43 @@ function formatRange(min, max, suffix = "") {
 }
 
 function formatInverterRange(min, max) {
+  const copy = getEstimatorCopy();
   const range = formatRange(min, max);
-  const noun = min === max && min === 1 ? "inverter" : "inverters";
+  const noun = min === max && min === 1 ? copy.invertersSingular : copy.invertersPlural;
   return `${range} ${noun}`;
 }
 
 function formatAddOns(items) {
+  const copy = getEstimatorCopy();
   if (!items.length) {
-    return "Recommended add-ons: Select accessories to include them in the planning estimate.";
+    return copy.notes.recommendedEmpty;
   }
 
   const labels = items.map((item) => item.label);
-  return `Recommended add-ons: ${labels.join(", ")}.`;
+  return `${copy.notes.recommendedPrefix}: ${labels.join(", ")}.`;
 }
 
-function formatSelectedAccessoryLabels(options, selected) {
+function formatSelectedAccessoryLabels(options, selected, copy = getEstimatorCopy()) {
   const labels = options
     .filter((item) => selected.has(item.key))
     .map((item) => item.label);
 
-  return labels.length ? labels.join(", ") : "None selected";
+  return labels.length ? labels.join(", ") : copy.notes.noneSelected;
 }
 
-function formatSolarLabels(selected) {
-  const labels = Array.from(selected).map((value) => SOLAR_OPTIONS[value]).filter(Boolean);
-  return labels.length ? labels.join(", ") : SOLAR_OPTIONS.none;
+function formatSolarLabels(selected, copy = getEstimatorCopy()) {
+  const labels = Array.from(selected).map((value) => copy.solarOptions[value]).filter(Boolean);
+  return labels.length ? labels.join(", ") : copy.solarOptions.none;
 }
 
-function getSolarNote(selected) {
+function getSolarNote(selected, copy = getEstimatorCopy()) {
   const values = selected instanceof Set ? selected : new Set([selected]);
 
   if (values.has("tracking")) {
-    return `Solar tracking system: Coming soon ${EM_DASH} price not included.`;
+    return copy.notes.tracking;
   }
   if (values.has("existing")) {
-    return "Plan around the existing solar setup and confirm final configuration with a quote.";
+    return copy.notes.existingSolar;
   }
-  return "No solar pricing included in this planning estimate.";
+  return copy.notes.noSolar;
 }

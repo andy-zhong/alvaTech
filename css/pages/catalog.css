@@ -724,6 +724,12 @@ body[data-page="product-installer"] .product-scenario-hero__media img {
   max-width: 340px;
 }
 
+@media (min-width: 1081px) {
+  body[data-page="product-installer"] .product-scenario-usecase h3 {
+    min-height: 3.65rem;
+  }
+}
+
 .product-scenario-product .showroom-product__media img {
   object-fit: contain;
   padding: 10px;

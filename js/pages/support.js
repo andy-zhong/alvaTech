@@ -62,7 +62,7 @@ const SUPPORT_COPY = {
       eyebrow: "Instruktioner",
       title: "Börja med grunderna.",
       intro:
-        "Dessa anteckningar är en första guide för planering och användning av en Voltrix-setup. Slutliga installationsdetaljer ska bekräftas med Alva eller en godkänd installatör.",
+        "Dessa anteckningar är en första guide för planering och användning av en Voltrix-setup. Slutliga installationsdetaljer ska bekräftas av Alva eller en godkänd installatör.",
       items: [
         ["Planera placeringen", "Placera systemet där ventilation, åtkomst och kabeldragning kan hanteras rent."],
         ["Kontrollera batterimodulerna", "Se till att batteripacken sitter rätt och att synliga kontakter är rena och oskadade."],
@@ -84,7 +84,7 @@ const SUPPORT_COPY = {
       eyebrow: "Felsökning",
       title: "Första kontroller.",
       intro:
-        "Om något inte fungerar som väntat, börja med kontrollerna nedan. Sluta använda produkten vid synlig skada, ovanlig lukt, värme eller ljud.",
+        "Om något inte fungerar som väntat, börja med att kontrollera följande. Sluta använda produkten vid synlig skada, ovanlig lukt, värme eller ljud.",
       checks: [
         ["Ingen ström", "Kontrollera att batteriet är laddat, sitter korrekt och att kablar eller uttag är anslutna."],
         ["Enheten laddar inte", "Prova en annan kabel, kontrollera enhetens effektbehov och testa en enhet i taget."],

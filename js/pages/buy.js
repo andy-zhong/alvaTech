@@ -1,5 +1,6 @@
 import { getBuyEnabledProducts, getProductContent } from "../services/product-service.js";
 import { t } from "../services/language-service.js";
+import { commerceVisibility, getPricingComingSoonLabel } from "../config/commerce-visibility.js";
 
 export function renderBuyHubPage({ lang, productUrl, buyProductUrl }) {
   return `
@@ -18,7 +19,7 @@ export function renderBuyHubPage({ lang, productUrl, buyProductUrl }) {
           <article class="buy-hub__item">
             <img src="${product.heroImage}" alt="${content.name}">
             <div class="product-card__body">
-              <span class="product-card__meta">${product.price}</span>
+              <span class="product-card__meta">${commerceVisibility.showPrices ? product.price : getPricingComingSoonLabel(lang)}</span>
               <h2>${content.name}</h2>
               <p>${content.summary}</p>
               <div class="hero__actions">

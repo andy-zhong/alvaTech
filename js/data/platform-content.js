@@ -254,8 +254,8 @@ const LANGUAGE_OVERRIDES = {
         label: "Bas + batteripack",
       },
       {
-        title: "Byggd för att växa",
-        body: "Börja med den kapacitet du behöver idag och lägg till batteripack när hemmarutiner eller teamets arbete växer.",
+        title: "Byggd för att expanderas",
+        body: "Börja med den kapacitet du behöver idag och lägg till batteripack när energibehovet ökar.",
         label: "Skalar över tid",
       },
       {
@@ -275,7 +275,42 @@ const LANGUAGE_OVERRIDES = {
       body:
         "Voltrix är byggt runt en modulär energibas och batteripack som kan stanna hemma, följa med utomhus eller stödja utvalda arbetsrutiner med kompatibla tillbehör.",
     },
-    productFit: { eyebrow: "Produktserie", primary: "Visa produktserie", secondary: "Utforska kit" },
+    addOns: {
+      eyebrow: "Tillbehör",
+      title: "Tillbehör",
+      body: "Utöka hur Battery Packs används med enkla tillbehör för vardag utomhus och mobila rutiner.",
+      note: "De flesta tillbehör fungerar med samma Battery Pack-plattform. Solar tracking system är en separat solfokuserad utökning och inte ett enkelt plug-on-tillbehör.",
+      items: [
+        {
+          title: "Backpack Power",
+          body: "Bär Battery Packs längre för utomhusaktiviteter och mobil användning.",
+          image: "/Picture/products/backpack/backpack_1inverter+1battery-optimized.jpg",
+        },
+        {
+          title: "VoltDock",
+          body: "Gör ett Battery Pack till en kompakt hubb för enheter, belysning och vardagens energi.",
+          image: "/Picture/products/voltdock/voltdock01.png",
+        },
+        {
+          title: "Bike accessory",
+          body: "Flytta Battery Packs längre med ett lätt mobilitetstillbehör för lokala rutiner.",
+          image: "/Picture/products/bike/bike01-optimized.png",
+        },
+        {
+          title: "Solar tracking system",
+          body: "Ett framtida soltillbehör för fritidshus som vill ta bättre vara på tillgängligt dagsljus.",
+          image: null,
+        },
+      ],
+    },
+    productFit: {
+      eyebrow: "Produktserie",
+      body: "En fast 5 kWh-startsetup för fritidshus, vardagligt energistöd och expanderbar utomhusanvändning.",
+      note: "Inkluderar fem NMC-batterimoduler. Faktisk prestanda beror på anslutna enheter, installation och användningsmönster.",
+      label: "Fast 5 kWh-startsetup",
+      primary: "Visa produktserie",
+      secondary: "Utforska kit",
+    },
     solutions: [
       {
         id: "summer-house",
@@ -300,7 +335,7 @@ const LANGUAGE_OVERRIDES = {
         id: "field",
         label: "Installatör",
         title: "För installatörer och serviceteam",
-        body: "Ladda batterier på kontoret eller i verkstaden, ta dem med i bilen och använd dem där arbetet sker.",
+        body: "Ladda batterier på kontoret eller i verkstaden, ta sedan med dem och använd energin där arbetet sker.",
         cta: "Utforska installatörslösning",
         href: "/views/solution-field.html",
         detail: {
@@ -340,7 +375,7 @@ const LANGUAGE_OVERRIDES = {
     },
     finalCta: {
       eyebrow: "Kom igång",
-      title: "Börja med den Voltrix-lösning som passar din rutin.",
+      title: "Börja med den Voltrix-lösning som passar ditt behov",
       body: "Utforska kit och komponenter, eller prata med Alva om du vill ha hjälp att planera en setup.",
       primary: "Utforska kit",
       secondary: "Kontakta Alva",
