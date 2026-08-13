@@ -49,15 +49,10 @@
 
       <h2>2. What we collect</h2>
       <p><strong>Order and inquiry forms:</strong> name, email, phone, and delivery address — used only to process your request.</p>
-      <p><strong>Anonymous analytics (only with your consent):</strong></p>
+      <p><strong>Analytics (only with your consent):</strong></p>
       <table>
         <thead><tr><th>Data</th><th>What it is</th><th>What it is NOT</th></tr></thead>
         <tbody>
-          <tr>
-            <td>Session ID</td>
-            <td>Random UUID in your browser's sessionStorage. Deleted when you close the tab.</td>
-            <td>Not linked to your identity or any login.</td>
-          </tr>
           <tr>
             <td>Page path</td>
             <td>Which page was visited (e.g. /views/product.html)</td>
@@ -75,8 +70,8 @@
           </tr>
           <tr>
             <td>Approximate location</td>
-            <td>Country and city derived from your IP at the moment of the first request.</td>
-            <td>Your IP address is NEVER stored.</td>
+            <td>Approximate geography provided by Google Analytics 4.</td>
+            <td>Not precise GPS location.</td>
           </tr>
         </tbody>
       </table>
@@ -92,7 +87,7 @@
       <table>
         <thead><tr><th>Data</th><th>Kept for</th></tr></thead>
         <tbody>
-          <tr><td>Anonymous analytics</td><td>90 days, then automatically deleted</td></tr>
+          <tr><td>Analytics data</td><td>According to the configured Google Analytics 4 retention settings</td></tr>
           <tr><td>Order data</td><td>7 years (Swedish accounting law)</td></tr>
           <tr><td>B2B / quote inquiries</td><td>2 years after last contact</td></tr>
           <tr><td>Consent preference</td><td>Stored in your browser only — we cannot access it</td></tr>
@@ -105,11 +100,11 @@
         <tbody>
           <tr><td>alva-consent</td><td>localStorage</td><td>Your cookie preference. Essential.</td><td>Until you clear browser storage</td></tr>
           <tr><td>alva-language</td><td>localStorage</td><td>Your language setting. Essential.</td><td>Until you clear browser storage</td></tr>
-          <tr><td>alva-session-id</td><td>sessionStorage</td><td>Anonymous session ID. Analytics only, with consent.</td><td>Deleted when tab closes</td></tr>
+          <tr><td>_ga / _ga_*</td><td>Cookie</td><td>Google Analytics 4 measurement, only after analytics consent.</td><td>Set by Google Analytics</td></tr>
           <tr><td>cart</td><td>localStorage</td><td>Shopping cart contents. Essential.</td><td>Until order placed or cleared</td></tr>
         </tbody>
       </table>
-      <p>We do <strong>not</strong> use Google Analytics, Facebook Pixel, or any advertising cookies.</p>
+      <p>We do <strong>not</strong> use Facebook Pixel or advertising cookies. Google Analytics 4 is loaded only if analytics consent is accepted.</p>
 
       <h2>6. Your rights</h2>
       <p>Under GDPR you have the right to access, rectify, erase, and port your data, and to withdraw consent at any time. Contact <a href="mailto:privacy@alvatechnology.com">privacy@alvatechnology.com</a>. You may also complain to the Swedish Data Protection Authority at <a href="https://www.imy.se" target="_blank" rel="noopener">imy.se</a>.</p>
@@ -149,15 +144,14 @@
 
         <h2>2. Vilka uppgifter vi samlar in</h2>
         <p><strong>Order- och kontaktformulär:</strong> namn, e-post, telefon och leveransadress, så att vi kan hantera din förfrågan eller order.</p>
-        <p><strong>Anonym analys, endast om du samtycker:</strong></p>
+        <p><strong>Analys, endast om du samtycker:</strong></p>
         <table>
           <thead><tr><th>Uppgift</th><th>Vad det är</th><th>Vad det inte är</th></tr></thead>
           <tbody>
-            <tr><td>Sessions-ID</td><td>Ett slumpmässigt ID i webbläsarens sessionStorage.</td><td>Inte kopplat till din identitet.</td></tr>
             <tr><td>Sidsökväg</td><td>Vilken sida som besöktes, till exempel /views/product.html.</td><td>Inte din fulla webbhistorik.</td></tr>
             <tr><td>Klickad yta</td><td>Text på knapp eller länk.</td><td>Inte det du skriver i formulär.</td></tr>
             <tr><td>Tid på sida</td><td>Ungefärlig tid på en sida.</td><td>Inte kopplad till inloggning eller konto.</td></tr>
-            <tr><td>Ungefärlig plats</td><td>Land och stad från IP vid första förfrågan.</td><td>IP-adressen sparas inte.</td></tr>
+            <tr><td>Ungefärlig plats</td><td>Ungefärlig geografi från Google Analytics 4.</td><td>Inte exakt GPS-position.</td></tr>
           </tbody>
         </table>
 
@@ -172,7 +166,7 @@
         <table>
           <thead><tr><th>Data</th><th>Sparas i</th></tr></thead>
           <tbody>
-            <tr><td>Anonym analys</td><td>90 dagar</td></tr>
+            <tr><td>Analysdata</td><td>Enligt inställd lagringstid i Google Analytics 4</td></tr>
             <tr><td>Orderdata</td><td>7 år enligt svensk bokföringspraxis</td></tr>
             <tr><td>Företags- och offertförfrågningar</td><td>2 år efter senaste kontakt</td></tr>
             <tr><td>Samtyckesval</td><td>I din webbläsare tills du rensar lagringen</td></tr>
@@ -180,7 +174,7 @@
         </table>
 
         <h2>5. Cookies och lokal lagring</h2>
-        <p>Vi använder lokal lagring för språkval, varukorg och samtycke. Vi använder inte Google Analytics, Facebook Pixel eller annonseringscookies.</p>
+        <p>Vi använder lokal lagring för språkval, varukorg och samtycke. Google Analytics 4 laddas endast om du accepterar analys. Vi använder inte Facebook Pixel eller annonseringscookies.</p>
 
         <h2>6. Dina rättigheter</h2>
         <p>Enligt GDPR kan du begära tillgång, rättelse, radering och dataportabilitet samt återkalla samtycke. Kontakta <a href="mailto:privacy@alvatechnology.com">privacy@alvatechnology.com</a>. Du kan även vända dig till Integritetsskyddsmyndigheten via <a href="https://www.imy.se" target="_blank" rel="noopener">imy.se</a>.</p>

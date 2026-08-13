@@ -78,6 +78,27 @@ main {
   text-decoration-color: rgba(199, 226, 122, 0.86);
 }
 
+.site-footer__aside {
+  display: grid;
+  justify-items: end;
+  gap: 12px;
+  max-width: 420px;
+  text-align: right;
+}
+
+.site-footer__links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px 18px;
+}
+
+.site-footer__links a {
+  color: rgba(243, 246, 242, 0.78);
+  font-size: 0.82rem;
+  font-weight: 700;
+  text-underline-offset: 4px;
+}
+
 .section {
   margin-top: 36px;
 }

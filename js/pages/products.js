@@ -1,5 +1,6 @@
 import { getAllProducts } from "../services/product-service.js";
 import { bindSetupEstimator, renderSetupEstimator } from "../components/setup-estimator.js";
+import { bindSectionNav } from "../components/section-nav.js";
 
 const PRODUCT_ASSETS = {
   solarTracking: {
@@ -191,6 +192,8 @@ export function renderProductsPage({ lang, productUrl }) {
       ${renderHeroMedia()}
     </section>
 
+    ${renderProductsMobileNav(copy)}
+
     <section class="showroom-section showroom-section--sage showroom-composition editorial-section--soft" aria-labelledby="composition-title">
       <div class="showroom-section__head">
         <span class="eyebrow">${copy.compositionEyebrow}</span>
@@ -228,7 +231,7 @@ export function renderProductsPage({ lang, productUrl }) {
 
     ${renderSetupEstimator({ context: "products" })}
 
-    <section class="showroom-section editorial-section" aria-labelledby="showroom-title">
+    <section class="showroom-section editorial-section" id="system-components" aria-labelledby="showroom-title">
       <div class="showroom-section__head">
         <span class="eyebrow">${copy.showroomEyebrow}</span>
         <h2 id="showroom-title">${copy.showroomTitle}</h2>
@@ -238,7 +241,7 @@ export function renderProductsPage({ lang, productUrl }) {
       </div>
     </section>
 
-    <section class="showroom-section showroom-section--sage editorial-section--soft" aria-labelledby="specs-title">
+    <section class="showroom-section showroom-section--sage editorial-section--soft" id="system-specs" aria-labelledby="specs-title">
       <div class="showroom-section__head">
         ${copy.specsEyebrow ? `<span class="eyebrow">${copy.specsEyebrow}</span>` : ""}
         <h2 id="specs-title">${copy.specsTitle}</h2>
@@ -267,6 +270,8 @@ export function renderProductsPage({ lang, productUrl }) {
 
 export function afterRenderProductsPage() {
   bindSetupEstimator();
+  bindProductsMobileNav();
+  bindProductAddOnRail();
 
   document.querySelectorAll("[data-product-link]").forEach((link) => {
     link.addEventListener("click", (event) => {
@@ -280,6 +285,68 @@ export function afterRenderProductsPage() {
       window.location.assign(VOLTRIX_KIT_URL);
     });
   });
+}
+
+function renderProductsMobileNav(copy) {
+  const labels = copy.mobileNav ?? {
+    kit: "Kit",
+    addons: "Add-ons",
+    planner: "Planner",
+    system: "System",
+    specs: "Specs",
+  };
+
+  return `
+    <nav class="mobile-section-nav products-mobile-nav" aria-label="${copy.productsEyebrow}">
+      <div class="mobile-section-nav__track">
+        <a href="#featured-setup" data-section-link="featured-setup">${labels.kit}</a>
+        <a href="#product-addons" data-section-link="product-addons">${labels.addons}</a>
+        <a href="#setup-estimator" data-section-link="setup-estimator">${labels.planner}</a>
+        <a href="#system-components" data-section-link="system-components">${labels.system}</a>
+        <a href="#system-specs" data-section-link="system-specs">${labels.specs}</a>
+      </div>
+    </nav>
+  `;
+}
+
+function bindProductsMobileNav() {
+  bindSectionNav(document.querySelector(".products-mobile-nav"));
+}
+
+function bindProductAddOnRail() {
+  const rail = document.querySelector(".showroom-product-addons__grid");
+  const controls = document.querySelector(".showroom-product-addons__nav");
+  if (!rail || !controls) return;
+
+  const items = [...rail.querySelectorAll(".showroom-product-addon")];
+  const previous = controls.querySelector("[data-addons-previous]");
+  const next = controls.querySelector("[data-addons-next]");
+  const current = controls.querySelector("[data-addons-current]");
+
+  const getIndex = () => items.reduce((closest, item, index) => (
+    Math.abs(item.offsetLeft - rail.scrollLeft) < Math.abs(items[closest].offsetLeft - rail.scrollLeft)
+      ? index
+      : closest
+  ), 0);
+
+  const update = () => {
+    const index = getIndex();
+    if (current) current.textContent = String(index + 1);
+    if (previous) previous.disabled = index === 0;
+    if (next) next.disabled = index === items.length - 1;
+  };
+
+  const move = (direction) => {
+    const index = Math.min(items.length - 1, Math.max(0, getIndex() + direction));
+    const target = items[index];
+    const behavior = window.matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth";
+    if (target) rail.scrollTo({ left: target.offsetLeft, behavior });
+  };
+
+  previous?.addEventListener("click", () => move(-1));
+  next?.addEventListener("click", () => move(1));
+  rail.addEventListener("scroll", () => window.requestAnimationFrame(update), { passive: true });
+  update();
 }
 
 function renderShowroomItem(item, productHref, copy) {
@@ -321,7 +388,7 @@ function renderHeroMedia() {
 
 function renderProductsAddOnsSection(copy, addons) {
   return `
-    <section class="showroom-section showroom-product-addons editorial-section" aria-labelledby="products-addons-title">
+    <section class="showroom-section showroom-product-addons editorial-section" id="product-addons" aria-labelledby="products-addons-title">
       <div class="showroom-product-addons__inner">
         <div class="showroom-section__head">
           <span class="eyebrow">${copy.addonsEyebrow}</span>
@@ -331,6 +398,14 @@ function renderProductsAddOnsSection(copy, addons) {
 
         <div class="showroom-product-addons__grid">
           ${addons.map((item) => renderProductAddOnItem(item)).join("")}
+        </div>
+
+        <div class="showroom-product-addons__nav" aria-label="${copy.addonsTitle}">
+          <span><b data-addons-current>1</b> / ${addons.length}</span>
+          <div>
+            <button type="button" data-addons-previous aria-label="${copy.previous}" title="${copy.previous}">&larr;</button>
+            <button type="button" data-addons-next aria-label="${copy.next}" title="${copy.next}">&rarr;</button>
+          </div>
         </div>
 
         <div class="showroom-product-addons__footer">
@@ -421,6 +496,15 @@ function getProductsCopy(lang) {
       ctaTitle: "Not sure where to start?",
       ctaBody: "Talk to Alva about your home, cabin, team routine or installer workflow.",
       exploreSolutions: "Explore solutions",
+      previous: "Previous",
+      next: "Next",
+      mobileNav: {
+        kit: "Kit",
+        addons: "Add-ons",
+        planner: "Planner",
+        system: "System",
+        specs: "Specs",
+      },
     },
     sv: {
       heroTitle: "Voltrix-systemet.",
@@ -448,6 +532,15 @@ function getProductsCopy(lang) {
       ctaTitle: "Osäker på var du ska börja?",
       ctaBody: "Prata med Alva om ditt hem, din stuga eller teamets installatörsrutiner.",
       exploreSolutions: "Utforska lösningar",
+      previous: "Föregående",
+      next: "Nästa",
+      mobileNav: {
+        kit: "Kit",
+        addons: "Tillbehör",
+        planner: "Planera",
+        system: "System",
+        specs: "Specifikationer",
+      },
     },
   };
 

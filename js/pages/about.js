@@ -30,6 +30,7 @@ const ABOUT_COPY = {
   ctaHeadline: "Explore how Alva is building the next generation of flexible energy products.",
   productsButton: "View products",
   solutionsButton: "Explore solutions",
+  buildListLabel: "What Alva builds",
   },
   sv: {
     eyebrow: "OM ALVA",
@@ -62,6 +63,7 @@ const ABOUT_COPY = {
     ctaHeadline: "Utforska hur Alva bygger nästa generation flexibla energiprodukter.",
     productsButton: "Visa produkter",
     solutionsButton: "Utforska lösningar",
+    buildListLabel: "Det här bygger Alva",
   },
 };
 
@@ -105,7 +107,7 @@ export function renderAboutPage({ lang } = {}) {
           <h2>${copy.buildHeadline}</h2>
           <p>${copy.buildBody}</p>
         </div>
-        <ul class="about-line-list" aria-label="What Alva builds">
+        <ul class="about-line-list" aria-label="${copy.buildListLabel}">
           ${copy.buildPoints.map((point) => `<li>${point}</li>`).join("")}
         </ul>
       </div>

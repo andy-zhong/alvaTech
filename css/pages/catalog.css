@@ -638,6 +638,10 @@
   border-top: 1px solid var(--line-soft);
 }
 
+.showroom-product-addons__nav {
+  display: none;
+}
+
 .showroom-product-addons__footer p {
   max-width: 760px;
   font-size: 0.88rem;
@@ -678,8 +682,12 @@
 }
 
 .product-scenario-hero__media {
+  justify-self: end;
+  width: min(100%, 760px);
+  max-width: 760px;
   overflow: hidden;
   background: #e6e6df;
+  transform: none;
 }
 
 .product-scenario-hero__media img {
@@ -694,6 +702,23 @@
 
 body[data-page="product-installer"] .product-scenario-hero__media img {
   object-position: 50% 54%;
+}
+
+.product-scenario-hero .showroom-hero__copy {
+  position: relative;
+  z-index: 1;
+  min-width: 0;
+}
+
+@media (min-width: 1440px) {
+  .product-scenario-hero {
+    grid-template-columns: minmax(0, 0.98fr) minmax(360px, 0.82fr);
+    gap: clamp(36px, 4vw, 72px);
+  }
+
+  .product-scenario-hero__media {
+    min-height: clamp(360px, 31vw, 560px);
+  }
 }
 
 .product-scenario-usecase-grid {

@@ -6,6 +6,7 @@ import {
   getCommerceRecordForSlug,
 } from "../services/commerce-catalog.js";
 import { commerceVisibility, getPricingComingSoonLabel } from "../config/commerce-visibility.js";
+import { bindSectionNav } from "../components/section-nav.js";
 
 let batteryCount = 1;
 let currentMediaIndex = 0;
@@ -109,6 +110,10 @@ const DETAIL_PLATFORM_COPY = {
     modularityFallback:
       "Capacity and configuration depend on selected modules and setup.",
     trustTitle: "Guidance before configuration",
+    navOverview: "Overview",
+    navFeatures: "Features",
+    navSpecs: "Specs",
+    navUseCases: "Use cases",
   },
   sv: {
     configure: "Konfigurera system",
@@ -123,6 +128,10 @@ const DETAIL_PLATFORM_COPY = {
     modularityConfig: ({ min, max, capacity }) =>
       `Konfigurera från ${min} till ${max} moduler med ${capacity} kWh per modul. Slutlig kapacitet beror på valda moduler och setup.`,
     trustTitle: "Vägledning före konfigurering",
+    navOverview: "Översikt",
+    navFeatures: "Funktioner",
+    navSpecs: "Specifikationer",
+    navUseCases: "Användning",
   },
   it: {
     configure: "Configura sistema",
@@ -325,6 +334,19 @@ function renderLightbox(labels) {
     </div>`;
 }
 
+function renderProductMobileNav(labels) {
+  return `
+    <nav class="mobile-section-nav product-mobile-nav" aria-label="${labels.navOverview}">
+      <div class="mobile-section-nav__track">
+        <a href="#product-overview" data-section-link="product-overview">${labels.navOverview}</a>
+        <a href="#product-features" data-section-link="product-features">${labels.navFeatures}</a>
+        <a href="#product-specifications" data-section-link="product-specifications">${labels.navSpecs}</a>
+        <a href="#product-use-cases" data-section-link="product-use-cases">${labels.navUseCases}</a>
+      </div>
+    </nav>
+  `;
+}
+
 export function renderProductDetailPage({ lang, slug, route }) {
   const product = getProductBySlug(slug);
   if (!product) return renderMissingProduct({ lang, route });
@@ -365,7 +387,9 @@ export function renderProductDetailPage({ lang, slug, route }) {
       </article>
     </section>
 
-    <section class="detail-section detail-platform-section">
+    ${renderProductMobileNav(labels)}
+
+    <section class="detail-section detail-platform-section" id="product-overview">
       <div class="detail-platform-grid">
         <article class="detail-platform-panel">
           <span class="eyebrow">${labels.whoFor}</span>
@@ -374,17 +398,15 @@ export function renderProductDetailPage({ lang, slug, route }) {
           </div>
         </article>
         <article class="detail-platform-panel">
-          <span class="eyebrow">${labels.platformFit}</span>
           <h2>${labels.platformFit}</h2>
           <p>${labels.platformFitBody}</p>
         </article>
       </div>
     </section>
 
-    <section class="detail-section">
+    <section class="detail-section" id="product-capacity">
       <div class="detail-platform-grid">
         <article class="detail-platform-panel">
-          <span class="eyebrow">${labels.modularity}</span>
           <h2>${labels.modularity}</h2>
           <p>${renderModularityCopy(product, labels)}</p>
         </article>
@@ -397,7 +419,7 @@ export function renderProductDetailPage({ lang, slug, route }) {
       </div>
     </section>
 
-    <section class="detail-section">
+    <section class="detail-section" id="product-features">
       <div class="info-grid">
         <article class="detail-content-panel">
           <h3>${t(lang, "detailFeatures")}</h3>
@@ -416,7 +438,7 @@ export function renderProductDetailPage({ lang, slug, route }) {
       </div>
     </section>
 
-    <section class="detail-section">
+    <section class="detail-section" id="product-specifications">
       <div class="spec-grid">
         <article class="detail-content-panel">
           <h3>${t(lang, "detailSpecifications")}</h3>
@@ -428,16 +450,16 @@ export function renderProductDetailPage({ lang, slug, route }) {
               </div>`).join("")}
           </div>
         </article>
-        <article class="detail-content-panel">
-          <h3>${t(lang, "detailCertifications")}</h3>
+        <details class="detail-content-panel detail-disclosure" open data-mobile-disclosure>
+          <summary><h3>${t(lang, "detailCertifications")}</h3></summary>
           <ul class="detail-list thin-divider-list">
             ${content.certifications.map((item) => `<li>${item}</li>`).join("")}
           </ul>
-        </article>
+        </details>
       </div>
     </section>
 
-    <section class="detail-section">
+    <section class="detail-section" id="product-use-cases">
       <div class="info-grid">
         <article class="detail-content-panel">
           <h3>${t(lang, "detailUseCases")}</h3>
@@ -445,12 +467,12 @@ export function renderProductDetailPage({ lang, slug, route }) {
             ${content.useCases.map((item) => `<li>${item}</li>`).join("")}
           </ul>
         </article>
-        <article class="detail-content-panel">
-          <h3>${t(lang, "detailFaq")}</h3>
+        <details class="detail-content-panel detail-disclosure" open data-mobile-disclosure>
+          <summary><h3>${t(lang, "detailFaq")}</h3></summary>
           <ul class="faq-list thin-divider-list">
             ${visibleFaq.map((item) => `<li>${item}</li>`).join("")}
           </ul>
-        </article>
+        </details>
       </div>
     </section>
   `;
@@ -621,6 +643,12 @@ export function afterRenderProductDetail(product) {
   const content = getProductContent(product, lang);
 
   initProductMediaViewer(product, content);
+  bindSectionNav(document.querySelector(".product-mobile-nav"));
+  if (window.matchMedia("(max-width: 640px)").matches) {
+    document.querySelectorAll("[data-mobile-disclosure]").forEach((details) => {
+      details.open = false;
+    });
+  }
   if (commerceVisibility.showPrices) {
     hydrateCommercePrice(product, lang);
   }

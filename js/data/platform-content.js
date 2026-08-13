@@ -3,20 +3,13 @@ import { getMarket, MARKET_CLUSTERS } from "./markets.js";
 export const PLATFORM_ANCHORS = {
   summerHouse: "summer-house",
   field: "field",
-  starter: "voltrix-starter",
-  medium: "voltrix-medium",
-  max: "voltrix-max",
   accessories: "accessories",
   instructions: "instructions",
   faqs: "faqs",
   troubleshooting: "troubleshooting",
 };
 
-const PRODUCT_TIER_NOTE =
-  "Capacity ranges are guidance for choosing a setup. Purchasable products remain in the product and checkout flow.";
-
 const SHARED_PLATFORM_CONTENT = {
-  productTierNote: PRODUCT_TIER_NOTE,
   heroScenarios: {
     summerHouse: {
       id: "summer-house",
@@ -154,32 +147,6 @@ const SHARED_PLATFORM_CONTENT = {
       },
     },
   ],
-  productTiers: [
-    {
-      id: "voltrix-starter",
-      title: "Voltrix Starter",
-      range: "1-5 kWh",
-      body: "For cabins, basic storage and smaller everyday energy needs.",
-    },
-    {
-      id: "voltrix-medium",
-      title: "Voltrix Medium",
-      range: "6-8 kWh",
-      body: "For larger summer houses, outdoor routines and flexible use.",
-    },
-    {
-      id: "voltrix-max",
-      title: "Voltrix Max",
-      range: "9-12 kWh",
-      body: "For extended autonomy, professional workflows and future expansion.",
-    },
-    {
-      id: "accessories",
-      title: "Accessories",
-      range: "System add-ons",
-      body: "For docks, installation support and flexible deployment.",
-    },
-  ],
   smartFeatures: {
     eyebrow: "Smart control",
     title: "Simple control for everyday energy.",
@@ -308,8 +275,8 @@ const LANGUAGE_OVERRIDES = {
       body: "En fast 5 kWh-startsetup för fritidshus, vardagligt energistöd och expanderbar utomhusanvändning.",
       note: "Inkluderar fem NMC-batterimoduler. Faktisk prestanda beror på anslutna enheter, installation och användningsmönster.",
       label: "Fast 5 kWh-startsetup",
-      primary: "Visa produktserie",
-      secondary: "Utforska kit",
+      primary: "Se 5-Pack Kit",
+      secondary: "Alla produkter",
     },
     solutions: [
       {
@@ -371,7 +338,7 @@ const LANGUAGE_OVERRIDES = {
       eyebrow: "Nordiska förhållanden",
       title: "Utformat för skiftande nordiska rutiner.",
       body: "Byggt för säsongsboenden, utomhusrutiner och praktiska energibehov i växlande väder.",
-      points: ["-20°C till +65°C", "IP65", "1-12 kWh per inverter/base setup"],
+      points: ["-20°C till +65°C", "IP65", "1-12 kWh per växelriktare och basenhet"],
     },
     finalCta: {
       eyebrow: "Kom igång",

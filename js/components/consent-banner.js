@@ -5,13 +5,13 @@
  * Shows on first visit.  Provides Accept All, Reject, and Customise options.
  * A small 🍪 button always stays visible so users can change their mind.
  *
- * Fires initTracker() on accept, stopTracker() on reject.
+ * Loads Google Analytics 4 only after analytics consent is granted.
  */
 
 import {
   hasDecided, acceptAll, rejectAll, setConsent, getConsent,
 } from "../core/consent.js";
-import { initTracker, stopTracker } from "../core/activity.js";
+import { initGoogleAnalytics, disableGoogleAnalytics } from "../core/ga4.js";
 
 // ── Copy (5 languages) ────────────────────────────────────────────────────────
 
@@ -161,7 +161,7 @@ export function mountCookieBanner({ lang }) {
 
   function onDecision(analyticsGranted) {
     hideBanner();
-    analyticsGranted ? initTracker() : stopTracker();
+    analyticsGranted ? initGoogleAnalytics() : disableGoogleAnalytics();
   }
 
   function handleAction(action) {
@@ -190,12 +190,14 @@ export function mountCookieBanner({ lang }) {
   if (!hasDecided()) {
     renderAndShow();                          // new visitor — show banner
   } else if (getConsent()?.analytics) {
-    initTracker();                            // returning visitor who accepted
+    initGoogleAnalytics();                    // returning visitor who accepted
   }
   // returning visitor who rejected → do nothing
 
   // React to consent changes from other code (e.g. privacy policy page)
   document.addEventListener("alva:consent", (e) => {
     if (e.detail === null) { showCustom = false; renderAndShow(); }
+    else if (e.detail.analytics) initGoogleAnalytics();
+    else disableGoogleAnalytics();
   });
 }

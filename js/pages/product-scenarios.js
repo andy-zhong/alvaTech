@@ -103,12 +103,30 @@ const SCENARIO_COPY = {
     },
     viewProduct: "View product",
     contactAlva: "Contact Alva",
+    comingSoon: "Coming soon",
+    categories: {
+      coreSystem: "Core system",
+      batteryPacks: "Battery packs",
+      charging: "Charging",
+      chargingAddOn: "Charging add-on",
+      portableUse: "Portable use",
+      mobility: "Mobility",
+      mounting: "Mounting",
+      solarExtension: "Solar extension",
+    },
+    addOns: {
+      mounting: {
+        name: "Mounting accessories",
+        category: "Mounting",
+        body: "Clean support for placement around the Voltrix base unit and battery packs.",
+      },
+    },
   },
   sv: {
     summerhouse: {
       eyebrow: "För fritidshus",
       title: "Energi som följer fritidshuslivet utomhus.",
-      body: "Keep useful energy close when everyday life moves beyond the walls - from the cabin to the terrace, garden, guest house or dock.",
+      body: "Håll användbar energi nära till hands när vardagen flyttar utanför väggarna – från stugan till terrassen, trädgården, gästhuset eller bryggan.",
       primary: "Utforska produkter för fritidshus",
       secondary: "Visa alla produkter",
       usecaseEyebrow: "Användning",
@@ -167,29 +185,47 @@ const SCENARIO_COPY = {
     },
     viewProduct: "Visa produkt",
     contactAlva: "Kontakta Alva",
+    comingSoon: "Kommer snart",
+    categories: {
+      coreSystem: "Kärnsystem",
+      batteryPacks: "Batteripack",
+      charging: "Laddning",
+      chargingAddOn: "Laddningstillbehör",
+      portableUse: "Portabel användning",
+      mobility: "Mobilitet",
+      mounting: "Montering",
+      solarExtension: "Solutökning",
+    },
+    addOns: {
+      mounting: {
+        name: "Monteringstillbehör",
+        category: "Montering",
+        body: "Praktiskt stöd för placering av Voltrix-basenheten och batteripacken.",
+      },
+    },
   },
 };
 
 const RECOMMENDATIONS = {
   summerhouse: [
-    { slug: "voltrix-5-pack-kit", category: "Core system" },
-    { slug: "voltrix-battery-module", category: "Battery packs" },
-    { slug: "voltdock", category: "Charging add-on" },
+    { slug: "voltrix-5-pack-kit", category: "coreSystem" },
+    { slug: "voltrix-battery-module", category: "batteryPacks" },
+    { slug: "voltdock", category: "chargingAddOn" },
     { addOn: "mounting" },
   ],
   installer: [
-    { slug: "voltrix-battery-module", category: "Battery packs" },
-    { slug: "voltdock", category: "Charging add-on" },
-    { slug: "backpack-power", category: "Portable use" },
+    { slug: "voltrix-battery-module", category: "batteryPacks" },
+    { slug: "voltdock", category: "chargingAddOn" },
+    { slug: "backpack-power", category: "portableUse" },
     { addOn: "mounting" },
   ],
   accessories: [
-    { slug: "voltdock", category: "Charging" },
-    { slug: "backpack-power", category: "Portable use" },
-    { slug: "bike-accessory", category: "Mobility" },
-    { slug: "voltrix-wall-mounting", category: "Mounting" },
-    { slug: "voltrix-stand-mounting", category: "Mounting" },
-    { slug: "solar-tracking-system", category: "Solar extension" },
+    { slug: "voltdock", category: "charging" },
+    { slug: "backpack-power", category: "portableUse" },
+    { slug: "bike-accessory", category: "mobility" },
+    { slug: "voltrix-wall-mounting", category: "mounting" },
+    { slug: "voltrix-stand-mounting", category: "mounting" },
+    { slug: "solar-tracking-system", category: "solarExtension" },
   ],
 };
 
@@ -258,6 +294,9 @@ function getScenarioCopy(lang, type) {
     ...copies[type],
     viewProduct: copies.viewProduct ?? SCENARIO_COPY.en.viewProduct,
     contactAlva: copies.contactAlva ?? SCENARIO_COPY.en.contactAlva,
+    comingSoon: copies.comingSoon ?? SCENARIO_COPY.en.comingSoon,
+    categories: { ...SCENARIO_COPY.en.categories, ...copies.categories },
+    addOns: { ...SCENARIO_COPY.en.addOns, ...copies.addOns },
   };
 }
 
@@ -269,9 +308,9 @@ function renderRecommendation(item, products, copy, lang) {
     const content = getProductContent(product, lang);
     return `
       <a class="showroom-product product-scenario-product" href="/views/product.html?slug=${encodeURIComponent(product.slug)}">
-        ${renderRecommendationMedia(product.thumbnail ?? product.heroImage, content.name)}
+        ${renderRecommendationMedia(product.thumbnail ?? product.heroImage, content.name, copy.comingSoon)}
         <div class="showroom-product__copy">
-          <span>${item.category}</span>
+          <span>${copy.categories[item.category] ?? item.category}</span>
           <h3>${content.name}</h3>
           <p>${content.summary}</p>
         </div>
@@ -280,12 +319,14 @@ function renderRecommendation(item, products, copy, lang) {
     `;
   }
 
-  const addOn = ADD_ONS[item.addOn];
+  const baseAddOn = ADD_ONS[item.addOn];
+  const localizedAddOn = copy.addOns[item.addOn];
+  const addOn = baseAddOn ? { ...baseAddOn, ...localizedAddOn } : null;
   if (!addOn) return "";
 
   return `
     <a class="showroom-product product-scenario-product" href="${addOn.href}">
-      ${renderRecommendationMedia(addOn.image, addOn.name)}
+      ${renderRecommendationMedia(addOn.image, addOn.name, copy.comingSoon)}
       <div class="showroom-product__copy">
         <span>${addOn.category}</span>
         <h3>${addOn.name}</h3>
@@ -296,11 +337,11 @@ function renderRecommendation(item, products, copy, lang) {
   `;
 }
 
-function renderRecommendationMedia(src, alt) {
+function renderRecommendationMedia(src, alt, comingSoon) {
   if (!src) {
     return `
       <figure class="showroom-product__media showroom-image showroom-image--placeholder frameless-image-stage" aria-label="${alt}">
-        <span>Coming soon</span>
+        <span>${comingSoon}</span>
       </figure>
     `;
   }

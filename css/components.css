@@ -406,6 +406,10 @@ body:not([data-page="checkout"]) .product-card > img {
   background: var(--section-bg-soft);
 }
 
+.mobile-section-nav {
+  display: none;
+}
+
 .setup-estimator-shell {
   color: var(--text-dark);
 }

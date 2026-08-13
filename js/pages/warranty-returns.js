@@ -77,14 +77,22 @@ const WARRANTY_COPY = {
   },
 };
 
-const REFERENCES = [
-  ["Konsumentverket: reklamationsrätt", "https://www.konsumentverket.se/varor-och-tjanster-rattigheter/reklamera-fel-pa-vara-eller-tjanst/"],
-  ["Konsumentverket: right of withdrawal", "https://web-prod.konsumentverket.se/en/articles/right-of-withdrawal/"],
-  ["EU consumer shopping rights", "https://www.consilium.europa.eu/en/policies/consumer-protection-shopping-rights/"],
-];
+const REFERENCES = {
+  en: [
+    ["Swedish Consumer Agency: complaints", "https://www.konsumentverket.se/varor-och-tjanster-rattigheter/reklamera-fel-pa-vara-eller-tjanst/"],
+    ["Swedish Consumer Agency: right of withdrawal", "https://web-prod.konsumentverket.se/en/articles/right-of-withdrawal/"],
+    ["EU consumer shopping rights", "https://www.consilium.europa.eu/en/policies/consumer-protection-shopping-rights/"],
+  ],
+  sv: [
+    ["Konsumentverket: reklamationsrätt", "https://www.konsumentverket.se/varor-och-tjanster-rattigheter/reklamera-fel-pa-vara-eller-tjanst/"],
+    ["Konsumentverket: ångerrätt", "https://www.konsumentverket.se/konsumentratt/angerratt/"],
+    ["EU: konsumenträttigheter vid köp", "https://europa.eu/youreurope/citizens/consumers/shopping/index_sv.htm"],
+  ],
+};
 
 export function renderWarrantyReturnsPage({ lang }) {
   const copy = WARRANTY_COPY[lang] ?? WARRANTY_COPY.en;
+  const references = REFERENCES[lang] ?? REFERENCES.en;
 
   return `
     <article class="legal-page">
@@ -109,7 +117,7 @@ export function renderWarrantyReturnsPage({ lang }) {
           <div class="legal-section__body">
             <p>${copy.referencesBody}</p>
             <ul>
-              ${REFERENCES.map(([label, href]) => `<li><a href="${href}" target="_blank" rel="noopener">${label}</a></li>`).join("")}
+              ${references.map(([label, href]) => `<li><a href="${href}" target="_blank" rel="noopener">${label}</a></li>`).join("")}
             </ul>
           </div>
         </section>

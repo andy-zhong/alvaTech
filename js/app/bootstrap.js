@@ -21,10 +21,6 @@ import {
 import { renderAboutPage }        from "../pages/about.js";
 import { renderSolutionsPage }    from "../pages/solutions.js";
 import { renderSolutionDetailPage } from "../pages/solution-detail.js";
-import {
-  getSystemRangeTitle,
-  renderSystemRangePage,
-} from "../pages/system-range.js";
 import { renderSupportPage }      from "../pages/support.js";
 import { renderAccountPage }      from "../pages/account.js";
 import { renderWarrantyReturnsPage } from "../pages/warranty-returns.js";
@@ -106,21 +102,6 @@ async function mountPage({ page, lang, route, productUrl, buyProductUrl, getCurr
     case "product-accessories":
       document.title = lang === "sv" ? "Tillbehör | Alva Technology" : "Accessories | Alva Technology";
       container.innerHTML = renderProductScenarioPage({ lang, type: "accessories" });
-      break;
-
-    case "product-starter":
-      document.title = getSystemRangeTitle("starter");
-      container.innerHTML = renderSystemRangePage({ type: "starter" });
-      break;
-
-    case "product-medium":
-      document.title = getSystemRangeTitle("medium");
-      container.innerHTML = renderSystemRangePage({ type: "medium" });
-      break;
-
-    case "product-max":
-      document.title = getSystemRangeTitle("max");
-      container.innerHTML = renderSystemRangePage({ type: "max" });
       break;
 
     case "solutions":

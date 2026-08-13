@@ -31,7 +31,7 @@ export const VOLTRIX_PRODUCT = {
       name: "Voltrix 5-Pack Kit",
       summary: "A fixed 5 kWh starting setup for seasonal homes, everyday energy support and expandable outdoor use.",
       intro:
-        "Voltrix 5-Pack Kit is a fixed 5 kWh starting setup within the Starter range. It includes five NMC battery modules for seasonal homes, everyday energy support and expandable outdoor use.",
+        "Voltrix 5-Pack Kit is a fixed 5 kWh configuration within the Voltrix platform. It includes five NMC battery modules for seasonal homes, everyday energy support and expandable outdoor use.",
       features: [
         "Fixed 5 kWh setup",
         "Includes five NMC battery modules",
@@ -80,7 +80,7 @@ export const VOLTRIX_PRODUCT = {
       name: "Voltrix 5-Pack Kit",
       summary: "En fast 5 kWh-startsetup för fritidshus, vardagligt energistöd och expanderbar utomhusanvändning.",
       intro:
-        "Voltrix 5-Pack Kit är en fast 5 kWh-startsetup inom Starter-serien. Den innehåller fem NMC-batterimoduler för fritidshus, vardagligt energistöd och expanderbar utomhusanvändning.",
+        "Voltrix 5-Pack Kit är en fast 5 kWh-konfiguration inom Voltrix-plattformen. Den innehåller fem NMC-batterimoduler för fritidshus, vardagligt energistöd och expanderbar utomhusanvändning.",
       features: [
         "Fast 5 kWh-setup",
         "2400 W toppeffekt på AC-utgång",
@@ -125,7 +125,7 @@ export const VOLTRIX_PRODUCT = {
       name: "Voltrix 5-Pack Kit",
       summary: "A fixed 5 kWh starting setup for seasonal homes, everyday energy support and expandable outdoor use.",
       intro:
-        "Voltrix 5-Pack Kit is a fixed 5 kWh starting setup within the Starter range. It includes five NMC battery modules for seasonal homes, everyday energy support and expandable outdoor use.",
+        "Voltrix 5-Pack Kit is a fixed 5 kWh configuration within the Voltrix platform. It includes five NMC battery modules for seasonal homes, everyday energy support and expandable outdoor use.",
       features: [
         "Laajennettavissa 1-12 akkumoduuliin",
         "2400 W huippu AC-teho",
@@ -170,7 +170,7 @@ export const VOLTRIX_PRODUCT = {
       name: "Voltrix 5-Pack Kit",
       summary: "A fixed 5 kWh starting setup for seasonal homes, everyday energy support and expandable outdoor use.",
       intro:
-        "Voltrix 5-Pack Kit is a fixed 5 kWh starting setup within the Starter range. It includes five NMC battery modules for seasonal homes, everyday energy support and expandable outdoor use.",
+        "Voltrix 5-Pack Kit is a fixed 5 kWh configuration within the Voltrix platform. It includes five NMC battery modules for seasonal homes, everyday energy support and expandable outdoor use.",
       features: [
         "Fixed 5 kWh setup",
         "2400 W topp AC-effekt",
@@ -215,7 +215,7 @@ export const VOLTRIX_PRODUCT = {
       name: "Voltrix 5-Pack Kit",
       summary: "A fixed 5 kWh starting setup for seasonal homes, everyday energy support and expandable outdoor use.",
       intro:
-        "Voltrix 5-Pack Kit is a fixed 5 kWh starting setup within the Starter range. It includes five NMC battery modules for seasonal homes, everyday energy support and expandable outdoor use.",
+        "Voltrix 5-Pack Kit is a fixed 5 kWh configuration within the Voltrix platform. It includes five NMC battery modules for seasonal homes, everyday energy support and expandable outdoor use.",
       features: [
         "Fixed 5 kWh setup",
         "2400 W top AC-effekt",
@@ -260,7 +260,7 @@ export const VOLTRIX_PRODUCT = {
       name: "Voltrix 5-Pack Kit",
       summary: "A fixed 5 kWh starting setup for seasonal homes, everyday energy support and expandable outdoor use.",
       intro:
-        "Voltrix 5-Pack Kit is a fixed 5 kWh starting setup within the Starter range. It includes five NMC battery modules for seasonal homes, everyday energy support and expandable outdoor use.",
+        "Voltrix 5-Pack Kit is a fixed 5 kWh configuration within the Voltrix platform. It includes five NMC battery modules for seasonal homes, everyday energy support and expandable outdoor use.",
       features: [
         "Fixed 5 kWh setup",
         "Potenza AC di picco 2400 W",

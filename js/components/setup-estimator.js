@@ -53,8 +53,8 @@ const ESTIMATOR_COPY = {
     resultSummer: "Summer house estimate",
     resultInstaller: "Installer estimate",
     requestQuote: "Request quote",
-    addToCart: "Add to cart",
-    addedToCart: "Added to cart",
+    addToCart: "Save configuration",
+    addedToCart: "Configuration saved",
     planningPrices: "Planning prices only. Final quote may differ.",
     kwhTitle: "What does 1 kWh mean?",
     kwhBody: "1 kWh is useful everyday energy. As a rough guide, it can mean many hours of lighting and device charging, roughly 40–70 full phone charges, or part of a day to about a day of efficient fridge support depending on model and conditions.",
@@ -129,8 +129,8 @@ const ESTIMATOR_COPY = {
     resultSummer: "Fritidshusestimat",
     resultInstaller: "Installatörsestimat",
     requestQuote: "Begär offert",
-    addToCart: "Lägg i varukorg",
-    addedToCart: "Tillagd i varukorgen",
+    addToCart: "Spara konfiguration",
+    addedToCart: "Konfiguration sparad",
     planningPrices: "Endast planeringspriser. Slutlig offert kan skilja sig.",
     kwhTitle: "Vad betyder 1 kWh?",
     kwhBody: "1 kWh är användbar vardagsenergi. Som grov riktlinje kan det innebära många timmars belysning och enhetsladdning, ungefär 40–70 fulla telefonladdningar eller delar av en dag till cirka en dag för ett effektivt kylskåp beroende på modell och förhållanden.",
@@ -154,17 +154,17 @@ const ESTIMATOR_COPY = {
       voltDock: "VoltDock",
       backpackPowerMounting: "Backpack Power Mounting",
       bikeAccessory: "Bike accessory",
-      extraBatteryPack: "Extra Battery Pack",
-      extraBatteryPacks: "Extra Battery Packs",
+      extraBatteryPack: "Extra batteripack",
+      extraBatteryPacks: "Extra batteripack",
       vanMounting: "Montering i servicebil",
     },
     metrics: {
       estimatedStorage: "Uppskattad lagring",
-      batteryPacks: "Battery Packs",
-      recommendedInverters: "Rekommenderade inverters",
+      batteryPacks: "Batteripack",
+      recommendedInverters: "Rekommenderade växelriktare",
       estimatedPriceRange: "Uppskattat prisintervall",
-      batteryPacksPerVan: "Battery Packs per servicebil",
-      totalBatteryPacks: "Totalt antal Battery Packs",
+      batteryPacksPerVan: "Batteripack per servicebil",
+      totalBatteryPacks: "Totalt antal batteripack",
     },
     notes: {
       recommendedEmpty: "Rekommenderade tillbehör: Välj tillbehör för att inkludera dem i planeringsestimatet.",
@@ -172,15 +172,15 @@ const ESTIMATOR_COPY = {
       noSolar: "Ingen solenergiprissättning ingår i detta planeringsestimat.",
       existingSolar: "Planera utifrån befintlig solenergi och bekräfta slutlig konfiguration med offert.",
       tracking: "Solar tracking system: Kommer snart — pris ingår inte.",
-      centralizedCharging: "Centraliserad laddning: Ladda Battery Packs på kontoret eller i verkstaden, ta sedan med dem i servicebilen och använd praktisk energi där arbetsdagen behöver den.",
+      centralizedCharging: "Centraliserad laddning: Ladda batteripack på kontoret eller i verkstaden, ta sedan med dem i servicebilen och använd energin där arbetsdagen behöver den.",
       noneSelected: "Inget valt",
       finalNote: "Obs: Baserat på förinställda planeringspriser. Slutlig konfiguration och offert kan skilja sig.",
       cartTitlePrefix: "Uppskattad Voltrix-setup",
       cartSubtitle: "Planeringsestimat, slutlig offert kan skilja sig.",
-      cartNotice: "Planeringsestimat tillagt i varukorgen. Begär offert för att bekräfta konfigurationen.",
+      cartNotice: "Planeringskonfiguration sparad i varukorgen. Begär offert för att bekräfta den slutliga lösningen.",
     },
-    invertersSingular: "inverter",
-    invertersPlural: "inverters",
+    invertersSingular: "växelriktare",
+    invertersPlural: "växelriktare",
     details: {
       scenario: "Scenario",
       solarOptions: "Solenergival",
@@ -188,7 +188,7 @@ const ESTIMATOR_COPY = {
       vansTeams: "Servicebilar / team",
       centralizedCharging: "Centraliserad laddning",
     },
-    centralizedChargingText: "Ladda Battery Packs på kontoret eller i verkstaden, ta sedan med dem i servicebilen och använd praktisk energi där arbetsdagen behöver den.",
+    centralizedChargingText: "Ladda batteripack på kontoret eller i verkstaden, ta sedan med dem i servicebilen och använd energin där arbetsdagen behöver den.",
   },
 };
 
@@ -233,9 +233,10 @@ export function renderSetupEstimator({ context = "home" } = {}) {
   const innerClass = context === "products"
     ? "setup-estimator"
     : "home-section-inner setup-estimator";
+  const shellId = context === "products" ? ' id="setup-estimator"' : "";
 
   return `
-    <section class="${shellClass}" aria-labelledby="setup-estimator-title" data-setup-estimator>
+    <section class="${shellClass}"${shellId} aria-labelledby="setup-estimator-title" data-setup-estimator>
       <div class="${innerClass}">
         <div class="setup-estimator__head">
           <span class="platform-eyebrow">${copy.eyebrow}</span>

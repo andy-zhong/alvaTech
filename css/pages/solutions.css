@@ -63,6 +63,25 @@
   transition: transform 180ms ease, border-color 180ms ease, box-shadow 180ms ease, background 180ms ease;
 }
 
+.solutions-overview-card__media {
+  width: 100%;
+  aspect-ratio: 1.65;
+  display: block;
+  overflow: hidden;
+  border-radius: 8px;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+}
+
+.solutions-overview-card__media--summer-house {
+  background-image: url("../../Picture/products/voltrix/summerhouse/summerhouse01-optimized.jpg");
+}
+
+.solutions-overview-card__media--field {
+  background-image: url("../../Picture/products/voltrix/field/field05-optimized.jpg");
+}
+
 .solutions-overview-card:hover,
 .solutions-overview-card:focus-visible {
   transform: translateY(-4px);

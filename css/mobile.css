@@ -56,95 +56,17 @@
   .detail-actions,
   .showroom-actions,
   .solution-page__actions,
-  .platform-hero__actions,
   .platform-final__actions,
   .platform-section-actions {
     gap: 10px;
   }
 
-  .platform-hero {
-    min-height: calc(100svh - var(--site-header-height));
-    align-items: end;
-  }
-
-  .platform-hero__image {
-    opacity: 0.56;
-    background-position: 69% 48%;
-    transform: scaleX(-1) scale(1.16);
-  }
-
-  .platform-hero__overlay {
-    background:
-      linear-gradient(180deg, rgba(7, 26, 22, 0.18), rgba(7, 26, 22, 0.76) 58%, rgba(7, 26, 22, 0.92)),
-      radial-gradient(circle at 74% 20%, rgba(32, 180, 85, 0.12), transparent 34%);
-  }
-
-  .platform-hero__inner {
-    padding-top: clamp(42px, 10svh, 72px);
-    padding-bottom: clamp(28px, 7svh, 54px);
-  }
-
-  .platform-hero__content {
-    gap: 22px;
-  }
-
-  .platform-hero__tabs {
-    justify-self: center;
-    overflow-x: auto;
-    flex-wrap: nowrap;
-    justify-content: center;
-    gap: clamp(18px, 7vw, 34px);
-    max-width: 100%;
-    scrollbar-width: none;
-  }
-
-  .platform-hero__tabs::-webkit-scrollbar {
-    display: none;
-  }
-
-  .platform-hero__tab {
-    flex: 0 0 auto;
-    white-space: nowrap;
-  }
-
-  .platform-hero h1,
   .showroom-hero h1,
   .solutions-overview-hero h1,
   .solution-page-hero h1,
   .page-hero h1 {
     line-height: 1.02;
     letter-spacing: -0.04em;
-  }
-
-  .platform-hero h1 {
-    font-size: clamp(2.25rem, 9vw, 3.25rem);
-  }
-
-  .platform-hero__title,
-  .platform-hero__copy,
-  .platform-hero p,
-  .platform-hero__benefits {
-    min-height: 0;
-  }
-
-  .platform-hero__title span {
-    white-space: normal;
-  }
-
-  .platform-hero p {
-    max-width: 34rem;
-    margin-top: 12px;
-    font-size: 1rem;
-    line-height: 1.58;
-  }
-
-  .platform-hero__benefits {
-    gap: 10px;
-  }
-
-  .platform-hero__benefits span {
-    min-height: 0;
-    padding-top: 10px;
   }
 
   .platform-home-section,
@@ -246,9 +168,7 @@
   .showroom-composition__image,
   .showroom-featured__image,
   .solution-page__visual,
-  .solution-page__image,
-  .platform-usecase__visual,
-  .platform-solution-detail__visual {
+  .solution-page__image {
     min-height: clamp(230px, 64vw, 330px);
   }
 
@@ -258,7 +178,6 @@
 
   .showroom-product__media,
   .showroom-addon__media,
-  .platform-preset-card__media,
   body:not([data-page="checkout"]) .buy-hub__item img,
   body:not([data-page="checkout"]) .product-card > img {
     min-height: 0;
@@ -266,16 +185,13 @@
   }
 
   .platform-section-head,
-  .platform-preset-head,
   .cart-header {
     gap: 14px;
   }
 
-  .platform-benefit-card,
   .platform-feature-card,
   .platform-tier-card,
   .platform-support-card,
-  .platform-solution-card,
   .solutions-overview-card,
   .solution-page-addon,
   .page-hero,
@@ -305,15 +221,10 @@
   .detail-actions,
   .showroom-actions,
   .solution-page__actions,
-  .platform-hero__actions,
   .platform-final__actions,
   .platform-section-actions {
     align-items: stretch;
     flex-direction: column;
-  }
-
-  .platform-hero__benefits small {
-    display: none;
   }
 
   .showroom-annotation,
@@ -392,16 +303,6 @@
     font-size: 0.86rem;
   }
 
-  .platform-hero {
-    min-height: calc(100svh - var(--site-header-height));
-  }
-
-  .platform-hero__inner {
-    padding-top: 34px;
-    padding-bottom: 28px;
-  }
-
-  .platform-hero h1,
   .showroom-hero h1,
   .solutions-overview-hero h1,
   .solution-page-hero h1 {
@@ -471,174 +372,8 @@
     background: #ffffff;
   }
 
-  .platform-hero {
-    min-height: auto;
-  }
-
-  .platform-hero__image {
-    opacity: 0.72;
-    background-position: 64% 48%;
-    transform: scaleX(-1) scale(1.08);
-  }
-
-  body[data-page="home"] .platform-hero__image {
-    opacity: 1;
-    background: url("/Picture/products/voltrix/summerhouse/summerhouse05.png") center 52% / cover no-repeat;
-    filter: saturate(1.04) contrast(1.02) brightness(1.04);
-    transform: scaleX(-1);
-  }
-
-  .platform-hero__overlay {
-    background:
-      linear-gradient(180deg, rgba(7, 26, 22, 0.12), rgba(7, 26, 22, 0.62) 54%, rgba(7, 26, 22, 0.88)),
-      radial-gradient(circle at 72% 20%, rgba(32, 180, 85, 0.1), transparent 34%);
-  }
-
-  .platform-hero__inner {
-    gap: 18px;
-    padding-top: clamp(28px, 7vw, 40px);
-    padding-bottom: 24px;
-  }
-
-  .platform-hero__content {
-    gap: 22px;
-  }
-
-  .platform-hero__copy {
-    min-height: calc((3 * 0.99em) + 12px + (4 * 1.52em));
-  }
-
-  .platform-hero h1 {
-    max-width: 12ch;
-    font-size: clamp(32px, 8.5vw, 42px);
-    line-height: 0.99;
-  }
-
-  .platform-hero__title {
-    min-height: calc(3em * 0.99);
-  }
-
-  .platform-hero p {
-    max-width: 34ch;
-    min-height: calc(4em * 1.52);
-    margin-top: 12px;
-    font-size: 0.875rem;
-    line-height: 1.52;
-  }
-
-  .platform-hero__benefits {
-    gap: 7px;
-  }
-
-  .platform-hero__benefits span {
-    grid-template-columns: auto 1fr;
-    gap: 6px 10px;
-    padding-top: 8px;
-  }
-
-  .platform-hero__benefits em {
-    font-size: 0.88rem;
-  }
-
-  .platform-hero__actions .button {
-    min-height: 46px;
-    padding-inline: 18px;
-    border-width: 1px;
-    border-color: rgba(15, 42, 36, 0.14);
-    box-shadow: none;
-  }
-
-  .platform-hero .button--primary {
-    background: #c7e27a;
-    border-color: transparent;
-    box-shadow: none;
-  }
-
-  .platform-hero .button--secondary {
-    background: rgba(255, 255, 255, 0.42);
-    border-color: rgba(15, 42, 36, 0.16);
-  }
-
-  .platform-hero__tabs {
-    margin-top: 24px;
-  }
-
-  body[data-page="home"] .platform-hero + .platform-home-section {
-    padding-top: 0;
-  }
-
-  .platform-benefit-grid {
-    gap: 0;
-    border-top: 1px solid var(--line-soft);
-    border-bottom: 1px solid var(--line-soft);
-  }
-
-  body[data-page="home"] .platform-hero + .platform-home-section .platform-benefit-grid {
-    border-top: 0;
-  }
-
-  body[data-page="home"] .platform-benefit-card.reveal {
-    opacity: 1;
-    transform: none;
-  }
-
-  .platform-benefit-card,
-  .platform-benefit-card:nth-child(2n) {
-    display: grid;
-    grid-template-columns: 2.4rem minmax(0, 1fr);
-    gap: 4px 12px;
-    min-height: 0;
-    padding: 14px 0;
-    border-right: 0;
-    border-bottom: 1px solid var(--line-soft);
-    border-radius: 0;
-    background: transparent;
-    box-shadow: none;
-  }
-
-  .platform-benefit-card:last-child {
-    border-bottom: 0;
-  }
-
-  .platform-benefit-card__meta {
-    grid-row: 1 / span 2;
-    display: block;
-    min-height: 0;
-  }
-
-  .platform-benefit-card__meta .platform-icon {
-    display: none;
-  }
-
-  .platform-benefit-card__meta span {
-    display: block;
-    padding-top: 2px;
-    color: #0f6b3f;
-    font-size: 0.72rem;
-    letter-spacing: 0.08em;
-  }
-
-  .platform-benefit-card__body {
-    min-width: 0;
-  }
-
-  .platform-benefit-card__body h2 {
-    margin: 0;
-    font-size: 1rem;
-    line-height: 1.2;
-  }
-
-  .platform-benefit-card p {
-    font-size: 0.93rem;
-    line-height: 1.48;
-  }
-
-  body[data-page="home"] .platform-benefit-card p,
   body[data-page="home"] .platform-explain__copy p,
-  body[data-page="home"] .platform-solution-tab p,
-  body[data-page="home"] .platform-section-head--narrow p,
-  body[data-page="home"] .platform-product-feature__copy p,
-  body[data-page="home"] .platform-addons__note {
+  body[data-page="home"] .platform-section-head--narrow p {
     display: none;
   }
 
@@ -649,176 +384,10 @@
     overflow-wrap: break-word;
   }
 
-  .platform-benefit-card__tag {
-    display: block;
-    grid-column: 2;
-    width: 100%;
-    min-height: 0;
-    margin-top: 0;
-    padding: 0;
-    border: 0;
-    background: transparent;
-    font-size: 0;
-    line-height: 1.2;
-    white-space: normal;
-    overflow-wrap: break-word;
-  }
-
-  body[data-page="home"] .platform-benefit-card__tag::after {
-    display: block;
-    max-width: 30ch;
-    color: #0f6b3f;
-    font-size: 0.74rem;
-    font-weight: 800;
-    line-height: 1.32;
-    white-space: normal;
-    overflow-wrap: break-word;
-  }
-
-  body[data-page="home"] .platform-benefit-card:nth-child(1) .platform-benefit-card__tag::after {
-    content: "A compact base unit with Battery Packs.";
-  }
-
-  body[data-page="home"] .platform-benefit-card:nth-child(2) .platform-benefit-card__tag::after {
-    content: "Start small, add capacity over time.";
-  }
-
-  body[data-page="home"] .platform-benefit-card:nth-child(3) .platform-benefit-card__tag::after {
-    content: "Use energy on the terrace, in the garden or by the van.";
-  }
-
-  body[data-page="home"] .platform-benefit-card:nth-child(4) .platform-benefit-card__tag::after {
-    content: "Connect VoltDock, Backpack Power and mobility accessories.";
-  }
-
-  body[data-page="home"] .platform-solution-tabs {
-    display: flex;
-    grid-template-columns: none;
-    gap: 0;
-    overflow-x: auto;
-    overflow-y: visible;
-    margin-inline: 0;
-    padding: 0 0 8px;
-    scroll-padding-inline: 0;
-    scroll-snap-type: x mandatory;
-    scrollbar-width: none;
-    -webkit-overflow-scrolling: touch;
-  }
-
-  body[data-page="home"] .platform-solution-tabs::-webkit-scrollbar {
-    display: none;
-  }
-
-  body[data-page="home"] .platform-solution-mobile-indicator {
-    display: flex;
-    align-items: center;
-    gap: 24px;
-    margin: 2px 0 0;
-    border-bottom: 1px solid rgba(15, 42, 36, 0.12);
-  }
-
-  body[data-page="home"] .platform-solution-mobile-indicator__button {
-    position: relative;
-    min-height: 34px;
-    padding: 0 0 9px;
-    border: 0;
-    border-radius: 0;
-    background: transparent;
-    color: rgba(15, 42, 36, 0.5);
-    font-size: 0.72rem;
-    font-weight: 900;
-    letter-spacing: 0.07em;
-    text-transform: uppercase;
-    cursor: pointer;
-  }
-
-  body[data-page="home"] .platform-solution-mobile-indicator__button::after {
-    content: "";
-    position: absolute;
-    left: 0;
-    right: 0;
-    bottom: -1px;
-    height: 1px;
-    background: #0f6b3f;
-    opacity: 0;
-    transform: scaleX(0.45);
-    transform-origin: center;
-    transition: opacity 180ms ease, transform 240ms ease;
-  }
-
-  body[data-page="home"] .platform-solution-mobile-indicator__button:hover,
-  body[data-page="home"] .platform-solution-mobile-indicator__button:focus-visible,
-  body[data-page="home"] .platform-solution-mobile-indicator__button.is-active {
-    color: #0f2a24;
-  }
-
-  body[data-page="home"] .platform-solution-mobile-indicator__button.is-active::after {
-    opacity: 1;
-    transform: scaleX(1);
-  }
-
-  body[data-page="home"] .platform-solution-slide {
-    flex: 0 0 100%;
-    scroll-snap-align: start;
-    scroll-snap-stop: always;
-  }
-
-  body[data-page="home"] .platform-solution-tab {
-    width: 100%;
-    gap: 12px;
-    padding: 0 0 18px;
-    overflow: visible;
-    border: 0;
-    border-radius: 0;
-    background: transparent;
-    box-shadow: none;
-  }
-
-  body[data-page="home"] .platform-solution-tab:last-child {
-    border-bottom: 0;
-  }
-
-  body[data-page="home"] .platform-solution-tab__image {
-    min-height: 0;
-    aspect-ratio: 1.34;
-    margin-inline: 10px;
-    border-radius: 12px;
-  }
-
-  body[data-page="home"] .platform-solution-tab__copy {
-    gap: 7px;
-    padding: 0 10px;
-    border-bottom: 0;
-  }
-
-  body[data-page="home"] .platform-solution-tab__copy strong {
-    font-size: 1.05rem;
-    line-height: 1.22;
-  }
-
-  body[data-page="home"] .platform-solution-tab__copy span {
-    font-size: 0.9rem;
-    line-height: 1.5;
-  }
-
-  body[data-page="home"] .platform-solution-tab__copy .platform-solution-tab__cta {
-    width: 100%;
-    margin-top: 4px;
-    padding-bottom: 14px;
-    border-bottom: 1px solid rgba(8, 45, 37, 0.09);
-  }
-
-  body[data-page="home"] .platform-solution-slide > .platform-solution-panels {
-    width: 100%;
-    margin-top: 14px;
-    border-top: 0;
-  }
-
   body[data-page="home"] #platform-section {
     border-bottom: 1px solid rgba(8, 45, 37, 0.09);
   }
 
-  .platform-addons-section,
   .platform-home-section.setup-estimator-shell,
   .showroom-section.setup-estimator-shell {
     padding-top: 42px;
@@ -918,29 +487,6 @@
 }
 
 @media (max-width: 430px) {
-  .platform-hero__inner {
-    padding-top: 28px;
-  }
-
-  .platform-hero h1 {
-    font-size: clamp(32px, 8.5vw, 42px);
-    line-height: 0.99;
-  }
-
-  .platform-hero p {
-    max-width: 32ch;
-    font-size: 0.875rem;
-    line-height: 1.5;
-  }
-
-  .platform-hero__tabs {
-    gap: 24px;
-  }
-
-  .platform-hero__tab {
-    font-size: 0.72rem;
-  }
-
   .setup-estimator__options {
     grid-template-columns: 1fr;
   }
@@ -956,6 +502,34 @@
 }
 
 @media (max-width: 640px) {
+  .setup-estimator__step-toggle {
+    grid-template-columns: minmax(0, 1fr) auto;
+    grid-template-areas:
+      "label icon"
+      "summary icon";
+    align-items: center;
+    gap: 4px 12px;
+    min-width: 0;
+  }
+
+  .setup-estimator__step-toggle span {
+    grid-area: label;
+    min-width: 0;
+    overflow-wrap: anywhere;
+  }
+
+  .setup-estimator__step-toggle small {
+    grid-area: summary;
+    min-width: 0;
+    text-align: left;
+    overflow-wrap: anywhere;
+  }
+
+  .setup-estimator__step-toggle::after {
+    grid-area: icon;
+    align-self: center;
+  }
+
   .setup-estimator__metric {
     grid-template-columns: 1fr;
     gap: 3px;

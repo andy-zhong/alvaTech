@@ -265,17 +265,15 @@ function renderSolutionShowcase(platform, solutions) {
           <p>${platform.body}</p>
         </div>
 
-        <div class="platform-solution-mobile-indicator" role="tablist" aria-label="Voltrix platform mobile solutions">
-          ${solutions.map((solution, index) => renderSolutionMobileIndicator(solution, index)).join("")}
-        </div>
+        <div class="platform-solution-stage">
+          <div class="platform-solution-mobile-indicator" role="tablist" aria-label="${platform.eyebrow}">
+            ${solutions.map((solution, index) => renderSolutionMobileIndicator(solution, index)).join("")}
+          </div>
 
-        <div class="platform-solution-tabs" role="tablist" aria-label="Voltrix platform solutions">
-          ${solutions.map((solution, index) => renderSolutionSlide(solution, index)).join("")}
+          <div class="platform-solution-tabs" data-solution-viewport>
+            ${solutions.map((solution, index) => renderSolutionSlide(solution, index)).join("")}
+          </div>
         </div>
-      </div>
-
-      <div class="platform-solution-panels" data-solution-panels hidden>
-        ${solutions.map((solution) => renderSolutionDetail(solution)).join("")}
       </div>
     </div>
   `;
@@ -360,7 +358,11 @@ function renderSolutionMobileIndicator(solution, index) {
     <button
       class="platform-solution-mobile-indicator__button ${isActive ? "is-active" : ""}"
       type="button"
+      role="tab"
       aria-selected="${isActive ? "true" : "false"}"
+      aria-controls="solution-panel-${solution.id}"
+      id="solution-tab-${solution.id}"
+      tabindex="${isActive ? "0" : "-1"}"
       data-solution-indicator="${solution.id}">
       ${solution.label}
     </button>
@@ -369,59 +371,31 @@ function renderSolutionMobileIndicator(solution, index) {
 
 function renderSolutionSlide(solution, index) {
   return `
-    <div class="platform-solution-slide" data-solution-slide="${solution.id}">
-      ${renderSolutionTab(solution, index)}
-    </div>
-  `;
-}
-
-function renderSolutionTab(solution, index) {
-  const visualClass = solution.id === "field" ? "platform-solution-tab__image--field" : "platform-solution-tab__image--summer";
-
-  return `
-    <button
-      class="platform-solution-tab"
-      type="button"
-      role="tab"
-      aria-selected="false"
-      aria-expanded="false"
-      aria-controls="solution-panel-${solution.id}"
-      id="solution-tab-${solution.id}"
-      data-solution-tab="${solution.id}"
-      style="--delay:${(index * 0.08).toFixed(2)}s">
-      <span class="platform-solution-tab__image ${visualClass}" aria-hidden="true"></span>
-      <span class="platform-solution-tab__copy">
-        <small>${solution.label}</small>
-        <strong>${solution.title}</strong>
-        <span>${solution.body}</span>
-        <span class="platform-solution-tab__cta">${solution.cta ?? "Explore solution"} <b aria-hidden="true">&rarr;</b></span>
-      </span>
-    </button>
-  `;
-}
-
-function renderSolutionDetail(solution) {
-  const visualClass = solution.id === "field" ? "platform-solution-detail__visual--field" : "platform-solution-detail__visual--summer";
-
-  return `
     <article
-      class="platform-solution-detail"
+      class="platform-solution-slide ${index === 0 ? "is-active" : ""}"
       id="solution-panel-${solution.id}"
       role="tabpanel"
       aria-labelledby="solution-tab-${solution.id}"
-      data-solution-panel="${solution.id}"
-      hidden>
-      <div class="platform-solution-detail__visual ${visualClass}" aria-hidden="true"></div>
-      <div class="platform-solution-detail__copy">
-        <span class="platform-eyebrow">${solution.detail.eyebrow}</span>
-        <h3>${solution.detail.title}</h3>
-        <p>${solution.detail.body}</p>
-        <ul>
-          ${solution.detail.bullets.map((bullet) => `<li>${bullet}</li>`).join("")}
-        </ul>
-        <a class="button button--primary" href="${solution.href}">${solution.cta}</a>
-      </div>
+      aria-hidden="${index === 0 ? "false" : "true"}"
+      data-solution-slide="${solution.id}"
+      ${index === 0 ? "" : "inert"}>
+      ${renderSolutionTab(solution)}
     </article>
+  `;
+}
+
+function renderSolutionTab(solution) {
+  const visualClass = `platform-solution-tab__image--${solution.id}`;
+
+  return `
+    <div class="platform-solution-tab">
+      <span class="platform-solution-tab__image ${visualClass}" aria-hidden="true"></span>
+      <span class="platform-solution-tab__copy">
+        <strong>${solution.title}</strong>
+        <span>${solution.body}</span>
+        <a class="platform-solution-tab__cta" href="${solution.href}">${solution.cta ?? "Explore solution"} <b aria-hidden="true">&rarr;</b></a>
+      </span>
+    </div>
   `;
 }
 
@@ -569,170 +543,150 @@ function bindSolutionShowcase() {
   const root = document.querySelector("[data-solution-showcase]");
   if (!root) return;
 
-  const tabs = [...root.querySelectorAll("[data-solution-tab]")];
-  const slides = [...root.querySelectorAll("[data-solution-slide]")];
   const indicators = [...root.querySelectorAll("[data-solution-indicator]")];
-  const panels = [...root.querySelectorAll("[data-solution-panel]")];
-  const panelsRoot = root.querySelector("[data-solution-panels]");
-  const tabsRoot = root.querySelector(".platform-solution-tabs");
-  const layout = root.querySelector(".platform-solution-layout");
-  const mobileQuery = window.matchMedia("(max-width: 860px)");
-  let activeId = null;
-  let switchTimer;
-  let scrollTimer;
+  const slides = [...root.querySelectorAll("[data-solution-slide]")];
+  const viewport = root.querySelector("[data-solution-viewport]");
+  const desktopQuery = window.matchMedia("(min-width: 861px)");
+  const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
+  let activeIndex = 0;
+  let scrollFrame = 0;
+  let autoplayTimer = null;
+  let isInView = false;
+  let hasManualSelection = false;
 
-  function updateTabs(id) {
-    tabs.forEach((tab) => {
-      const isActive = tab.dataset.solutionTab === id;
-      const arrow = tab.querySelector(".platform-solution-tab__cta b");
-
-      tab.classList.toggle("is-active", isActive);
-      tab.setAttribute("aria-selected", isActive ? "true" : "false");
-      tab.setAttribute("aria-expanded", isActive ? "true" : "false");
-
-      if (arrow) {
-        arrow.textContent = isActive ? "\u2193" : "\u2192";
-      }
-    });
+  function stopAutoplay() {
+    window.clearTimeout(autoplayTimer);
+    autoplayTimer = null;
   }
 
-  function updateMobileIndicator(id) {
-    indicators.forEach((indicator) => {
-      const isActive = indicator.dataset.solutionIndicator === id;
+  function canAutoplay() {
+    return desktopQuery.matches
+      && !reducedMotion.matches
+      && !hasManualSelection
+      && isInView
+      && !document.hidden
+      && !root.matches(":hover")
+      && !root.contains(document.activeElement)
+      && slides.length > 1;
+  }
+
+  function scheduleAutoplay() {
+    stopAutoplay();
+    if (!canAutoplay()) return;
+
+    autoplayTimer = window.setTimeout(() => {
+      scrollToSolution((activeIndex + 1) % slides.length);
+      scheduleAutoplay();
+    }, 8000);
+  }
+
+  function selectManually(nextIndex, options = {}) {
+    hasManualSelection = true;
+    stopAutoplay();
+    scrollToSolution(nextIndex, options);
+  }
+
+  function syncSolution(nextIndex, { focus = false } = {}) {
+    const normalizedIndex = Math.max(0, Math.min(nextIndex, slides.length - 1));
+    activeIndex = normalizedIndex;
+
+    slides.forEach((slide, index) => {
+      const isActive = index === normalizedIndex;
+      slide.classList.toggle("is-active", isActive);
+      slide.setAttribute("aria-hidden", String(!isActive));
+      slide.toggleAttribute("inert", !isActive);
+    });
+
+    indicators.forEach((indicator, index) => {
+      const isActive = index === normalizedIndex;
       indicator.classList.toggle("is-active", isActive);
-      indicator.setAttribute("aria-selected", isActive ? "true" : "false");
+      indicator.setAttribute("aria-selected", String(isActive));
+      indicator.tabIndex = isActive ? 0 : -1;
     });
+
+    if (focus) indicators[normalizedIndex]?.focus();
   }
 
-  function getNearestSlideId() {
-    if (!tabsRoot || !slides.length) return null;
+  function scrollToSolution(nextIndex, { focus = false } = {}) {
+    const normalizedIndex = Math.max(0, Math.min(nextIndex, slides.length - 1));
+    const slide = slides[normalizedIndex];
+    if (!viewport || !slide) return;
 
-    const rootLeft = tabsRoot.getBoundingClientRect().left;
-    return slides.reduce((nearest, slide) => {
-      const distance = Math.abs(slide.getBoundingClientRect().left - rootLeft);
-      return distance < nearest.distance
-        ? { id: slide.dataset.solutionSlide, distance }
-        : nearest;
-    }, { id: slides[0].dataset.solutionSlide, distance: Infinity }).id;
-  }
-
-  function scrollToSlide(id) {
-    if (!mobileQuery.matches) return;
-    const slide = slides.find((item) => item.dataset.solutionSlide === id);
-    slide?.scrollIntoView({
+    syncSolution(normalizedIndex, { focus });
+    viewport.scrollTo({
+      left: slide.offsetLeft,
       behavior: window.matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth",
-      block: "nearest",
-      inline: "start",
     });
   }
 
-  function scrollToPanels() {
-    if (!panelsRoot || panelsRoot.hidden || mobileQuery.matches) return;
+  function getNearestSlideIndex() {
+    if (!viewport || !slides.length) return 0;
+    const viewportLeft = viewport.getBoundingClientRect().left;
+    return slides.reduce((nearest, slide, index) => {
+      const distance = Math.abs(slide.getBoundingClientRect().left - viewportLeft);
+      return distance < nearest.distance ? { index, distance } : nearest;
+    }, { index: 0, distance: Infinity }).index;
+  }
 
-    requestAnimationFrame(() => {
-      const headerOffset = document.querySelector(".site-header")?.offsetHeight || 0;
-      const targetTop = panelsRoot.getBoundingClientRect().top + window.scrollY - headerOffset - 24;
-      window.scrollTo({ top: Math.max(targetTop, 0), behavior: "smooth" });
+  function updateSceneMotion() {
+    if (!viewport) return;
+    const viewportLeft = viewport.getBoundingClientRect().left;
+    const viewportWidth = Math.max(viewport.clientWidth, 1);
+
+    slides.forEach((slide) => {
+      const distance = Math.min(Math.abs(slide.getBoundingClientRect().left - viewportLeft) / viewportWidth, 1);
+      slide.style.setProperty("--scene-opacity", String(1 - distance * 0.12));
+      slide.style.setProperty("--scene-scale", String(1 - distance * 0.012));
     });
   }
 
-  function placePanels(id) {
-    if (!panelsRoot) return;
-
-    const activeTab = tabs.find((tab) => tab.dataset.solutionTab === id);
-    if (mobileQuery.matches && activeTab) {
-      activeTab.insertAdjacentElement("afterend", panelsRoot);
-      return;
-    }
-
-    if (layout && layout.nextElementSibling !== panelsRoot) {
-      layout.insertAdjacentElement("afterend", panelsRoot);
-    }
-  }
-
-  function collapseSolution() {
-    clearTimeout(switchTimer);
-    updateTabs(null);
-    panels.forEach((panel) => {
-      panel.hidden = true;
-    });
-
-    if (panelsRoot) {
-      panelsRoot.hidden = true;
-      panelsRoot.classList.remove("is-open", "is-switching");
-    }
-
-    activeId = null;
-  }
-
-  function setSolution(id) {
-    if (activeId === id && panelsRoot && !panelsRoot.hidden) {
-      collapseSolution();
-      return;
-    }
-
-    updateTabs(id);
-    updateMobileIndicator(id);
-    scrollToSlide(id);
-
-    const showPanel = () => {
-      panels.forEach((panel) => {
-        panel.hidden = panel.dataset.solutionPanel !== id;
-      });
-
-      if (panelsRoot) {
-        placePanels(id);
-        panelsRoot.hidden = false;
-        panelsRoot.classList.remove("is-switching");
-        panelsRoot.classList.add("is-open");
-      }
-
-      activeId = id;
-      scrollToPanels();
-    };
-
-    if (panelsRoot) {
-      clearTimeout(switchTimer);
-
-      if (activeId && activeId !== id && !panelsRoot.hidden) {
-        panelsRoot.classList.add("is-switching");
-        switchTimer = setTimeout(showPanel, 180);
-        return;
-      }
-    }
-
-    showPanel();
-  }
-
-  tabs.forEach((tab) => {
-    tab.addEventListener("click", () => setSolution(tab.dataset.solutionTab));
-  });
-
-  indicators.forEach((indicator) => {
-    indicator.addEventListener("click", () => {
-      const id = indicator.dataset.solutionIndicator;
-      updateMobileIndicator(id);
-      scrollToSlide(id);
+  indicators.forEach((indicator, index) => {
+    indicator.addEventListener("click", () => selectManually(index));
+    indicator.addEventListener("keydown", (event) => {
+      if (!["ArrowLeft", "ArrowRight", "Home", "End"].includes(event.key)) return;
+      event.preventDefault();
+      const nextIndex = event.key === "Home"
+        ? 0
+        : event.key === "End"
+          ? indicators.length - 1
+          : activeIndex + (event.key === "ArrowRight" ? 1 : -1);
+      selectManually(nextIndex, { focus: true });
     });
   });
 
-  tabsRoot?.addEventListener("scroll", () => {
-    if (!mobileQuery.matches) return;
-
-    clearTimeout(scrollTimer);
-    scrollTimer = setTimeout(() => {
-      const id = getNearestSlideId();
-      if (id) updateMobileIndicator(id);
-    }, 80);
+  viewport?.addEventListener("scroll", () => {
+    cancelAnimationFrame(scrollFrame);
+    scrollFrame = requestAnimationFrame(() => {
+      updateSceneMotion();
+      syncSolution(getNearestSlideIndex());
+    });
   }, { passive: true });
 
-  mobileQuery.addEventListener("change", () => {
-    if (activeId && panelsRoot && !panelsRoot.hidden) {
-      placePanels(activeId);
-    }
+  root.addEventListener("pointerenter", stopAutoplay);
+  root.addEventListener("pointerleave", scheduleAutoplay);
+  root.addEventListener("focusin", stopAutoplay);
+  root.addEventListener("focusout", () => window.setTimeout(scheduleAutoplay, 0));
+  document.addEventListener("visibilitychange", () => {
+    if (document.hidden) stopAutoplay();
+    else scheduleAutoplay();
   });
 
-  updateMobileIndicator(slides[0]?.dataset.solutionSlide);
+  const visibilityObserver = new IntersectionObserver((entries) => {
+    isInView = entries[0]?.isIntersecting ?? false;
+    if (isInView) scheduleAutoplay();
+    else stopAutoplay();
+  }, { threshold: 0.35 });
+  visibilityObserver.observe(root);
+
+  reducedMotion.addEventListener("change", scheduleAutoplay);
+  desktopQuery.addEventListener("change", scheduleAutoplay);
+
+  window.addEventListener("resize", () => {
+    viewport?.scrollTo({ left: slides[activeIndex]?.offsetLeft ?? 0, behavior: "auto" });
+  }, { passive: true });
+
+  syncSolution(0);
+  updateSceneMotion();
 }
 
 function bindAppShowcase() {

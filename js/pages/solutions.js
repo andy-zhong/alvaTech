@@ -93,6 +93,7 @@ function renderSolutionCard(solution) {
 
   return `
     <a class="solutions-overview-card" id="${solution.id}" href="${href}">
+      <span class="solutions-overview-card__media solutions-overview-card__media--${solution.id}" aria-hidden="true"></span>
       <span class="solutions-overview-card__icon">
         ${SOLUTION_ICONS[solution.id] ?? SOLUTION_ICONS["summer-house"]}
       </span>

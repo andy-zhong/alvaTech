@@ -564,6 +564,19 @@ body[data-page="product"] .spec-grid {
   letter-spacing: -0.035em;
 }
 
+.detail-disclosure summary {
+  list-style: none;
+  pointer-events: none;
+}
+
+.detail-disclosure summary::-webkit-details-marker {
+  display: none;
+}
+
+.detail-disclosure summary h3 {
+  margin: 0;
+}
+
 body[data-page="product"] .detail-list,
 body[data-page="product"] .support-list,
 body[data-page="product"] .faq-list,
