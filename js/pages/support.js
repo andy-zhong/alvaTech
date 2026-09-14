@@ -121,37 +121,37 @@ export function renderSupportPage({ lang }) {
       </nav>
     </section>
 
-    <section class="support-section" id="instructions" aria-labelledby="support-instructions-title">
-      <div class="support-section__head">
+    <details class="support-section support-group" id="instructions" open>
+      <summary class="support-section__head">
         <span class="eyebrow">${copy.instructions.eyebrow}</span>
         <h2 id="support-instructions-title">${copy.instructions.title}</h2>
         <p>${copy.instructions.intro}</p>
-      </div>
+      </summary>
       <div class="support-row-list">
         ${copy.instructions.items.map(([title, body]) => renderSupportRow(title, body)).join("")}
       </div>
-    </section>
+    </details>
 
-    <section class="support-section support-section--soft" id="faqs" aria-labelledby="support-faqs-title">
-      <div class="support-section__head">
+    <details class="support-section support-section--soft support-group" id="faqs" open>
+      <summary class="support-section__head">
         <span class="eyebrow">${copy.faqs.eyebrow}</span>
         <h2 id="support-faqs-title">${copy.faqs.title}</h2>
-      </div>
+      </summary>
       <div class="support-row-list">
         ${copy.faqs.items.map(([title, body]) => renderSupportRow(title, body)).join("")}
       </div>
-    </section>
+    </details>
 
-    <section class="support-section" id="troubleshooting" aria-labelledby="support-troubleshooting-title">
-      <div class="support-section__head">
+    <details class="support-section support-group" id="troubleshooting" open>
+      <summary class="support-section__head">
         <span class="eyebrow">${copy.troubleshooting.eyebrow}</span>
         <h2 id="support-troubleshooting-title">${copy.troubleshooting.title}</h2>
         <p>${copy.troubleshooting.intro}</p>
-      </div>
+      </summary>
       <div class="support-row-list">
         ${copy.troubleshooting.checks.map(([title, body]) => renderSupportRow(title, body)).join("")}
       </div>
-    </section>
+    </details>
 
     <section class="support-cta">
       <h2>${copy.ctaTitle}</h2>
@@ -166,9 +166,31 @@ export function renderSupportPage({ lang }) {
 
 function renderSupportRow(title, body) {
   return `
-    <article class="support-row">
-      <h3>${title}</h3>
+    <details class="support-row" open>
+      <summary><h3>${title}</h3></summary>
       <p>${body}</p>
-    </article>
+    </details>
   `;
+}
+
+export function bindSupportPage() {
+  const mobileQuery = window.matchMedia("(max-width: 640px)");
+  const groups = [...document.querySelectorAll(".support-group")];
+  const rows = [...document.querySelectorAll(".support-row")];
+
+  const sync = () => {
+    const open = !mobileQuery.matches;
+    groups.forEach((group) => { group.open = open; });
+    rows.forEach((row) => { row.open = open; });
+  };
+
+  document.querySelectorAll('.support-quicklinks a[href^="#"]').forEach((link) => {
+    link.addEventListener("click", () => {
+      const group = document.querySelector(link.getAttribute("href"));
+      if (mobileQuery.matches && group) group.open = true;
+    });
+  });
+
+  sync();
+  mobileQuery.addEventListener("change", sync);
 }

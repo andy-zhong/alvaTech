@@ -488,9 +488,9 @@ function renderProofBand(copy) {
         <p>${copy.proofBody}</p>
       </div>
       <div class="solution-page-proof__badges">
-        <span>-20°C to +65°C</span>
+        <span>-20°C to +45°C</span>
         <span>IP65</span>
-        <span>1-12 kWh expandable</span>
+        <span>1-7 Battery Packs per Voltrix group / PCS</span>
       </div>
     </section>
   `;

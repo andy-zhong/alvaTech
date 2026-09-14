@@ -129,6 +129,21 @@
   max-width: 680px;
 }
 
+.support-group > summary,
+.support-row > summary {
+  list-style: none;
+  cursor: default;
+}
+
+.support-group > summary::-webkit-details-marker,
+.support-row > summary::-webkit-details-marker {
+  display: none;
+}
+
+.support-row > summary h3 {
+  margin: 0;
+}
+
 .support-cta {
   display: grid;
   justify-items: center;
@@ -177,5 +192,109 @@
   .support-quicklinks a {
     min-height: 0;
     padding: 18px 0;
+  }
+
+  .support-hero {
+    gap: 14px;
+    padding-top: 44px;
+    padding-bottom: 40px;
+  }
+
+  .support-hero h1 {
+    font-size: clamp(2.25rem, 11vw, 3rem);
+  }
+
+  .support-quicklinks {
+    margin-top: 12px;
+  }
+
+  .support-quicklinks a {
+    padding: 13px 0;
+  }
+
+  .support-quicklinks span {
+    display: none;
+  }
+
+  .support-section.support-group {
+    gap: 0;
+    padding-top: 0;
+    padding-bottom: 0;
+  }
+
+  .support-group > .support-section__head {
+    position: relative;
+    min-height: 88px;
+    align-content: center;
+    gap: 5px;
+    padding: 18px 40px 18px 0;
+    cursor: pointer;
+  }
+
+  .support-group > .support-section__head::after {
+    position: absolute;
+    top: 50%;
+    right: 0;
+    color: #0f6b3f;
+    font-size: 1.35rem;
+    transform: translateY(-50%);
+    content: "+";
+  }
+
+  .support-group[open] > .support-section__head::after {
+    content: "-";
+  }
+
+  .support-group > .support-section__head .eyebrow {
+    display: none;
+  }
+
+  .support-group > .support-section__head h2 {
+    font-size: 1.45rem;
+  }
+
+  .support-group > .support-section__head p {
+    display: none;
+  }
+
+  .support-group > .support-row-list {
+    padding-bottom: 22px;
+  }
+
+  .support-row {
+    gap: 0;
+    padding: 0;
+  }
+
+  .support-row > summary {
+    position: relative;
+    min-height: 54px;
+    display: flex;
+    align-items: center;
+    padding: 12px 32px 12px 0;
+    cursor: pointer;
+  }
+
+  .support-row > summary::after {
+    position: absolute;
+    right: 2px;
+    color: rgba(8, 45, 37, 0.62);
+    font-size: 1rem;
+    content: "+";
+  }
+
+  .support-row[open] > summary::after {
+    content: "-";
+  }
+
+  .support-row > p {
+    padding: 0 28px 16px 0;
+    font-size: 0.88rem;
+    line-height: 1.55;
+  }
+
+  .support-cta {
+    padding-top: 56px;
+    padding-bottom: 72px;
   }
 }

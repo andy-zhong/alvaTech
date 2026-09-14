@@ -310,6 +310,10 @@ function renderModularityCopy(product, labels) {
 }
 
 function getDisplayPrice(product, labels, lang = "en") {
+  if (product.price == null) {
+    return labels.requestAdvice;
+  }
+
   if (!commerceVisibility.showPrices) {
     return getPricingComingSoonLabel(lang);
   }
@@ -431,15 +435,17 @@ export function renderProductDetailPage({ lang, slug, route }) {
           <h3>${t(lang, "detailSupport")}</h3>
           <ul class="support-list thin-divider-list">
             <li>${content.summary}</li>
-            <li>${getDisplayPrice(product, labels, lang)}</li>
-            <li>${t(lang, "productCardStatus")}</li>
+            ${product.price == null
+              ? `<li>${labels.requestAdvice}</li>`
+              : `<li>${getDisplayPrice(product, labels, lang)}</li>
+                 <li>${product.buyEnabled === false ? labels.requestAdvice : t(lang, "productCardStatus")}</li>`}
           </ul>
         </article>
       </div>
     </section>
 
     <section class="detail-section" id="product-specifications">
-      <div class="spec-grid">
+      <div class="spec-grid ${content.certifications.length ? "" : "spec-grid--single"}">
         <article class="detail-content-panel">
           <h3>${t(lang, "detailSpecifications")}</h3>
           <div class="detail-spec-table spec-table">
@@ -450,12 +456,14 @@ export function renderProductDetailPage({ lang, slug, route }) {
               </div>`).join("")}
           </div>
         </article>
-        <details class="detail-content-panel detail-disclosure" open data-mobile-disclosure>
-          <summary><h3>${t(lang, "detailCertifications")}</h3></summary>
-          <ul class="detail-list thin-divider-list">
-            ${content.certifications.map((item) => `<li>${item}</li>`).join("")}
-          </ul>
-        </details>
+        ${content.certifications.length ? `
+          <details class="detail-content-panel detail-disclosure" open data-mobile-disclosure>
+            <summary><h3>${t(lang, "detailCertifications")}</h3></summary>
+            <ul class="detail-list thin-divider-list">
+              ${content.certifications.map((item) => `<li>${item}</li>`).join("")}
+            </ul>
+          </details>
+        ` : ""}
       </div>
     </section>
 

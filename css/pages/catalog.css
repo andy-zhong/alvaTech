@@ -812,6 +812,161 @@ body[data-page="product-installer"] .product-scenario-hero__media img {
   }
 }
 
+@media (max-width: 860px) {
+  body[data-page="products"] .setup-estimator__head h2 {
+    max-width: 12ch;
+  }
+
+  body[data-page="products"] .setup-estimator {
+    gap: 22px;
+  }
+
+  body[data-page="products"] .setup-estimator__selector {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 3px;
+    padding: 3px;
+    border: 1px solid rgba(8, 45, 37, 0.12);
+    border-radius: 6px;
+    background: rgba(8, 45, 37, 0.035);
+  }
+
+  body[data-page="products"] .setup-estimator__scenario {
+    min-height: 42px;
+    padding: 0 8px;
+    border-radius: 4px;
+    font-size: 0.76rem;
+    letter-spacing: 0;
+    text-transform: none;
+  }
+
+  body[data-page="products"] .setup-estimator__scenario::after {
+    content: none;
+  }
+
+  body[data-page="products"] .setup-estimator__scenario.is-active {
+    background: #ffffff;
+    box-shadow: 0 1px 5px rgba(8, 45, 37, 0.08);
+  }
+
+  body[data-page="products"] .setup-estimator__body,
+  body[data-page="products"] .setup-estimator__panel {
+    gap: 0;
+  }
+
+  body[data-page="products"] .setup-estimator__step-toggle {
+    display: grid;
+    min-height: 58px;
+    gap: 10px;
+  }
+
+  body[data-page="products"] .setup-estimator__control legend {
+    display: none;
+  }
+
+  body[data-page="products"] .setup-estimator__step-toggle span {
+    color: #082d25;
+    font-size: 0.9rem;
+    font-weight: 750;
+    letter-spacing: 0;
+    text-transform: none;
+  }
+
+  body[data-page="products"] .setup-estimator__step-toggle small {
+    max-width: 17ch;
+    color: rgba(8, 45, 37, 0.58);
+    font-size: 0.78rem;
+    font-weight: 650;
+  }
+
+  body[data-page="products"] .setup-estimator__control.is-open {
+    margin: 0;
+    padding: 0 0 12px;
+    border: 0;
+    border-bottom: 1px solid rgba(8, 45, 37, 0.1);
+    border-radius: 0;
+    background: transparent;
+  }
+
+  body[data-page="products"] .setup-estimator__options,
+  body[data-page="products"] .setup-estimator__checks {
+    gap: 0;
+    margin-top: 0;
+    border-top: 1px solid rgba(8, 45, 37, 0.08);
+  }
+
+  body[data-page="products"] .setup-estimator__option,
+  body[data-page="products"] .setup-estimator__check span {
+    min-height: 48px;
+    padding: 10px 2px;
+    border: 0;
+    border-bottom: 1px solid rgba(8, 45, 37, 0.08);
+    border-radius: 0;
+    background: transparent;
+    color: rgba(8, 45, 37, 0.62);
+  }
+
+  body[data-page="products"] .setup-estimator__option {
+    justify-content: flex-start;
+    text-align: left;
+  }
+
+  body[data-page="products"] .setup-estimator__result {
+    padding: 16px 0 0;
+    border: 0;
+    border-top: 1px solid rgba(8, 45, 37, 0.12);
+    border-radius: 0;
+    background: transparent;
+    box-shadow: none;
+  }
+
+  body[data-page="products"] .setup-estimator__result-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 0 18px;
+  }
+
+  body[data-page="products"] .setup-estimator__metric,
+  body[data-page="products"] .setup-estimator__metric:nth-child(n) {
+    order: initial;
+    gap: 5px;
+    padding: 11px 0;
+    border-top: 1px solid rgba(8, 45, 37, 0.08);
+    border-bottom: 0;
+  }
+
+  body[data-page="products"] .setup-estimator__metric:first-child {
+    grid-column: 1 / -1;
+  }
+
+  body[data-page="products"] .setup-estimator__metric--placeholder {
+    display: none;
+  }
+
+  body[data-page="products"] .setup-estimator__metric:nth-child(n) strong {
+    font-size: 1.08rem;
+    line-height: 1.12;
+  }
+
+  body[data-page="products"] .setup-estimator__result-actions .button--primary {
+    width: 100%;
+  }
+
+  body[data-page="products"] .setup-estimator__result-actions .button--secondary {
+    align-self: center;
+    width: fit-content;
+  }
+}
+
+@media (min-width: 641px) and (max-width: 860px) {
+  body[data-page="products"] .setup-estimator__step-toggle {
+    display: none;
+  }
+
+  body[data-page="products"] .setup-estimator__control legend {
+    display: block;
+  }
+}
+
 @media (max-width: 640px) {
   .showroom-hero,
   .showroom-section,
@@ -865,5 +1020,38 @@ body[data-page="product-installer"] .product-scenario-hero__media img {
   .showroom-product-addons__footer {
     align-items: flex-start;
     flex-direction: column;
+  }
+}
+
+@media (max-width: 640px) {
+  body[data-page="product-accessories"] .product-scenario-products .product-scenario-product:first-child {
+    grid-template-columns: 1fr;
+    gap: 16px;
+    padding: 18px 0 28px;
+  }
+
+  body[data-page="product-accessories"] .product-scenario-products .product-scenario-product:first-child .showroom-product__media {
+    width: 100%;
+    aspect-ratio: 1.38;
+    background:
+      radial-gradient(circle at 50% 56%, rgba(255, 255, 255, 0.9), transparent 64%),
+      var(--section-bg-soft);
+  }
+
+  body[data-page="product-accessories"] .product-scenario-products .product-scenario-product:first-child .showroom-product__media img {
+    padding: 18px;
+  }
+
+  body[data-page="product-accessories"] .product-scenario-products .product-scenario-product:first-child .showroom-product__copy {
+    gap: 6px;
+  }
+
+  body[data-page="product-accessories"] .product-scenario-products .product-scenario-product:first-child .showroom-product__copy p {
+    display: block;
+    max-width: 34ch;
+  }
+
+  body[data-page="product-accessories"] .product-scenario-products .product-scenario-product:first-child .showroom-link {
+    justify-self: start;
   }
 }

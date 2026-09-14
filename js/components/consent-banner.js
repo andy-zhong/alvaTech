@@ -19,6 +19,7 @@ const COPY = {
   en: {
     heading:      "We value your privacy",
     body:         "We use anonymous analytics to understand how visitors use this site. No personal data is stored. You can accept, reject, or customise.",
+    mobileBody:   "Anonymous analytics help us improve the site. No personal data is stored.",
     acceptAll:    "Accept all",
     rejectAll:    "Reject non-essential",
     customise:    "Customise",
@@ -31,6 +32,7 @@ const COPY = {
   sv: {
     heading:      "Vi värnar om din integritet",
     body:         "Vi använder anonym statistik för att förstå hur besökare använder webbplatsen. Inga personuppgifter lagras.",
+    mobileBody:   "Anonym statistik hjälper oss förbättra webbplatsen. Inga personuppgifter lagras.",
     acceptAll:    "Acceptera alla",
     rejectAll:    "Avvisa icke-nödvändiga",
     customise:    "Anpassa",
@@ -43,6 +45,7 @@ const COPY = {
   fi: {
     heading:      "Arvostamme yksityisyyttäsi",
     body:         "Käytämme nimettömiä analytiikkaevästeitä. Henkilötietoja ei tallenneta.",
+    mobileBody:   "Nimetön analytiikka auttaa meitä parantamaan sivustoa. Henkilötietoja ei tallenneta.",
     acceptAll:    "Hyväksy kaikki",
     rejectAll:    "Hylkää ei-välttämättömät",
     customise:    "Mukauta",
@@ -55,6 +58,7 @@ const COPY = {
   no: {
     heading:      "Vi verdsetter ditt personvern",
     body:         "Vi bruker anonyme analysecookies. Ingen persondata lagres.",
+    mobileBody:   "Anonym analyse hjelper oss å forbedre nettstedet. Ingen persondata lagres.",
     acceptAll:    "Godta alle",
     rejectAll:    "Avvis ikke-nødvendige",
     customise:    "Tilpass",
@@ -67,6 +71,7 @@ const COPY = {
   da: {
     heading:      "Vi respekterer dit privatliv",
     body:         "Vi bruger anonyme analysecookies. Ingen persondata gemmes.",
+    mobileBody:   "Anonym analyse hjælper os med at forbedre siden. Ingen persondata gemmes.",
     acceptAll:    "Acceptér alle",
     rejectAll:    "Afvis ikke-nødvendige",
     customise:    "Tilpas",
@@ -88,7 +93,8 @@ function renderBanner(copy, showCustom) {
       <div class="cookie-banner__copy">
         <h2 class="cookie-banner__heading">${copy.heading}</h2>
         <p class="cookie-banner__body">
-          ${copy.body}
+          <span class="cookie-banner__body-long">${copy.body}</span>
+          <span class="cookie-banner__body-short">${copy.mobileBody ?? copy.body}</span>
           <a class="cookie-banner__link" href="/views/privacy-policy.html">${copy.learnMore}</a>
         </p>
       </div>

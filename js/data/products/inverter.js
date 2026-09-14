@@ -29,9 +29,9 @@ export const INVERTER_PRODUCT = {
       name: "Voltrix Inverter",
       summary: "The inverter unit for building and expanding a Voltrix Battery Pack setup.",
       intro:
-        "The Voltrix Inverter connects Battery Packs into a practical energy setup, supporting one inverter/base configuration before larger setups expand with additional inverter units.",
+        "The Voltrix Inverter connects Battery Packs into a practical energy setup. One Voltrix group / PCS is recommended for up to 7 Battery Packs; larger setups add another group / PCS.",
       features: [
-        "Supports 7-12 Battery Packs in a standard planning setup",
+        "Recommended for 1-7 Battery Packs in one Voltrix group / PCS",
         "Can also act as a starting setup with fewer Battery Packs",
         "Designed for modular Voltrix system expansion",
         "Pairs with Battery Packs and selected add-ons around the platform",
@@ -42,8 +42,8 @@ export const INVERTER_PRODUCT = {
       ],
       specs: [
         { label: "Platform", value: "Voltrix Battery Pack" },
-        { label: "Planning range", value: "1-12 Battery Packs per inverter setup" },
-        { label: "Expansion", value: "Add another inverter above 12 Battery Packs" },
+        { label: "Planning range", value: "1-7 Battery Packs per Voltrix group / PCS" },
+        { label: "Expansion", value: "Add another Voltrix group / PCS above 7 Battery Packs" },
         { label: "Use type", value: "System inverter unit" },
       ],
       useCases: [
@@ -52,8 +52,8 @@ export const INVERTER_PRODUCT = {
         "Support summer house and selected installer routines",
       ],
       faq: [
-        "Does one inverter support every setup? One inverter is planned around up to 12 Battery Packs.",
-        "Can a setup use more than 12 Battery Packs? Yes, larger planning setups add another inverter.",
+        "Does one PCS support every setup? One Voltrix group / PCS is recommended for up to 7 Battery Packs.",
+        "Can a setup use more than 7 Battery Packs? Yes, larger planning setups add another Voltrix group / PCS.",
         "Does it include Battery Packs? No, Battery Packs are selected separately.",
       ],
     },
@@ -63,7 +63,7 @@ export const INVERTER_PRODUCT = {
       intro:
         "Voltrix Inverter kopplar Battery Packs till en praktisk energisetup och gör det möjligt att bygga ut systemet med fler inverterenheter vid större setup.",
       features: [
-        "Stödjer 7-12 Battery Packs i en standard planeringssetup",
+        "Rekommenderas för 1-7 Battery Packs i en Voltrix-grupp / PCS",
         "Kan också fungera som startsetup med färre Battery Packs",
         "Utformad för modulär Voltrix-expansion",
         "Kombineras med Battery Packs och utvalda tillbehör runt plattformen",
@@ -74,8 +74,8 @@ export const INVERTER_PRODUCT = {
       ],
       specs: [
         { label: "Plattform", value: "Voltrix Battery Pack" },
-        { label: "Planeringsspann", value: "1-12 Battery Packs per invertersetup" },
-        { label: "Expansion", value: "Lägg till en inverter över 12 Battery Packs" },
+        { label: "Planeringsspann", value: "1-7 Battery Packs per Voltrix-grupp / PCS" },
+        { label: "Expansion", value: "Lägg till ytterligare en Voltrix-grupp / PCS över 7 Battery Packs" },
         { label: "Användning", value: "Systeminverter" },
       ],
       useCases: [
@@ -84,8 +84,8 @@ export const INVERTER_PRODUCT = {
         "Stöd fritidshus och utvalda installatörsrutiner",
       ],
       faq: [
-        "Stödjer en inverter varje setup? En inverter planeras runt upp till 12 Battery Packs.",
-        "Kan en setup använda fler än 12 Battery Packs? Ja, större planeringssetuper lägger till en inverter.",
+        "Stödjer en PCS varje setup? En Voltrix-grupp / PCS rekommenderas för upp till 7 Battery Packs.",
+        "Kan en setup använda fler än 7 Battery Packs? Ja, större planeringssetuper lägger till ytterligare en Voltrix-grupp / PCS.",
         "Ingår Battery Packs? Nej, Battery Packs väljs separat.",
       ],
     },

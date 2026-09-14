@@ -21,9 +21,20 @@ const APP_DOWNLOAD_COPY = {
 };
 const APP_SHOWCASE_SLIDES = [
   {
+    src: "/Picture/products/apps/voltrix_app_inuse.png",
+    width: 1528,
+    height: 1029,
+    kind: "photo",
+    alt: {
+      en: "Voltrix app shown on a phone beside an installed Voltrix system",
+      sv: "Voltrix-appen på en telefon bredvid ett installerat Voltrix-system",
+    },
+  },
+  {
     src: "/Picture/products/apps/voltrix_app_effortless.png",
     width: 318,
     height: 692,
+    kind: "ui",
     alt: {
       en: "Voltrix app home screen showing effortless energy control",
       sv: "Voltrix-appens startvy för enkel energikontroll",
@@ -33,6 +44,7 @@ const APP_SHOWCASE_SLIDES = [
     src: "/Picture/products/apps/voltrix_app_energy-efficient.png",
     width: 333,
     height: 695,
+    kind: "ui",
     alt: {
       en: "Voltrix app screen showing energy-efficient usage insight",
       sv: "Voltrix-appvy med energiinsikt",
@@ -42,6 +54,7 @@ const APP_SHOWCASE_SLIDES = [
     src: "/Picture/products/apps/voltrix_app_add.png",
     width: 1125,
     height: 2436,
+    kind: "ui",
     alt: {
       en: "Voltrix app screen for adding a device",
       sv: "Voltrix-appvy för att lägga till en enhet",
@@ -89,7 +102,7 @@ export function renderHomePage({ lang }) {
       </div>
     </section>
 
-    <section class="platform-home-section platform-home-section--milk">
+    <section class="platform-home-section platform-home-section--milk platform-home-section--principles">
       <div class="home-section-inner">
         <div class="platform-benefit-grid">
           ${content.benefits.map((item, index) => `
@@ -109,17 +122,13 @@ export function renderHomePage({ lang }) {
       </div>
     </section>
 
-    <section class="platform-home-section platform-home-section--sage" id="platform-section" aria-labelledby="platform-title">
+    <section class="platform-home-section platform-home-section--sage platform-home-section--platform" id="platform-section" aria-labelledby="platform-title">
       <div class="home-section-inner">
         ${renderSolutionShowcase(content.platform, content.solutions)}
       </div>
     </section>
 
-    ${renderAddOnsSection(content.addOns)}
-
-    ${renderSetupEstimator({ context: "home" })}
-
-    <section class="platform-home-section platform-home-section--sage" aria-labelledby="product-fit-title">
+    <section class="platform-home-section platform-home-section--milk platform-home-section--product" aria-labelledby="product-fit-title">
       <div class="home-section-inner platform-product-area platform-product-area--featured">
         <div class="platform-section-head">
           <div>
@@ -145,7 +154,7 @@ export function renderHomePage({ lang }) {
       </div>
     </section>
 
-    <section class="platform-home-section platform-home-section--milk" aria-labelledby="smart-title">
+    <section class="platform-home-section platform-home-section--sage platform-home-section--app" aria-labelledby="smart-title">
       <div class="home-section-inner">
         <div class="platform-smart-showcase" data-app-showcase>
           <div class="platform-smart-copy reveal">
@@ -175,30 +184,11 @@ export function renderHomePage({ lang }) {
       </div>
     </section>
 
-    <section class="platform-home-section platform-home-section--sage platform-home-section--trust" aria-labelledby="trust-title">
-      <div class="home-section-inner platform-trust">
-        <div>
-          <span class="platform-eyebrow platform-eyebrow--dark">${content.trust.eyebrow}</span>
-          <h2 id="trust-title">${content.trust.title}</h2>
-          <p>${content.trust.body}</p>
-        </div>
-        <div class="platform-trust__points">
-          ${content.trust.points.map((point) => `<span>${point}</span>`).join("")}
-        </div>
-      </div>
-    </section>
+    ${renderAddOnsSection(content.addOns)}
 
-    <section class="platform-home-section platform-home-section--milk platform-home-section--final" aria-labelledby="final-cta-title">
-      <div class="home-section-inner platform-final">
-        <span class="platform-eyebrow">${content.finalCta.eyebrow}</span>
-        <h2 id="final-cta-title">${content.finalCta.title}</h2>
-        <p>${content.finalCta.body}</p>
-        <div class="platform-final__actions">
-          <a class="button button--primary" href="/views/products.html">${content.finalCta.primary}</a>
-          <a class="button button--secondary" href="/views/b2b.html">${content.finalCta.secondary}</a>
-        </div>
-      </div>
-    </section>
+    ${renderSetupEstimator({ context: "home" })}
+
+    ${renderTrustContactSection(content)}
   `;
 }
 
@@ -275,6 +265,10 @@ function renderSolutionShowcase(platform, solutions) {
           </div>
         </div>
       </div>
+
+      <div class="platform-solution-panels" data-solution-panels hidden>
+        ${solutions.map((solution) => renderSolutionDetail(solution)).join("")}
+      </div>
     </div>
   `;
 }
@@ -288,13 +282,15 @@ function renderAppShowcase(lang) {
     <div class="platform-app-showcase reveal" role="region" aria-label="${regionLabel}">
       <div class="platform-app-stage">
         ${APP_SHOWCASE_SLIDES.map((slide, index) => `
-          <figure class="platform-app-slide ${index === 0 ? "is-active" : ""}" data-app-slide="${index}" aria-hidden="${index === 0 ? "false" : "true"}">
-            <img
-              src="${slide.src}"
-              alt="${slide.alt[lang] ?? slide.alt.en}"
-              width="${slide.width}"
-              height="${slide.height}"
-              ${index === 0 ? 'fetchpriority="high"' : 'loading="lazy"'}>
+          <figure class="platform-app-slide ${slide.kind ? `platform-app-slide--${slide.kind}` : ""} ${index === 0 ? "is-active" : ""}" data-app-slide="${index}" aria-hidden="${index === 0 ? "false" : "true"}">
+            <div class="platform-app-slide__frame">
+              <img
+                src="${slide.src}"
+                alt="${slide.alt[lang] ?? slide.alt.en}"
+                width="${slide.width}"
+                height="${slide.height}"
+                ${index === 0 ? 'fetchpriority="high"' : 'loading="lazy"'}>
+            </div>
           </figure>
         `).join("")}
       </div>
@@ -330,6 +326,7 @@ function renderAddOnsSection(addOns) {
         </div>
 
         <p class="platform-addons__note">${addOns.note}</p>
+        <a class="platform-addons__all" href="/views/products/accessories/">${addOns.cta}</a>
       </div>
     </section>
   `;
@@ -337,17 +334,52 @@ function renderAddOnsSection(addOns) {
 
 function renderAddOnItem(item, index) {
   return `
-    <article class="platform-addon reveal" style="--delay:${(index * 0.06).toFixed(2)}s">
-      <figure class="platform-addon__media ${item.image ? "" : "platform-addon__media--placeholder"}" aria-label="${escapeHtml(item.title)}">
+    <a class="platform-addon reveal" href="${item.href}" style="--delay:${(index * 0.06).toFixed(2)}s">
+      <figure class="platform-addon__media ${item.image ? "" : "platform-addon__media--placeholder"} ${item.imageFit === "cover" ? "platform-addon__media--cover" : ""}" aria-label="${escapeHtml(item.title)}">
         ${item.image
           ? `<img src="${item.image}" alt="${escapeHtml(item.title)}">`
           : `<span>${escapeHtml(item.title)}</span>`}
       </figure>
       <div class="platform-addon__copy">
+        ${item.status ? `<span class="platform-addon__status">${item.status}</span>` : ""}
         <h3>${item.title}</h3>
         <p>${item.body}</p>
       </div>
-    </article>
+    </a>
+  `;
+}
+
+function renderTrustContactSection(content) {
+  return `
+    <section class="platform-home-section platform-home-section--milk platform-home-section--trust-contact" aria-labelledby="final-cta-title">
+      <div class="home-section-inner platform-trust-contact">
+        <div class="platform-trust-contact__story">
+          <div class="platform-trust-contact__intro">
+            <span class="platform-eyebrow platform-eyebrow--dark platform-trust-label">${String(content.trust.eyebrow).split(/\s+/).map((word) => `<span>${escapeHtml(word)}</span>`).join(" ")}</span>
+            <h2 id="trust-title">${content.trust.title}</h2>
+            <p>${content.trust.body}</p>
+          </div>
+          <div class="platform-trust__points">
+            ${content.trust.points.map((point) => `
+              <span>
+                <strong>${point.value}</strong>
+                <small>${point.label}</small>
+              </span>
+            `).join("")}
+          </div>
+        </div>
+
+        <div class="platform-final" aria-labelledby="final-cta-title">
+          <span class="platform-eyebrow platform-eyebrow--dark">${content.finalCta.eyebrow}</span>
+          <h2 id="final-cta-title">${content.finalCta.title}</h2>
+          <p>${content.finalCta.body}</p>
+          <div class="platform-final__actions">
+            <a class="button button--primary" href="/views/b2b.html">${content.finalCta.secondary}</a>
+            <a class="button button--secondary" href="/views/products.html">${content.finalCta.primary}</a>
+          </div>
+        </div>
+      </div>
+    </section>
   `;
 }
 
@@ -388,14 +420,37 @@ function renderSolutionTab(solution) {
   const visualClass = `platform-solution-tab__image--${solution.id}`;
 
   return `
-    <div class="platform-solution-tab">
+    <div class="platform-solution-tab" data-solution-overview="${solution.id}">
       <span class="platform-solution-tab__image ${visualClass}" aria-hidden="true"></span>
       <span class="platform-solution-tab__copy">
         <strong>${solution.title}</strong>
         <span>${solution.body}</span>
-        <a class="platform-solution-tab__cta" href="${solution.href}">${solution.cta ?? "Explore solution"} <b aria-hidden="true">&rarr;</b></a>
+        <a class="platform-solution-tab__cta" href="${solution.href}" data-solution-cta="${solution.id}" aria-controls="solution-detail-${solution.id}" aria-expanded="false">${solution.cta ?? "Explore solution"} <b aria-hidden="true">&rarr;</b></a>
       </span>
     </div>
+  `;
+}
+
+function renderSolutionDetail(solution) {
+  const visualClass = `platform-solution-detail__visual--${solution.id}`;
+
+  return `
+    <article
+      class="platform-solution-detail"
+      id="solution-detail-${solution.id}"
+      data-solution-detail="${solution.id}"
+      hidden>
+      <div class="platform-solution-detail__visual ${visualClass}" aria-hidden="true"></div>
+      <div class="platform-solution-detail__copy">
+        <span class="platform-eyebrow">${solution.detail.eyebrow}</span>
+        <h3>${solution.detail.title}</h3>
+        <p>${solution.detail.body}</p>
+        <ul>
+          ${solution.detail.bullets.map((bullet) => `<li>${bullet}</li>`).join("")}
+        </ul>
+        <a class="button button--primary" href="${solution.href}">${solution.cta}</a>
+      </div>
+    </article>
   `;
 }
 
@@ -546,7 +601,10 @@ function bindSolutionShowcase() {
   const indicators = [...root.querySelectorAll("[data-solution-indicator]")];
   const slides = [...root.querySelectorAll("[data-solution-slide]")];
   const viewport = root.querySelector("[data-solution-viewport]");
-  const desktopQuery = window.matchMedia("(min-width: 861px)");
+  const overviews = [...root.querySelectorAll("[data-solution-overview]")];
+  const detailPanels = [...root.querySelectorAll("[data-solution-detail]")];
+  const detailsRoot = root.querySelector("[data-solution-panels]");
+  const desktopQuery = window.matchMedia("(min-width: 1024px)");
   const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
   let activeIndex = 0;
   let scrollFrame = 0;
@@ -560,7 +618,7 @@ function bindSolutionShowcase() {
   }
 
   function canAutoplay() {
-    return desktopQuery.matches
+    return !desktopQuery.matches
       && !reducedMotion.matches
       && !hasManualSelection
       && isInView
@@ -586,11 +644,56 @@ function bindSolutionShowcase() {
     scrollToSolution(nextIndex, options);
   }
 
+  function closeDesktopDetails() {
+    if (detailsRoot) {
+      detailsRoot.hidden = true;
+      detailsRoot.classList.remove("is-open");
+    }
+    detailPanels.forEach((panel) => {
+      panel.hidden = true;
+    });
+    overviews.forEach((overview) => {
+      overview.classList.remove("is-active");
+      overview.querySelector("[data-solution-cta]")?.setAttribute("aria-expanded", "false");
+    });
+  }
+
+  function openDesktopDetails(id) {
+    if (!desktopQuery.matches || !detailsRoot) return;
+
+    detailPanels.forEach((panel) => {
+      panel.hidden = panel.dataset.solutionDetail !== id;
+    });
+    overviews.forEach((overview) => {
+      const isActive = overview.dataset.solutionOverview === id;
+      overview.classList.toggle("is-active", isActive);
+      overview.querySelector("[data-solution-cta]")?.setAttribute("aria-expanded", String(isActive));
+    });
+
+    detailsRoot.hidden = false;
+    detailsRoot.classList.add("is-open");
+
+    requestAnimationFrame(() => {
+      const headerOffset = document.querySelector(".site-header")?.offsetHeight ?? 0;
+      const top = detailsRoot.getBoundingClientRect().top + window.scrollY - headerOffset - 24;
+      window.scrollTo({
+        top: Math.max(top, 0),
+        behavior: reducedMotion.matches ? "auto" : "smooth",
+      });
+    });
+  }
+
   function syncSolution(nextIndex, { focus = false } = {}) {
     const normalizedIndex = Math.max(0, Math.min(nextIndex, slides.length - 1));
     activeIndex = normalizedIndex;
 
     slides.forEach((slide, index) => {
+      if (desktopQuery.matches) {
+        slide.classList.add("is-active");
+        slide.setAttribute("aria-hidden", "false");
+        slide.removeAttribute("inert");
+        return;
+      }
       const isActive = index === normalizedIndex;
       slide.classList.toggle("is-active", isActive);
       slide.setAttribute("aria-hidden", String(!isActive));
@@ -608,6 +711,10 @@ function bindSolutionShowcase() {
   }
 
   function scrollToSolution(nextIndex, { focus = false } = {}) {
+    if (desktopQuery.matches) {
+      syncSolution(0);
+      return;
+    }
     const normalizedIndex = Math.max(0, Math.min(nextIndex, slides.length - 1));
     const slide = slides[normalizedIndex];
     if (!viewport || !slide) return;
@@ -654,6 +761,14 @@ function bindSolutionShowcase() {
     });
   });
 
+  overviews.forEach((overview) => {
+    overview.addEventListener("click", (event) => {
+      if (!desktopQuery.matches) return;
+      event.preventDefault();
+      openDesktopDetails(overview.dataset.solutionOverview);
+    });
+  });
+
   viewport?.addEventListener("scroll", () => {
     cancelAnimationFrame(scrollFrame);
     scrollFrame = requestAnimationFrame(() => {
@@ -679,7 +794,11 @@ function bindSolutionShowcase() {
   visibilityObserver.observe(root);
 
   reducedMotion.addEventListener("change", scheduleAutoplay);
-  desktopQuery.addEventListener("change", scheduleAutoplay);
+  desktopQuery.addEventListener("change", () => {
+    if (!desktopQuery.matches) closeDesktopDetails();
+    syncSolution(activeIndex);
+    scheduleAutoplay();
+  });
 
   window.addEventListener("resize", () => {
     viewport?.scrollTo({ left: slides[activeIndex]?.offsetLeft ?? 0, behavior: "auto" });

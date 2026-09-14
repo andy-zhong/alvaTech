@@ -535,6 +535,10 @@ body[data-page="product"] .spec-grid {
   gap: clamp(24px, 5vw, 64px);
 }
 
+body[data-page="product"] .spec-grid--single {
+  grid-template-columns: minmax(0, 1fr);
+}
+
 .detail-platform-panel,
 .detail-content-panel,
 .detail-trust-band {

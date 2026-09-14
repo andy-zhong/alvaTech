@@ -1,0 +1,3 @@
+const http=require('http'),fs=require('fs'),path=require('path'),root=process.cwd();
+const mime={'.html':'text/html; charset=utf-8','.css':'text/css; charset=utf-8','.js':'text/javascript; charset=utf-8','.json':'application/json','.png':'image/png','.jpg':'image/jpeg','.jpeg':'image/jpeg','.svg':'image/svg+xml','.webp':'image/webp'};
+http.createServer((q,r)=>{const rel=decodeURIComponent(q.url.split('?')[0]).replace(/^\/+/, '')||'index.html',file=path.resolve(root,rel);if(!file.startsWith(root+path.sep))return r.writeHead(403).end();fs.readFile(file,(e,d)=>{if(e)return r.writeHead(404).end();r.writeHead(200,{'Content-Type':mime[path.extname(file).toLowerCase()]||'application/octet-stream'});r.end(d)})}).listen(5501,'127.0.0.1');

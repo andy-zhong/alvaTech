@@ -32,9 +32,9 @@ const ADD_ONS = {
   },
   solarTracking: {
     name: "Solar tracking system",
-    image: null,
+    image: "/Picture/products/tracker/tracker1.png",
     category: "Solar extension",
-    body: "A future solar-focused extension for summer house setups that want to make more of available daylight.",
+    body: "A solar-focused extension for summer house setups that want to make more of available daylight.",
     href: "/views/product.html?slug=solar-tracking-system",
   },
 };

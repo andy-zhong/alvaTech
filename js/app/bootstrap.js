@@ -21,7 +21,7 @@ import {
 import { renderAboutPage }        from "../pages/about.js";
 import { renderSolutionsPage }    from "../pages/solutions.js";
 import { renderSolutionDetailPage } from "../pages/solution-detail.js";
-import { renderSupportPage }      from "../pages/support.js";
+import { renderSupportPage, bindSupportPage } from "../pages/support.js";
 import { renderAccountPage }      from "../pages/account.js";
 import { renderWarrantyReturnsPage } from "../pages/warranty-returns.js";
 import { getProductBySlug }       from "../services/product-service.js";
@@ -122,6 +122,7 @@ async function mountPage({ page, lang, route, productUrl, buyProductUrl, getCurr
     case "support":
       document.title = lang === "sv" ? "Support | Alva Technology" : "Support | Alva Technology";
       container.innerHTML = renderSupportPage({ lang });
+      bindSupportPage();
       break;
 
     case "product": {

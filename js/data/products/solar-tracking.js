@@ -1,27 +1,32 @@
 const createMediaItem = (src, alt, type = "image") => ({ src, alt, type });
 
-const SOLAR_TRACKING_PLACEHOLDER = "Solar tracking system";
+const TRACKER_MEDIA = {
+  main: "/Picture/products/tracker/tracker1.png",
+  galleryTwo: "/Picture/products/tracker/tracker2.png",
+  galleryThree: "/Picture/products/tracker/tracker3.png",
+};
 
 export const SOLAR_TRACKING_PRODUCT = {
   slug: "solar-tracking-system",
   name: "Solar tracking system",
   shortName: "Solar tracking",
 
-  heroImage: null,
-  thumbnail: null,
+  heroImage: TRACKER_MEDIA.main,
+  thumbnail: TRACKER_MEDIA.main,
 
   heroMedia: createMediaItem(
-    null,
-    SOLAR_TRACKING_PLACEHOLDER,
-    "placeholder"
+    TRACKER_MEDIA.main,
+    "Solar tracking system viewed from the front"
   ),
 
   gallery: [
-    createMediaItem(null, SOLAR_TRACKING_PLACEHOLDER, "placeholder"),
+    createMediaItem(TRACKER_MEDIA.main, "Solar tracking system viewed from the front"),
+    createMediaItem(TRACKER_MEDIA.galleryTwo, "Solar tracking system viewed from the rear"),
+    createMediaItem(TRACKER_MEDIA.galleryThree, "Solar tracking system mechanism detail"),
   ],
 
-  price: "Coming soon",
-  status: "comingSoon",
+  price: null,
+  status: "inquiry",
   buyEnabled: false,
   basePrice: null,
   config: null,
@@ -29,66 +34,58 @@ export const SOLAR_TRACKING_PRODUCT = {
   translations: {
     en: {
       name: "Solar tracking system",
-      summary: "A future solar-focused extension for summer house setups that want to make more of available daylight.",
+      summary: "A solar-focused extension for summer house setups that want to make more of available daylight.",
       intro:
-        "Solar tracking system is a separate solar-focused extension planned around Voltrix summer house setups. It is not a simple plug-on Battery Pack accessory.",
+        "Solar tracking system is a separate solar-focused extension designed around Voltrix summer house setups. It is not a simple plug-on Battery Pack accessory.",
       features: [
-        "Future solar-focused extension",
-        "Planned for summer house and outdoor energy routines",
+        "Solar-focused extension",
+        "Designed for summer house and outdoor energy routines",
         "Separate from simple Battery Pack add-ons",
-        "Price and availability to be confirmed",
+        "Configuration and installation guidance through Alva",
       ],
-      certifications: [
-        "Coming soon",
-        "Final specification, installation requirements and price to be confirmed",
-      ],
+      certifications: [],
       specs: [
-        { label: "Status", value: "Coming soon" },
         { label: "Use type", value: "Solar-focused extension" },
         { label: "Platform", value: "Voltrix summer house setup" },
-        { label: "Price", value: "Not included yet" },
+        { label: "Configuration", value: "Confirmed through an inquiry" },
       ],
       useCases: [
         "Summer house solar planning",
         "Outdoor energy routines with available daylight",
-        "Future expansion around the Voltrix platform",
+        "Solar expansion around the Voltrix platform",
       ],
       faq: [
-        "Is it available now? Not yet, it is planned as a future extension.",
+        "How is the system configured? Contact Alva to confirm the setup and installation requirements.",
         "Is it a simple Battery Pack accessory? No, it is a separate solar-focused extension.",
-        "Is the price included? No, price is not included yet.",
+        "How is pricing confirmed? Pricing is confirmed through an inquiry.",
       ],
     },
     sv: {
       name: "Solar tracking system",
-      summary: "En framtida solfokuserad utökning för fritidshussetup som vill nyttja tillgängligt dagsljus bättre.",
+      summary: "En solfokuserad utökning för fritidshussetup som vill nyttja tillgängligt dagsljus bättre.",
       intro:
-        "Solar tracking system är en separat solfokuserad utökning planerad runt Voltrix för fritidshus. Det är inte ett enkelt plug-on-tillbehör för Battery Pack.",
+        "Solar tracking system är en separat solfokuserad utökning utformad runt Voltrix för fritidshus. Det är inte ett enkelt plug-on-tillbehör för Battery Pack.",
       features: [
-        "Framtida solfokuserad utökning",
-        "Planerad för fritidshus och utomhusrutiner",
+        "Solfokuserad utökning",
+        "Utformad för fritidshus och utomhusrutiner",
         "Separat från enkla Battery Pack-tillbehör",
-        "Pris och tillgänglighet bekräftas senare",
+        "Konfigurations- och installationsvägledning genom Alva",
       ],
-      certifications: [
-        "Kommer snart",
-        "Slutlig specifikation, installationskrav och pris bekräftas senare",
-      ],
+      certifications: [],
       specs: [
-        { label: "Status", value: "Kommer snart" },
         { label: "Användning", value: "Solfokuserad utökning" },
         { label: "Plattform", value: "Voltrix fritidshussetup" },
-        { label: "Pris", value: "Inte inkluderat än" },
+        { label: "Konfiguration", value: "Bekräftas via förfrågan" },
       ],
       useCases: [
         "Solplanering för fritidshus",
         "Utomhusrutiner med tillgängligt dagsljus",
-        "Framtida utökning runt Voltrix-plattformen",
+        "Solutökning runt Voltrix-plattformen",
       ],
       faq: [
-        "Är den tillgänglig nu? Inte än, den är planerad som en framtida utökning.",
+        "Hur konfigureras systemet? Kontakta Alva för att bekräfta setup och installationskrav.",
         "Är det ett enkelt Battery Pack-tillbehör? Nej, det är en separat solfokuserad utökning.",
-        "Är priset inkluderat? Nej, priset är inte inkluderat än.",
+        "Hur bekräftas priset? Priset bekräftas via förfrågan.",
       ],
     },
   },

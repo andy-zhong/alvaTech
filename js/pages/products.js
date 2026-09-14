@@ -4,7 +4,9 @@ import { bindSectionNav } from "../components/section-nav.js";
 
 const PRODUCT_ASSETS = {
   solarTracking: {
-    placeholderLabel: "Coming soon",
+    primaryImage: "/Picture/products/tracker/tracker1.png",
+    hoverImage: "/Picture/products/tracker/tracker2.png",
+    galleryImages: [],
   },
   kit: {
     primaryImage: "/Picture/products/voltrix/voltrix02.png",
@@ -116,7 +118,7 @@ const SHOWROOM_PRODUCTS = [
     key: "solarTracking",
     category: "Solar extension",
     name: "Solar tracking system",
-    body: "A future solar-focused extension for summer house setups.",
+    body: "A solar-focused extension for summer house setups.",
     slug: "solar-tracking-system",
   },
 ];
@@ -146,20 +148,19 @@ const ADDONS = [
   {
     key: "solarTracking",
     title: "Solar tracking system",
-    body: "A future solar add-on for summer house setups that want to make more of available daylight.",
-    note: "Coming soon.",
-    image: null,
+    body: "A solar-focused extension for summer house setups that want to make more of available daylight.",
+    image: "/Picture/products/tracker/tracker1.png",
     href: "/views/product.html?slug=solar-tracking-system",
   },
 ];
 
 const SPECS = [
   ["Battery chemistry", "NMC"],
-  ["Battery expansion", "1-12 kWh per inverter/base setup"],
+  ["Battery expansion", "1-7 Battery Packs per Voltrix group / PCS"],
   ["5-Pack Kit capacity", "5 kWh"],
-  ["More capacity", "Additional inverter/base setup required"],
+  ["More capacity", "Add another Voltrix group / PCS above 7 Battery Packs"],
   ["Outdoor readiness", "IP65"],
-  ["Temperature range", "-20 C to +65 C"],
+  ["Temperature range", "-20 C to +45 C"],
   ["Communication", "WiFi / Bluetooth"],
   ["Control", "Cloud platform / app"],
   ["Add-ons", "VoltDock, Backpack Power, mobility options"],
@@ -592,19 +593,18 @@ function getProductsCopy(lang) {
       {
         key: "solarTracking",
         title: "Solar tracking system",
-        body: "Ett framtida soltillbehör för fritidshus som vill ta bättre vara på tillgängligt dagsljus.",
-        note: "Kommer snart.",
-        image: null,
+        body: "Ett solfokuserat tillbehör för fritidshus som vill ta bättre vara på tillgängligt dagsljus.",
+        image: "/Picture/products/tracker/tracker1.png",
         href: "/views/product.html?slug=solar-tracking-system",
       },
     ],
     specs: [
       ["Batterikemi", "NMC"],
-      ["Batteriexpansion", "1-12 kWh per inverter/base setup"],
+      ["Batteriexpansion", "1-7 Battery Packs per Voltrix-grupp / PCS"],
       ["5-Pack Kit-kapacitet", "5 kWh"],
-      ["Mer kapacitet", "Ytterligare inverter/base setup krävs"],
+      ["Mer kapacitet", "Lägg till ytterligare en Voltrix-grupp / PCS över 7 Battery Packs"],
       ["Utomhusklassning", "IP65"],
-      ["Temperaturområde", "-20 C till +65 C"],
+      ["Temperaturområde", "-20 C till +45 C"],
       ["Kommunikation", "WiFi / Bluetooth"],
       ["Kontroll", "Molnplattform / app"],
       ["Tillbehör", "VoltDock, Backpack Power, mobilitetsval"],
