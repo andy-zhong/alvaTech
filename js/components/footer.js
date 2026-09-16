@@ -2,8 +2,8 @@ import { t } from "../services/language-service.js";
 
 export function renderFooter({ lang }) {
   const linksByLanguage = {
-    en: { privacy: "Privacy", contact: "Contact" },
-    sv: { privacy: "Integritet", contact: "Kontakt" },
+    en: { privacy: "Privacy", contact: "Contact", cookies: "Cookie settings" },
+    sv: { privacy: "Integritet", contact: "Kontakt", cookies: "Cookie-inställningar" },
     fi: { privacy: "Tietosuoja", contact: "Yhteys" },
     no: { privacy: "Personvern", contact: "Kontakt" },
     da: { privacy: "Privatliv", contact: "Kontakt" },
@@ -27,8 +27,9 @@ export function renderFooter({ lang }) {
           <nav class="site-footer__links" aria-label="Footer">
             <a href="/views/privacy-policy.html">${links.privacy}</a>
             <a href="/views/b2b.html">${links.contact}</a>
+            <button class="site-footer__cookie" type="button" data-consent-action="manage">${links.cookies ?? "Cookie settings"}</button>
           </nav>
-          <span>${t(lang, "footerTagline")}</span>
+
         </div>
       </div>
     </footer>

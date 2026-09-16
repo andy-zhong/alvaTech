@@ -24,6 +24,9 @@ const COPY = {
       message: "Describe what you would like Alva to help with.",
     },
     invalidEmail: "Enter a valid email address.",
+    messageTooLong: "Your request is longer than 4,000 characters. Shorten it before sending so no configuration details are lost.",
+    messageLimit: "Maximum 4,000 characters. Your full request must fit before it can be sent.",
+    directContact: 'If the form is unavailable, email <a href="mailto:support@alvatechnology.com">support@alvatechnology.com</a>.',
   },
   sv: {
     requiredSummary: "Fyll i de obligatoriska kontaktuppgifterna innan du skickar förfrågan.",
@@ -44,12 +47,18 @@ const COPY = {
       message: "Beskriv vad ni vill att Alva hjälper er med.",
     },
     invalidEmail: "Ange en giltig e-postadress.",
+    messageTooLong: "Din förfrågan är längre än 4 000 tecken. Korta ned den innan du skickar så att inga konfigurationsuppgifter går förlorade.",
+    messageLimit: "Högst 4 000 tecken. Hela förfrågan måste få plats innan den kan skickas.",
+    directContact: 'Om formuläret inte fungerar, mejla <a href="mailto:support@alvatechnology.com">support@alvatechnology.com</a>.',
   },
 };
 
 export function initB2BForm() {
   applyB2BTranslations();
   prefillEstimateRequest();
+  const prior=history.state?.alvaContactDraft;
+  if(prior){for(const name of ['company','contact','email','phone','message']){const field=document.querySelector('[name="'+name+'"]');if(field&&typeof prior[name]==='string')field.value=prior[name];}const next={...history.state};delete next.alvaContactDraft;history.replaceState(next,'');}
+  window.addEventListener('alva:before-language-change',()=>{history.replaceState({...history.state,alvaContactDraft:Object.fromEntries(new FormData(document.getElementById('b2b-form')))},'');},{once:true});
 
   const form = document.getElementById("b2b-form");
   if (!form || form.dataset.bound === "true") return;
@@ -137,7 +146,7 @@ function buildPayload(form) {
     contact: clean(formData.contact),
     email: clean(formData.email),
     phone: clean(formData.phone),
-    message: clean(formData.message, 4000),
+    message: clean(formData.message, 10000),
   };
 }
 
@@ -153,6 +162,7 @@ function validatePayload(data, copy) {
   if (data.email && !EMAIL_RE.test(data.email)) {
     errors.email = copy.invalidEmail;
   }
+  if (data.message.length > 4000) errors.message = copy.messageTooLong;
 
   return {
     valid: Object.keys(errors).length === 0,
@@ -225,21 +235,33 @@ function clean(value, max = 500) {
 function applyB2BTranslations() {
   const lang = getStoredLanguage();
   const copy = getCopy(lang);
+  const limit=document.getElementById('b2b-message-limit'); if(limit)limit.textContent=copy.messageLimit;
+  const direct=document.getElementById('b2b-direct-contact'); if(direct)direct.innerHTML=copy.directContact;
 
   const setText = (id, value) => {
     const el = document.getElementById(id);
     if (el) el.textContent = value;
   };
 
-  setText("b2b-title", t(lang, "b2bTitle"));
-  setText("b2b-body", t(lang, "b2bBody"));
+  setText("b2b-title", lang==='sv'?'Prata med Alva':'Talk to Alva');
+  document.title=lang==='sv'?'Kontakta Alva | Alva Technology':'Contact Alva | Alva Technology';
+  setText("b2b-body",lang==='sv'?'Berätta om din plats och hur du vill använda energi. Vi hjälper privatpersoner och företag att välja en setup och få en offert.':'Tell us about your site and how you want to use energy. We help individuals and businesses choose a setup and get a quotation.');
   setText("b2b-submit", t(lang, "b2bSubmit"));
   setText("b2b-success", copy.success);
-  setText("b2b-label-company", copy.fields.company);
-  setText("b2b-label-contact", copy.fields.contact);
+  setText("b2b-label-company",lang==='sv'?'Företag (valfritt)':'Company (optional)');
+  setText("b2b-label-contact",lang==='sv'?'Ditt namn':'Your name');
   setText("b2b-label-email", copy.fields.email);
   setText("b2b-label-phone", copy.fields.phone);
   setText("b2b-label-message", copy.fields.message);
+  const enquiryContext = new URLSearchParams(window.location.search).get("context");
+  if (["fieldpack", "marine"].includes(enquiryContext)) {
+    const sv = lang === "sv";
+    setText("b2b-title", sv ? "Prata med oss om din setup" : "Let's talk about your setup");
+    setText("b2b-body", sv ? "Berätta hur du vill använda FieldPack. Alva hjälper dig att välja batterier, utrustning och kablar, för privat bruk eller företag." : "Tell us how you plan to use FieldPack. Alva helps you choose batteries, equipment and cables, for personal or business use.");
+    setText("b2b-label-company", sv ? "Företag (valfritt)" : "Company (optional)");
+    setText("b2b-label-contact", sv ? "Ditt namn" : "Your name");
+    document.title = sv ? "Din FieldPack-setup | Alva Technology" : "Your FieldPack setup | Alva Technology";
+  }
 }
 
 function getCopy(lang) {

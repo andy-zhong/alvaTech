@@ -1,11 +1,11 @@
 import { PRODUCTS } from "../data/products.js";
 
 export function getAllProducts() {
-  return PRODUCTS;
+  return PRODUCTS.filter(product => product.catalogVisible !== false);
 }
 
 export function getBuyEnabledProducts() {
-  return PRODUCTS.filter((product) => product.buyEnabled);
+  return PRODUCTS.filter((product) => product.buyEnabled && product.catalogVisible !== false);
 }
 
 export function getProductBySlug(slug) {

@@ -3,16 +3,16 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Business Inquiry | Alva Technology</title>
-  <meta name="description" content="Contact Alva Technology about business solutions, fleet setups, installer workflows or custom Voltrix energy configurations.">
+  <title>Contact Alva | Alva Technology</title>
+  <meta name="description" content="Contact Alva about Voltrix, FieldPack, summer house solar and installer setups, for personal or business use.">
   <link rel="canonical" href="https://alvatechnology.se/views/b2b.html">
-  <meta property="og:title" content="Business Inquiry | Alva Technology">
+  <meta property="og:title" content="Contact Alva | Alva Technology">
   <meta property="og:description" content="Contact Alva Technology about business solutions, fleet setups, installer workflows or custom Voltrix configurations.">
   <meta property="og:url" content="https://alvatechnology.se/views/b2b.html">
   <meta property="og:type" content="website">
   <meta property="og:image" content="https://alvatechnology.se/Picture/products/voltrix/field/field08-optimized.jpg">
   <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="Business Inquiry | Alva Technology">
+  <meta name="twitter:title" content="Contact Alva | Alva Technology">
   <meta name="twitter:description" content="Contact Alva Technology about business solutions, fleet setups, installer workflows or custom Voltrix configurations.">
   <meta name="twitter:image" content="https://alvatechnology.se/Picture/products/voltrix/field/field08-optimized.jpg">
 
@@ -27,10 +27,10 @@
     <section class="section">
       <div class="b2b-container">
 
-        <h1 id="b2b-title">Contact us as a company</h1>
+        <h1 id="b2b-title">Talk to Alva</h1>
 
         <p class="muted" id="b2b-body">
-          Looking for a business solution, a fleet setup, or a custom configuration? Fill in the form and our team will contact you.
+          Tell us how you want to use energy. We help individuals and businesses choose a setup and get a quotation.
         </p>
 
         <form id="b2b-form" class="b2b-form" novalidate>
@@ -64,7 +64,8 @@
 
           <label class="b2b-field">
             <span id="b2b-label-message">Tell us what you're looking for</span>
-            <textarea name="message" required></textarea>
+            <textarea name="message" maxlength="4000" aria-describedby="b2b-message-limit" required></textarea>
+            <small id="b2b-message-limit" class="b2b-field-help">Maximum 4,000 characters. Your full request must fit before it can be sent.</small>
             <small class="b2b-field-error" data-error-for="message"></small>
           </label>
 
@@ -75,6 +76,7 @@
           <p id="b2b-success" class="b2b-success hidden" role="status" aria-live="polite">
             Your request has been sent. We will contact you shortly.
           </p>
+          <p class="b2b-direct-contact" id="b2b-direct-contact">If the form is unavailable, email <a href="mailto:support@alvatechnology.com">support@alvatechnology.com</a>.</p>
         </form>
 
       </div>

@@ -5,17 +5,17 @@ const { sendB2BMail } = require("../js/services/email-service.js");
 
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
-function clean(value, max = 4000) {
-  return String(value ?? "").trim().slice(0, max);
+function clean(value) {
+  return String(value ?? "").trim();
 }
 
 function validate(body) {
   const data = {
-    company: clean(body.company, 200),
-    contact: clean(body.contact, 200),
-    email: clean(body.email, 200),
-    phone: clean(body.phone, 100),
-    message: clean(body.message, 4000),
+    company: clean(body.company),
+    contact: clean(body.contact),
+    email: clean(body.email),
+    phone: clean(body.phone),
+    message: clean(body.message),
   };
   const requiredFields = ["contact", "email", "phone", "message"];
   const missing = requiredFields
@@ -39,6 +39,10 @@ function validate(body) {
       fields: ["email"],
       data,
     };
+  }
+  const tooLong = data.company.length > 200 || data.contact.length > 200 || data.email.length > 200 || data.phone.length > 100 || data.message.length > 4000;
+  if (tooLong) {
+    return { valid: false, status: 400, error: "One or more fields are too long. Please shorten the request before sending it.", fields: data.message.length > 4000 ? ["message"] : [], data };
   }
 
   return { valid: true, data };

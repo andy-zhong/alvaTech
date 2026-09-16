@@ -28,6 +28,7 @@ export function renderLanguagePicker({ lang, route }) {
 export function bindLanguagePicker() {
   document.querySelectorAll("[data-language-option]").forEach((button) => {
     button.addEventListener("click", () => {
+      window.dispatchEvent(new CustomEvent("alva:before-language-change"));
       setStoredLanguage(button.dataset.languageOption);
       window.location.reload();
     });

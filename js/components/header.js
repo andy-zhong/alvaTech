@@ -9,6 +9,7 @@ const NAV_COPY = {
     contact: "Contact",
     summerHouse: "Summer House",
     field: "Installer",
+    marine: "Marine",
     forSummerHouse: "For Summer house",
     forInstaller: "For Installer",
     accessories: "Accessories",
@@ -25,6 +26,7 @@ const NAV_COPY = {
     contact: "Kontakt",
     summerHouse: "Fritidshus",
     field: "Installatör",
+    marine: "Båtliv",
     forSummerHouse: "För fritidshus",
     forInstaller: "För installatörer",
     accessories: "Tillbehör",
@@ -87,6 +89,8 @@ export function initHeader({ page, lang, route }) {
   clearActiveLinks();
   setActive(page);
   setTranslations(lang);
+  const cartLink=document.querySelector('.navbar__cart');
+  if(cartLink){cartLink.setAttribute('aria-label',lang==='sv'?'Din konfiguration':'Your configuration');cartLink.title=lang==='sv'?'Din konfiguration':'Your configuration';}
   updateCart();
   renderLanguage(lang, route);
   bindMobileMenu(lang);
@@ -180,15 +184,23 @@ function bindMobileMenu(lang) {
   const openLabel = lang === "sv" ? "Öppna meny" : "Open menu";
   const closeLabel = lang === "sv" ? "Stäng meny" : "Close menu";
 
+  const mobile=window.matchMedia("(max-width: 860px)");
+  const pageMain=document.querySelector("main");
+  const footer=document.querySelector("footer");
   function setOpen(isOpen) {
     header.classList.toggle("is-menu-open", isOpen);
     toggle.setAttribute("aria-expanded", String(isOpen));
     toggle.setAttribute("aria-label", isOpen ? closeLabel : openLabel);
-    nav.setAttribute("aria-hidden", String(!isOpen));
+    nav.setAttribute("aria-hidden", String(mobile.matches && !isOpen));
+    nav.inert=mobile.matches && !isOpen;
+    if (pageMain) pageMain.inert=mobile.matches && isOpen;
+    if (footer) footer.inert=mobile.matches && isOpen;
+    document.documentElement.classList.toggle("has-mobile-menu", mobile.matches && isOpen);
   }
 
   toggle.setAttribute("aria-label", openLabel);
-  nav.setAttribute("aria-hidden", "true");
+  setOpen(false);
+  mobile.addEventListener("change",()=>setOpen(false));
   toggle.addEventListener("click", () => {
     setOpen(!header.classList.contains("is-menu-open"));
   });
@@ -200,8 +212,17 @@ function bindMobileMenu(lang) {
   });
 
   document.addEventListener("keydown", (event) => {
-    if (event.key === "Escape") {
+    if (event.key === "Escape" && header.classList.contains("is-menu-open")) {
+      toggle.focus();
       setOpen(false);
+      return;
+    }
+    if (event.key === "Tab" && mobile.matches && header.classList.contains("is-menu-open")) {
+      const focusable=[...header.querySelectorAll('a[href],button:not([disabled])')].filter(el=>!el.closest('[aria-hidden="true"]'));
+      if (!focusable.length) return;
+      const first=focusable[0], last=focusable[focusable.length-1];
+      if (event.shiftKey && document.activeElement===first) { event.preventDefault(); last.focus(); }
+      else if (!event.shiftKey && document.activeElement===last) { event.preventDefault(); first.focus(); }
     }
   });
 }

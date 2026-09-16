@@ -1,3 +1,5 @@
+import { renderSummerSolar } from '../components/summer-solar.js';
+import { renderProductDirectory } from '../components/product-directory.js';
 const SOLUTION_PAGE_COPY = {
   "summer-house": {
     type: "summer-house",
@@ -51,7 +53,7 @@ const SOLUTION_PAGE_COPY = {
       "Voltrix is the energy core. From there, battery packs can stay with the home setup, move to outdoor routines or work with selected extensions when power needs to follow everyday life.",
     ecosystem: [
       ["VoltDock", "For devices, desks, lights and small outdoor moments around the cabin."],
-      ["Backpack Power", "For garden tasks, outdoor work corners and places where power should move with you."],
+      ["Voltrix FieldPack", "For garden tasks, outdoor work corners and places where power should move with you."],
       ["Mobility options", "For selected routines where one battery needs to travel further from the house."],
     ],
     proofBody:
@@ -73,7 +75,7 @@ const SOLUTION_PAGE_COPY = {
     title: "Portable energy for installer teams.",
     intro:
       "Charge batteries centrally at the office or workshop, bring selected packs into the service van and use them with compatible add-ons when useful power needs to move with the work.",
-    line: "Base -> Van -> Site -> Return",
+    line: "Workshop → Van → Job site → Recharge",
     primaryCta: "Plan an installer setup",
     primaryHref: "/views/b2b.html",
     secondaryCta: "Talk to Alva",
@@ -84,7 +86,7 @@ const SOLUTION_PAGE_COPY = {
       "Useful power should not stop at the wall socket, the warehouse or the parking spot.",
     statementBody:
       "Voltrix helps organize batteries at the office or workshop, move them with the team and use them where work actually happens.",
-    statementTags: ["Base charging", "Service vans", "Temporary workstations", "Last-meter power"],
+    statementTags: ["Workshop charging", "Service vans", "Temporary workstations", "Last-meter power"],
     workflowTitle: "From centralized charging to work on site.",
     workflowBody:
       "Voltrix works as the energy base at your office, workshop or company site. Batteries can be prepared before the workday, brought into the service van as needed and returned for centralized charging.",
@@ -92,8 +94,8 @@ const SOLUTION_PAGE_COPY = {
       ["Prepare centrally", "Charge batteries at the office or workshop before the team leaves for the day."],
       ["Bring only what is needed", "Take the right number of battery packs for the route, job type or expected workload."],
       ["Support flexible work", "Use VoltDock for phones, laptops, tablets and temporary workstations in the van or on site."],
-      ["Reach the last meter", "Use Backpack Power when energy needs to move beyond the service van and closer to the final work area."],
-      ["Return and recharge", "Bring batteries back to base, recharge centrally and stay ready for the next workday."],
+      ["Reach the last meter", "Use Voltrix FieldPack when energy needs to move beyond the service van and closer to the final work area."],
+      ["Return and recharge", "Bring batteries back to the workshop, recharge centrally and stay ready for the next workday."],
     ],
     dockTitle: "Create a flexible working desk where the job needs it.",
     dockBody:
@@ -104,7 +106,7 @@ const SOLUTION_PAGE_COPY = {
     dockImageClass: "solution-page__image--field-dock",
     backpackTitle: "Carry power closer to the point of work.",
     backpackBody:
-      "Backpack Power helps move energy beyond the service van and into the final working area. It can carry one battery with an inverter as a wearable mobile power source, or help transport multiple batteries closer to where the task happens.",
+      "FieldPack has an integrated PCS and room for up to two Battery Packs. Bring the same batteries from your Voltrix base to the place where the work happens.",
     backpackBullets: [
       "The parking spot is far from the work area",
       "Cables are inconvenient",
@@ -114,12 +116,12 @@ const SOLUTION_PAGE_COPY = {
     backpackImageClass: "solution-page__image--field-backpack",
     ecosystemTitle: "One battery platform. Multiple work formats.",
     ecosystemBody:
-      "Voltrix is the charging and energy base. From there, batteries can move into the service van, support a temporary workstation, travel to the final work point and return to base for the next cycle.",
+      "Voltrix is the central charging point. From there, batteries can move into the service van, support a temporary workstation, travel to the final work point and return for the next cycle.",
     ecosystem: [
-      ["Voltrix base", "Centralized charging and energy organization at the office or workshop."],
+      ["Voltrix charging point", "Centralized charging and energy organization at the office or workshop."],
       ["Battery packs", "Prepared centrally and moved with the team as needed."],
       ["VoltDock", "A compact hub for devices, field admin and temporary workstations."],
-      ["Backpack Power", "Last-meter power and practical battery transport."],
+      ["Voltrix FieldPack", "Last-meter power and practical battery transport."],
       ["Mobility layer", "Optional support for selected sites where one battery needs to move across distance."],
     ],
     mobilityBody:
@@ -182,7 +184,7 @@ const SOLUTION_PAGE_SV_COPY = {
       "Voltrix är energibasen. Därifrån kan batteripack stanna i hemmets setup, följa med till utomhusrutiner eller fungera med utvalda tillbehör när energin behöver flytta med vardagen.",
     ecosystem: [
       ["VoltDock", "För enheter, skrivbord, belysning och små utomhusmoment runt stugan."],
-      ["Backpack Power", "För trädgårdsuppgifter, arbetshörnor utomhus och platser där energin ska följa med."],
+      ["Voltrix FieldPack", "För trädgårdsuppgifter, arbetshörnor utomhus och platser där energin ska följa med."],
       ["Mobilitetstillbehör", "För utvalda rutiner där ett batteri behöver flyttas längre från huset."],
     ],
     proofBody:
@@ -208,7 +210,7 @@ const SOLUTION_PAGE_SV_COPY = {
     title: "Portabel energi för installatörer.",
     intro:
       "Ladda batterier på kontoret eller i verkstaden, ta utvalda pack i servicebilen och använd dem på plats med kompatibla tillbehör när energin behöver följa arbetet.",
-    line: "Kontor / verkstad -> Servicebil -> Arbetsplats -> Tillbaka",
+    line: "Verkstad → Servicebil → Arbetsplats → Ladda om",
     primaryCta: "Planera en installatörssetup",
     secondaryCta: "Kontakta Alva",
     statement:
@@ -218,12 +220,12 @@ const SOLUTION_PAGE_SV_COPY = {
     statementTags: ["Centraliserad laddning", "Servicebilar", "Tillfälliga arbetsytor", "Energi sista biten"],
     workflowTitle: "Från laddning på kontoret till arbete på plats.",
     workflowBody:
-      "Voltrix fungerar som energibas på kontoret, i verkstaden eller på företagets plats. Batterier kan förberedas innan arbetsdagen, tas med i servicebilen vid behov och återvända för centraliserad laddning.",
+      "Voltrix fungerar som central laddningspunkt på kontoret eller i verkstaden. Batterier kan förberedas innan arbetsdagen, tas med i servicebilen vid behov och återvända för laddning.",
     steps: [
       ["Förbered innan avfärd", "Ladda batterierna centralt innan teamet åker ut för dagen."],
       ["Ta bara med det som behövs", "Välj rätt antal batteripack för rutten, jobbet eller förväntad användning."],
       ["Stöd flexibelt arbete", "Använd VoltDock för telefoner, laptops, surfplattor och tillfälliga arbetsytor i bilen eller på plats."],
-      ["Nå sista biten", "Använd Backpack Power när energin behöver flytta bortom servicebilen och närmare arbetsytan."],
+      ["Nå sista biten", "Använd Voltrix FieldPack när energin behöver flytta bortom servicebilen och närmare arbetsytan."],
       ["Tillbaka och ladda", "Ta tillbaka batterierna, ladda centralt och var redo för nästa arbetsdag."],
     ],
     dockTitle: "Skapa en flexibel arbetsyta där jobbet behöver den.",
@@ -234,7 +236,7 @@ const SOLUTION_PAGE_SV_COPY = {
     dockTags: ["Mobil administration", "Kommunikation", "Dokumentation", "Samordning", "Tillfälliga arbetsytor"],
     backpackTitle: "Bär energi närmare arbetet.",
     backpackBody:
-      "Backpack Power hjälper till att flytta energi bortom servicebilen och till den faktiska arbetsytan. Den kan bära ett batteri med inverter som en bärbar energikälla, eller hjälpa till att transportera flera batterier närmare uppgiften.",
+      "FieldPack har inbyggd PCS och plats för upp till två Battery Packs. Ta med samma batterier från Voltrix-basen till platsen där arbetet sker.",
     backpackBullets: [
       "Parkeringsplatsen ligger långt från arbetsytan",
       "Kablar är opraktiska",
@@ -243,12 +245,12 @@ const SOLUTION_PAGE_SV_COPY = {
     ],
     ecosystemTitle: "En batteriplattform. Flera arbetsformat.",
     ecosystemBody:
-      "Voltrix är laddnings- och energibasen. Därifrån kan batterier flytta in i servicebilen, stödja en tillfällig arbetsyta, följa med till sista arbetsmomentet och återvända för nästa cykel.",
+      "Voltrix är den centrala laddningspunkten. Därifrån kan batterier flytta in i servicebilen, stödja en tillfällig arbetsyta, följa med till sista arbetsmomentet och återvända för nästa cykel.",
     ecosystem: [
-      ["Voltrix-bas", "Centraliserad laddning och ordning på kontoret eller i verkstaden."],
+      ["Voltrix laddningspunkt", "Centraliserad laddning och ordning på kontoret eller i verkstaden."],
       ["Batteripack", "Förberedda centralt och flyttade med teamet vid behov."],
       ["VoltDock", "En kompakt hubb för enheter, administration och tillfälliga arbetsytor."],
-      ["Backpack Power", "Energi sista biten och praktisk batteritransport."],
+      ["Voltrix FieldPack", "Energi sista biten och praktisk batteritransport."],
       ["Mobilitetslager", "Valfritt stöd för platser där ett batteri behöver flyttas längre."],
     ],
     mobilityBody:
@@ -280,66 +282,29 @@ export function renderSolutionDetailPage({ type, lang }) {
   const copy = getSolutionCopy(type, lang);
 
   return copy.type === "field"
-    ? renderFieldPage(copy)
-    : renderSummerHousePage(copy);
+    ? renderFieldPage(copy, lang)
+    : renderSummerHousePage(copy, lang);
 }
 
-function renderSummerHousePage(copy) {
-  return `
-    ${renderHero(copy)}
-    ${renderStatement(copy)}
-    ${renderSplit({
-      eyebrow: copy.labels?.whyItFits ?? "Why it fits",
-      title: copy.fitTitle,
-      body: copy.fitBody,
-      bullets: copy.fitBullets,
-      imageClass: copy.fitImageClass,
-    })}
-    ${renderTimeline({
-      eyebrow: copy.labels?.setup ?? "The setup",
-      title: copy.setupTitle,
-      body: copy.setupBody,
-      steps: copy.steps,
-      variant: "summer",
-    })}
-    ${renderImageBand(copy)}
-    ${renderEcosystemCards(copy)}
-    ${renderProofBand(copy)}
-    ${renderCta(copy)}
-  `;
+function renderSummerHousePage(copy, lang) {
+ const sv=lang==='sv';
+ const hero={...copy,primaryCta:sv?'Planera batterikapacitet':'Plan battery capacity',primaryHref:'/views/products.html?scenario=summer#setup-estimator',secondaryCta:sv?'Solenergi med Tracker':'Solar with Tracker',secondaryHref:'#summer-solar'};
+ return `
+   ${renderHero(hero)}
+   ${renderSummerSolar(lang)}
+   <section class="refined-section"><div class="refined-section-head"><div><span class="eyebrow">${sv?'DIN SETUP':'YOUR SETUP'}</span><h2>${sv?'Börja med lagring. Ta med energin.':'Start with storage. Take energy with you.'}</h2><p>${sv?'Välj kapacitet för din vistelse och lägg till FieldPack om batterierna ska följa med till trädgården eller bryggan.':'Choose capacity for your stay, and add FieldPack when your batteries need to come along to the garden or dock.'}</p></div></div>${renderProductDirectory(lang,['voltrix-5-pack-kit','voltrix-battery-module','voltrix-fieldpack'],{compact:true})}</section>
+   <section class="refined-section solution-practical"><h2>${sv?'Planera efter platsen och vistelsen.':'Plan around your site and your stay.'}</h2><p>${sv?'Har du redan solpaneler? Alva hjälper dig att kontrollera anslutning och kompatibilitet. Överväger du Tracker? Vi går igenom placering, paneler och installation tillsammans.':'Already have solar panels? Alva helps check connections and compatibility. Considering Tracker? We review placement, panels and installation together.'}</p><p>${sv?'Välj batterikapacitet efter utrustningen du använder och tiden mellan säkra laddningar. Solenergi kompletterar planeringen, utan att garantera en viss drifttid.':'Choose battery capacity around the equipment you use and the time between reliable recharges. Solar complements the plan without guaranteeing a particular runtime.'}</p><a class="button button--primary" href="/views/products.html?scenario=summer#setup-estimator">${sv?'Planera min setup':'Plan my setup'}</a></section>
+ `;
 }
-
-function renderFieldPage(copy) {
-  return `
-    ${renderHero(copy)}
-    ${renderStatement(copy)}
-    ${renderTimeline({
-      eyebrow: copy.labels?.workflow ?? "The workflow",
-      title: copy.workflowTitle,
-      body: copy.workflowBody,
-      steps: copy.steps,
-      variant: "field",
-    })}
-    ${renderSplit({
-      eyebrow: copy.labels?.vanToWorkstation ?? "From van to workstation",
-      title: copy.dockTitle,
-      body: copy.dockBody,
-      bodyTwo: copy.dockBodyTwo,
-      tags: copy.dockTags,
-      imageClass: copy.dockImageClass,
-    })}
-    ${renderSplit({
-      eyebrow: copy.labels?.lastMeter ?? "The last meter",
-      title: copy.backpackTitle,
-      body: copy.backpackBody,
-      bullets: copy.backpackBullets,
-      imageClass: copy.backpackImageClass,
-      reverse: true,
-    })}
-    ${renderEcosystemStrip(copy)}
-    ${renderMobilityNote(copy)}
-    ${renderCta(copy)}
-  `;
+function renderFieldPage(copy, lang) {
+ const sv=lang==='sv';
+ const hero={...copy,primaryCta:sv?'Planera för teamet':'Plan for your team',primaryHref:'/views/products.html?scenario=installer#setup-estimator',secondaryCta:sv?'Utforska FieldPack':'Explore FieldPack',secondaryHref:'/views/product.html?slug=voltrix-fieldpack'};
+ return `
+ ${renderHero(hero)}
+ ${renderTimeline({eyebrow:copy.labels?.workflow??'The workflow',title:copy.workflowTitle,body:copy.workflowBody,steps:copy.steps,variant:'field'})}
+ <section class="refined-section"><div class="refined-section-head"><div><h2>${sv?'Från verkstad till arbetsplats.':'From workshop to job site.'}</h2><p>${sv?'Voltrix förbereder batterierna. FieldPack ger portabel ström där arbetet sker. VoltDock stödjer enheter och tillfälliga arbetsytor.':'Voltrix prepares the batteries. FieldPack brings portable power to the job. VoltDock supports devices and temporary workstations.'}</p></div></div>${renderProductDirectory(lang,['voltrix-5-pack-kit','voltrix-fieldpack','voltdock'],{compact:true})}</section>
+ <section class="refined-section solution-practical"><h2>${copy.ctaTitle}</h2><p>${copy.ctaBody}</p><div class="refined-actions"><a class="button button--primary" href="/views/products.html?scenario=installer#setup-estimator">${sv?'Planera för teamet':'Plan for your team'}</a><a class="text-link" href="/views/b2b.html">${copy.ctaPrimary} →</a></div></section>
+ `;
 }
 
 function renderHero(copy) {
@@ -349,7 +314,7 @@ function renderHero(copy) {
         <span class="eyebrow">${copy.eyebrow}</span>
         <h1>${copy.title}</h1>
         <p>${copy.intro}</p>
-        <p class="solution-page-hero__line">${copy.line}</p>
+        ${copy.type==='field'?`<ol class="solution-hero-flow" aria-label="${copy.line}">${copy.line.split('→').map((step,index)=>`<li><span>${String(index+1).padStart(2,'0')}</span>${step.trim()}</li>`).join('')}</ol>`:`<p class="solution-page-hero__line">${copy.line}</p>`}
         <div class="solution-page__actions">
           <a class="button button--primary" href="${copy.primaryHref}">${copy.primaryCta}</a>
           <a class="button button--secondary" href="${copy.secondaryHref}">${copy.secondaryCta}</a>
@@ -391,10 +356,9 @@ function renderSplit({ eyebrow, title, body, bodyTwo, bullets, tags, imageClass,
 function renderSplitImage(imageClass) {
   if (imageClass === "solution-page__image--field-backpack") {
     return `
-      <div class="solution-page__image ${imageClass}" aria-hidden="true">
-        <span class="solution-page__image-slide solution-page__image-slide--field-backpack-one"></span>
-        <span class="solution-page__image-slide solution-page__image-slide--field-backpack-two"></span>
-      </div>
+      <a class="solution-page__image solution-page__image--fieldpack" href="/views/product.html?slug=voltrix-fieldpack" aria-label="Voltrix FieldPack">
+        <img src="/Picture/products/marine/marine_field_backpack_1.webp" alt="Voltrix FieldPack" loading="lazy">
+      </a>
     `;
   }
 

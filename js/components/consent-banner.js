@@ -141,16 +141,9 @@ export function mountCookieBanner({ lang }) {
   banner.id = "cookie-banner";
   banner.className = "cookie-banner";
 
-  // Persistent 🍪 manage button (bottom-left corner)
-  let manageWrap = document.getElementById("cookie-manage-btn-wrap");
-  if (!manageWrap) {
-    manageWrap = document.createElement("div");
-    manageWrap.id = "cookie-manage-btn-wrap";
-    document.body.appendChild(manageWrap);
-  }
-  manageWrap.innerHTML = `
-    <button class="cookie-manage-btn" data-consent-action="manage"
-            aria-label="${copy.manage}" title="${copy.manage}">🍪</button>`;
+  document.getElementById("cookie-manage-btn-wrap")?.remove();
+  const manageButton = document.querySelector("[data-consent-action='manage']");
+  if (manageButton) manageButton.textContent = copy.manage;
 
   let showCustom = false;
 
@@ -187,7 +180,7 @@ export function mountCookieBanner({ lang }) {
     if (action) handleAction(action);
   });
 
-  manageWrap.addEventListener("click", (e) => {
+  manageButton?.addEventListener("click", (e) => {
     const action = e.target.closest("[data-consent-action]")?.dataset.consentAction;
     if (action) handleAction(action);
   });

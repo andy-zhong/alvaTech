@@ -2,23 +2,23 @@ const createMediaItem = (src, alt, type = "image") => ({ src, alt, type });
 
 export const BACKPACK_PRODUCT = {
   slug: "backpack-power",
-  name: "Backpack Power",
-  shortName: "Backpack Power",
+  name: "Voltrix Carrier",
+  shortName: "Voltrix Carrier",
 
   heroImage: "/Picture/products/backpack/backpack_1inverter+1battery-optimized.jpg",
   thumbnail: "/Picture/products/backpack/backpack_1inverter+1battery-optimized.jpg",
 
   heroMedia: createMediaItem(
     "/Picture/products/backpack/backpack_1inverter+1battery-optimized.jpg",
-    "Backpack Power with one inverter and one Battery Pack"
+    "Voltrix Carrier with one inverter and one Battery Pack"
   ),
 
   gallery: [
-    createMediaItem("/Picture/products/backpack/backpack_1inverter+1battery-optimized.jpg", "Backpack Power setup"),
-    createMediaItem("/Picture/products/backpack/backpack03-optimized.jpg", "Backpack Power in use"),
-    createMediaItem("/Picture/products/backpack/backpack01-optimized.jpg", "Backpack Power product view"),
-    createMediaItem("/Picture/products/backpack/backpack02-optimized.jpg", "Backpack Power charging detail"),
-    createMediaItem("/Picture/products/backpack/backpack03-optimized.jpg", "Backpack Power outdoor use"),
+    createMediaItem("/Picture/products/backpack/backpack_1inverter+1battery-optimized.jpg", "Voltrix Carrier setup"),
+    createMediaItem("/Picture/products/backpack/backpack03-optimized.jpg", "Voltrix Carrier in use"),
+    createMediaItem("/Picture/products/backpack/backpack01-optimized.jpg", "Voltrix Carrier product view"),
+    createMediaItem("/Picture/products/backpack/backpack02-optimized.jpg", "Voltrix Carrier charging detail"),
+    createMediaItem("/Picture/products/backpack/backpack03-optimized.jpg", "Voltrix Carrier outdoor use"),
   ],
 
   price: "1 490 SEK",
@@ -29,10 +29,10 @@ export const BACKPACK_PRODUCT = {
 
   translations: {
     en: {
-      name: "Backpack Power",
+      name: "Voltrix Carrier",
       summary: "A carrying add-on for moving Battery Packs closer to outdoor tasks and last-meter work.",
       intro:
-        "Backpack Power helps carry useful energy beyond the wall, from the service van or fixed setup to the place where the task actually happens.",
+        "Voltrix Carrier helps carry useful energy beyond the wall, from the service van or fixed setup to the place where the task actually happens.",
       features: [
         "Designed around the Voltrix Battery Pack platform",
         "Supports last-meter carrying for selected outdoor and workday routines",
@@ -61,10 +61,10 @@ export const BACKPACK_PRODUCT = {
       ],
     },
     sv: {
-      name: "Backpack Power",
+      name: "Voltrix Carrier",
       summary: "Ett bärtillbehör för att flytta Battery Packs närmare utomhusuppgifter och sista metern.",
       intro:
-        "Backpack Power hjälper till att bära användbar energi bortom väggen, från servicebilen eller den fasta setupen till platsen där uppgiften sker.",
+        "Voltrix Carrier hjälper till att bära användbar energi bortom väggen, från servicebilen eller den fasta setupen till platsen där uppgiften sker.",
       features: [
         "Byggd runt Voltrix Battery Pack-plattformen",
         "Stöd för praktisk energi där arbetet sker i utvalda utomhus- och arbetsrutiner",

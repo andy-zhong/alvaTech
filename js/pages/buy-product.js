@@ -79,7 +79,9 @@ const CART_COPY = {
 };
 
 function getCartCopy(lang) {
-  return CART_COPY[lang] ?? CART_COPY.en;
+  const copy={...(CART_COPY[lang] ?? CART_COPY.en)};
+  if(!commerceVisibility.allowCheckout){copy.title=lang==='sv'?'Din konfiguration':'Your configuration';copy.summaryTitle=lang==='sv'?'Sammanfattning':'Configuration summary';copy.continue=lang==='sv'?'Utforska produkter':'Explore products';}
+  return copy;
 }
 
 function getRequestQuoteLabel(lang) {
@@ -88,11 +90,11 @@ function getRequestQuoteLabel(lang) {
 
 function getCartSummaryNote(lang, hasPlanningEstimate) {
   if (!commerceVisibility.allowCheckout) {
-    return getCheckoutDisabledMessage(lang);
+    return lang==='sv'?'Skicka konfigurationen till Alva för en offert. Inget köp genomförs här.':'Send your configuration to Alva for a quotation. No purchase is made here.';
   }
 
   return hasPlanningEstimate
-    ? "Planning estimates are not live Vendure order lines. Request quote to confirm configuration."
+    ? (lang==='sv' ? "Planeringsestimat är inte en order. Begär offert för att bekräfta konfigurationen." : "Planning estimates are not orders. Request a quote to confirm the configuration.")
     : t(lang, "cartTaxNote");
 }
 
@@ -121,8 +123,8 @@ export function renderBuyProductPage({ lang, route }) {
     return `
       <section class="section">
         <article class="empty-state">
-          <h1>${t(lang, "cartEmpty")}</h1>
-          <p class="muted">${t(lang, "cartEmptyBody")}</p>
+          <h1>${commerceVisibility.allowCheckout?t(lang,"cartEmpty"):(lang==='sv'?'Ingen konfiguration sparad ännu':'No saved configuration yet')}</h1>
+          <p class="muted">${commerceVisibility.allowCheckout?t(lang,"cartEmptyBody"):(lang==='sv'?'Utforska produkterna eller spara ett förslag från planeringsverktyget.':'Explore products or save a recommendation from the planner.')}</p>
           <div class="section">
             <a class="button button--secondary" href="/views/products.html">
               ${t(lang, "backToProducts")}
@@ -137,9 +139,7 @@ export function renderBuyProductPage({ lang, route }) {
   const notice = consumeCartNotice();
   const primaryHref = !commerceVisibility.allowCheckout || hasPlanningEstimate ? "/views/b2b.html" : "/views/checkout.html";
   const primaryLabel = !commerceVisibility.allowCheckout || hasPlanningEstimate ? getRequestQuoteLabel(lang) : copy.checkout;
-  const primaryAttrs = !commerceVisibility.allowCheckout
-    ? "aria-disabled=\"true\" data-checkout-disabled"
-    : hasPlanningEstimate ? "data-planning-quote-link" : "data-vendure-checkout-link";
+  const primaryAttrs = !commerceVisibility.allowCheckout || hasPlanningEstimate ? 'data-planning-quote-link' : 'data-vendure-checkout-link';
 
   return `
     <section class="section">
@@ -275,14 +275,15 @@ function renderPurchaseAssurance(lang) {
 }
 
 function renderPlanningEstimateLine(item, lang) {
-  const details = Array.isArray(item.details) ? item.details.filter(shouldRenderPlanningDetail) : [];
+  const view = item.localized?.[lang] ?? item;
+  const details = Array.isArray(view.details) ? view.details.filter(shouldRenderPlanningDetail) : [];
 
   return `
     <div class="cart-line cart-line--planning" data-item-id="${item.cartItemId}">
-      <div class="cart-line__img cart-line__img--planning" aria-hidden="true">Estimate</div>
+      <div class="cart-line__img cart-line__img--planning" aria-hidden="true">${lang==='sv'?'Estimat':'Estimate'}</div>
       <div class="cart-line__body">
-        <p class="cart-line__name">${item.title || "Estimated Voltrix setup"}</p>
-        <p class="cart-line__meta">${item.subtitle || "Planning estimate, final quote may differ."}</p>
+        <p class="cart-line__name">${view.title || (lang==='sv'?"Uppskattad Voltrix-setup":"Estimated Voltrix setup")}</p>
+        <p class="cart-line__meta">${view.subtitle || (lang==='sv'?"Planeringsestimat, slutlig offert kan skilja sig.":"Planning estimate, final quote may differ.")}</p>
         <dl class="cart-line__details">
           ${details.map(([label, value]) => `
             <div>
@@ -291,7 +292,7 @@ function renderPlanningEstimateLine(item, lang) {
             </div>
           `).join("")}
         </dl>
-        <p class="cart-line__meta">Request quote to confirm configuration.</p>
+        <p class="cart-line__meta">${lang==='sv'?'Begär offert för att bekräfta konfigurationen.':'Request a quote to confirm the configuration.'}</p>
       </div>
       <div class="cart-line__right">
         <p class="cart-line__price">${commerceVisibility.showEstimatorPrices ? item.estimatedPriceRange || getPricingComingSoonLabel(lang) : renderCartPricePlaceholder(lang)}</p>
@@ -305,10 +306,11 @@ function renderPlanningEstimateLine(item, lang) {
 
 function renderSummaryRow(item, lang) {
   if (isPlanningEstimateItem(item)) {
+    const view=item.localized?.[lang]??item;
     return `
       <div class="cart-summary__row">
         <span style="max-width:180px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;"
-              title="${item.title || "Estimated Voltrix setup"}">${item.title || "Estimated Voltrix setup"}</span>
+              title="${view.title || (lang==='sv'?"Uppskattad Voltrix-setup":"Estimated Voltrix setup")}">${view.title || (lang==='sv'?"Uppskattad Voltrix-setup":"Estimated Voltrix setup")}</span>
         <span>${commerceVisibility.showEstimatorPrices ? item.estimatedPriceRange || getPricingComingSoonLabel(lang) : renderCartPricePlaceholder(lang)}</span>
       </div>`;
   }
@@ -337,6 +339,7 @@ function renderSummaryRow(item, lang) {
 
 export function afterRenderBuyProduct({ lang } = {}) {
   const activeLang = lang || getStoredLanguage();
+  if(!commerceVisibility.allowCheckout)document.title=(activeLang==='sv'?'Din konfiguration':'Your configuration')+' | Alva Technology';
   const checkoutLink = document.querySelector("[data-vendure-checkout-link]");
   const disabledCheckoutLink = document.querySelector("[data-checkout-disabled]");
 
@@ -389,7 +392,13 @@ export function afterRenderBuyProduct({ lang } = {}) {
   });
 
   document.querySelector("[data-planning-quote-link]")?.addEventListener("click", () => {
-    const summary = getFirstPlanningEstimateSummary();
+    const items=JSON.parse(localStorage.getItem('cart')||'[]');
+    const summary=items.map(item=>{
+      if(isPlanningEstimateItem(item))return item.localized?.[activeLang]?.summary||item.summary||'';
+      const product=getProductBySlug(item.slug);
+      const name=product?getProductContent(product,activeLang).name:(item.name||item.title||item.slug||'Voltrix');
+      return name+' × '+(item.quantity||1)+(item.batteryCount?' · '+item.batteryCount+' Battery Packs':'');
+    }).filter(Boolean).join('\n\n');
     if (summary) {
       sessionStorage.setItem("alva-estimator-request-summary", summary);
     }

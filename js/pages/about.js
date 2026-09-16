@@ -93,13 +93,6 @@ export function renderAboutPage({ lang } = {}) {
       </div>
     </section>
 
-    <section class="about-statement section--milk">
-      <div class="about-statement__inner">
-        <p>${copy.statementHeadline}</p>
-        <div class="about-statement__body">${copy.statementBody}</div>
-      </div>
-    </section>
-
     <section class="about-build section--sage">
       <div class="about-build__inner">
         <div class="about-build__copy">
@@ -113,16 +106,6 @@ export function renderAboutPage({ lang } = {}) {
       </div>
     </section>
 
-    <section class="about-split section--milk">
-      <div class="about-split__inner">
-        <div class="about-split__marker" aria-hidden="true">01</div>
-        <div>
-          <h2>${copy.mattersHeadline}</h2>
-          <p>${copy.mattersBody}</p>
-        </div>
-      </div>
-    </section>
-
     <section class="about-nordic section--sage">
       <div class="about-nordic__inner">
         <div class="about-nordic__visual" aria-hidden="true">
@@ -133,13 +116,6 @@ export function renderAboutPage({ lang } = {}) {
           <h2>${copy.swedishHeadline}</h2>
           <p>${copy.swedishBody}</p>
         </div>
-      </div>
-    </section>
-
-    <section class="about-philosophy section--milk">
-      <div class="about-philosophy__inner">
-        <h2>${copy.philosophyHeadline}</h2>
-        <p>${copy.philosophyBody}</p>
       </div>
     </section>
 

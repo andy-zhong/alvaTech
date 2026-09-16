@@ -87,6 +87,10 @@ $frontendRoots = @(
 )
 
 $unusedLargeOriginals = @(
+    "Picture\products\apps\voltrix_app_inuse.png",
+    "Picture\products\marine\marine_field_backpack_insue_8.jpg",
+    "Picture\products\marine\marine_field_backpack_insue_8.webp",
+    "Picture\products\marine\marine_field_backpack_inuse_9.png",
     "Picture\home\HomePageBackground_1.jpg",
     "Picture\home\HomePageBackground_2.png",
     "Picture\products\voltrix\summerhouse\summerhouse01.jpg",

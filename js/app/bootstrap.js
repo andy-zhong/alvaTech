@@ -1,3 +1,4 @@
+import { renderMarinePage } from '../pages/solution-marine.js';
 import { initHeader }             from "../components/header.js";
 import { renderFooter }           from "../components/footer.js";
 import { bindLanguagePicker }     from "../components/language-picker.js";
@@ -45,6 +46,13 @@ export async function initApp() {
   mountCookieBanner({ lang });  // ← NEW — always last so it overlays everything
 
   bindLanguagePicker();
+  // Page content is mounted asynchronously, after the browser's initial fragment lookup.
+  if (window.location.hash) {
+    try {
+      const targetId = decodeURIComponent(window.location.hash.slice(1));
+      requestAnimationFrame(() => document.getElementById(targetId)?.scrollIntoView({block:"start",behavior:"instant"}));
+    } catch { /* Ignore malformed fragments. */ }
+  }
 }
 
 async function mountShell({ page, lang, route, productUrl }) {
@@ -114,6 +122,11 @@ async function mountPage({ page, lang, route, productUrl, buyProductUrl, getCurr
       container.innerHTML = renderSolutionDetailPage({ lang, type: "summer-house" });
       break;
 
+    case "solution-marine":
+      document.title = lang === "sv" ? "Båtliv · FieldPack | Alva Technology" : "Marine · FieldPack | Alva Technology";
+      container.innerHTML = renderMarinePage({ lang });
+      break;
+
     case "solution-field":
       document.title = lang === "sv" ? "Installatör | Alva Technology" : "Field Teams | Alva Technology";
       container.innerHTML = renderSolutionDetailPage({ lang, type: "field" });
@@ -131,6 +144,7 @@ async function mountPage({ page, lang, route, productUrl, buyProductUrl, getCurr
       container.innerHTML = renderProductDetailPage({ lang, slug, route, buyProductUrl });
       const product = getProductBySlug(slug);
       if (product) {
+        document.title = `${product.translations[lang]?.name ?? product.name} | Alva Technology`;
         afterRenderProductDetail(product);
       } else {
         container.innerHTML = renderMissingProduct({ lang, route });

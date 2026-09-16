@@ -1,3 +1,4 @@
+import { getMarineContent, MARINE_ASSETS } from './marine-content.js';
 import { getMarket, MARKET_CLUSTERS } from "./markets.js";
 
 export const PLATFORM_ANCHORS = {
@@ -22,6 +23,10 @@ const SHARED_PLATFORM_CONTENT = {
         "Modular battery platform",
         "Ready for Nordic routines",
       ],
+      cta: "Explore Summer House",
+      href: "/views/solution-summer-house.html",
+      productCta: "View Voltrix Kit",
+      productHref: "/views/product.html?slug=voltrix-5-pack-kit",
     },
     field: {
       id: "field",
@@ -34,6 +39,10 @@ const SHARED_PLATFORM_CONTENT = {
         "Centralized charging",
         "Portable installer routines",
       ],
+      cta: "Explore Installer",
+      href: "/views/solution-field.html",
+      productCta: "View FieldPack",
+      productHref: "/views/product.html?slug=voltrix-fieldpack",
     },
   },
   heroCtas: {
@@ -58,8 +67,8 @@ const SHARED_PLATFORM_CONTENT = {
     },
     {
       title: "Ready for add-ons",
-      body: "Pair battery packs with VoltDock, Backpack Power and selected mobility options when energy needs to move with you.",
-      label: "Dock / Backpack / mobility",
+      body: "Pair battery packs with VoltDock, Voltrix FieldPack and selected mobility options when energy needs to move with you.",
+      label: "Dock / FieldPack / mobility",
     },
   ],
   platform: {
@@ -76,10 +85,10 @@ const SHARED_PLATFORM_CONTENT = {
     cta: "Explore all accessories",
     items: [
       {
-        title: "Backpack Power",
+        title: "Voltrix FieldPack",
         body: "Carry Battery Packs further for outdoor tasks and mobile use.",
-        image: "/Picture/products/backpack/backpack_1inverter+1battery-optimized.jpg",
-        href: "/views/product.html?slug=backpack-power",
+        image: "/Picture/products/marine/marine_field_backpack_1.webp",
+        href: "/views/product.html?slug=voltrix-fieldpack",
       },
       {
         title: "VoltDock",
@@ -96,7 +105,7 @@ const SHARED_PLATFORM_CONTENT = {
       {
         title: "Solar tracking system",
         body: "A solar-focused extension for summer house setups that want to make more of available daylight.",
-        image: "/Picture/products/tracker/tracker1.png",
+        image: "/Picture/products/tracker/tracker1.webp",
         imageFit: "cover",
         href: "/views/product.html?slug=solar-tracking-system",
       },
@@ -148,7 +157,7 @@ const SHARED_PLATFORM_CONTENT = {
           "Centralized charging at the office or workshop",
           "Bring only the batteries needed for the route or job",
           "Use VoltDock for devices and temporary workstations",
-          "Use Backpack Power for last-meter tasks",
+          "Use Voltrix FieldPack for last-meter tasks",
         ],
       },
     },
@@ -216,12 +225,16 @@ const LANGUAGE_OVERRIDES = {
         headlineLines: ["Trygg energi", "i fritidshuset"],
         body: "Ha användbar energi nära till hands när vardagen flyttar utanför väggarna - från stugan till terrassen, trädgården, gästhuset eller bryggan.",
         benefits: ["Fritidshus och stugor", "Modulär batteriplattform", "Redo för nordiska rutiner"],
+        cta: "Utforska fritidshus",
+        productCta: "Se Voltrix-kit",
       },
       field: {
         label: "Installatör",
         headlineLines: ["Portabel energi", "för installatörer"],
         body: "Ladda batteripack på kontoret eller i verkstaden, ta med dem i servicebilen och använd dem där praktisk el behövs.",
         benefits: ["Installatörer och serviceteam", "Centraliserad laddning", "Portabla arbetsrutiner"],
+        cta: "Utforska installatör",
+        productCta: "Se FieldPack",
       },
     },
     heroCtas: { primary: "Utforska kit", secondary: "Se plattformen" },
@@ -243,8 +256,8 @@ const LANGUAGE_OVERRIDES = {
       },
       {
         title: "Redo för tillbehör",
-        body: "Kombinera batteripack med VoltDock, Backpack Power och utvalda mobilitetsalternativ när energin behöver följa med.",
-        label: "Dock / Backpack / mobilitet",
+        body: "Kombinera batteripack med VoltDock, Voltrix FieldPack och utvalda mobilitetsalternativ när energin behöver följa med.",
+        label: "Dock / FieldPack / mobilitet",
       },
     ],
     platform: {
@@ -261,10 +274,10 @@ const LANGUAGE_OVERRIDES = {
       cta: "Utforska alla tillbehör",
       items: [
         {
-          title: "Backpack Power",
+          title: "Voltrix FieldPack",
           body: "Bär Battery Packs längre för utomhusaktiviteter och mobil användning.",
-          image: "/Picture/products/backpack/backpack_1inverter+1battery-optimized.jpg",
-          href: "/views/product.html?slug=backpack-power",
+          image: "/Picture/products/marine/marine_field_backpack_1.webp",
+          href: "/views/product.html?slug=voltrix-fieldpack",
         },
         {
           title: "VoltDock",
@@ -281,7 +294,7 @@ const LANGUAGE_OVERRIDES = {
         {
           title: "Solar tracking system",
           body: "Ett solfokuserat tillbehör för fritidshus som vill ta bättre vara på tillgängligt dagsljus.",
-          image: "/Picture/products/tracker/tracker1.png",
+          image: "/Picture/products/tracker/tracker1.webp",
           imageFit: "cover",
           href: "/views/product.html?slug=solar-tracking-system",
         },
@@ -331,7 +344,7 @@ const LANGUAGE_OVERRIDES = {
             "Centraliserad laddning på kontoret eller i verkstaden",
             "Ta bara med de batterier som behövs för rutten eller jobbet",
             "Använd VoltDock för enheter och tillfälliga arbetsstationer",
-            "Använd Backpack Power för de sista metrarna",
+            "Använd Voltrix FieldPack för de sista metrarna",
           ],
         },
       },
@@ -421,6 +434,26 @@ export function getPlatformContent(lang) {
 
   return {
     market,
-    ...mergeNested(clusterContent, LANGUAGE_OVERRIDES[lang] ?? {}),
+    ...extendMarineContent(mergeNested(clusterContent, LANGUAGE_OVERRIDES[lang] ?? {}), lang),
+  };
+}
+
+function extendMarineContent(content, lang) {
+  const marine = getMarineContent(lang);
+  const sv = lang === 'sv';
+  const items = content.addOns.items.map(item => item.href.includes('voltrix-fieldpack') ? {
+    ...item, body: sv ? 'Portabel ström med inbyggd PCS. Ta samma batterier från hemmet till arbetet eller båten.' : 'Portable power with an integrated PCS. Take the same batteries from home to work or the boat.',
+    image: MARINE_ASSETS.product,
+  } : item);
+  items.sort((a,b) => {
+    const rank = item => item.href.includes('fieldpack') ? 0 : item.href.includes('solar-tracking') ? 1 : item.href.includes('voltdock') ? 2 : 3;
+    return rank(a)-rank(b);
+  });
+  return {...content,
+    heroScenarios: {...content.heroScenarios, marine},
+    solutions: [...content.solutions.map(solution=>solution.id==='summer-house'?{...solution,body:sv?'Lagra energi med Voltrix och planera solenergi med Tracker för fritidshuset.':'Store energy with Voltrix and plan solar with Tracker for your summer house.',detail:{...solution.detail,body:sv?'Kombinera Voltrix och Battery Packs med solenergi som passar din plats. Tracker är ett val för kompatibla paneler; FieldPack tar med energin utanför huset.':'Combine Voltrix and Battery Packs with solar suited to your site. Tracker is an option for compatible panels; FieldPack brings energy beyond the house.',bullets:sv?['Voltrix lagrar energi för din vistelse','Tracker kompletterar med solenergi efter platsens förutsättningar','FieldPack tar samma batterier till trädgården eller bryggan']:['Voltrix stores energy for your stay','Tracker adds a solar option planned around your site','FieldPack takes the same batteries to the garden or dock']}}:solution), marine],
+    platform: {...content.platform, body: sv ? 'Voltrix på land. FieldPack på plats. Samma löstagbara Battery Packs för fritidshuset, arbetsdagen och livet på vattnet.' : 'Voltrix on shore. FieldPack on the move. The same removable Battery Packs for your summer house, workday and time on the water.'},
+    addOns: {...content.addOns, title: sv ? 'Utöka din Voltrix.' : 'Take your Voltrix further.', items},
+    pages: {...content.pages, solutions: {...content.pages.solutions, body: sv ? 'Hitta din lösning för fritidshuset, arbetsdagen eller båtlivet.' : 'Find your setup for the summer house, the workday or life on the water.'}},
   };
 }

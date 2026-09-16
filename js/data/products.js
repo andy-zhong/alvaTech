@@ -1,3 +1,4 @@
+import { FIELDPACK_PRODUCT } from './products/fieldpack.js';
 /**
  * data/products.js
  * Single source of truth for storefront products.
@@ -20,6 +21,7 @@ export const PRODUCTS = [
   BATTERY_PRODUCT,
   INVERTER_PRODUCT,
   VOLTDOCK_PRODUCT,
+  FIELDPACK_PRODUCT,
   BACKPACK_PRODUCT,
   BIKE_ACCESSORY_PRODUCT,
   VOLTRIX_WALL_MOUNTING_PRODUCT,

@@ -1,14 +1,14 @@
 const createMediaItem = (src, alt, type = "image") => ({ src, alt, type });
 
 const TRACKER_MEDIA = {
-  main: "/Picture/products/tracker/tracker1.png",
-  galleryTwo: "/Picture/products/tracker/tracker2.png",
-  galleryThree: "/Picture/products/tracker/tracker3.png",
+  main: "/Picture/products/tracker/tracker1.webp",
+  galleryTwo: "/Picture/products/tracker/tracker2.webp",
+  galleryThree: "/Picture/products/tracker/tracker3.webp",
 };
 
 export const SOLAR_TRACKING_PRODUCT = {
   slug: "solar-tracking-system",
-  name: "Solar tracking system",
+  name: "Tracker",
   shortName: "Solar tracking",
 
   heroImage: TRACKER_MEDIA.main,
@@ -33,19 +33,21 @@ export const SOLAR_TRACKING_PRODUCT = {
 
   translations: {
     en: {
-      name: "Solar tracking system",
-      summary: "A solar-focused extension for summer house setups that want to make more of available daylight.",
+      name: "Tracker",
+      summary: "A sun-tracking mount for compatible solar panels, designed for summer house energy setups.",
       intro:
-        "Solar tracking system is a separate solar-focused extension designed around Voltrix summer house setups. It is not a simple plug-on Battery Pack accessory.",
+        "Tracker is a sun-tracking mount for compatible solar panels. Plan it with Voltrix to collect solar energy at your summer house, store it in Battery Packs and use it when needed. Tracking mount only; solar panels are not included.",
       features: [
-        "Solar-focused extension",
+        "Tracking mount only — solar panels are not included",
+        "Up to 40% more solar energy under suitable conditions",
         "Designed for summer house and outdoor energy routines",
-        "Separate from simple Battery Pack add-ons",
+        "Panel compatibility, site placement and electrical connections reviewed with Alva",
         "Configuration and installation guidance through Alva",
       ],
       certifications: [],
       specs: [
-        { label: "Use type", value: "Solar-focused extension" },
+        { label: "Product type", value: "Sun-tracking mount; solar panels not included" },
+        { label: "Potential gain", value: "Up to 40% more solar energy; actual results depend on conditions" },
         { label: "Platform", value: "Voltrix summer house setup" },
         { label: "Configuration", value: "Confirmed through an inquiry" },
       ],
@@ -55,25 +57,28 @@ export const SOLAR_TRACKING_PRODUCT = {
         "Solar expansion around the Voltrix platform",
       ],
       faq: [
-        "How is the system configured? Contact Alva to confirm the setup and installation requirements.",
+        "Are solar panels included? No. Alva supplies the tracking mount and helps check compatibility with your chosen panels.",
+        "How is the system configured? Contact Alva to review the setup and installation requirements.",
         "Is it a simple Battery Pack accessory? No, it is a separate solar-focused extension.",
         "How is pricing confirmed? Pricing is confirmed through an inquiry.",
       ],
     },
     sv: {
-      name: "Solar tracking system",
-      summary: "En solfokuserad utökning för fritidshussetup som vill nyttja tillgängligt dagsljus bättre.",
+      name: "Tracker",
+      summary: "Ett solföljande stativ för kompatibla solpaneler, utformat för fritidshusets energisystem.",
       intro:
-        "Solar tracking system är en separat solfokuserad utökning utformad runt Voltrix för fritidshus. Det är inte ett enkelt plug-on-tillbehör för Battery Pack.",
+        "Tracker är ett solföljande stativ för kompatibla solpaneler. Planera det med Voltrix för att samla solenergi vid fritidshuset, lagra den i Battery Packs och använda den när den behövs. Endast solföljande stativ; solpaneler ingår inte.",
       features: [
-        "Solfokuserad utökning",
+        "Endast solföljande stativ — solpaneler ingår inte",
+        "Upp till 40 % mer solenergi under lämpliga förhållanden",
         "Utformad för fritidshus och utomhusrutiner",
-        "Separat från enkla Battery Pack-tillbehör",
+        "Panelkompatibilitet, placering och elektrisk anslutning gås igenom med Alva",
         "Konfigurations- och installationsvägledning genom Alva",
       ],
       certifications: [],
       specs: [
-        { label: "Användning", value: "Solfokuserad utökning" },
+        { label: "Produkttyp", value: "Solföljande stativ; solpaneler ingår inte" },
+        { label: "Möjlig ökning", value: "Upp till 40 % mer solenergi; verkligt resultat beror på förhållandena" },
         { label: "Plattform", value: "Voltrix fritidshussetup" },
         { label: "Konfiguration", value: "Bekräftas via förfrågan" },
       ],
@@ -83,7 +88,8 @@ export const SOLAR_TRACKING_PRODUCT = {
         "Solutökning runt Voltrix-plattformen",
       ],
       faq: [
-        "Hur konfigureras systemet? Kontakta Alva för att bekräfta setup och installationskrav.",
+        "Ingår solpaneler? Nej. Alva levererar det solföljande stativet och hjälper till att kontrollera kompatibiliteten med dina valda paneler.",
+        "Hur konfigureras systemet? Kontakta Alva för att gå igenom setup och installationskrav.",
         "Är det ett enkelt Battery Pack-tillbehör? Nej, det är en separat solfokuserad utökning.",
         "Hur bekräftas priset? Priset bekräftas via förfrågan.",
       ],

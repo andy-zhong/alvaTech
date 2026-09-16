@@ -1,10 +1,11 @@
+import { renderProductDirectory } from '../components/product-directory.js';
 import { getPlatformContent } from "../data/platform-content.js";
 import { bindSetupEstimator, renderSetupEstimator } from "../components/setup-estimator.js";
 
 const ICONS = ["01", "02", "03", "04"];
 const BENEFIT_ICONS = ["modules", "expand", "deploy", "tool"];
 const FEATURE_ICONS = ["overview", "batteryPlus", "deploy"];
-const HERO_SCENARIOS = ["summerHouse", "field"];
+const HERO_SCENARIOS = ["summerHouse", "field", "marine"];
 const HERO_ROTATION_DELAY_MS = 7000;
 const HERO_MANUAL_PAUSE_MS = 9000;
 const HERO_COPY_SWITCH_DELAY_MS = 260;
@@ -21,7 +22,7 @@ const APP_DOWNLOAD_COPY = {
 };
 const APP_SHOWCASE_SLIDES = [
   {
-    src: "/Picture/products/apps/voltrix_app_inuse.png",
+    src: "/Picture/products/apps/voltrix_app_inuse.webp",
     width: 1528,
     height: 1029,
     kind: "photo",
@@ -76,6 +77,7 @@ export function renderHomePage({ lang }) {
         <span class="platform-hero__battery platform-hero__battery--one"></span>
         <span class="platform-hero__battery platform-hero__battery--two"></span>
       </div>
+      <div class="platform-hero__marine" data-hero-visual="marine" aria-hidden="true"></div>
       <div class="platform-hero__overlay" aria-hidden="true"></div>
 
       <div class="home-section-inner platform-hero__inner">
@@ -90,69 +92,26 @@ export function renderHomePage({ lang }) {
           </div>
 
           <div class="platform-hero__actions">
-            <a class="button button--primary" href="/views/products.html">${content.heroCtas.primary}</a>
-            <a class="button button--secondary" href="#platform-section">${content.heroCtas.secondary}</a>
+            <a class="button button--primary" href="${defaultScenario.href}">${defaultScenario.cta}</a>
+            <a class="button button--secondary" href="${defaultScenario.productHref}">${defaultScenario.productCta}</a>
           </div>
         </div>
 
         <div class="platform-hero__tabs" role="tablist" aria-label="Energy scenarios">
           ${renderHeroTab("summerHouse", content.heroScenarios.summerHouse, true)}
           ${renderHeroTab("field", content.heroScenarios.field, false)}
-        </div>
-      </div>
-    </section>
-
-    <section class="platform-home-section platform-home-section--milk platform-home-section--principles">
-      <div class="home-section-inner">
-        <div class="platform-benefit-grid">
-          ${content.benefits.map((item, index) => `
-            <article class="platform-benefit-card reveal" style="--delay:${(index * 0.08).toFixed(2)}s">
-              <div class="platform-benefit-card__meta">
-                ${renderIcon(BENEFIT_ICONS[index])}
-                <span>${ICONS[index]}</span>
-              </div>
-              <div class="platform-benefit-card__body">
-                <h2>${item.title}</h2>
-                <p>${item.body}</p>
-              </div>
-              ${item.label ? `<small class="platform-benefit-card__tag">${item.label}</small>` : ""}
-            </article>
-          `).join("")}
+          ${renderHeroTab("marine", content.heroScenarios.marine, false)}
         </div>
       </div>
     </section>
 
     <section class="platform-home-section platform-home-section--sage platform-home-section--platform" id="platform-section" aria-labelledby="platform-title">
       <div class="home-section-inner">
-        ${renderSolutionShowcase(content.platform, content.solutions)}
+        ${renderSolutionShowcase(content.platform, content.solutions, lang)}
       </div>
     </section>
 
-    <section class="platform-home-section platform-home-section--milk platform-home-section--product" aria-labelledby="product-fit-title">
-      <div class="home-section-inner platform-product-area platform-product-area--featured">
-        <div class="platform-section-head">
-          <div>
-            <span class="platform-eyebrow">${content.productFit.eyebrow}</span>
-            <h2 id="product-fit-title">${content.productFit.title}</h2>
-            <p>${content.productFit.body}</p>
-          </div>
-          <div class="platform-section-actions">
-            <a class="button button--primary" href="/views/product.html?slug=voltrix-5-pack-kit">${content.productFit.primary}</a>
-            <a class="button button--secondary" href="/views/products.html">${content.productFit.secondary}</a>
-          </div>
-        </div>
-
-        <div class="platform-product-feature reveal">
-          <figure class="platform-product-feature__media frameless-image-stage">
-            <img src="/Picture/products/voltrix/voltrix02.png" alt="Voltrix 5-Pack Kit">
-          </figure>
-          <div class="platform-product-feature__copy">
-            <span class="platform-product-feature__label">${content.productFit.label ?? "Fixed 5 kWh starting setup"}</span>
-            <p>${content.productFit.note ?? content.productTierNote}</p>
-          </div>
-        </div>
-      </div>
-    </section>
+    <section class="refined-section home-core-products" id="product-addons"><div class="refined-section-head"><div><span class="eyebrow">Voltrix</span><h2>${lang==='sv'?'En plattform. Din kombination.':'One platform. Your combination.'}</h2></div><a class="text-link" href="/views/products.html">${lang==='sv'?'Alla produkter':'All products'} →</a></div>${renderProductDirectory(lang,undefined,{compact:true})}</section>
 
     <section class="platform-home-section platform-home-section--sage platform-home-section--app" aria-labelledby="smart-title">
       <div class="home-section-inner">
@@ -174,7 +133,7 @@ export function renderHomePage({ lang }) {
           ${renderAppShowcase(lang)}
 
           <aside class="platform-app-download reveal" aria-label="${appDownload.label}">
-            <img src="/Picture/products/apps/qr_code.png" alt="${appDownload.label}" width="339" height="331" loading="lazy">
+            <img src="/Picture/products/apps/qr_code.png" alt="${appDownload.label}" width="339" height="331" loading="lazy" decoding="async">
             <div>
               <strong>${appDownload.label}</strong>
               <span>${appDownload.body}</span>
@@ -184,17 +143,17 @@ export function renderHomePage({ lang }) {
       </div>
     </section>
 
-    ${renderAddOnsSection(content.addOns)}
+
 
     ${renderSetupEstimator({ context: "home" })}
 
-    ${renderTrustContactSection(content)}
+    ${renderTrustContactSection(content, lang)}
   `;
 }
 
 export function bindHomePage({ lang }) {
   bindScenarioTabs(lang);
-  bindSolutionShowcase();
+  bindSolutionDisclosure();
   bindAppShowcase();
   bindSetupEstimator();
   initScrollReveal();
@@ -245,32 +204,81 @@ function escapeHtml(value) {
     .replaceAll("'", "&#039;");
 }
 
-function renderSolutionShowcase(platform, solutions) {
+function renderSolutionShowcase(platform, solutions, lang) {
+  const sv = lang === "sv";
+  const detailImages = {
+    "summer-house": "/Picture/products/voltrix/summerhouse/summerhouse02-optimized.jpg",
+    field: "/Picture/products/voltrix/field/field04-optimized.jpg",
+    marine: "/Picture/products/marine/marine_field_backpack_inuse_7.webp",
+  };
   return `
-    <div class="platform-solution-showcase reveal" data-solution-showcase>
-      <div class="platform-solution-layout">
-        <div class="platform-explain__copy">
-          <span class="platform-eyebrow">${platform.eyebrow}</span>
-          <h2 id="platform-title">${platform.title}</h2>
-          <p>${platform.body}</p>
-        </div>
-
-        <div class="platform-solution-stage">
-          <div class="platform-solution-mobile-indicator" role="tablist" aria-label="${platform.eyebrow}">
-            ${solutions.map((solution, index) => renderSolutionMobileIndicator(solution, index)).join("")}
-          </div>
-
-          <div class="platform-solution-tabs" data-solution-viewport>
-            ${solutions.map((solution, index) => renderSolutionSlide(solution, index)).join("")}
-          </div>
-        </div>
+    <div class="scenario-directory" data-scenario-directory>
+      <div class="platform-explain__copy">
+        <span class="platform-eyebrow">${platform.eyebrow}</span>
+        <h2 id="platform-title">${platform.title}</h2>
+        <p>${platform.body}</p>
       </div>
-
-      <div class="platform-solution-panels" data-solution-panels hidden>
-        ${solutions.map((solution) => renderSolutionDetail(solution)).join("")}
+      <div class="scenario-directory__grid">
+        ${solutions.map(solution => `
+          <div class="scenario-choice">
+            <button class="scenario-card" type="button" id="scenario-trigger-${solution.id}"
+              aria-expanded="false" aria-controls="scenario-detail-${solution.id}" data-scenario-toggle="${solution.id}">
+              <span class="scenario-card__image platform-solution-tab__image--${solution.id}" aria-hidden="true"></span>
+              <span class="scenario-card__copy">
+                <span class="scenario-card__label">${solution.label}</span>
+                <strong>${solution.title}</strong>
+                <span class="scenario-card__description">${solution.body}</span>
+                <span class="scenario-card__link"><span>${sv ? "Upptäck möjligheterna" : "Explore the possibilities"}</span><span class="scenario-card__toggle" aria-hidden="true">+</span></span>
+              </span>
+            </button>
+            <section class="scenario-detail" id="scenario-detail-${solution.id}" aria-labelledby="scenario-detail-title-${solution.id}" data-scenario-detail="${solution.id}" hidden>
+              <figure class="scenario-detail__media"><img src="${detailImages[solution.id]}" alt="${solution.label} — Voltrix" width="1536" height="1024" loading="lazy"></figure>
+              <div class="scenario-detail__copy">
+                <div class="scenario-detail__top"><span class="platform-eyebrow">${solution.detail.eyebrow}</span><button type="button" class="scenario-detail__close" data-scenario-close="${solution.id}" aria-label="${sv ? "Stäng" : "Close"} ${solution.label}">×</button></div>
+                <h3 id="scenario-detail-title-${solution.id}">${solution.detail.title}</h3>
+                <p>${solution.detail.body}</p>
+                <ul>${solution.detail.bullets.slice(0,3).map(bullet => `<li>${bullet}</li>`).join("")}</ul>
+                <a class="button button--primary" href="${solution.href}">${solution.cta}</a>${solution.id === "summer-house" ? `<a class="text-link scenario-solar-link" href="/views/solution-summer-house.html#summer-solar">${sv?"Solenergi med Tracker":"Solar with Tracker"} →</a>` : ""}
+              </div>
+            </section>
+          </div>`).join("")}
       </div>
-    </div>
-  `;
+    </div>`;
+}
+
+function bindSolutionDisclosure() {
+  const root = document.querySelector("[data-scenario-directory]");
+  if (!root) return;
+  const triggers = [...root.querySelectorAll("[data-scenario-toggle]")];
+  const panels = [...root.querySelectorAll("[data-scenario-detail]")];
+  let activeId = null;
+  const motion = () => window.matchMedia("(prefers-reduced-motion: reduce)").matches ? "instant" : "smooth";
+  function setOpen(id, {returnFocus = false} = {}) {
+    const previous = activeId;
+    activeId = id;
+    triggers.forEach(trigger => {
+      const open = trigger.dataset.scenarioToggle === id;
+      trigger.setAttribute("aria-expanded", String(open));
+      trigger.querySelector(".scenario-card__toggle").textContent = open ? "−" : "+";
+    });
+    panels.forEach(panel => { panel.hidden = panel.dataset.scenarioDetail !== id; });
+    const trigger = triggers.find(button => button.dataset.scenarioToggle === (id || previous));
+    if (returnFocus) trigger?.focus({preventScroll:true});
+    if (!id && !returnFocus) return;
+    requestAnimationFrame(() => {
+      const target = id && window.matchMedia("(min-width:1024px)").matches
+        ? panels.find(panel => panel.dataset.scenarioDetail === id) : trigger;
+      target?.scrollIntoView({behavior:motion(),block:"start"});
+    });
+  }
+  triggers.forEach(trigger => trigger.addEventListener("click", () => {
+    const id = trigger.dataset.scenarioToggle;
+    setOpen(activeId === id ? null : id);
+  }));
+  root.querySelectorAll("[data-scenario-close]").forEach(button => button.addEventListener("click", () => setOpen(null, {returnFocus:true})));
+  root.addEventListener("keydown", event => {
+    if (event.key === "Escape" && activeId) { event.preventDefault(); setOpen(null, {returnFocus:true}); }
+  });
 }
 
 function renderAppShowcase(lang) {
@@ -289,7 +297,7 @@ function renderAppShowcase(lang) {
                 alt="${slide.alt[lang] ?? slide.alt.en}"
                 width="${slide.width}"
                 height="${slide.height}"
-                ${index === 0 ? 'fetchpriority="high"' : 'loading="lazy"'}>
+                loading="lazy" decoding="async">
             </div>
           </figure>
         `).join("")}
@@ -349,7 +357,7 @@ function renderAddOnItem(item, index) {
   `;
 }
 
-function renderTrustContactSection(content) {
+function renderTrustContactSection(content, lang) {
   return `
     <section class="platform-home-section platform-home-section--milk platform-home-section--trust-contact" aria-labelledby="final-cta-title">
       <div class="home-section-inner platform-trust-contact">
@@ -360,6 +368,7 @@ function renderTrustContactSection(content) {
             <p>${content.trust.body}</p>
           </div>
           <div class="platform-trust__points">
+            <small class="platform-trust__scope">${lang==='sv'?'Nyckeldata för Voltrix PCS':'Key specifications for the Voltrix PCS'}</small>
             ${content.trust.points.map((point) => `
               <span>
                 <strong>${point.value}</strong>
@@ -380,77 +389,6 @@ function renderTrustContactSection(content) {
         </div>
       </div>
     </section>
-  `;
-}
-
-function renderSolutionMobileIndicator(solution, index) {
-  const isActive = index === 0;
-
-  return `
-    <button
-      class="platform-solution-mobile-indicator__button ${isActive ? "is-active" : ""}"
-      type="button"
-      role="tab"
-      aria-selected="${isActive ? "true" : "false"}"
-      aria-controls="solution-panel-${solution.id}"
-      id="solution-tab-${solution.id}"
-      tabindex="${isActive ? "0" : "-1"}"
-      data-solution-indicator="${solution.id}">
-      ${solution.label}
-    </button>
-  `;
-}
-
-function renderSolutionSlide(solution, index) {
-  return `
-    <article
-      class="platform-solution-slide ${index === 0 ? "is-active" : ""}"
-      id="solution-panel-${solution.id}"
-      role="tabpanel"
-      aria-labelledby="solution-tab-${solution.id}"
-      aria-hidden="${index === 0 ? "false" : "true"}"
-      data-solution-slide="${solution.id}"
-      ${index === 0 ? "" : "inert"}>
-      ${renderSolutionTab(solution)}
-    </article>
-  `;
-}
-
-function renderSolutionTab(solution) {
-  const visualClass = `platform-solution-tab__image--${solution.id}`;
-
-  return `
-    <div class="platform-solution-tab" data-solution-overview="${solution.id}">
-      <span class="platform-solution-tab__image ${visualClass}" aria-hidden="true"></span>
-      <span class="platform-solution-tab__copy">
-        <strong>${solution.title}</strong>
-        <span>${solution.body}</span>
-        <a class="platform-solution-tab__cta" href="${solution.href}" data-solution-cta="${solution.id}" aria-controls="solution-detail-${solution.id}" aria-expanded="false">${solution.cta ?? "Explore solution"} <b aria-hidden="true">&rarr;</b></a>
-      </span>
-    </div>
-  `;
-}
-
-function renderSolutionDetail(solution) {
-  const visualClass = `platform-solution-detail__visual--${solution.id}`;
-
-  return `
-    <article
-      class="platform-solution-detail"
-      id="solution-detail-${solution.id}"
-      data-solution-detail="${solution.id}"
-      hidden>
-      <div class="platform-solution-detail__visual ${visualClass}" aria-hidden="true"></div>
-      <div class="platform-solution-detail__copy">
-        <span class="platform-eyebrow">${solution.detail.eyebrow}</span>
-        <h3>${solution.detail.title}</h3>
-        <p>${solution.detail.body}</p>
-        <ul>
-          ${solution.detail.bullets.map((bullet) => `<li>${bullet}</li>`).join("")}
-        </ul>
-        <a class="button button--primary" href="${solution.href}">${solution.cta}</a>
-      </div>
-    </article>
   `;
 }
 
@@ -511,6 +449,7 @@ function bindScenarioTabs(lang) {
 
   function scheduleRotation(delay = HERO_ROTATION_DELAY_MS) {
     stopRotation();
+    if (window.matchMedia("(max-width: 860px)").matches || window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
     rotationTimer = setTimeout(() => {
       const currentIndex = HERO_SCENARIOS.indexOf(activeScenario);
       const nextScenario = HERO_SCENARIOS[(currentIndex + 1) % HERO_SCENARIOS.length] ?? HERO_SCENARIOS[0];
@@ -543,6 +482,11 @@ function bindScenarioTabs(lang) {
     });
 
     root.dataset.activeScenario = key;
+    const [primary, secondary] = root.querySelectorAll('.platform-hero__actions a');
+    primary.href = scenario.href;
+    primary.textContent = scenario.cta;
+    secondary.href = scenario.productHref;
+    secondary.textContent = scenario.productCta;
     copy.classList.add("is-switching");
     benefits.classList.add("is-switching");
     clearTimeout(copyTimer);
@@ -594,220 +538,6 @@ function bindScenarioTabs(lang) {
   scheduleRotation();
 }
 
-function bindSolutionShowcase() {
-  const root = document.querySelector("[data-solution-showcase]");
-  if (!root) return;
-
-  const indicators = [...root.querySelectorAll("[data-solution-indicator]")];
-  const slides = [...root.querySelectorAll("[data-solution-slide]")];
-  const viewport = root.querySelector("[data-solution-viewport]");
-  const overviews = [...root.querySelectorAll("[data-solution-overview]")];
-  const detailPanels = [...root.querySelectorAll("[data-solution-detail]")];
-  const detailsRoot = root.querySelector("[data-solution-panels]");
-  const desktopQuery = window.matchMedia("(min-width: 1024px)");
-  const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
-  let activeIndex = 0;
-  let scrollFrame = 0;
-  let autoplayTimer = null;
-  let isInView = false;
-  let hasManualSelection = false;
-
-  function stopAutoplay() {
-    window.clearTimeout(autoplayTimer);
-    autoplayTimer = null;
-  }
-
-  function canAutoplay() {
-    return !desktopQuery.matches
-      && !reducedMotion.matches
-      && !hasManualSelection
-      && isInView
-      && !document.hidden
-      && !root.matches(":hover")
-      && !root.contains(document.activeElement)
-      && slides.length > 1;
-  }
-
-  function scheduleAutoplay() {
-    stopAutoplay();
-    if (!canAutoplay()) return;
-
-    autoplayTimer = window.setTimeout(() => {
-      scrollToSolution((activeIndex + 1) % slides.length);
-      scheduleAutoplay();
-    }, 8000);
-  }
-
-  function selectManually(nextIndex, options = {}) {
-    hasManualSelection = true;
-    stopAutoplay();
-    scrollToSolution(nextIndex, options);
-  }
-
-  function closeDesktopDetails() {
-    if (detailsRoot) {
-      detailsRoot.hidden = true;
-      detailsRoot.classList.remove("is-open");
-    }
-    detailPanels.forEach((panel) => {
-      panel.hidden = true;
-    });
-    overviews.forEach((overview) => {
-      overview.classList.remove("is-active");
-      overview.querySelector("[data-solution-cta]")?.setAttribute("aria-expanded", "false");
-    });
-  }
-
-  function openDesktopDetails(id) {
-    if (!desktopQuery.matches || !detailsRoot) return;
-
-    detailPanels.forEach((panel) => {
-      panel.hidden = panel.dataset.solutionDetail !== id;
-    });
-    overviews.forEach((overview) => {
-      const isActive = overview.dataset.solutionOverview === id;
-      overview.classList.toggle("is-active", isActive);
-      overview.querySelector("[data-solution-cta]")?.setAttribute("aria-expanded", String(isActive));
-    });
-
-    detailsRoot.hidden = false;
-    detailsRoot.classList.add("is-open");
-
-    requestAnimationFrame(() => {
-      const headerOffset = document.querySelector(".site-header")?.offsetHeight ?? 0;
-      const top = detailsRoot.getBoundingClientRect().top + window.scrollY - headerOffset - 24;
-      window.scrollTo({
-        top: Math.max(top, 0),
-        behavior: reducedMotion.matches ? "auto" : "smooth",
-      });
-    });
-  }
-
-  function syncSolution(nextIndex, { focus = false } = {}) {
-    const normalizedIndex = Math.max(0, Math.min(nextIndex, slides.length - 1));
-    activeIndex = normalizedIndex;
-
-    slides.forEach((slide, index) => {
-      if (desktopQuery.matches) {
-        slide.classList.add("is-active");
-        slide.setAttribute("aria-hidden", "false");
-        slide.removeAttribute("inert");
-        return;
-      }
-      const isActive = index === normalizedIndex;
-      slide.classList.toggle("is-active", isActive);
-      slide.setAttribute("aria-hidden", String(!isActive));
-      slide.toggleAttribute("inert", !isActive);
-    });
-
-    indicators.forEach((indicator, index) => {
-      const isActive = index === normalizedIndex;
-      indicator.classList.toggle("is-active", isActive);
-      indicator.setAttribute("aria-selected", String(isActive));
-      indicator.tabIndex = isActive ? 0 : -1;
-    });
-
-    if (focus) indicators[normalizedIndex]?.focus();
-  }
-
-  function scrollToSolution(nextIndex, { focus = false } = {}) {
-    if (desktopQuery.matches) {
-      syncSolution(0);
-      return;
-    }
-    const normalizedIndex = Math.max(0, Math.min(nextIndex, slides.length - 1));
-    const slide = slides[normalizedIndex];
-    if (!viewport || !slide) return;
-
-    syncSolution(normalizedIndex, { focus });
-    viewport.scrollTo({
-      left: slide.offsetLeft,
-      behavior: window.matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth",
-    });
-  }
-
-  function getNearestSlideIndex() {
-    if (!viewport || !slides.length) return 0;
-    const viewportLeft = viewport.getBoundingClientRect().left;
-    return slides.reduce((nearest, slide, index) => {
-      const distance = Math.abs(slide.getBoundingClientRect().left - viewportLeft);
-      return distance < nearest.distance ? { index, distance } : nearest;
-    }, { index: 0, distance: Infinity }).index;
-  }
-
-  function updateSceneMotion() {
-    if (!viewport) return;
-    const viewportLeft = viewport.getBoundingClientRect().left;
-    const viewportWidth = Math.max(viewport.clientWidth, 1);
-
-    slides.forEach((slide) => {
-      const distance = Math.min(Math.abs(slide.getBoundingClientRect().left - viewportLeft) / viewportWidth, 1);
-      slide.style.setProperty("--scene-opacity", String(1 - distance * 0.12));
-      slide.style.setProperty("--scene-scale", String(1 - distance * 0.012));
-    });
-  }
-
-  indicators.forEach((indicator, index) => {
-    indicator.addEventListener("click", () => selectManually(index));
-    indicator.addEventListener("keydown", (event) => {
-      if (!["ArrowLeft", "ArrowRight", "Home", "End"].includes(event.key)) return;
-      event.preventDefault();
-      const nextIndex = event.key === "Home"
-        ? 0
-        : event.key === "End"
-          ? indicators.length - 1
-          : activeIndex + (event.key === "ArrowRight" ? 1 : -1);
-      selectManually(nextIndex, { focus: true });
-    });
-  });
-
-  overviews.forEach((overview) => {
-    overview.addEventListener("click", (event) => {
-      if (!desktopQuery.matches) return;
-      event.preventDefault();
-      openDesktopDetails(overview.dataset.solutionOverview);
-    });
-  });
-
-  viewport?.addEventListener("scroll", () => {
-    cancelAnimationFrame(scrollFrame);
-    scrollFrame = requestAnimationFrame(() => {
-      updateSceneMotion();
-      syncSolution(getNearestSlideIndex());
-    });
-  }, { passive: true });
-
-  root.addEventListener("pointerenter", stopAutoplay);
-  root.addEventListener("pointerleave", scheduleAutoplay);
-  root.addEventListener("focusin", stopAutoplay);
-  root.addEventListener("focusout", () => window.setTimeout(scheduleAutoplay, 0));
-  document.addEventListener("visibilitychange", () => {
-    if (document.hidden) stopAutoplay();
-    else scheduleAutoplay();
-  });
-
-  const visibilityObserver = new IntersectionObserver((entries) => {
-    isInView = entries[0]?.isIntersecting ?? false;
-    if (isInView) scheduleAutoplay();
-    else stopAutoplay();
-  }, { threshold: 0.35 });
-  visibilityObserver.observe(root);
-
-  reducedMotion.addEventListener("change", scheduleAutoplay);
-  desktopQuery.addEventListener("change", () => {
-    if (!desktopQuery.matches) closeDesktopDetails();
-    syncSolution(activeIndex);
-    scheduleAutoplay();
-  });
-
-  window.addEventListener("resize", () => {
-    viewport?.scrollTo({ left: slides[activeIndex]?.offsetLeft ?? 0, behavior: "auto" });
-  }, { passive: true });
-
-  syncSolution(0);
-  updateSceneMotion();
-}
-
 function bindAppShowcase() {
   const root = document.querySelector("[data-app-showcase]");
   appShowcaseCleanup?.();
@@ -819,6 +549,7 @@ function bindAppShowcase() {
   const slides = [...root.querySelectorAll("[data-app-slide]")];
   const dots = [...root.querySelectorAll("[data-app-dot]")];
   const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
+  const compactLayout = window.matchMedia("(max-width: 860px)");
   let activeIndex = 0;
   let timer = null;
   let isPaused = false;
@@ -861,7 +592,7 @@ function bindAppShowcase() {
   }
 
   function startAutoplay() {
-    if (reducedMotion.matches || isPaused || slides.length < 2 || timer) return;
+    if (reducedMotion.matches || compactLayout.matches || isPaused || slides.length < 2 || timer) return;
     timer = setInterval(() => setSlide(activeIndex + 1), APP_SHOWCASE_INTERVAL_MS);
   }
 
@@ -908,6 +639,7 @@ function bindAppShowcase() {
     startAutoplay();
   };
   on(reducedMotion, "change", handleReducedMotionChange);
+  on(compactLayout, "change", handleReducedMotionChange);
 
   appShowcaseCleanup = () => {
     stopAutoplay();

@@ -166,22 +166,22 @@ export function renderSupportPage({ lang }) {
 
 function renderSupportRow(title, body) {
   return `
-    <details class="support-row" open>
-      <summary><h3>${title}</h3></summary>
+    <article class="support-row">
+      <h3>${title}</h3>
       <p>${body}</p>
-    </details>
+    </article>
   `;
 }
 
 export function bindSupportPage() {
   const mobileQuery = window.matchMedia("(max-width: 640px)");
   const groups = [...document.querySelectorAll(".support-group")];
-  const rows = [...document.querySelectorAll(".support-row")];
+
 
   const sync = () => {
     const open = !mobileQuery.matches;
-    groups.forEach((group) => { group.open = open; });
-    rows.forEach((row) => { row.open = open; });
+    groups.forEach((group) => { group.open = open || window.location.hash === "#"+group.id; });
+
   };
 
   document.querySelectorAll('.support-quicklinks a[href^="#"]').forEach((link) => {

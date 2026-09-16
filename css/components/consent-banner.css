@@ -182,6 +182,17 @@
   transition: opacity 0.18s, transform 0.18s;
 }
 .cookie-manage-btn:hover { opacity: 0.9; transform: scale(1.08); }
+.site-footer__cookie {
+  min-height: 44px;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: inherit;
+  font: inherit;
+  text-decoration: underline;
+  text-underline-offset: 4px;
+  cursor: pointer;
+}
 
 /* ── Mobile ── */
 @media (max-width: 1120px) {

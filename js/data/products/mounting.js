@@ -10,6 +10,8 @@ function createMountingProduct({
 }) {
   return {
     slug,
+    catalogVisible: false,
+    includedWith: "voltrix-5-pack-kit",
     name,
     shortName,
 

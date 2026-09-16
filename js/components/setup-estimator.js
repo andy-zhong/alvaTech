@@ -141,16 +141,15 @@ const HOME_ESTIMATOR_COPY = {
 
 const SUMMER_ACCESSORIES = [
   { key: "voltDock", label: "VoltDock", priceKey: "voltDock" },
-  { key: "backpackPowerMounting", label: "Backpack Power Mounting", priceKey: "backpackPowerMounting" },
+  { key: "fieldPack", label: "Voltrix FieldPack" },
   { key: "bikeAccessory", label: "Bike accessory", priceKey: "bikeAccessory" },
   { key: "extraBatteryPack", label: "Extra Battery Pack", priceKey: "batteryPack", addsBatteryPack: true },
 ];
 
 const INSTALLER_ACCESSORIES = [
   { key: "voltDock", label: "VoltDock", priceKey: "voltDock" },
-  { key: "backpackPowerMounting", label: "Backpack Power Mounting", priceKey: "backpackPowerMounting" },
+  { key: "fieldPack", label: "Voltrix FieldPack" },
   { key: "extraBatteryPacks", label: "Extra Battery Packs", priceKey: "batteryPack", addsBatteryPacksPerVan: 1 },
-  { key: "vanMounting", label: "Van mounting", priceKey: "vanMounting" },
   { key: "bikeAccessory", label: "Bike accessory", priceKey: "bikeAccessory" },
 ];
 
@@ -192,11 +191,12 @@ const ESTIMATOR_COPY = {
     solarOptions: {
       none: "No solar yet",
       existing: "Existing solar",
-      tracking: "Solar tracking system",
+      tracking: "Tracker · solar tracking",
     },
     accessoryLabels: {
       voltDock: "VoltDock",
-      backpackPowerMounting: "Backpack Power Mounting",
+      fieldPack: "Voltrix FieldPack",
+      backpackPowerMounting: "Voltrix Carrier",
       bikeAccessory: "Bike accessory",
       extraBatteryPack: "Extra Battery Pack",
       extraBatteryPacks: "Extra Battery Packs",
@@ -221,7 +221,7 @@ const ESTIMATOR_COPY = {
       finalNote: "Note: Based on preset planning prices. Final configuration and quote may differ.",
       cartTitlePrefix: "Estimated Voltrix setup",
       cartSubtitle: "Planning estimate, final quote may differ.",
-      cartNotice: "Planning estimate added to cart. Request quote to confirm configuration.",
+      cartNotice: "Planning configuration saved. Request a quote to confirm your setup.",
       architectureRule: "One Voltrix group / PCS is recommended for 1–7 Battery Packs. Add another group / PCS above 7 packs.",
     },
     invertersSingular: "Voltrix group / PCS",
@@ -270,11 +270,12 @@ const ESTIMATOR_COPY = {
     solarOptions: {
       none: "Ingen solenergi ännu",
       existing: "Befintlig solenergi",
-      tracking: "Solar tracking system",
+      tracking: "Tracker · solspårning",
     },
     accessoryLabels: {
       voltDock: "VoltDock",
-      backpackPowerMounting: "Backpack Power Mounting",
+      fieldPack: "Voltrix FieldPack",
+      backpackPowerMounting: "Voltrix Carrier",
       bikeAccessory: "Bike accessory",
       extraBatteryPack: "Extra batteripack",
       extraBatteryPacks: "Extra batteripack",
@@ -299,7 +300,7 @@ const ESTIMATOR_COPY = {
       finalNote: "Obs: Baserat på förinställda planeringspriser. Slutlig konfiguration och offert kan skilja sig.",
       cartTitlePrefix: "Uppskattad Voltrix-setup",
       cartSubtitle: "Planeringsestimat, slutlig offert kan skilja sig.",
-      cartNotice: "Planeringskonfiguration sparad i varukorgen. Begär offert för att bekräfta den slutliga lösningen.",
+      cartNotice: "Planeringskonfiguration sparad. Begär offert för att bekräfta din setup.",
       architectureRule: "En Voltrix-grupp / PCS rekommenderas för 1–7 Battery Packs. Lägg till ytterligare en grupp / PCS över 7 pack.",
     },
     invertersSingular: "Voltrix-grupp / PCS",
@@ -316,8 +317,8 @@ const ESTIMATOR_COPY = {
   },
 };
 
-function getEstimatorCopy() {
-  const lang = typeof document !== "undefined" ? document.documentElement.lang : "en";
+function getEstimatorCopy(langOverride) {
+  const lang = langOverride ?? (typeof document !== "undefined" ? document.documentElement.lang : "en");
   const copy = ESTIMATOR_COPY[lang] ?? ESTIMATOR_COPY.en;
 
   if (commerceVisibility.showEstimatorPrices) {
@@ -351,57 +352,18 @@ function getAccessoryOptions(options, copy) {
   }));
 }
 
-function getHomeEstimatorCopy() {
-  const lang = typeof document !== "undefined" ? document.documentElement.lang : "en";
+function getHomeEstimatorCopy(langOverride) {
+  const lang = langOverride ?? (typeof document !== "undefined" ? document.documentElement.lang : "en");
   return HOME_ESTIMATOR_COPY[lang] ?? HOME_ESTIMATOR_COPY.en;
 }
 
 export function renderSetupEstimator({ context = "home" } = {}) {
-  const copy = getEstimatorCopy();
-  if (context === "home") {
-    return renderHomeSetupEstimator(copy, getHomeEstimatorCopy());
-  }
-
-  const shellClass = context === "products"
-    ? "showroom-section showroom-section--sage editorial-section--soft setup-estimator-shell"
-    : "platform-home-section platform-home-section--sage platform-home-section--estimator setup-estimator-shell";
-  const innerClass = context === "products"
-    ? "setup-estimator"
-    : "home-section-inner setup-estimator";
-  const shellId = context === "products" ? ' id="setup-estimator"' : "";
-
-  return `
-    <section class="${shellClass}"${shellId} aria-labelledby="setup-estimator-title" data-setup-estimator>
-      <div class="${innerClass}">
-        <div class="setup-estimator__head">
-          <span class="platform-eyebrow">${copy.eyebrow}</span>
-          <h2 id="setup-estimator-title">${copy.title}</h2>
-          <p>${copy.body}</p>
-        </div>
-
-        <div class="setup-estimator__selector" role="tablist" aria-label="Estimator use case">
-          <button class="setup-estimator__scenario is-active" type="button" role="tab" aria-selected="true" data-estimator-scenario="summer">
-            ${copy.summerScenario}
-          </button>
-          <button class="setup-estimator__scenario" type="button" role="tab" aria-selected="false" data-estimator-scenario="installer">
-            ${copy.installerScenario}
-          </button>
-        </div>
-
-        <div class="setup-estimator__body">
-          ${renderSummerPanel(copy)}
-          ${renderInstallerPanel(copy)}
-          ${renderResultPanel(copy)}
-        </div>
-
-      </div>
-    </section>
-  `;
+  return renderHomeSetupEstimator(getEstimatorCopy(), getHomeEstimatorCopy(), context);
 }
 
-function renderHomeSetupEstimator(copy, homeCopy) {
+function renderHomeSetupEstimator(copy, homeCopy, context) {
   return `
-    <section class="platform-home-section platform-home-section--sage platform-home-section--estimator setup-estimator-shell" aria-labelledby="setup-estimator-title" data-setup-estimator data-home-estimator>
+    <section class="platform-home-section platform-home-section--sage platform-home-section--estimator setup-estimator-shell" ${context === "products" ? 'id="setup-estimator"' : ""} aria-labelledby="setup-estimator-title" data-setup-estimator data-home-estimator>
       <div class="home-section-inner setup-estimator setup-estimator--home-v2">
         <div class="setup-estimator__head">
           <span class="platform-eyebrow">${homeCopy.eyebrow}</span>
@@ -468,7 +430,7 @@ function renderHomeSummerPanel(copy, homeCopy) {
           summaryKey: "summer-solar",
           kind: "solar",
           icon: "solar",
-          content: renderHomeSolarChoices(copy, homeCopy.solar),
+          content: renderHomeSolarChoices(copy, homeCopy.solar) + `<div class="estimator-solar-context" data-tracker-context hidden><strong>Tracker + Voltrix</strong><p>${document.documentElement.lang==='sv'?'Tracker ingår i din förfrågan. Alva bekräftar paneler, placering och anslutningar. Solenergi minskar inte batterirekommendationen automatiskt.':'Tracker is included in your enquiry. Alva confirms panels, placement and connections. Solar does not automatically reduce the battery recommendation.'}</p><a href="/views/solution-summer-house.html#summer-solar">${document.documentElement.lang==='sv'?'Så fungerar solenergi för fritidshuset':'How summer house solar works'} →</a></div>`,
         })}
         ${renderHomeSecondaryDisclosure({
           label: homeCopy.recommendedAddons,
@@ -486,8 +448,8 @@ function renderHomeSummerPanel(copy, homeCopy) {
 
 function renderHomeInstallerPanel(copy, homeCopy) {
   const installerAccessories = getAccessoryOptions(INSTALLER_ACCESSORIES, copy).sort((a, b) => {
-    if (a.key === "backpackPowerMounting") return -1;
-    if (b.key === "backpackPowerMounting") return 1;
+    if (a.key === "fieldPack") return -1;
+    if (b.key === "fieldPack") return 1;
     return 0;
   });
 
@@ -592,9 +554,9 @@ function renderHomeAccessoryChoices(label, scenario, options, homeCopy = null) {
       <legend>${label}</legend>
       <div class="setup-estimator__checks">
         ${options.map((option) => `
-          <label class="setup-estimator__check ${option.key === "backpackPowerMounting" ? "setup-estimator__check--recommended" : ""}">
+          <label class="setup-estimator__check ${option.key === "fieldPack" ? "setup-estimator__check--recommended" : ""}">
             <input type="checkbox" data-estimator-accessory="${scenario}" value="${option.key}">
-            <span><b>${option.key === "backpackPowerMounting" ? "Backpack Mount" : option.label}</b>${option.key === "backpackPowerMounting" && homeCopy ? `<small>${homeCopy.backpackProminence}</small>` : ""}</span>
+            <span><b>${option.key === "fieldPack" ? "Voltrix FieldPack" : option.label}</b>${option.key === "fieldPack" && homeCopy ? `<small>${homeCopy.backpackProminence}</small>` : ""}</span>
           </label>
         `).join("")}
       </div>
@@ -843,6 +805,39 @@ export function bindSetupEstimator(scope = document) {
   });
 }
 
+function restoreEstimatorContext(root,state) {
+  let saved=null;
+  try { saved=JSON.parse(sessionStorage.getItem('alva-estimator-language')||'null');sessionStorage.removeItem('alva-estimator-language'); } catch {}
+  if(saved?.path===window.location.pathname && Date.now()-saved.at<60000) {
+    const s=saved.state;
+    if(s?.scenario==='installer'||s?.scenario==='summer')state.scenario=s.scenario;
+    for(const scenario of ['summer','installer']) {
+      const from=s?.[scenario];if(!from)continue;
+      const profiles=scenario==='summer'?HOME_SUMMER_PROFILES:HOME_INSTALLER_PROFILES;
+      if(Object.hasOwn(profiles,from.profile))state[scenario].profile=from.profile;
+      if([1,2,3].includes(from.rechargeDays))state[scenario].rechargeDays=from.rechargeDays;
+      if(scenario==='installer'&&[1,2,3,4,5].includes(from.teams))state.installer.teams=from.teams;
+      const available=(scenario==='summer'?SUMMER_ACCESSORIES:INSTALLER_ACCESSORIES).map(item=>item.key);
+      state[scenario].accessories=new Set((from.accessories||[]).filter(key=>available.includes(key)));
+    }
+    const solarKeys=Object.keys(getEstimatorCopy().solarOptions);
+    state.summer.solar=new Set((s?.summer?.solar||['none']).filter(key=>solarKeys.includes(key)));
+    if(!state.summer.solar.size)state.summer.solar.add('none');
+  } else {
+    const params=new URLSearchParams(window.location.search);
+    if(['summer','installer'].includes(params.get('scenario')))state.scenario=params.get('scenario');
+    if(params.get('solar')==='tracking'){state.scenario='summer';state.summer.solar=new Set(['tracking']);}
+  }
+  const selected={'summer-profile':state.summer.profile,'summer-days':state.summer.rechargeDays,'installer-teams':state.installer.teams,'installer-profile':state.installer.profile,'installer-days':state.installer.rechargeDays};
+  root.querySelectorAll('[data-estimator-option]').forEach(button=>{const active=String(selected[button.dataset.estimatorOption])===button.dataset.estimatorValue;button.classList.toggle('is-active',active);button.setAttribute('aria-pressed',String(active));});
+  root.querySelectorAll('[data-estimator-solar]').forEach(input=>{input.checked=state.summer.solar.has(input.value);});
+  root.querySelectorAll('[data-estimator-accessory]').forEach(input=>{input.checked=state[input.dataset.estimatorAccessory].accessories.has(input.value);});
+  setScenario(root,state.scenario);
+  window.addEventListener('alva:before-language-change',()=>{
+    try {sessionStorage.setItem('alva-estimator-language',JSON.stringify({path:window.location.pathname,at:Date.now(),state},(key,value)=>value instanceof Set?[...value]:value));}catch{}
+  },{once:true});
+}
+
 function bindHomeSetupEstimator(root) {
   const state = {
     scenario: "summer",
@@ -860,11 +855,14 @@ function bindHomeSetupEstimator(root) {
     },
   };
 
+  restoreEstimatorContext(root,state);
   setupEstimatorAccordion(root);
   setupEstimatorResultDetails(root);
 
   const update = () => {
     updateHomeEstimator(root, state);
+    const context=root.querySelector('[data-tracker-context]');
+    if(context)context.hidden=!state.summer.solar.has('tracking');
     updateHomeEstimatorStepSummaries(root, state);
   };
 
@@ -1116,6 +1114,11 @@ function updateEstimator(root, state) {
 function addCurrentEstimateToCart(root, state, buildPayload = buildEstimatePayload) {
   const copy = getEstimatorCopy();
   const payload = buildPayload(state);
+  const localized = buildPayload === buildHomeEstimatePayload ? Object.fromEntries(['en','sv'].map(lang=>{
+    const translated=buildPayload(state,lang);
+    const translatedCopy=getEstimatorCopy(lang);
+    return [lang,{title:`${translatedCopy.notes.cartTitlePrefix} - ${translated.scenarioLabel}`,subtitle:translatedCopy.notes.cartSubtitle,scenario:translated.scenarioLabel,details:translated.cartDetails,summary:translated.summary}];
+  })) : null;
   const cart = readCart();
   const item = {
     type: "planning-estimate",
@@ -1132,6 +1135,7 @@ function addCurrentEstimateToCart(root, state, buildPayload = buildEstimatePaylo
     } : {}),
     details: payload.cartDetails,
     summary: payload.summary,
+    ...(localized ? { localized, language: document.documentElement.lang || 'en' } : {}),
   };
 
   cart.push(item);
@@ -1199,9 +1203,9 @@ export function calculateHomePlanningEstimate({ scenario, profile, rechargeDays,
   };
 }
 
-function buildHomeEstimatePayload(state) {
-  const copy = getEstimatorCopy();
-  const homeCopy = getHomeEstimatorCopy();
+function buildHomeEstimatePayload(state, langOverride) {
+  const copy = getEstimatorCopy(langOverride);
+  const homeCopy = getHomeEstimatorCopy(langOverride);
   const isInstaller = state.scenario === "installer";
   const selectedState = isInstaller ? state.installer : state.summer;
   const estimate = calculateHomePlanningEstimate({

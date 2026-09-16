@@ -3,6 +3,7 @@ import { getPlatformContent } from "../data/platform-content.js";
 const SOLUTION_ROUTES = {
   "summer-house": "/views/solution-summer-house.html",
   field: "/views/solution-field.html",
+  marine: "/views/solution-marine.html",
 };
 
 const OVERVIEW_COPY = {
@@ -74,11 +75,6 @@ export function renderSolutionsPage({ lang }) {
       ${content.solutions.map((solution) => renderSolutionCard(solution)).join("")}
     </section>
 
-    <section class="solutions-overview-platform">
-      <span class="eyebrow">${platform.eyebrow}</span>
-      <h2>${platform.title}</h2>
-      <p>${platform.body}</p>
-    </section>
   `;
 }
 
@@ -95,7 +91,7 @@ function renderSolutionCard(solution) {
     <a class="solutions-overview-card" id="${solution.id}" href="${href}">
       <span class="solutions-overview-card__media solutions-overview-card__media--${solution.id}" aria-hidden="true"></span>
       <span class="solutions-overview-card__icon">
-        ${SOLUTION_ICONS[solution.id] ?? SOLUTION_ICONS["summer-house"]}
+        ${solution.id === "marine" ? "" : (SOLUTION_ICONS[solution.id] ?? "")}
       </span>
       <span class="solutions-overview-card__pill">${copy.label}</span>
       <span class="solutions-overview-card__body">

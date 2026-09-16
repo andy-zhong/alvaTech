@@ -1,3 +1,5 @@
+import { renderSummerSolar, SUMMER_TRACKER_PLANNER, trackerEnquiry } from '../components/summer-solar.js';
+import { renderFieldPackOptions, bindFieldPackOptions } from '../components/fieldpack-options.js';
 import { getProductBySlug, getProductContent } from "../services/product-service.js";
 import { t } from "../services/language-service.js";
 import {
@@ -10,6 +12,8 @@ import { bindSectionNav } from "../components/section-nav.js";
 
 let batteryCount = 1;
 let currentMediaIndex = 0;
+let galleryKeyboardController;
+let currentMediaSlug;
 
 const DETAIL_COPY = {
   en: {
@@ -185,14 +189,15 @@ function calculateCapacity(product) {
   return (batteryCount * product.config.capacityPerBattery).toFixed(2);
 }
 
-function getProductMedia(product, fallbackAlt) {
+function getProductMedia(product, content) {
+  const fallbackAlt = content.name;
   const hero = product.heroMedia ?? {
     type: "image",
     src: product.heroImage,
     alt: fallbackAlt,
   };
 
-  const gallery = Array.isArray(product.gallery) ? product.gallery : [];
+  const gallery = content.gallery ?? (Array.isArray(product.gallery) ? product.gallery : []);
 
   const uniqueGallery = gallery.filter((item) => {
     if (!item?.src && item?.type !== "placeholder") return false;
@@ -246,8 +251,17 @@ function renderThumbnail(media, index, isActive, fallbackAlt, labels) {
 }
 
 function renderMediaViewer(product, content, labels) {
-  const mediaItems = getProductMedia(product, content.name);
-  const activeMedia = mediaItems[0];
+  const mediaItems = getProductMedia(product, content);
+  try {
+    const saved = JSON.parse(sessionStorage.getItem("alva-language-gallery") || "null");
+    sessionStorage.removeItem("alva-language-gallery");
+    if (saved?.slug === product.slug && Number.isInteger(saved.index) && saved.index >= 0) {
+      currentMediaSlug = product.slug;
+      currentMediaIndex = saved.index;
+    }
+  } catch { /* Gallery remains usable when session storage is unavailable. */ }
+  const activeIndex = currentMediaSlug === product.slug ? Math.min(currentMediaIndex, mediaItems.length - 1) : 0;
+  const activeMedia = mediaItems[activeIndex];
 
   return `
     <article class="detail-media">
@@ -261,17 +275,17 @@ function renderMediaViewer(product, content, labels) {
 
           <button class="media-nav media-nav--next" id="media-next" type="button" aria-label="${labels.next}">&rsaquo;</button>
 
-          <span class="media-stage__expand-hint" aria-hidden="true">
+          <button type="button" id="media-expand" class="media-stage__expand-hint" aria-label="${document.documentElement.lang === "sv" ? "Förstora produktbild" : "Enlarge product image"}">
             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"
                  fill="none" stroke="currentColor" stroke-width="2.2"
                  stroke-linecap="round" stroke-linejoin="round">
               <path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7"/>
             </svg>
-          </span>
+          </button>
         </div>
 
         <div class="media-thumbs" id="media-thumbs">
-          ${mediaItems.map((media, index) => renderThumbnail(media, index, index === 0, content.name, labels)).join("")}
+          ${mediaItems.map((media, index) => renderThumbnail(media, index, index === activeIndex, content.name, labels)).join("")}
         </div>
       </div>
     </article>`;
@@ -331,6 +345,7 @@ function renderLightbox(labels) {
         </svg>
       </button>
 
+      <button class="lightbox__zoom" id="lightbox-zoom" type="button" aria-pressed="false">${document.documentElement.lang === "sv" ? "Förstora +" : "Zoom in +"}</button>
       <button class="lightbox__nav lightbox__nav--prev" id="lightbox-prev" aria-label="${labels.previous}">&lsaquo;</button>
       <div class="lightbox__stage" id="lightbox-stage"></div>
       <button class="lightbox__nav lightbox__nav--next" id="lightbox-next" aria-label="${labels.next}">&rsaquo;</button>
@@ -354,136 +369,34 @@ function renderProductMobileNav(labels) {
 export function renderProductDetailPage({ lang, slug, route }) {
   const product = getProductBySlug(slug);
   if (!product) return renderMissingProduct({ lang, route });
-
-  const content = getProductContent(product, lang);
-  const labels = getDetailCopy(lang);
-  const platformUseCases = PLATFORM_USE_CASES_BY_LANG[lang] ?? PLATFORM_USE_CASES;
-  const trustPoints = TRUST_POINTS_BY_LANG[lang] ?? TRUST_POINTS;
-  const visibleFaq = commerceVisibility.showPrices
-    ? content.faq
-    : content.faq.filter((item) => !/(price|pris|SEK|kr|€)/i.test(item));
-
-  return `
-    ${renderLightbox(labels)}
-
-    <section class="detail-hero">
-      ${renderMediaViewer(product, content, labels)}
-
-      <article class="detail-copy">
-        <span class="eyebrow">${t(lang, "detailEyebrow")}</span>
-        <div class="price-badge" data-commerce-price="${product.slug}">${getDisplayPrice(product, labels, lang)}</div>
-        <h1>${content.name}</h1>
-        <p>${content.intro}</p>
-
-        ${renderBatterySelector(product, labels, lang)}
-
-        <div class="detail-actions">
-          ${product.buyEnabled === false
-            ? `<a class="button button--primary" href="${route("views/b2b.html")}">${labels.requestAdvice}</a>
-               <a class="button button--secondary" href="${route("views/products.html")}">${t(lang, "backToProducts")}</a>`
-            : `<button class="button button--primary" id="add-to-cart" data-commerce-action="${product.slug}">
-                ${labels.configure}
-              </button>
-              <a class="button button--secondary" href="${route("views/b2b.html")}">
-                ${labels.requestAdvice}
-              </a>`}
-        </div>
+  const sv=lang==='sv';
+  if (product.includedWith) return `<section class="detail-section included-mounting"><span class="eyebrow">Voltrix</span><h1>${sv?'Monteringen ingår.':'Mounting is included.'}</h1><p>${sv?'Nödvändig montering levereras med Voltrix och säljs inte separat.':'Required mounting comes with Voltrix and is not sold separately.'}</p><a class="button button--primary" href="/views/product.html?slug=${product.includedWith}">${sv?'Se Voltrix':'View Voltrix'}</a></section>`;
+  const content=getProductContent(product,lang), labels=getDetailCopy(lang);
+  const fieldpack=slug==='voltrix-fieldpack', tracker=slug==='solar-tracking-system';
+  const quote='/views/b2b.html?context=product&request='+encodeURIComponent((sv?'Jag vill ha rådgivning och en offert för ':'I would like advice and a quotation for ')+content.name+'.');
+  const visibleFaq=commerceVisibility.showPrices?content.faq:content.faq.filter(item=>!/(\b(?:price|pris|SEK|kr)\b|€)/i.test(item));
+  return `${renderLightbox(labels)}
+    <nav class="detail-breadcrumb" aria-label="${sv?'Navigering':'Breadcrumb'}"><a href="/views/products.html">${sv?'Produkter':'Products'}</a><span aria-hidden="true">/</span><span>${content.name}</span></nav>
+    <section id="product-overview" class="detail-hero ${fieldpack?'detail-hero--fieldpack':''}">
+      ${renderMediaViewer(product,content,labels)}
+      <article class="detail-copy"><span class="eyebrow">${t(lang,'detailEyebrow')}</span><h1>${content.name}</h1><p>${content.intro}</p>
+        <div class="price-badge" data-commerce-price="${slug}">${getDisplayPrice(product,labels,lang)}</div>
+        ${renderBatterySelector(product,labels,lang)}
+        <div class="detail-actions">${fieldpack?`<a class="button button--primary" href="#fieldpack-options">${sv?'Välj din setup':'Choose your setup'}</a>`:tracker?`<a class="button button--primary" href="${SUMMER_TRACKER_PLANNER}">${sv?'Planera med Voltrix':'Plan with Voltrix'}</a><a class="text-link" href="${trackerEnquiry(lang)}">${sv?'Begär offert för Tracker':'Request a Tracker quote'} →</a>`:product.buyEnabled===false?`<a class="button button--primary" href="${quote}">${sv?'Begär offert':'Request quote'}</a>`:`<button class="button button--primary" id="add-to-cart" data-commerce-action="${slug}">${commerceVisibility.allowCheckout?labels.configure:(sv?'Spara konfiguration':'Save configuration')}</button><a class="text-link" href="${quote}" data-product-enquiry>${labels.requestAdvice} →</a>`}</div>
       </article>
     </section>
-
-    ${renderProductMobileNav(labels)}
-
-    <section class="detail-section detail-platform-section" id="product-overview">
-      <div class="detail-platform-grid">
-        <article class="detail-platform-panel">
-          <span class="eyebrow">${labels.whoFor}</span>
-          <div class="detail-pill-grid">
-            ${platformUseCases.map((item) => `<span class="detail-platform-pill">${item}</span>`).join("")}
-          </div>
-        </article>
-        <article class="detail-platform-panel">
-          <h2>${labels.platformFit}</h2>
-          <p>${labels.platformFitBody}</p>
-        </article>
-      </div>
-    </section>
-
-    <section class="detail-section" id="product-capacity">
-      <div class="detail-platform-grid">
-        <article class="detail-platform-panel">
-          <h2>${labels.modularity}</h2>
-          <p>${renderModularityCopy(product, labels)}</p>
-        </article>
-        <article class="detail-trust-band">
-          <span class="eyebrow">${labels.trustTitle}</span>
-          <div class="detail-trust-points">
-            ${trustPoints.map((point) => `<span>${point}</span>`).join("")}
-          </div>
-        </article>
-      </div>
-    </section>
-
-    <section class="detail-section" id="product-features">
-      <div class="info-grid">
-        <article class="detail-content-panel">
-          <h3>${t(lang, "detailFeatures")}</h3>
-          <ul class="detail-list thin-divider-list">
-            ${content.features.map((item) => `<li>${item}</li>`).join("")}
-          </ul>
-        </article>
-        <article class="detail-content-panel">
-          <h3>${t(lang, "detailSupport")}</h3>
-          <ul class="support-list thin-divider-list">
-            <li>${content.summary}</li>
-            ${product.price == null
-              ? `<li>${labels.requestAdvice}</li>`
-              : `<li>${getDisplayPrice(product, labels, lang)}</li>
-                 <li>${product.buyEnabled === false ? labels.requestAdvice : t(lang, "productCardStatus")}</li>`}
-          </ul>
-        </article>
-      </div>
-    </section>
-
-    <section class="detail-section" id="product-specifications">
-      <div class="spec-grid ${content.certifications.length ? "" : "spec-grid--single"}">
-        <article class="detail-content-panel">
-          <h3>${t(lang, "detailSpecifications")}</h3>
-          <div class="detail-spec-table spec-table">
-            ${content.specs.map((item) => `
-              <div class="detail-spec-row">
-                <span>${item.label}</span>
-                <strong>${item.value}</strong>
-              </div>`).join("")}
-          </div>
-        </article>
-        ${content.certifications.length ? `
-          <details class="detail-content-panel detail-disclosure" open data-mobile-disclosure>
-            <summary><h3>${t(lang, "detailCertifications")}</h3></summary>
-            <ul class="detail-list thin-divider-list">
-              ${content.certifications.map((item) => `<li>${item}</li>`).join("")}
-            </ul>
-          </details>
-        ` : ""}
-      </div>
-    </section>
-
-    <section class="detail-section" id="product-use-cases">
-      <div class="info-grid">
-        <article class="detail-content-panel">
-          <h3>${t(lang, "detailUseCases")}</h3>
-          <ul class="detail-list thin-divider-list">
-            ${content.useCases.map((item) => `<li>${item}</li>`).join("")}
-          </ul>
-        </article>
-        <details class="detail-content-panel detail-disclosure" open data-mobile-disclosure>
-          <summary><h3>${t(lang, "detailFaq")}</h3></summary>
-          <ul class="faq-list thin-divider-list">
-            ${visibleFaq.map((item) => `<li>${item}</li>`).join("")}
-          </ul>
-        </details>
-      </div>
-    </section>
-  `;
+    ${fieldpack?renderFieldPackOptions(lang):''}
+    ${tracker?renderSummerSolar(lang,{compact:true}):''}
+    <section class="detail-section detail-key-facts" id="product-features"><span id="product-capacity" class="anchor-alias"></span><div class="detail-facts-grid">
+      <article><h2>${t(lang,'detailFeatures')}</h2><ul class="detail-list thin-divider-list">${content.features.map(item=>`<li>${item}</li>`).join('')}</ul></article>
+      <article><h2>${content.included?(sv?'Detta ingår':'What is included'):(sv?'Användning & kompatibilitet':'Use & compatibility')}</h2>${content.included?`<ul class="detail-list thin-divider-list">${content.included.map(item=>`<li>${item}</li>`).join('')}</ul>`:`<ul class="detail-list thin-divider-list">${content.useCases.map(item=>`<li>${item}</li>`).join('')}</ul>`}${content.platformFit?`<p>${content.platformFit}</p>`:''}${content.modularity?`<p>${content.modularity}</p>`:product.config?`<p>${renderModularityCopy(product,labels)}</p>`:''}</article>
+    </div></section>
+    <section class="detail-section detail-reference">
+      <details class="detail-disclosure" id="product-specifications" open data-mobile-disclosure><summary><h2>${t(lang,'detailSpecifications')}</h2></summary><div class="detail-spec-table spec-table">${content.specs.map(item=>`<div class="detail-spec-row"><span>${item.label}</span><strong>${item.value}</strong></div>`).join('')}</div></details>
+      ${content.certifications.length?`<details class="detail-disclosure"><summary><h2>${t(lang,'detailCertifications')}</h2></summary><ul class="detail-list">${content.certifications.map(item=>`<li>${item}</li>`).join('')}</ul></details>`:''}
+      <details class="detail-disclosure" id="product-use-cases"><summary><h2>${t(lang,'detailFaq')}</h2></summary><ul class="faq-list thin-divider-list">${visibleFaq.map(item=>`<li>${item}</li>`).join('')}</ul></details>
+      <a class="text-link" href="/views/support.html">${sv?'Hjälp & support':'Help & support'} →</a>
+    </section>`;
 }
 
 export function renderMissingProduct({ lang, route }) {
@@ -529,6 +442,13 @@ function setLightboxContent(lbStage, media, fallbackAlt) {
   const alt = media?.alt ?? fallbackAlt;
   const labels = getDetailCopy(document.documentElement.lang || "en");
 
+  lbStage.classList.remove("is-zoomed");
+  const zoomButton = document.getElementById("lightbox-zoom");
+  if (zoomButton) {
+    zoomButton.hidden = type !== "image" || !src;
+    zoomButton.setAttribute("aria-pressed", "false");
+    zoomButton.textContent = document.documentElement.lang === "sv" ? "Förstora +" : "Zoom in +";
+  }
   if (type === "video") {
     lbStage.innerHTML = `<video class="lightbox__asset" controls playsinline preload="metadata"
                            aria-label="${alt}" autoplay>
@@ -543,14 +463,21 @@ function setLightboxContent(lbStage, media, fallbackAlt) {
 }
 
 function initProductMediaViewer(product, content) {
-  const mediaItems = getProductMedia(product, content.name);
+  galleryKeyboardController?.abort();
+  galleryKeyboardController = new AbortController();
+  const mediaItems = getProductMedia(product, content);
   if (!mediaItems.length) return;
 
-  currentMediaIndex = 0;
+  currentMediaIndex = currentMediaSlug === product.slug ? Math.min(currentMediaIndex, mediaItems.length - 1) : 0;
+  currentMediaSlug = product.slug;
   const prevBtn = document.getElementById("media-prev");
   const nextBtn = document.getElementById("media-next");
   const thumbButtons = document.querySelectorAll(".media-thumb");
   const mainStage = document.getElementById("media-stage");
+  const expandButton = document.getElementById("media-expand");
+  window.addEventListener("alva:before-language-change", () => {
+    try { sessionStorage.setItem("alva-language-gallery", JSON.stringify({slug: product.slug, index: currentMediaIndex})); } catch { /* Optional continuity only. */ }
+  }, { signal: galleryKeyboardController.signal });
 
   const lightbox = document.getElementById("lightbox");
   const lbStage = document.getElementById("lightbox-stage");
@@ -591,12 +518,14 @@ function initProductMediaViewer(product, content) {
     if (lbCounter) lbCounter.textContent = `${currentMediaIndex + 1} / ${mediaItems.length}`;
     lightbox?.classList.add("active");
     document.body.style.overflow = "hidden";
+    lbClose?.focus();
   }
 
   function closeLightbox() {
     lightbox?.classList.remove("active");
     document.body.style.overflow = "";
     lbStage?.querySelectorAll("video").forEach((video) => video.pause());
+    expandButton?.focus();
   }
 
   function lbGoTo(newIndex) {
@@ -607,10 +536,17 @@ function initProductMediaViewer(product, content) {
   }
 
   mainStage?.addEventListener("click", (event) => {
-    if (event.target.closest(".media-nav")) return;
+    if (event.target.closest(".media-nav, video")) return;
     openLightbox(currentMediaIndex);
   });
 
+  const lbZoom = document.getElementById("lightbox-zoom");
+  lbZoom?.addEventListener("click", () => {
+    const zoomed = lbStage.classList.toggle("is-zoomed");
+    lbZoom.setAttribute("aria-pressed", String(zoomed));
+    lbZoom.textContent = document.documentElement.lang === "sv" ? (zoomed ? "Visa hela bilden −" : "Förstora +") : (zoomed ? "Fit image −" : "Zoom in +");
+    lbStage.scrollTo({left:0,top:0});
+  });
   lbClose?.addEventListener("click", closeLightbox);
   lbPrev?.addEventListener("click", () => lbGoTo(currentMediaIndex - 1));
   lbNext?.addEventListener("click", () => lbGoTo(currentMediaIndex + 1));
@@ -627,6 +563,12 @@ function initProductMediaViewer(product, content) {
     const lightboxOpen = lightbox?.classList.contains("active");
 
     if (lightboxOpen) {
+      if (event.key === "Tab") {
+        const controls = [...lightbox.querySelectorAll("button")].filter(button => button.offsetParent !== null);
+        const first = controls[0], last = controls.at(-1);
+        if (event.shiftKey && document.activeElement === first) { event.preventDefault(); last?.focus(); }
+        if (!event.shiftKey && document.activeElement === last) { event.preventDefault(); first?.focus(); }
+      }
       if (event.key === "Escape") {
         event.preventDefault();
         closeLightbox();
@@ -640,17 +582,21 @@ function initProductMediaViewer(product, content) {
         lbGoTo(currentMediaIndex + 1);
       }
     } else {
-      if (event.key === "ArrowLeft") goTo(currentMediaIndex - 1);
-      if (event.key === "ArrowRight") goTo(currentMediaIndex + 1);
+      if (event.target.closest?.(".media-viewer")) {
+        if (event.key === "ArrowLeft") { event.preventDefault(); goTo(currentMediaIndex - 1); }
+        if (event.key === "ArrowRight") { event.preventDefault(); goTo(currentMediaIndex + 1); }
+      }
     }
-  });
+  }, { signal: galleryKeyboardController.signal });
 }
 
 export function afterRenderProductDetail(product) {
+  if (product.includedWith) return;
   const lang = document.documentElement.lang || "en";
   const content = getProductContent(product, lang);
 
   initProductMediaViewer(product, content);
+  bindFieldPackOptions(lang);
   bindSectionNav(document.querySelector(".product-mobile-nav"));
   if (window.matchMedia("(max-width: 640px)").matches) {
     document.querySelectorAll("[data-mobile-disclosure]").forEach((details) => {
@@ -680,6 +626,8 @@ export function afterRenderProductDetail(product) {
 
     function update() {
       countEl.innerText = batteryCount;
+      const enquiry=document.querySelector("[data-product-enquiry]");
+      if(enquiry) enquiry.href="/views/b2b.html?context=product&request="+encodeURIComponent(`${content.name}: ${batteryCount} Battery Packs, ${calculateCapacity(product)} kWh. ${lang==='sv'?'Jag vill ha rådgivning och en offert.':'I would like advice and a quotation.'}`);
       if (priceEl) priceEl.innerText = calculatePrice(product).toLocaleString("sv-SE");
       capacityEl.innerText = calculateCapacity(product);
     }

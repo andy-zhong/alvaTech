@@ -5,13 +5,13 @@ export const VOLTRIX_PRODUCT = {
   name: "Voltrix 5-Pack Kit",
   shortName: "Voltrix",
 
-  heroImage: "/Picture/products/voltrix/voltrix02.png",
-  thumbnail: "/Picture/products/voltrix/voltrix02.png",
+  heroImage: "/Picture/products/voltrix/voltrix02.webp",
+  thumbnail: "/Picture/products/voltrix/voltrix02.webp",
 
-  heroMedia: createMediaItem("/Picture/products/voltrix/voltrix02.png", "Voltrix Energy Hub"),
+  heroMedia: createMediaItem("/Picture/products/voltrix/voltrix02.webp", "Voltrix Energy Hub"),
 
   gallery: [
-    createMediaItem("/Picture/products/voltrix/voltrix02.png", "Voltrix front view"),
+    createMediaItem("/Picture/products/voltrix/voltrix02.webp", "Voltrix front view"),
     createMediaItem("/Picture/products/voltrix/voltrix05.png", "Voltrix base unit"),
     createMediaItem("/Picture/products/voltrix/voltrix01.jpg", "Voltrix overview"),
     createMediaItem("/Picture/products/voltrix/voltrix03.jpg", "Voltrix side profile"),
@@ -32,6 +32,7 @@ export const VOLTRIX_PRODUCT = {
       summary: "A fixed 5 kWh starting setup for seasonal homes, everyday energy support and expandable outdoor use.",
       intro:
         "Voltrix 5-Pack Kit is a fixed 5 kWh configuration within the Voltrix platform. It includes five NMC battery modules for seasonal homes, everyday energy support and expandable outdoor use.",
+      included: ["Voltrix PCS", "5 × 1 kWh Battery Packs", "Required mounting hardware — included with the system; mounting format confirmed with Alva"],
       features: [
         "Fixed 5 kWh setup",
         "Includes five NMC battery modules",
@@ -87,6 +88,7 @@ export const VOLTRIX_PRODUCT = {
       summary: "En fast 5 kWh-startsetup för fritidshus, vardagligt energistöd och expanderbar utomhusanvändning.",
       intro:
         "Voltrix 5-Pack Kit är en fast 5 kWh-konfiguration inom Voltrix-plattformen. Den innehåller fem NMC-batterimoduler för fritidshus, vardagligt energistöd och expanderbar utomhusanvändning.",
+      included: ["Voltrix PCS", "5 × 1 kWh Battery Packs", "Nödvändig monteringsutrustning ingår; monteringsutförande bekräftas med Alva"],
       features: [
         "Fast 5 kWh-setup",
         "1600 VA nominell AC-utgång / 2400 VA toppeffekt i 10 s i off-grid-läge",
