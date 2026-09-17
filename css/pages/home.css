@@ -299,6 +299,8 @@
     align-items: end;
     overflow: hidden;
     background: #ffffff;
+    overscroll-behavior-x: contain;
+    touch-action: pan-y pinch-zoom;
   }
 
   body[data-page="home"] .platform-hero__image,
@@ -1580,8 +1582,15 @@
 @media (max-width: 860px) {
   body[data-page="home"] .platform-final h2 {
     max-width: 15ch;
+    margin-inline: auto;
     font-size: clamp(1.72rem, 7.5vw, 2.15rem);
     line-height: 1.08;
+  }
+
+  body[data-page="home"] .platform-final,
+  body[data-page="home"] .platform-final p,
+  body[data-page="home"] .platform-final__actions {
+    margin-inline: auto;
   }
 
   body[data-page="home"] .platform-final__actions {
@@ -2627,6 +2636,11 @@ body[data-page="home"] .platform-home-section--estimator {
     max-height: 430px;
   }
 
+  body[data-page="home"] .platform-app-showcase {
+    overscroll-behavior-x: contain;
+    touch-action: pan-y pinch-zoom;
+  }
+
   body[data-page="home"] .platform-app-slide--ui .platform-app-slide__frame {
     width: min(62vw, 236px);
     height: 430px;
@@ -2821,23 +2835,33 @@ body[data-page="home"] .platform-solution-detail[hidden] {
   body[data-page="home"] .platform-trust-contact .platform-trust__points {
     grid-template-columns: repeat(2, minmax(0, 1fr));
     gap: 0;
+    border-top: 0;
+  }
+
+  body[data-page="home"] .platform-trust-contact .platform-trust__scope {
+    margin: 0;
+    padding: 0 0 12px;
+    border-bottom: 1px solid rgba(8, 45, 37, 0.12);
   }
 
   body[data-page="home"] .platform-trust-contact .platform-trust__points span {
     min-width: 0;
     padding: 12px 10px;
     border: 0;
-    border-bottom: 1px solid rgba(8, 45, 37, 0.12);
     border-radius: 0;
     background: transparent;
   }
 
-  body[data-page="home"] .platform-trust-contact .platform-trust__points span:nth-child(odd) {
+  body[data-page="home"] .platform-trust-contact .platform-trust__points span:nth-of-type(-n + 2) {
+    border-bottom: 1px solid rgba(8, 45, 37, 0.12);
+  }
+
+  body[data-page="home"] .platform-trust-contact .platform-trust__points span:nth-of-type(odd) {
     padding-left: 0;
     border-right: 1px solid rgba(8, 45, 37, 0.12);
   }
 
-  body[data-page="home"] .platform-trust-contact .platform-trust__points span:nth-child(even) {
+  body[data-page="home"] .platform-trust-contact .platform-trust__points span:nth-of-type(even) {
     padding-right: 0;
   }
 
@@ -2858,4 +2882,3 @@ body[data-page="home"] .platform-solution-detail[hidden] {
     -webkit-user-drag: none;
   }
 }
-

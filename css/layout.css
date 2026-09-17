@@ -64,6 +64,9 @@ main {
 
 .site-footer__legal a {
   width: fit-content;
+  min-height: 44px;
+  display: inline-flex;
+  align-items: center;
   color: rgba(243, 246, 242, 0.78);
   font-size: 0.82rem;
   font-weight: 700;
@@ -89,14 +92,23 @@ main {
 .site-footer__links {
   display: flex;
   flex-wrap: wrap;
+  align-items: center;
   gap: 10px 18px;
 }
 
 .site-footer__links a {
+  min-height: 44px;
+  display: inline-flex;
+  align-items: center;
   color: rgba(243, 246, 242, 0.78);
   font-size: 0.82rem;
   font-weight: 700;
   text-underline-offset: 4px;
+}
+
+.site-footer__cookie {
+  display: inline-flex;
+  align-items: center;
 }
 
 .section {

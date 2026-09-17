@@ -427,10 +427,13 @@ function bindScenarioTabs(lang) {
   let copyTimer;
   let touchStartX = 0;
   let touchStartY = 0;
+  let touchLastX = 0;
+  let touchLastY = 0;
+  let touchAxis = null;
 
   function handleSwipe(deltaX, deltaY) {
     if (!window.matchMedia("(max-width: 860px)").matches) return;
-    if (Math.abs(deltaX) < 44 || Math.abs(deltaX) < Math.abs(deltaY) * 1.25) return;
+    if (Math.abs(deltaX) < 32 || Math.abs(deltaX) < Math.abs(deltaY) * 0.8) return;
 
     const currentIndex = HERO_SCENARIOS.indexOf(activeScenario);
     const nextIndex = deltaX < 0
@@ -516,22 +519,51 @@ function bindScenarioTabs(lang) {
     const touch = event.touches[0];
     touchStartX = touch.clientX;
     touchStartY = touch.clientY;
+    touchLastX = touch.clientX;
+    touchLastY = touch.clientY;
+    touchAxis = null;
   }, { passive: true });
+
+  root.addEventListener("touchmove", (event) => {
+    if (!window.matchMedia("(max-width: 860px)").matches || !event.touches.length) return;
+    const touch = event.touches[0];
+    const deltaX = touch.clientX - touchStartX;
+    const deltaY = touch.clientY - touchStartY;
+    touchLastX = touch.clientX;
+    touchLastY = touch.clientY;
+
+    if (!touchAxis && Math.max(Math.abs(deltaX), Math.abs(deltaY)) >= 8) {
+      touchAxis = Math.abs(deltaX) >= Math.abs(deltaY) * 0.8 ? "horizontal" : "vertical";
+    }
+
+    if (touchAxis === "horizontal") {
+      event.preventDefault();
+    }
+  }, { passive: false });
 
   root.addEventListener("touchend", (event) => {
     if (!window.matchMedia("(max-width: 860px)").matches) return;
     const touch = event.changedTouches[0];
-    handleSwipe(touch.clientX - touchStartX, touch.clientY - touchStartY);
+    const endX = touch?.clientX ?? touchLastX;
+    const endY = touch?.clientY ?? touchLastY;
+    if (touchAxis === "horizontal") {
+      handleSwipe(endX - touchStartX, endY - touchStartY);
+    }
+    touchAxis = null;
+  }, { passive: true });
+
+  root.addEventListener("touchcancel", () => {
+    touchAxis = null;
   }, { passive: true });
 
   root.addEventListener("pointerdown", (event) => {
-    if (!window.matchMedia("(max-width: 860px)").matches) return;
+    if (!window.matchMedia("(max-width: 860px)").matches || event.pointerType !== "mouse") return;
     touchStartX = event.clientX;
     touchStartY = event.clientY;
   });
 
   root.addEventListener("pointerup", (event) => {
-    if (!window.matchMedia("(max-width: 860px)").matches) return;
+    if (!window.matchMedia("(max-width: 860px)").matches || event.pointerType !== "mouse") return;
     handleSwipe(event.clientX - touchStartX, event.clientY - touchStartY);
   }, { passive: true });
 
@@ -555,6 +587,11 @@ function bindAppShowcase() {
   let isPaused = false;
   let pointerStartX = 0;
   let pointerStartY = 0;
+  let touchStartX = 0;
+  let touchStartY = 0;
+  let touchLastX = 0;
+  let touchLastY = 0;
+  let touchAxis = null;
   const cleanupHandlers = [];
 
   if (!carousel || !slides.length) return;
@@ -612,7 +649,7 @@ function bindAppShowcase() {
   }
 
   function handleSwipe(deltaX, deltaY) {
-    if (Math.abs(deltaX) < 42 || Math.abs(deltaX) < Math.abs(deltaY) * 1.4) return;
+    if (Math.abs(deltaX) < 32 || Math.abs(deltaX) < Math.abs(deltaY) * 0.8) return;
     setSlide(activeIndex + (deltaX < 0 ? 1 : -1), { manual: true });
   }
 
@@ -625,12 +662,56 @@ function bindAppShowcase() {
   on(carousel, "focusin", pause);
   on(carousel, "focusout", resume);
 
+  on(carousel, "touchstart", (event) => {
+    if (!compactLayout.matches || !event.touches.length) return;
+    const touch = event.touches[0];
+    touchStartX = touch.clientX;
+    touchStartY = touch.clientY;
+    touchLastX = touch.clientX;
+    touchLastY = touch.clientY;
+    touchAxis = null;
+  }, { passive: true });
+
+  on(carousel, "touchmove", (event) => {
+    if (!compactLayout.matches || !event.touches.length) return;
+    const touch = event.touches[0];
+    const deltaX = touch.clientX - touchStartX;
+    const deltaY = touch.clientY - touchStartY;
+    touchLastX = touch.clientX;
+    touchLastY = touch.clientY;
+
+    if (!touchAxis && Math.max(Math.abs(deltaX), Math.abs(deltaY)) >= 8) {
+      touchAxis = Math.abs(deltaX) >= Math.abs(deltaY) * 0.8 ? "horizontal" : "vertical";
+    }
+
+    if (touchAxis === "horizontal") {
+      event.preventDefault();
+    }
+  }, { passive: false });
+
+  on(carousel, "touchend", (event) => {
+    if (!compactLayout.matches) return;
+    const touch = event.changedTouches[0];
+    const endX = touch?.clientX ?? touchLastX;
+    const endY = touch?.clientY ?? touchLastY;
+    if (touchAxis === "horizontal") {
+      handleSwipe(endX - touchStartX, endY - touchStartY);
+    }
+    touchAxis = null;
+  }, { passive: true });
+
+  on(carousel, "touchcancel", () => {
+    touchAxis = null;
+  }, { passive: true });
+
   on(carousel, "pointerdown", (event) => {
+    if (event.pointerType !== "mouse") return;
     pointerStartX = event.clientX;
     pointerStartY = event.clientY;
   }, { passive: true });
 
   on(carousel, "pointerup", (event) => {
+    if (event.pointerType !== "mouse") return;
     handleSwipe(event.clientX - pointerStartX, event.clientY - pointerStartY);
   }, { passive: true });
 

@@ -12,6 +12,22 @@ $ErrorActionPreference = "Stop"
 
 $repoRoot = Resolve-Path (Join-Path $PSScriptRoot "..")
 $distDir = Join-Path $repoRoot "dist"
+$utf8NoBom = New-Object System.Text.UTF8Encoding($false)
+
+function Read-Utf8Text {
+    param([string]$Path)
+
+    return [System.IO.File]::ReadAllText($Path, [System.Text.Encoding]::UTF8)
+}
+
+function Write-Utf8Text {
+    param(
+        [string]$Path,
+        [string]$Content
+    )
+
+    [System.IO.File]::WriteAllText($Path, $Content, $utf8NoBom)
+}
 
 function Import-DotEnvFile {
     param([string]$Path)
@@ -149,21 +165,81 @@ window.ALVA_STRIPE_PUBLISHABLE_KEY = "$stripePublishableKey";
 window.ALVA_GA4_MEASUREMENT_ID = "$ga4MeasurementId";
 "@
 
-    Set-Content -LiteralPath $configPath -Value $content -Encoding UTF8
+    Write-Utf8Text -Path $configPath -Content $content
 }
 
-function Add-ConfigCacheBuster {
+function Add-StaticAssetCacheBusters {
     param(
         [string]$StageDir,
         [string]$Version
     )
 
+    $htmlPattern = '(?<prefix>(?:src|href|content)=")(?<url>(?:\.\.?/|/)[^"?#]+\.(?:js|css|png|jpe?g|webp|svg|gif|avif))(?:\?v=[^"#]*)?(?<suffix>")'
+    $jsPattern = "(?<prefix>['`"])(?<url>(?:\.\.?/|/)(?:(?:Picture|assets|components)/[^'`"?#]+\.(?:png|jpe?g|webp|svg|gif|avif|html)|[^'`"?#]+\.js))(?:\?v=[^'`"#]*)?(?<suffix>['`"])"
+    $cssPattern = "(?<prefix>['`"])(?<url>(?:\.\.?/|/)[^'`"?#]+\.(?:css|png|jpe?g|webp|svg|gif|avif))(?:\?v=[^'`"#]*)?(?<suffix>['`"])"
+    $versionEvaluator = {
+        param($match)
+        return $match.Groups['prefix'].Value + $match.Groups['url'].Value + '?v=' + $Version + $match.Groups['suffix'].Value
+    }
+
     Get-ChildItem -LiteralPath $StageDir -Recurse -File -Filter "*.html" | ForEach-Object {
-        $content = Get-Content -LiteralPath $_.FullName -Raw
-        $updated = $content -replace '(src="(?:\.\./|\./|/)js/config\.js)(?:\?v=[^"]*)?(")', "`${1}?v=$Version`${2}"
+        $content = Read-Utf8Text -Path $_.FullName
+        $updated = [regex]::Replace($content, $htmlPattern, $versionEvaluator)
+        $updated = $updated -replace '(/assets/favicon/[^"?]+\.png)\?v=[^"#]*', '$1'
+        if ($updated -notmatch 'rel="icon"') {
+            $faviconLinks = "  <link rel=`"icon`" type=`"image/png`" sizes=`"96x96`" href=`"/assets/favicon/alva-favicon-96.png`">`r`n  <link rel=`"shortcut icon`" type=`"image/png`" href=`"/assets/favicon/alva-favicon-96.png`">`r`n  <link rel=`"apple-touch-icon`" sizes=`"180x180`" href=`"/assets/favicon/apple-touch-icon.png`">`r`n"
+            $updated = $updated -replace '(<head>\s*)', "`${1}$faviconLinks"
+        }
+        if ($updated -notmatch 'http-equiv="Cache-Control"') {
+            $cacheMeta = "  <meta http-equiv=`"Cache-Control`" content=`"no-cache, no-store, must-revalidate`">`r`n  <meta http-equiv=`"Pragma`" content=`"no-cache`">`r`n  <meta http-equiv=`"Expires`" content=`"0`">`r`n"
+            $updated = $updated -replace '(<head>\s*)', "`${1}$cacheMeta"
+        }
 
         if ($updated -ne $content) {
-            Set-Content -LiteralPath $_.FullName -Value $updated -Encoding UTF8
+            Write-Utf8Text -Path $_.FullName -Content $updated
+        }
+    }
+
+    Get-ChildItem -LiteralPath $StageDir -Recurse -File -Filter "*.js" | ForEach-Object {
+        $content = Read-Utf8Text -Path $_.FullName
+        $updated = [regex]::Replace($content, $jsPattern, $versionEvaluator)
+
+        if ($updated -ne $content) {
+            Write-Utf8Text -Path $_.FullName -Content $updated
+        }
+    }
+
+    Get-ChildItem -LiteralPath $StageDir -Recurse -File -Filter "*.css" | ForEach-Object {
+        $content = Read-Utf8Text -Path $_.FullName
+        $updated = [regex]::Replace($content, $cssPattern, $versionEvaluator)
+
+        if ($updated -ne $content) {
+            Write-Utf8Text -Path $_.FullName -Content $updated
+        }
+    }
+}
+
+function Test-FrontendJavaScript {
+    param([string]$StageDir)
+
+    $node = Get-Command node -ErrorAction SilentlyContinue
+    if (-not $node) {
+        throw "Node.js is required to validate the packaged JavaScript before creating the ZIP."
+    }
+
+    $moduleMarker = Join-Path $StageDir "package.json"
+    Write-Utf8Text -Path $moduleMarker -Content '{"type":"module"}'
+
+    try {
+        foreach ($file in Get-ChildItem -LiteralPath (Join-Path $StageDir "js") -Recurse -File -Filter "*.js") {
+            $checkOutput = & $node.Source --check $file.FullName 2>&1
+            if ($LASTEXITCODE -ne 0) {
+                throw "Packaged JavaScript validation failed for $($file.FullName):`n$($checkOutput -join [Environment]::NewLine)"
+            }
+        }
+    } finally {
+        if (Test-Path -LiteralPath $moduleMarker) {
+            Remove-Item -LiteralPath $moduleMarker -Force
         }
     }
 }
@@ -215,7 +291,8 @@ function New-FrontendPackage {
     }
 
     Write-RuntimeConfig -StageDir $stageDir -Name $Name -Config $configs[$Name]
-    Add-ConfigCacheBuster -StageDir $stageDir -Version $timestamp
+    Add-StaticAssetCacheBusters -StageDir $stageDir -Version $timestamp
+    Test-FrontendJavaScript -StageDir $stageDir
 
     $manifest = @"
 Package: alvatech frontend
@@ -225,9 +302,9 @@ API base URL: $($configs[$Name].ApiBaseUrl)
 Vendure Shop API: $($configs[$Name].VendureShopApi)
 Stripe publishable key configured: $([bool]$configs[$Name].StripePublishableKey)
 GA4 measurement ID configured: $([bool]$configs[$Name].Ga4MeasurementId)
-Config cache-buster: $timestamp
+Static asset version: $timestamp
 "@
-    Set-Content -LiteralPath (Join-Path $stageDir "package-info.txt") -Value $manifest -Encoding UTF8
+    Write-Utf8Text -Path (Join-Path $stageDir "package-info.txt") -Content $manifest
 
     Compress-FrontendArchive -SourceDir $stageDir -DestinationPath $zipPath
     Remove-IfInside -BaseDir $distDir -TargetPath $stageDir

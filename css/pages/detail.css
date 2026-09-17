@@ -792,3 +792,79 @@ body[data-page="product"] .media-thumb video {
     height: 64px;
   }
 }
+
+/* Shared controls and disclosures: comfortable on touch and usable on desktop. */
+.detail-disclosure summary {
+  pointer-events: auto;
+}
+
+.battery-selector__label {
+  color: #082d25;
+  font-weight: 700;
+}
+
+.battery-control {
+  width: fit-content;
+  display: grid;
+  grid-template-columns: 44px minmax(52px, auto) 44px;
+  align-items: center;
+  margin-top: 12px;
+  border: 1px solid rgba(4, 48, 38, 0.16);
+  border-radius: 8px;
+  overflow: hidden;
+  background: #ffffff;
+}
+
+.battery-btn {
+  width: 44px;
+  min-width: 44px;
+  height: 44px;
+  padding: 0;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  color: #082d25;
+  font-size: 1.15rem;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.battery-btn:first-child {
+  border-right: 1px solid rgba(4, 48, 38, 0.1);
+}
+
+.battery-btn:last-child {
+  border-left: 1px solid rgba(4, 48, 38, 0.1);
+}
+
+.battery-btn:hover,
+.battery-btn:focus-visible {
+  background: rgba(15, 107, 63, 0.08);
+}
+
+.battery-count {
+  min-width: 52px;
+  text-align: center;
+  color: #082d25;
+  font-weight: 800;
+  font-variant-numeric: tabular-nums;
+}
+
+.battery-selector__readout {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 8px 24px;
+  margin-top: 14px;
+  border: 0;
+  padding: 0;
+}
+
+.battery-selector__readout p {
+  margin: 0;
+}
+
+@media (max-width: 560px) {
+  .battery-selector__readout {
+    grid-template-columns: 1fr;
+  }
+}

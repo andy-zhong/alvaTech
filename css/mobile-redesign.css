@@ -767,8 +767,7 @@
     background: #ffffff;
   }
 
-  body[data-page="product"] .detail-platform-section,
-  body[data-page="product"] #product-use-cases {
+  body[data-page="product"] .detail-platform-section {
     background: #eef4e9;
   }
 
