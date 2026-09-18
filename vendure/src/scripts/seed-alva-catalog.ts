@@ -2,6 +2,7 @@ import {
     Asset,
     AssetService,
     bootstrapWorker,
+    ChannelService,
     CollectionService,
     CurrencyCode,
     LanguageCode,
@@ -9,6 +10,7 @@ import {
     ProductService,
     ProductVariant,
     ProductVariantService,
+    Populator,
     RequestContextService,
     runMigrations,
     StockLocationService,
@@ -121,14 +123,27 @@ const ALVA_PRODUCTS: AlvaSeedProduct[] = [
     },
     {
         slug: 'solar-tracking-system',
-        name: 'Solar tracking system',
+        name: 'Tracker',
         description:
-            'A future solar-focused extension for summer house setups that want to make more of available daylight. Coming soon - price not included.',
+            'A solar tracking system for compatible panels, planned together with the Voltrix setup.',
         sku: 'ALVA-SOLAR-TRACKING-SYSTEM',
         price: 0,
         stockOnHand: 0,
-        assetName: 'Alva Solar tracking system',
-        enabled: false,
+        assetName: 'Alva Tracker',
+        assetPath: 'products/tracker/tracker1.webp',
+        enabled: true,
+    },
+    {
+        slug: 'voltrix-fieldpack',
+        name: 'Voltrix FieldPack',
+        description:
+            'Portable power with an integrated PCS and room for one or two Voltrix Battery Packs. The closed protective shell is designed to float on water.',
+        sku: 'ALVA-VOLTRIX-FIELDPACK',
+        price: 0,
+        stockOnHand: 0,
+        assetName: 'Alva Voltrix FieldPack',
+        assetPath: 'products/fieldpack/marine_field_backpack_inuse_9.webp',
+        enabled: true,
     },
 ];
 
@@ -155,13 +170,41 @@ async function seedAlvaCatalog() {
     try {
         const app = worker.app;
         const requestContextService = app.get(RequestContextService);
+        const channelService = app.get(ChannelService);
+        const populator = app.get(Populator);
         const assetService = app.get(AssetService);
         const collectionService = app.get(CollectionService);
         const productService = app.get(ProductService);
         const productVariantService = app.get(ProductVariantService);
         const stockLocationService = app.get(StockLocationService);
 
-        const ctx = await requestContextService.create({
+        let ctx = await requestContextService.create({
+            apiType: 'admin',
+            languageCode: LanguageCode.en,
+        });
+        let defaultChannel = await channelService.getDefaultChannel(ctx);
+        if (!defaultChannel.defaultTaxZone) {
+            await populator.populateInitialData({
+                defaultLanguage: LanguageCode.en,
+                defaultZone: 'Sweden',
+                countries: [{ code: 'SE', name: 'Sweden', zone: 'Sweden' }],
+                taxRates: [{ name: 'Swedish standard VAT', percentage: 25 }],
+                shippingMethods: [],
+                paymentMethods: [],
+                collections: [],
+            });
+            defaultChannel = await channelService.getDefaultChannel(ctx);
+        }
+        const updatedChannel = await channelService.update(ctx, {
+            id: defaultChannel.id,
+            currencyCode: CurrencyCode.SEK,
+            defaultCurrencyCode: CurrencyCode.SEK,
+            availableCurrencyCodes: [CurrencyCode.SEK],
+        });
+        if ('errorCode' in updatedChannel) {
+            throw new Error(`${updatedChannel.errorCode}: ${updatedChannel.message}`);
+        }
+        ctx = await requestContextService.create({
             apiType: 'admin',
             languageCode: LanguageCode.en,
         });

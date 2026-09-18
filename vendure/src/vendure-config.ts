@@ -5,7 +5,12 @@ import {
     DefaultSearchPlugin,
     VendureConfig,
 } from '@vendure/core';
-import { defaultEmailHandlers, EmailPlugin, FileBasedTemplateLoader } from '@vendure/email-plugin';
+import {
+    defaultEmailHandlers,
+    EmailPlugin,
+    EmailPluginOptions,
+    FileBasedTemplateLoader,
+} from '@vendure/email-plugin';
 import { AssetServerPlugin } from '@vendure/asset-server-plugin';
 import { DashboardPlugin } from '@vendure/dashboard/plugin';
 import { GraphiqlPlugin } from '@vendure/graphiql-plugin';
@@ -14,6 +19,11 @@ import 'dotenv/config';
 import path from 'path';
 import { DataSourceOptions } from 'typeorm';
 import { AlvaOrderReviewPlugin } from './plugins/alva-order-review/alva-order-review.plugin';
+import { AlvaInquiryPlugin } from './plugins/alva-inquiry/alva-inquiry.plugin';
+import {
+    MicrosoftGraphEmailSender,
+    validateMicrosoftGraphMailConfig,
+} from './email/microsoft-graph-email-sender';
 
 const IS_DEV = process.env.APP_ENV === 'dev';
 const serverPort = +process.env.PORT || 2605;
@@ -24,6 +34,7 @@ const assetUrlPrefix = process.env.ASSET_URL_PREFIX?.trim()
     || (publicApiUrl ? `${publicApiUrl.replace(/\/+$/, '')}/assets/` : undefined);
 const cookieSecret = getCookieSecret();
 const superadminCredentials = getSuperadminCredentials();
+const emailDeliveryOptions = getEmailDeliveryOptions();
 const localStorefrontOrigins = [
     storefrontUrl,
     'http://localhost:5500',
@@ -68,6 +79,41 @@ function getSuperadminCredentials(): { identifier: string; password: string } {
         identifier: requiredEnv('SUPERADMIN_USERNAME'),
         password: requiredEnv('SUPERADMIN_PASSWORD'),
     };
+}
+
+function getSmtpSettings() {
+    if (IS_DEV || isDashboardBuild()) {
+        return undefined;
+    }
+    const port = envInt('SMTP_PORT', 587);
+    return {
+        type: 'smtp' as const,
+        host: requiredEnv('SMTP_HOST'),
+        port,
+        secure: envBoolean('SMTP_SECURE', port === 465),
+        auth: {
+            user: requiredEnv('SMTP_USER'),
+            pass: requiredEnv('SMTP_PASS'),
+        },
+    };
+}
+
+function getEmailDeliveryOptions(): Pick<EmailPluginOptions, 'transport' | 'emailSender'> | undefined {
+    if (IS_DEV || isDashboardBuild()) {
+        return undefined;
+    }
+    const transport = (process.env.MAIL_TRANSPORT || 'smtp').trim().toLowerCase();
+    if (transport === 'graph') {
+        validateMicrosoftGraphMailConfig();
+        return {
+            transport: { type: 'none' },
+            emailSender: new MicrosoftGraphEmailSender(),
+        };
+    }
+    if (transport === 'smtp') {
+        return { transport: getSmtpSettings()! };
+    }
+    throw new Error(`Unsupported MAIL_TRANSPORT "${transport}". Use "graph" or "smtp".`);
 }
 
 function isDashboardBuild(): boolean {
@@ -164,7 +210,7 @@ export const config: VendureConfig = {
     // need to be updated. See the "Migrations" section in README.md.
     customFields: {},
     plugins: [
-        GraphiqlPlugin.init(),
+        ...(IS_DEV ? [GraphiqlPlugin.init()] : []),
         AssetServerPlugin.init({
             route: 'assets',
             assetUploadDir: path.join(__dirname, '../static/assets'),
@@ -173,6 +219,7 @@ export const config: VendureConfig = {
         DefaultSchedulerPlugin.init(),
         DefaultJobQueuePlugin.init({ useDatabaseForBuffer: true }),
         DefaultSearchPlugin.init({ bufferUpdates: false, indexStockStatus: true }),
+        AlvaInquiryPlugin,
         AlvaOrderReviewPlugin,
         StripePlugin.init({
             metadata: (injector, ctx, order) => ({
@@ -182,15 +229,21 @@ export const config: VendureConfig = {
             }),
         }),
         EmailPlugin.init({
-            devMode: true,
-            outputPath: path.join(__dirname, '../static/email/test-emails'),
-            route: 'mailbox',
+            ...(IS_DEV || isDashboardBuild()
+                ? {
+                    devMode: true as const,
+                    outputPath: path.join(__dirname, '../static/email/test-emails'),
+                    route: 'mailbox',
+                }
+                : {
+                    ...emailDeliveryOptions!,
+                }),
             handlers: defaultEmailHandlers,
             templateLoader: new FileBasedTemplateLoader(path.join(__dirname, '../static/email/templates')),
             globalTemplateVars: {
                 // The following variables will change depending on your storefront implementation.
                 // Here we point to the existing Alva storefront served by Express.
-                fromAddress: '"Alva Technology" <noreply@alvatechnology.com>',
+                fromAddress: process.env.MAIL_FROM || '"Alva Technology" <info@alvatechnology.se>',
                 verifyEmailAddressUrl: `${storefrontUrl}/views/account.html`,
                 passwordResetUrl: `${storefrontUrl}/views/account.html`,
                 changeEmailAddressUrl: `${storefrontUrl}/views/account.html`

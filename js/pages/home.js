@@ -10,6 +10,11 @@ const HERO_ROTATION_DELAY_MS = 7000;
 const HERO_MANUAL_PAUSE_MS = 9000;
 const HERO_COPY_SWITCH_DELAY_MS = 260;
 const APP_SHOWCASE_INTERVAL_MS = 4600;
+const APP_DOWNLOAD_URLS = {
+  ios: "https://apps.apple.com/se/app/smart-life-smart-living/id1115101477",
+  android: "https://play.google.com/store/apps/details?id=com.tuya.smartlife",
+  fallback: "https://e.tuya.com/smartlife/",
+};
 const APP_DOWNLOAD_COPY = {
   en: {
     label: "Download the app",
@@ -132,13 +137,13 @@ export function renderHomePage({ lang }) {
 
           ${renderAppShowcase(lang)}
 
-          <aside class="platform-app-download reveal" aria-label="${appDownload.label}">
+          <a class="platform-app-download reveal" href="${APP_DOWNLOAD_URLS.fallback}" target="_blank" rel="noopener" data-app-download data-mobile-cta="${lang === "sv" ? "Ladda ner Smart Life" : "Download Smart Life"}" aria-label="${appDownload.label}">
             <img src="/Picture/products/apps/qr_code.png" alt="${appDownload.label}" width="339" height="331" loading="lazy" decoding="async">
             <div>
               <strong>${appDownload.label}</strong>
               <span>${appDownload.body}</span>
             </div>
-          </aside>
+          </a>
         </div>
       </div>
     </section>
@@ -155,6 +160,7 @@ export function bindHomePage({ lang }) {
   bindScenarioTabs(lang);
   bindSolutionDisclosure();
   bindAppShowcase();
+  bindAppDownloadLink();
   bindSetupEstimator();
   initScrollReveal();
 }
@@ -238,7 +244,7 @@ function renderSolutionShowcase(platform, solutions, lang) {
                 <h3 id="scenario-detail-title-${solution.id}">${solution.detail.title}</h3>
                 <p>${solution.detail.body}</p>
                 <ul>${solution.detail.bullets.slice(0,3).map(bullet => `<li>${bullet}</li>`).join("")}</ul>
-                <a class="button button--primary" href="${solution.href}">${solution.cta}</a>${solution.id === "summer-house" ? `<a class="text-link scenario-solar-link" href="/views/solution-summer-house.html#summer-solar">${sv?"Solenergi med Tracker":"Solar with Tracker"} →</a>` : ""}
+                <a class="button button--primary" href="${solution.href}">${solution.cta}</a>
               </div>
             </section>
           </div>`).join("")}
@@ -412,6 +418,22 @@ function renderIcon(name) {
       ${paths[name] ?? paths.modules}
     </svg>
   `;
+}
+
+function bindAppDownloadLink() {
+  const link = document.querySelector("[data-app-download]");
+  if (!link) return;
+
+  const agent = navigator.userAgent || "";
+  const isIOS = /iPad|iPhone|iPod/.test(agent)
+    || (/Macintosh/.test(agent) && navigator.maxTouchPoints > 1);
+  const isAndroid = /Android/i.test(agent);
+
+  link.href = isIOS
+    ? APP_DOWNLOAD_URLS.ios
+    : isAndroid
+      ? APP_DOWNLOAD_URLS.android
+      : APP_DOWNLOAD_URLS.fallback;
 }
 
 function bindScenarioTabs(lang) {

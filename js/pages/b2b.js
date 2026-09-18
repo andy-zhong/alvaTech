@@ -26,7 +26,7 @@ const COPY = {
     invalidEmail: "Enter a valid email address.",
     messageTooLong: "Your request is longer than 4,000 characters. Shorten it before sending so no configuration details are lost.",
     messageLimit: "Maximum 4,000 characters. Your full request must fit before it can be sent.",
-    directContact: 'If the form is unavailable, email <a href="mailto:support@alvatechnology.com">support@alvatechnology.com</a>.',
+    directContact: 'If the form is unavailable, email <a href="mailto:info@alvatechnology.se">info@alvatechnology.se</a>.',
   },
   sv: {
     requiredSummary: "Fyll i de obligatoriska kontaktuppgifterna innan du skickar förfrågan.",
@@ -49,7 +49,7 @@ const COPY = {
     invalidEmail: "Ange en giltig e-postadress.",
     messageTooLong: "Din förfrågan är längre än 4 000 tecken. Korta ned den innan du skickar så att inga konfigurationsuppgifter går förlorade.",
     messageLimit: "Högst 4 000 tecken. Hela förfrågan måste få plats innan den kan skickas.",
-    directContact: 'Om formuläret inte fungerar, mejla <a href="mailto:support@alvatechnology.com">support@alvatechnology.com</a>.',
+    directContact: 'Om formuläret inte fungerar, mejla <a href="mailto:info@alvatechnology.se">info@alvatechnology.se</a>.',
   },
 };
 

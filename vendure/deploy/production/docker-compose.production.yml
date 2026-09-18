@@ -1,0 +1,71 @@
+name: alva-production
+
+services:
+  postgres:
+    image: postgres:16-alpine
+    restart: unless-stopped
+    env_file: .env.production
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB}
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+    volumes:
+      - alva_production_postgres:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U $$POSTGRES_USER -d $$POSTGRES_DB"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+
+  init:
+    profiles: ["initialize"]
+    build:
+      context: ../..
+      dockerfile: deploy/production/Dockerfile
+    image: alva-vendure-production:latest
+    command: ["npm", "run", "seed:alva:compiled"]
+    env_file: .env.production
+    environment:
+      DB_SYNCHRONIZE: "true"
+    depends_on:
+      postgres:
+        condition: service_healthy
+    volumes:
+      - alva_production_assets:/usr/src/app/static/assets
+
+  server:
+    build:
+      context: ../..
+      dockerfile: deploy/production/Dockerfile
+    image: alva-vendure-production:latest
+    restart: unless-stopped
+    env_file: .env.production
+    depends_on:
+      postgres:
+        condition: service_healthy
+    ports:
+      - "127.0.0.1:${HOST_PORT:-2606}:2605"
+    volumes:
+      - alva_production_assets:/usr/src/app/static/assets
+    healthcheck:
+      test: ["CMD", "node", "-e", "fetch('http://127.0.0.1:2605/health').then(r=>{if(!r.ok)process.exit(1)}).catch(()=>process.exit(1))"]
+      interval: 20s
+      timeout: 5s
+      retries: 10
+
+  worker:
+    image: alva-vendure-production:latest
+    restart: unless-stopped
+    command: ["npm", "run", "start:worker"]
+    env_file: .env.production
+    depends_on:
+      postgres:
+        condition: service_healthy
+      server:
+        condition: service_healthy
+    volumes:
+      - alva_production_assets:/usr/src/app/static/assets
+
+volumes:
+  alva_production_postgres:
+  alva_production_assets:

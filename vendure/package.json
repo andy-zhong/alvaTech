@@ -11,6 +11,7 @@
     "configure:alva": "ts-node ./src/scripts/configure-alva-channel.ts",
     "payments:configure-stripe": "ts-node ./src/scripts/configure-stripe-payment.ts",
     "seed:alva": "ts-node ./src/scripts/seed-alva-catalog.ts",
+    "seed:alva:compiled": "node ./dist/scripts/seed-alva-catalog.js",
     "catalog:disable-demo": "ts-node ./src/scripts/disable-demo-catalog.ts --apply",
     "catalog:disable-demo:dry-run": "ts-node ./src/scripts/disable-demo-catalog.ts",
     "orders:cleanup": "ts-node ./src/scripts/cleanup-test-orders.ts --apply",
@@ -32,11 +33,13 @@
     "@vendure/graphiql-plugin": "3.6.3",
     "better-sqlite3": "12.10.0",
     "dotenv": "17.4.2",
+    "nodemailer": "6.10.1",
     "pg": "^8.20.0",
     "stripe": "^13.11.0"
   },
   "devDependencies": {
     "@vendure/cli": "3.6.3",
+    "@types/nodemailer": "6.4.23",
     "concurrently": "9.2.1",
     "ts-node": "10.9.2",
     "typescript": "5.8.2"

@@ -1,0 +1,84 @@
+msgid ""
+msgstr ""
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: zh_Hans\n"
+
+msgid "Alva sales"
+msgstr "Alva 销售"
+
+msgid "Website inquiries"
+msgstr "网站询价"
+
+msgid "Requests submitted through the B2B form and floating quote widget."
+msgstr "通过 B2B 表单和浮动询价组件提交的请求。"
+
+msgid "inquiries"
+msgstr "条询价"
+
+msgid "Email delivery state is shown separately from sales follow-up state."
+msgstr "邮件送达状态与销售跟进状态分开显示。"
+
+msgid "Search reference, company, contact or message"
+msgstr "搜索编号、公司、联系人或留言"
+
+msgid "All statuses"
+msgstr "全部状态"
+
+msgid "Refresh"
+msgstr "刷新"
+
+msgid "Loading inquiries…"
+msgstr "正在加载询价…"
+
+msgid "Unable to load inquiries:"
+msgstr "无法加载询价："
+
+msgid "Received"
+msgstr "接收时间"
+
+msgid "Reference / source"
+msgstr "编号 / 来源"
+
+msgid "Contact"
+msgstr "联系人"
+
+msgid "Request"
+msgstr "请求内容"
+
+msgid "Email"
+msgstr "邮件"
+
+msgid "Follow-up"
+msgstr "跟进状态"
+
+msgid "Source page"
+msgstr "来源页面"
+
+msgid "No inquiries found."
+msgstr "未找到询价。"
+
+msgid "New"
+msgstr "新询价"
+
+msgid "Contacted"
+msgstr "已联系"
+
+msgid "Quoted"
+msgstr "已报价"
+
+msgid "Closed"
+msgstr "已关闭"
+
+msgid "Pending"
+msgstr "等待发送"
+
+msgid "Sent"
+msgstr "已发送"
+
+msgid "Skipped"
+msgstr "已跳过"
+
+msgid "Failed"
+msgstr "发送失败"

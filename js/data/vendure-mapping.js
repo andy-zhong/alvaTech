@@ -26,6 +26,9 @@ export const VENDURE_PRODUCT_VARIANTS = {
   "solar-tracking-system": {
     sku: "ALVA-SOLAR-TRACKING-SYSTEM",
   },
+  "voltrix-fieldpack": {
+    sku: "ALVA-VOLTRIX-FIELDPACK",
+  },
 };
 
 export function getVendureVariantForSlug(slug) {

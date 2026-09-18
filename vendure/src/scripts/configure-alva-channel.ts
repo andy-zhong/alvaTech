@@ -2,6 +2,7 @@ import {
     bootstrapWorker,
     ChannelService,
     CurrencyCode,
+    GlobalSettingsService,
     LanguageCode,
     RequestContextService,
     runMigrations,
@@ -21,16 +22,22 @@ async function configureAlvaChannel() {
         const app = worker.app;
         const requestContextService = app.get(RequestContextService);
         const channelService = app.get(ChannelService);
+        const globalSettingsService = app.get(GlobalSettingsService);
         const ctx = await requestContextService.create({
             apiType: 'admin',
             languageCode: LanguageCode.en,
         });
         const channel = await channelService.getDefaultChannel(ctx);
+        await globalSettingsService.updateSettings(ctx, {
+            availableLanguages: [LanguageCode.en, LanguageCode.zh_Hans],
+        });
         const result = await channelService.update(ctx, {
             id: channel.id,
             currencyCode: CurrencyCode.SEK,
             defaultCurrencyCode: CurrencyCode.SEK,
             availableCurrencyCodes: [CurrencyCode.SEK],
+            defaultLanguageCode: LanguageCode.en,
+            availableLanguageCodes: [LanguageCode.en, LanguageCode.zh_Hans],
         });
 
         if ('errorCode' in result) {
@@ -38,7 +45,7 @@ async function configureAlvaChannel() {
         }
 
         console.log(
-            `Alva channel configured. Channel "${result.code}" now uses ${result.defaultCurrencyCode}.`,
+            `Alva channel configured. Channel "${result.code}" now uses ${result.defaultCurrencyCode} with English and Simplified Chinese enabled.`,
         );
     } finally {
         await worker.app.close();

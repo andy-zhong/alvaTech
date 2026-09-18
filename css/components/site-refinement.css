@@ -243,6 +243,9 @@ body[data-page="home"] .platform-hero [data-hero-visual] {
  transition:opacity 680ms cubic-bezier(.22,.61,.36,1),transform 680ms cubic-bezier(.22,.61,.36,1);
  will-change:opacity,transform;
 }
+body[data-page="home"] .platform-hero [data-hero-visual="summerHouse"] {
+ transform:scaleX(-1) scale(1.025);
+}
 body[data-page="home"] .platform-hero[data-active-scenario="summerHouse"] [data-hero-visual="summerHouse"] {
  opacity:.86;
  transform:scaleX(-1) scale(1.01);
@@ -259,6 +262,46 @@ body[data-page="home"] .platform-hero[data-active-scenario="marine"] [data-hero-
  }
  body[data-page="home"] .platform-hero[data-active-scenario="summerHouse"] [data-hero-visual="summerHouse"] {
   transform:scaleX(-1) scale(1);
+ }
+ body[data-page="home"] .platform-hero:not([data-active-scenario="summerHouse"]) [data-hero-visual="summerHouse"] {
+  transform:scaleX(-1) scale(1.02);
+ }
+ body[data-page="home"] .platform-trust-contact__story {
+  padding-bottom:0;
+  border-bottom:0;
+ }
+ body[data-page="home"] .platform-trust-contact .platform-trust__points {
+  border-bottom:1px solid rgba(8,45,37,.12);
+ }
+ body[data-page="home"] .platform-trust-contact .platform-final {
+  border-top:0;
+ }
+ body[data-page="home"] .platform-app-download {
+  grid-template-columns:1fr;
+  border:1px solid rgba(8,45,37,.14);
+  border-radius:14px;
+  color:inherit;
+  text-decoration:none;
+ }
+ body[data-page="home"] .platform-app-download img,
+ body[data-page="home"] .platform-app-download span {
+  display:none;
+ }
+ body[data-page="home"] .platform-app-download strong {
+  display:block;
+  text-align:center;
+ }
+ body[data-page="home"] .platform-app-download::after {
+  content:attr(data-mobile-cta);
+  grid-column:1/-1;
+  min-height:48px;
+  display:grid;
+  place-items:center;
+  border-radius:10px;
+  background:#0b3c2d;
+  color:#fff;
+  font-size:.95rem;
+  font-weight:750;
  }
 }
 @media(prefers-reduced-motion:reduce) {
